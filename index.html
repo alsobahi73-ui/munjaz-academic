@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="academic-services.css">
 </head>
 <body>
   <a class="skip-link" href="#main">تخطَّ إلى المحتوى</a>
@@ -34,7 +35,7 @@
       <nav class="main-nav" id="mainNav" aria-label="التنقل الرئيسي">
         <a href="#tools">الأدوات الأكاديمية</a>
         <a href="#assistant">المساعد البحثي</a>
-        <a href="#services">الخدمات</a>
+        <a href="services.html">خدماتنا الأكاديمية</a>
         <a href="#library">المكتبة والموارد</a>
         <button type="button" class="btn btn-gold btn-sm" data-open-charter>ميثاق النزاهة</button>
         <button type="button" class="btn btn-light-outline btn-sm" id="authBtn" data-open-auth aria-haspopup="dialog">👤 <span id="authBtnText">تسجيل / دخول</span></button>
@@ -51,7 +52,7 @@
           <h1>لا نكتب عنك… <em>نُنجز معك</em></h1>
           <p class="lead">دعم أكاديمي مسؤول وأدوات مجانية لطلبة الدراسات الأولية والعليا والباحثين والتدريسيين. ندقّق وننسّق ونرشد ونُنجز معك الخطوات، أما العمل العلمي فيبقى لك.</p>
           <div class="hero-actions">
-            <a class="btn btn-gold" href="#services">اختر فئتك وابدأ</a>
+            <a class="btn btn-gold" href="services.html">اختر فئتك وابدأ</a>
             <a class="btn btn-wa-hero" id="heroWaBtn" href="#" target="_blank" rel="noopener noreferrer">
               <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
                 <path d="M12 2C6.48 2 2 6.48 2 12c0 1.82.49 3.53 1.34 5L2.1 21.9l5.03-1.22A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm5.46 14.13c-.23.64-1.15 1.18-1.6 1.22-.44.05-1 .07-3.15-.79-2.58-1.04-4.22-3.66-4.35-3.83-.13-.17-1.05-1.4-1.05-2.67 0-1.27.66-1.89.9-2.14.23-.26.51-.32.68-.32.17 0 .34 0 .49.01.16.01.37-.06.58.44.22.53.75 1.83.82 1.96.07.14.11.3.02.48-.09.17-.14.28-.27.43-.14.16-.29.35-.42.47-.14.14-.29.3-.13.57.17.28.74 1.22 1.59 1.98 1.09.98 2.01 1.28 2.3 1.42.28.14.45.12.62-.07.17-.2.72-.84.91-1.13.2-.28.39-.24.66-.14.27.1.1.72 1.72 1.52.2.1.34.15.39.24.05.08.05.48-.18 1.12z"/>
@@ -104,22 +105,34 @@
       </div>
     </section>
 
-    <!-- ============ Services ============ -->
+    <!-- ============ Academic services ============ -->
     <section class="section" id="services" aria-labelledby="servicesTitle">
       <div class="container">
         <header class="section-head">
-          <h2 id="servicesTitle">مركز الخدمات</h2>
-          <p id="servicesSub">جميع الخدمات المتاحة. اختر فئتك في الأعلى لتصفية ما يناسبك.</p>
+          <h2 id="servicesTitle">خدماتنا الأكاديمية</h2>
+          <p>١٥ خدمة مدفوعة في ثلاث فئات، تُقدَّم دعماً علمياً وتحريرياً بالتعاون مع صاحب العمل. الأدوات الأكاديمية تبقى مجانية ومستقلة.</p>
         </header>
-        <div class="cat-grid" id="categoryPicker"></div>
-
-        <div class="services-panel" id="servicesPanel" hidden>
-          <div class="panel-bar">
-            <h3 id="panelTitle"></h3>
-            <button type="button" class="btn btn-outline btn-sm" id="backToCategories">→ تغيير الفئة</button>
-          </div>
-          <div id="servicesGroups"></div>
+        <div class="cat-grid academic-category-grid">
+          <a class="cat-card academic-category-link" href="services.html#undergrad">
+            <span class="cat-icon" aria-hidden="true">🎓</span>
+            <strong>خدمات طلبة الدراسات الأولية</strong>
+            <small>دعم أكاديمي في تقاريرك ومشاريعك وخطواتك المهنية.</small>
+            <span class="cat-count">4 خدمات ←</span>
+          </a>
+          <a class="cat-card academic-category-link" href="services.html#grad">
+            <span class="cat-icon" aria-hidden="true">📚</span>
+            <strong>خدمات طلبة الدراسات العليا</strong>
+            <small>دعم بحثي ومنهجي وتحريري لرسالتك وبحوثك العلمية.</small>
+            <span class="cat-count">5 خدمات ←</span>
+          </a>
+          <a class="cat-card academic-category-link" href="services.html#faculty-researchers">
+            <span class="cat-icon" aria-hidden="true">🔬</span>
+            <strong>خدمات الأساتذة والباحثين</strong>
+            <small>دعم المؤلفات والنشر والنتائج وملفات الترقية العلمية.</small>
+            <span class="cat-count">6 خدمات ←</span>
+          </a>
         </div>
+        <div class="academic-overview-action"><a class="btn btn-teal" href="services.html">استعرض جميع الخدمات</a></div>
       </div>
     </section>
 
@@ -739,7 +752,7 @@
         </header>
         <ol class="steps">
           <li><span class="step-num">1</span><h3>اختر فئتك وخدمتك</h3><p>حدّد من أنت ثم اختر الخدمة الأقرب لاحتياجك.</p></li>
-          <li><span class="step-num">2</span><h3>تواصل عبر واتساب</h3><p>تُجهَّز رسالتك تلقائياً بنوع الخدمة والفئة، فتبدأ المحادثة مباشرة.</p></li>
+          <li><span class="step-num">2</span><h3>املأ نموذج الطلب</h3><p>حدّد تفاصيل احتياجك في النموذج الموحد وجهّز طلبك للتواصل.</p></li>
           <li><span class="step-num">3</span><h3>نُنجز معك</h3><p>نعمل معك خطوة بخطوة ضمن ميثاق النزاهة، وتبقى أنت صاحب العمل.</p></li>
         </ol>
       </div>

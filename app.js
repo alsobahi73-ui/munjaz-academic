@@ -7,7 +7,7 @@
   /* ---------- الإعدادات: عدّل رقم واتساب الأعمال هنا ---------- */
   const CONFIG = {
     // الصيغة الدولية بدون + أو أصفار: مثال العراق 9647XXXXXXXXX
-    WHATSAPP_NUMBER: '9647700000000',
+    WHATSAPP_NUMBER: '9647819934210',
     BRAND: 'مُنجز أكاديمي',
     /* التسجيل بالبريد الإلكتروني (اختياري):
        - اتركه null  => "ملف محلي" يُحفظ على جهاز الزائر فقط (بدون كلمة مرور ولا حساب سحابي).
@@ -64,28 +64,6 @@
   };
 
   const AUD_KEYS = ['undergrad', 'grad', 'researcher', 'faculty'];
-
-  /* ---------- أبواب الخدمات داخل كل فئة ---------- */
-  const SERVICE_CATS = [
-    { key: 'lang', icon: '📝', label: 'التدقيق والتنسيق والتوثيق' },
-    { key: 'guide', icon: '🧭', label: 'الإرشاد المنهجي والإحصائي' },
-    { key: 'pub', icon: '📰', label: 'النشر والترقية العلمية' },
-    { key: 'train', icon: '🎓', label: 'العروض والتدريب' },
-  ];
-
-  /* ---------- بيانات الخدمات ---------- */
-  const SERVICES = [
-    { cat: 'lang', icon: '🔤', title: 'التدقيق اللغوي والإملائي', desc: 'مراجعة نصك لغوياً وإملائياً وأسلوبياً مع إبقاء أفكارك وصياغتك الأصلية.', aud: ['undergrad', 'grad', 'researcher', 'faculty'] },
-    { cat: 'lang', icon: '📐', title: 'تنسيق التقارير وبحوث التخرج', desc: 'ضبط الهوامش والفهارس والترقيم وفق قالب جامعتك وقسمك.', aud: ['undergrad'] },
-    { cat: 'lang', icon: '📘', title: 'تنسيق الرسائل والأطاريح', desc: 'تنسيق شامل للرسالة أو الأطروحة وفق متطلبات الجامعة والدراسات العليا.', aud: ['grad'] },
-    { cat: 'lang', icon: '🔗', title: 'توثيق المراجع (APA / IEEE / Harvard)', desc: 'ضبط أسلوب التوثيق وربط الاستشهادات بقائمة المراجع بدقة.', aud: ['undergrad', 'grad', 'researcher', 'faculty'] },
-    { cat: 'guide', icon: '🧭', title: 'الإرشاد المنهجي للبحث', desc: 'توجيه في صياغة المشكلة والأهداف والفرضيات واختيار المنهج، دون كتابة البحث عنك.', aud: ['grad', 'researcher'] },
-    { cat: 'guide', icon: '📈', title: 'الإرشاد الإحصائي والتحليل (SPSS)', desc: 'نشرح لك الاختبار المناسب وكيفية تنفيذه وتفسير مخرجاته لتنجزه بنفسك.', aud: ['grad', 'researcher', 'faculty'] },
-    { cat: 'train', icon: '🖼️', title: 'تصميم العروض التقديمية', desc: 'تحسين تصميم الشرائح وتنظيمها لعرض مناقشة أو مؤتمر، بمحتواك أنت.', aud: ['undergrad', 'grad', 'researcher', 'faculty'] },
-    { cat: 'pub', icon: '📰', title: 'اختيار المجلات ودعم النشر العلمي', desc: 'مساعدتك على فهم المجلات المفهرسة (Scopus / Clarivate) وتهيئة المخطوطة لشروط النشر.', aud: ['researcher', 'faculty', 'grad'] },
-    { cat: 'pub', icon: '🗂️', title: 'تنظيم ملف الترقية العلمية', desc: 'ترتيب وتوثيق بنود الترقية وفحص اكتمال المستمسكات وفق التعليمات النافذة.', aud: ['faculty'] },
-    { cat: 'train', icon: '🎓', title: 'تدريب وورش أكاديمية', desc: 'ورش قصيرة في مهارات البحث، إدارة المراجع، وأدوات الكتابة العلمية.', aud: ['undergrad', 'grad', 'researcher', 'faculty'] },
-  ];
 
   /* ---------- بنود الترقية (قيم استرشادية قابلة للتعديل) ---------- */
   const PROMO_TYPES = [
@@ -151,60 +129,6 @@
      ===================================================== */
   let currentAudience = 'all';
 
-  function renderServices() {
-    const picker = $('#categoryPicker');
-    const panel = $('#servicesPanel');
-    const sub = $('#servicesSub');
-    const hasAud = currentAudience !== 'all';
-
-    picker.hidden = hasAud;
-    panel.hidden = !hasAud;
-
-    if (!hasAud) {
-      // الواجهة الرئيسية: بطاقات الفئات فقط (دون عرض الخدمات)
-      sub.textContent = 'اختر فئتك لتظهر لك الخدمات المبوّبة الخاصة بها.';
-      picker.replaceChildren();
-      AUD_KEYS.forEach((k) => {
-        const a = AUDIENCES[k];
-        const count = SERVICES.filter((s) => s.aud.includes(k)).length;
-        picker.append(el('button', { type: 'button', class: 'cat-card', 'data-pick': k },
-          el('span', { class: 'cat-icon', 'aria-hidden': 'true', text: a.icon }),
-          el('strong', { text: a.label }),
-          el('small', { text: a.text }),
-          el('span', { class: 'cat-count', text: `${count} خدمات ←` }),
-        ));
-      });
-      return;
-    }
-
-    const list = SERVICES.filter((s) => s.aud.includes(currentAudience));
-    sub.textContent = `خدمات فئة «${AUDIENCES[currentAudience].label}» (${list.length})`;
-    $('#panelTitle').textContent = `${AUDIENCES[currentAudience].icon} ${AUDIENCES[currentAudience].label}`;
-
-    const wrap = $('#servicesGroups');
-    wrap.replaceChildren();
-    let idx = 0;
-    SERVICE_CATS.forEach((cat) => {
-      const items = list.filter((s) => s.cat === cat.key);
-      if (!items.length) return;
-      const grid = el('div', { class: 'cards' });
-      items.forEach((s) => {
-        const btn = el('a', { class: 'btn btn-wa', href: waLink(s.title), target: '_blank', rel: 'noopener noreferrer' });
-        btn.textContent = '💬 اطلب عبر واتساب';
-        grid.append(el('article', { class: 'card', style: `animation-delay:${Math.min(idx++, 8) * 40}ms` },
-          el('div', { class: 'card-icon', 'aria-hidden': 'true', text: s.icon }),
-          el('h3', { text: s.title }),
-          el('p', { text: s.desc }),
-          btn,
-        ));
-      });
-      wrap.append(el('section', { class: 'svc-group', 'aria-label': cat.label },
-        el('h3', { class: 'svc-group-title' }, el('span', { 'aria-hidden': 'true', text: cat.icon }), ` ${cat.label}`),
-        grid,
-      ));
-    });
-  }
-
   function renderBanner() {
     const box = $('#audienceBanner');
     if (!box) return;
@@ -229,7 +153,6 @@
     $$('#audienceChips .chip').forEach((c) => c.setAttribute('aria-checked', String(c.dataset.audience === key)));
     if (persist) store.set(LS.audience, key);
     renderBanner();
-    renderServices();
     markTools();
     $('#waFloat').href = waLink('');
     if ($('#heroWaBtn')) $('#heroWaBtn').href = waLink('استشارة أكاديمية عامة');
@@ -255,21 +178,7 @@
       });
     });
 
-    // زر العودة لاختيار الفئة + بطاقات الفئات داخل قسم الخدمات
-    $('#backToCategories').addEventListener('click', () => {
-      setAudience('all');
-      syncTab();
-      $('#services').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-    $('#categoryPicker').addEventListener('click', (e) => {
-      const b = e.target.closest('[data-pick]');
-      if (!b) return;
-      setAudience(b.dataset.pick);
-      syncTab();
-      $('#services').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-
-    setAudience('all'); // الواجهة الرئيسية بلا خدمات حتى يختار الزائر فئته
+    setAudience('all');
     syncTab();
   }
 
@@ -1183,7 +1092,6 @@
         const p = store.get(LS.profile);
         if (p && p.email === u.email && p.audience) setAudience(p.audience, false); // يتذكّر فئتك
       }
-      renderServices();                     // لتحديث روابط واتساب (الاسم)
       $('#waFloat').href = waLink('');
       if ($('#heroWaBtn')) $('#heroWaBtn').href = waLink('استشارة أكاديمية عامة');
       if ($('#authModal').open) this.showView();
