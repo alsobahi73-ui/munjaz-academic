@@ -2,6 +2,10 @@
 
 واجهة عربية وخادم Python صغير لعداد الزوار، دون اشتراكات. الهوية وخط Tajawal والشعار محفوظة.
 
+## نموذج المراجعة المحلي
+
+الفرع المحلي `codex/platform-preview-review` يحتوي `munjiz-preview.html`، ملفاً موحداً للمعاينة مع مفضلة الأدوات وخطة متابعة البحث وقالب Word عام فعلي ومعاينة منفصلة لتصنيف التعيينات. التفاصيل وحدود البحث وما ينتظر ملف الأخبار الأصلي في [PLATFORM_REVIEW_AR.md](PLATFORM_REVIEW_AR.md). لم يُنشر هذا الفرع أو يُدمج في main.
+
 ## التشغيل
 
 من مجلد المشروع:
@@ -61,6 +65,9 @@ node --check services-catalog.js
 node --check services-page.js
 node --check visitor-counter.js
 node --check tool-directory.js
+node --check research-workspace.js
+node --check academic-jobs.js
+node tests/academic-jobs.test.js
 node tests/quiz-core.test.js
 node tests/quiz-export.test.js
 node tests/service-assistant.test.js
@@ -68,8 +75,11 @@ python3 -m unittest discover -s tests -p 'test_server.py'
 python3 tests/browser_smoke.py
 python3 tests/service_browser.py
 python3 tests/navigation_browser.py
+python3 tests/workspace_browser.py
 ```
 
 الاختبارات المتصفحية تحتاج Python Playwright وChromium وخادم المشروع على المنفذ8000، أو `MUNJIZ_TEST_URL` لمنفذ مختلف. تتحقق من الرفع والدقة والحفظ والتقرير والتصفح والفصل بين المجاني والمدفوع على الهاتف والحاسوب، دون إرسال ملفات أو رسائل واتساب إلى الخارج. فحص فتح HTML مباشرة بصيغة `file://` اختياري؛ سياسة Chromium في البيئة الحالية تمنعه، وتُذكر هذه الحالة منفصلة عن نتائج HTTP الناجحة.
 
-هذا التنفيذ معزول في الفرع `codex/academic-services-15` تحت `/workspace/munjiz-academic-services`. النسخة الأصلية تحت `/workspace/munjiz-academic` لم تتغير. يمكن ضبط `MUNJIZ_TEST_URL` للاختبارات المتصفحية عند تشغيل الفرع على منفذ مختلف.
+نسخة الخدمات السابقة موجودة في الفرع `codex/academic-services-15`، وإضافات المراجعة الحالية معزولة في الفرع المحلي `codex/platform-preview-review` تحت `/workspace/munjiz-academic-services`. النسخة الأصلية تحت `/workspace/munjiz-academic` لم تتغير. يمكن ضبط `MUNJIZ_TEST_URL` للاختبارات المتصفحية عند تشغيل الفرع على منفذ مختلف.
+
+لمراجعة الملف الموحد بالاختبارات الوظيفية نفسها، شغّل `tests/browser_smoke.py` مع `MUNJIZ_TOOL_PATH='/munjiz-preview.html#tools'`. المفضلة والخطة تُحفظان محلياً، وتُحذفان أيضاً عند حذف الملف المحلي.

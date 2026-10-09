@@ -24,6 +24,8 @@
     charter: 'munjaz.charterAccepted',
     profile: 'munjaz.profile',
     references: 'munjaz.references',
+    favorites: 'munjaz.toolFavorites',
+    workflow: 'munjaz.researchWorkflow',
   };
 
   /* ---------- بيانات الفئات ---------- */
@@ -1370,7 +1372,7 @@
       if (this.isLocal() && !confirm('حذف الملف المحلي وبنود الترقية والمراجع المحفوظة من هذا المتصفح؟ صدّر أو انسخ ما تحتاجه أولاً.')) return;
       try { if (this.fb) await this.fb.A.signOut(this.fb.a); } catch { /* ignore */ }
       if (this.isLocal()) {
-        for (const key of [LS.promo, LS.target, LS.references, LS.audience, LS.charter]) {
+        for (const key of [LS.promo, LS.target, LS.references, LS.audience, LS.charter, LS.favorites, LS.workflow]) {
           if (!store.remove(key)) { $('#accMsg').textContent = 'تعذّر حذف البيانات؛ تحقق من إعدادات التخزين.'; return; }
         }
         promo.items = [];
@@ -1457,7 +1459,7 @@
       if (!$('#toolTiles') || !/^#tool-[a-z]+$/.test(location.hash)) return;
       const id = location.hash.slice(6);
       const button = $(`.tool-tile[data-open-tool="${id}"]`);
-      if (button) { button.focus(); modals.open($('#dlg-' + id)); }
+      if (button) { (button.querySelector('.tool-open') || button).focus(); modals.open($('#dlg-' + id)); }
     };
     window.addEventListener('hashchange', () => { if (!redirectLegacyHash()) openLinkedTool(); });
     openLinkedTool();

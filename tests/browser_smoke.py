@@ -9,7 +9,7 @@ from xml.sax.saxutils import escape
 from zipfile import ZipFile, ZIP_DEFLATED
 from playwright.sync_api import sync_playwright, expect
 
-URL = os.environ.get('MUNJIZ_TEST_URL', 'http://127.0.0.1:8000').rstrip('/') + '/tools.html'
+URL = os.environ.get('MUNJIZ_TEST_URL', 'http://127.0.0.1:8000').rstrip('/') + os.environ.get('MUNJIZ_TOOL_PATH', '/tools.html')
 checks = []
 
 def make_pdf(path, sentences=()):
@@ -56,7 +56,7 @@ with tempfile.TemporaryDirectory(prefix='munjiz-test-') as temporary, sync_playw
     page.on('pageerror', lambda error: errors.append(str(error)))
     page.on('request', lambda request: posts.append(request.url) if request.method == 'POST' and not request.url.endswith('/api/visitors') else None)
     assert page.goto(URL, wait_until='networkidle').status == 200
-    def open_tool(name): page.locator(f'.tool-tile[data-open-tool="{name}"]').click()
+    def open_tool(name): page.locator(f'.tool-tile[data-open-tool="{name}"] .tool-open').click()
     def close_tool(name): page.locator(f'#dlg-{name} [data-close-modal]').click()
     def check(name): checks.append(name); print('PASS:', name, flush=True)
 

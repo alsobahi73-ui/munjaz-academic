@@ -26,13 +26,14 @@ with sync_playwright() as p:
     ids = page.locator('[data-open-tool]').evaluate_all('(nodes) => nodes.map(node => node.dataset.openTool)')
     assert len(ids) == len(set(ids)) == 7
     assert page.locator('#assistant [data-open-tool], #library [data-open-tool]').count() == 0
-    assert page.locator('#library .resource-availability').count() == 3
+    assert page.locator('#library .resource-availability').count() == 2
+    expect(page.locator('#library a[download]')).to_have_count(1)
     search = page.locator('#toolSearch')
     search.fill('DOI'); expect(page.locator('.tool-tile:visible')).to_have_count(1)
     expect(page.locator('.tool-tile:visible')).to_have_attribute('data-open-tool', 'references')
     search.fill('أَسْئِلَة'); expect(page.locator('.tool-tile:visible')).to_have_count(1)
-    page.locator('.tool-tile:visible').click(); expect(page.locator('#dlg-quiz')).to_be_visible()
-    page.keyboard.press('Escape'); expect(page.locator('.tool-tile:visible')).to_be_focused()
+    page.locator('.tool-tile:visible .tool-open').click(); expect(page.locator('#dlg-quiz')).to_be_visible()
+    page.keyboard.press('Escape'); expect(page.locator('.tool-tile:visible .tool-open')).to_be_focused()
     search.fill(''); page.locator('[data-tool-filter="research"]').click()
     expect(page.locator('.tool-tile:visible')).to_have_count(2)
     search.fill('APA'); expect(page.locator('.tool-tile:visible')).to_have_count(1)

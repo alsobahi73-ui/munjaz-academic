@@ -53,7 +53,7 @@
       <h1>الأدوات الأكاديمية المجانية</h1>
       <p>7 أدوات مجانية في مكان واحد. ابحث أو اختر تصنيفاً، واستخدمها دون تسجيل أو دفع.</p>
       <nav class="workspace-links" aria-label="أقسام مساحة الأدوات">
-        <a href="#tools">دليل الأدوات</a><a href="#assistant">الإرشادات البحثية</a><a href="#library">المكتبة والموارد</a>
+        <a href="#tools">دليل الأدوات</a><a href="#workspace">مساحة عملي</a><a href="#assistant">الإرشادات البحثية</a><a href="#library">المكتبة والموارد</a>
       </nav>
     </div></section>
     <!-- ============ Tools ============ -->
@@ -66,17 +66,18 @@
             <input type="search" id="toolSearch" placeholder="مثال: المعدل، المراجع، DOI، الاختبارات" autocomplete="off" aria-controls="toolTiles">
           </label>
           <div class="tool-filters" role="group" aria-label="تصنيف الأدوات">
-            <button type="button" data-tool-filter="all" aria-pressed="true">جميع الأدوات</button>
+            <button type="button" data-tool-filter="all" aria-pressed="true">جميع الأدوات</button><button type="button" data-tool-filter="favorites" aria-pressed="false">المفضلة</button>
             <button type="button" data-tool-filter="academic" aria-pressed="false">الحسابات الأكاديمية</button>
             <button type="button" data-tool-filter="research" aria-pressed="false">البحث والمراجع</button>
             <button type="button" data-tool-filter="writing" aria-pressed="false">الكتابة والاختبارات</button>
             <button type="button" data-tool-filter="conversions" aria-pressed="false">التحويلات العلمية</button>
           </div>
+          <p id="toolFavoritesStatus" class="directory-status" role="status"></p>
           <p id="toolSearchStatus" class="directory-status" role="status" aria-live="polite"></p>
         </div>
         <p id="toolSearchEmpty" class="directory-empty" hidden>لم نجد أداة مطابقة. جرّب كلمة أخرى أو اختر «جميع الأدوات».</p>
         <div class="tool-tiles" id="toolTiles">
-          <button type="button" class="tool-tile" data-open-tool="gpa" data-tool-group="academic" data-tool-keywords="GPA ECTS بولونيا المعدل الدرجات" data-tool-audience="undergrad grad" aria-haspopup="dialog">
+          <article class="tool-tile" data-open-tool="gpa" data-tool-group="academic" data-tool-keywords="GPA ECTS بولونيا المعدل الدرجات" data-tool-audience="undergrad grad"><button type="button" class="tool-open" aria-haspopup="dialog">
             <span class="badge-rec" hidden>موصى بها لك</span>
             <span class="tile-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#E9C16C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/><circle cx="12" cy="12" r="4"/></svg>
@@ -84,9 +85,9 @@
             <span class="access-badge access-free">أداة مجانية</span>
             <strong>حاسبة المعدل الأكاديمي</strong>
             <small>مئوي تقليدي • نقاط GPA • بولونيا ECTS</small>
-          </button>
+          </button><button type="button" class="tool-save" data-save-tool="gpa" aria-pressed="false" aria-label="حفظ حاسبة المعدل الأكاديمي في المفضلة">☆ حفظ في المفضلة</button></article>
 
-          <button type="button" class="tool-tile" data-open-tool="references" data-tool-group="research" data-tool-keywords="DOI APA IEEE توثيق مصادر مراجع" data-tool-audience="undergrad grad researcher faculty" aria-haspopup="dialog">
+          <article class="tool-tile" data-open-tool="references" data-tool-group="research" data-tool-keywords="DOI APA IEEE توثيق مصادر مراجع" data-tool-audience="undergrad grad researcher faculty"><button type="button" class="tool-open" aria-haspopup="dialog">
             <span class="badge-rec" hidden>موصى بها لك</span>
             <span class="tile-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#E9C16C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
@@ -94,9 +95,9 @@
             <span class="access-badge access-free">أداة مجانية</span>
             <strong>منشئ وموثّق المراجع</strong>
             <small>جلب DOI من Crossref • APA 7 • IEEE</small>
-          </button>
+          </button><button type="button" class="tool-save" data-save-tool="references" aria-pressed="false" aria-label="حفظ منشئ وموثّق المراجع في المفضلة">☆ حفظ في المفضلة</button></article>
 
-          <button type="button" class="tool-tile" data-open-tool="sample" data-tool-group="research" data-tool-keywords="كوكران احصاء إحصاء عينة" data-tool-audience="grad researcher faculty" aria-haspopup="dialog">
+          <article class="tool-tile" data-open-tool="sample" data-tool-group="research" data-tool-keywords="كوكران احصاء إحصاء عينة" data-tool-audience="grad researcher faculty"><button type="button" class="tool-open" aria-haspopup="dialog">
             <span class="badge-rec" hidden>موصى بها لك</span>
             <span class="tile-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#E9C16C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
@@ -104,9 +105,9 @@
             <span class="access-badge access-free">أداة مجانية</span>
             <strong>حاسبة حجم العينة</strong>
             <small>معادلة كوكران • المجتمع المحدود N</small>
-          </button>
+          </button><button type="button" class="tool-save" data-save-tool="sample" aria-pressed="false" aria-label="حفظ حاسبة حجم العينة في المفضلة">☆ حفظ في المفضلة</button></article>
 
-          <button type="button" class="tool-tile" data-open-tool="words" data-tool-group="writing" data-tool-keywords="كلمات نصوص كتابة احصاء" data-tool-audience="undergrad grad researcher faculty" aria-haspopup="dialog">
+          <article class="tool-tile" data-open-tool="words" data-tool-group="writing" data-tool-keywords="كلمات نصوص كتابة احصاء" data-tool-audience="undergrad grad researcher faculty"><button type="button" class="tool-open" aria-haspopup="dialog">
             <span class="badge-rec" hidden>موصى بها لك</span>
             <span class="tile-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#E9C16C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 6.1H3"/><path d="M21 12H3"/><path d="M15.1 18H3"/></svg>
@@ -114,9 +115,9 @@
             <span class="access-badge access-free">أداة مجانية</span>
             <strong>عداد الكلمات والنصوص</strong>
             <small>فوري محلي 100% • زمن القراءة • إحصاء دقيق</small>
-          </button>
+          </button><button type="button" class="tool-save" data-save-tool="words" aria-pressed="false" aria-label="حفظ عداد الكلمات والنصوص في المفضلة">☆ حفظ في المفضلة</button></article>
 
-          <button type="button" class="tool-tile" data-open-tool="units" data-tool-group="conversions" data-tool-keywords="تحويل وحدات طول كتلة حرارة ضغط طاقة" data-tool-audience="undergrad grad researcher faculty" aria-haspopup="dialog">
+          <article class="tool-tile" data-open-tool="units" data-tool-group="conversions" data-tool-keywords="تحويل وحدات طول كتلة حرارة ضغط طاقة" data-tool-audience="undergrad grad researcher faculty"><button type="button" class="tool-open" aria-haspopup="dialog">
             <span class="badge-rec" hidden>موصى بها لك</span>
             <span class="tile-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#E9C16C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>
@@ -124,9 +125,9 @@
             <span class="access-badge access-free">أداة مجانية</span>
             <strong>محول الوحدات العلمية</strong>
             <small>6 مجموعات • طول، كتلة، حرارة، ضغط، طاقة</small>
-          </button>
+          </button><button type="button" class="tool-save" data-save-tool="units" aria-pressed="false" aria-label="حفظ محول الوحدات العلمية في المفضلة">☆ حفظ في المفضلة</button></article>
 
-          <button type="button" class="tool-tile" data-open-tool="quiz" data-tool-group="writing" data-tool-keywords="كوز اسئلة أسئلة ملف اختبار MCQ DOCX PDF صح خطأ Word" data-tool-audience="undergrad grad faculty" aria-haspopup="dialog">
+          <article class="tool-tile" data-open-tool="quiz" data-tool-group="writing" data-tool-keywords="كوز اسئلة أسئلة ملف اختبار MCQ DOCX PDF صح خطأ Word" data-tool-audience="undergrad grad faculty"><button type="button" class="tool-open" aria-haspopup="dialog">
             <span class="badge-rec" hidden>موصى بها لك</span>
             <span class="tile-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#E9C16C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
@@ -134,9 +135,9 @@
             <span class="access-badge access-free">أداة مجانية</span>
             <strong>إنشاء الاختبارات والتصحيح</strong>
             <small>أسئلة من الملفات • تدريب • تصدير Word</small>
-          </button>
+          </button><button type="button" class="tool-save" data-save-tool="quiz" aria-pressed="false" aria-label="حفظ إنشاء الاختبارات والتصحيح في المفضلة">☆ حفظ في المفضلة</button></article>
 
-          <button type="button" class="tool-tile" data-open-tool="promotion" data-tool-group="academic" data-tool-keywords="ترقية تدريسي نقاط" data-tool-audience="faculty researcher" aria-haspopup="dialog">
+          <article class="tool-tile" data-open-tool="promotion" data-tool-group="academic" data-tool-keywords="ترقية تدريسي نقاط" data-tool-audience="faculty researcher"><button type="button" class="tool-open" aria-haspopup="dialog">
             <span class="badge-rec" hidden>موصى بها لك</span>
             <span class="tile-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#E9C16C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M3 10h18"/><path d="M5 10v11"/><path d="M9 10v11"/><path d="M15 10v11"/><path d="M19 10v11"/><path d="m12 3 9 7H3z"/></svg>
@@ -144,7 +145,7 @@
             <span class="access-badge access-free">أداة مجانية</span>
             <strong>حاسبة نقاط الترقية</strong>
             <small>للتدريسيين والباحثين وفق تعليمات الوزارة</small>
-          </button>
+          </button><button type="button" class="tool-save" data-save-tool="promotion" aria-pressed="false" aria-label="حفظ حاسبة نقاط الترقية في المفضلة">☆ حفظ في المفضلة</button></article>
         </div>
 
         <!-- نوافذ الأدوات: تُفتح عند الضغط على الأيقونات -->
@@ -620,6 +621,20 @@
       </div>
     </section>
 
+    <section class="section" id="workspace" aria-labelledby="workspaceTitle"><div class="container">
+      <header class="section-head"><h2 id="workspaceTitle">مساحة عملي</h2><p>تابع خطوات بحثك على هذا الجهاز، دون إنشاء حساب. أداتك المفضلة تجدها ضمن تصنيف «المفضلة» في الدليل نفسه.</p></header>
+      <details class="research-workflow" open>
+        <summary>خطة إنجاز البحث <span id="workflowSummary">0 من 10 خطوات</span></summary>
+        <div class="workflow-body">
+          <p>قائمة تنظيمية عامة؛ راجع متطلبات جامعتك ومشرفك قبل اعتماد خطة العمل. تُحفظ العلامات على هذا المتصفح فقط.</p>
+          <progress id="workflowProgress" max="10" value="0" aria-label="تقدم خطوات البحث"></progress>
+          <div id="workflowSteps" class="workflow-steps"></div>
+          <p id="workflowStatus" class="directory-status" role="status" aria-live="polite"></p>
+          <button type="button" class="btn btn-outline btn-sm" id="workflowReset">بدء خطة جديدة</button>
+        </div>
+      </details>
+    </div></section>
+
     <!-- ============ Free research guidance ============ -->
     <section class="section" id="assistant" aria-labelledby="assistantTitle">
       <div class="container">
@@ -665,17 +680,17 @@
       <div class="container">
         <header class="section-head">
           <h2 id="libraryTitle">المكتبة والموارد الأكاديمية</h2>
-          <p>مساحة مخصصة للقوالب والأدلة. الملفات التالية قيد التجهيز وليست متاحة للتنزيل حالياً؛ لا توجد رسوم على الموارد عند إتاحتها.</p>
+          <p>قالب عام متاح للتنزيل مجاناً، وأدلة أخرى قيد التجهيز أو التحقق. نوضح جاهزية كل مورد قبل استخدامه.</p>
         </header>
 
         <div class="library-grid">
           <article class="resource-card">
-            <div class="resource-badge">قالب قيد التجهيز</div>
-            <h3>قالب وورد لتنسيق الرسائل والأطاريح</h3>
-            <p>قالب مستهدف للهوامش والخطوط والفهارس التلقائية؛ يُراجع وفق متطلبات الجامعة قبل إتاحته.</p>
+            <div class="resource-badge">قالب مجاني قابل للتعديل</div>
+            <h3>قالب Word لتنظيم خطة البحث والرسالة</h3>
+            <p>قالب عام من مُنجز أكاديمي، يتضمن خطة البحث وهيكلة الفصول وقائمة مراجعة. عدّله وفق متطلبات جامعتك؛ ليس قالباً رسمياً معتمداً.</p>
             <div class="resource-meta">
               <span>📄 صيغة DOCX</span>
-              <span class="resource-availability">غير متاح للتنزيل حالياً</span>
+              <a href="resources/research-plan.docx" download="خطة البحث - مُنجز أكاديمي.docx" class="resource-link">تحميل Word مجاناً ↓</a>
             </div>
           </article>
 
@@ -832,6 +847,7 @@
   <script src="services-catalog.js"></script>
   <script src="service-assistant.js"></script>
   <script src="tool-directory.js"></script>
+  <script src="research-workspace.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

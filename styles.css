@@ -497,6 +497,30 @@ textarea { resize: vertical; min-height: 130px; }
 .workspace-privacy { color: var(--muted); padding-bottom: 1rem; font-size: .9rem; }
 .tools-page #tools { padding-top: 1.5rem; }
 .tools-page .wa-float { display: none; }
+.tool-open { display: flex; flex-direction: column; align-items: center; gap: .3rem; width: 100%; flex: 1; border: 0; padding: 0; background: transparent; text-align: center; cursor: pointer; }
+.tool-save { width: 100%; border: 1px solid var(--line); background: var(--teal-light); color: var(--teal-dark); border-radius: 10px; padding: .35rem .3rem; margin-top: .75rem; cursor: pointer; font-size: .8rem; font-weight: 700; }
+.tool-save[aria-pressed="true"] { background: var(--gold-soft); color: var(--gold-dark); border-color: #D9B578; }
+.research-workflow { border: 1px solid var(--line); border-radius: var(--radius); background: var(--teal-light); }
+.research-workflow summary { cursor: pointer; padding: 1rem 1.3rem; font-weight: 800; color: var(--teal-dark); }
+.research-workflow summary span { float: inline-end; font-size: .9rem; }
+.workflow-body { padding: 0 1.3rem 1.3rem; }
+.workflow-body > p { font-size: .95rem; color: var(--muted); }
+.workflow-body progress { width: 100%; height: 1rem; accent-color: var(--teal); margin-bottom: 1rem; }
+.workflow-steps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+.workflow-steps fieldset { min-width: 0; border: 1px solid var(--line); border-radius: 10px; background: #fff; padding: 1rem; }
+.workflow-steps legend { font-weight: 800; color: var(--teal-dark); }
+.workflow-steps label { display: flex; align-items: flex-start; gap: .6rem; margin-bottom: .75rem; cursor: pointer; font-size: .95rem; }
+.workflow-steps input { flex-shrink: 0; margin-top: .4rem; accent-color: var(--teal); width: 1.1rem; height: 1.1rem; }
+.jobs-ticker { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; margin-block: 1.5rem; padding: 1rem; border: 1px solid var(--line); border-inline-start: 5px solid var(--gold); border-radius: var(--radius); background: var(--teal-light); }
+.jobs-ticker strong { color: var(--teal-dark); }
+.jobs-ticker > div { flex: 1; min-width: 0; display: flex; flex-wrap: wrap; gap: .6rem; color: var(--muted); }
+.jobs-ticker a { font-weight: 700; }
+.jobs-filters { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 1rem; margin: 1.5rem 0; }
+.jobs-filters .field { flex: 1 1 200px; margin: 0; }
+.jobs-card dl { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: .4rem 1rem; margin: .5rem 0 1rem; }
+.jobs-card dt { font-weight: 700; color: var(--teal-dark); }
+.jobs-card dd { margin: 0; overflow-wrap: anywhere; }
+.job-expired { color: var(--danger); font-weight: 700; }
 @media (max-width: 640px) {
   .platform-routes { grid-template-columns: 1fr; }
   .platform-route { padding: 1.4rem; }
@@ -507,6 +531,8 @@ textarea { resize: vertical; min-height: 130px; }
   .tools-page .tool-tile strong { font-size: 1rem; }
   .tools-page .tool-tile small { font-size: .8rem; }
   .tools-page .tool-tile .access-badge { font-size: .75rem; }
+  .workflow-steps { grid-template-columns: 1fr; }
+  .research-workflow summary span { float: none; display: block; }
 }
 .card > .btn + .btn { margin-top: .6rem; }
 .service-wizard-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; margin-top: 1rem; }

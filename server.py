@@ -13,7 +13,7 @@ import sqlite3
 from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parent
-PUBLIC_FILES = {'index.html', 'tools.html', 'services.html', 'styles.css', 'app.js', 'tool-directory.js', 'quiz-core.js', 'quiz-export.js', 'service-assistant.js', 'services-catalog.js', 'services-page.js', 'visitor-counter.js'}
+PUBLIC_FILES = {'index.html', 'tools.html', 'services.html', 'munjiz-preview.html', 'styles.css', 'app.js', 'tool-directory.js', 'research-workspace.js', 'preview-router.js', 'resources/research-plan.docx', 'quiz-core.js', 'quiz-export.js', 'service-assistant.js', 'services-catalog.js', 'services-page.js', 'visitor-counter.js'}
 COOKIE = 'munjiz_visitor'
 
 
