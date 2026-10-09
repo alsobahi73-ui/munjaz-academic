@@ -7,7 +7,7 @@
   /* ---------- الإعدادات: عدّل رقم واتساب الأعمال هنا ---------- */
   const CONFIG = {
     // الصيغة الدولية بدون + أو أصفار: مثال العراق 9647XXXXXXXXX
-    WHATSAPP_NUMBER: '9647700000000',
+    WHATSAPP_NUMBER: '9647819934210',
     BRAND: 'مُنجز أكاديمي',
     /* التسجيل بالبريد الإلكتروني (اختياري):
        - اتركه null  => "ملف محلي" يُحفظ على جهاز الزائر فقط (بدون كلمة مرور ولا حساب سحابي).
@@ -23,6 +23,7 @@
     target: 'munjaz.promoTarget',
     charter: 'munjaz.charterAccepted',
     profile: 'munjaz.profile',
+    references: 'munjaz.references',
   };
 
   /* ---------- بيانات الفئات ---------- */
@@ -75,16 +76,16 @@
 
   /* ---------- بيانات الخدمات ---------- */
   const SERVICES = [
-    { cat: 'lang', icon: '🔤', title: 'التدقيق اللغوي والإملائي', desc: 'مراجعة نصك لغوياً وإملائياً وأسلوبياً مع إبقاء أفكارك وصياغتك الأصلية.', aud: ['undergrad', 'grad', 'researcher', 'faculty'] },
-    { cat: 'lang', icon: '📐', title: 'تنسيق التقارير وبحوث التخرج', desc: 'ضبط الهوامش والفهارس والترقيم وفق قالب جامعتك وقسمك.', aud: ['undergrad'] },
-    { cat: 'lang', icon: '📘', title: 'تنسيق الرسائل والأطاريح', desc: 'تنسيق شامل للرسالة أو الأطروحة وفق متطلبات الجامعة والدراسات العليا.', aud: ['grad'] },
-    { cat: 'lang', icon: '🔗', title: 'توثيق المراجع (APA / IEEE / Harvard)', desc: 'ضبط أسلوب التوثيق وربط الاستشهادات بقائمة المراجع بدقة.', aud: ['undergrad', 'grad', 'researcher', 'faculty'] },
-    { cat: 'guide', icon: '🧭', title: 'الإرشاد المنهجي للبحث', desc: 'توجيه في صياغة المشكلة والأهداف والفرضيات واختيار المنهج، دون كتابة البحث عنك.', aud: ['grad', 'researcher'] },
-    { cat: 'guide', icon: '📈', title: 'الإرشاد الإحصائي والتحليل (SPSS)', desc: 'نشرح لك الاختبار المناسب وكيفية تنفيذه وتفسير مخرجاته لتنجزه بنفسك.', aud: ['grad', 'researcher', 'faculty'] },
-    { cat: 'train', icon: '🖼️', title: 'تصميم العروض التقديمية', desc: 'تحسين تصميم الشرائح وتنظيمها لعرض مناقشة أو مؤتمر، بمحتواك أنت.', aud: ['undergrad', 'grad', 'researcher', 'faculty'] },
-    { cat: 'pub', icon: '📰', title: 'اختيار المجلات ودعم النشر العلمي', desc: 'مساعدتك على فهم المجلات المفهرسة (Scopus / Clarivate) وتهيئة المخطوطة لشروط النشر.', aud: ['researcher', 'faculty', 'grad'] },
-    { cat: 'pub', icon: '🗂️', title: 'تنظيم ملف الترقية العلمية', desc: 'ترتيب وتوثيق بنود الترقية وفحص اكتمال المستمسكات وفق التعليمات النافذة.', aud: ['faculty'] },
-    { cat: 'train', icon: '🎓', title: 'تدريب وورش أكاديمية', desc: 'ورش قصيرة في مهارات البحث، إدارة المراجع، وأدوات الكتابة العلمية.', aud: ['undergrad', 'grad', 'researcher', 'faculty'] },
+    { id: 'proofreading', cat: 'lang', icon: '🔤', title: 'التدقيق اللغوي والإملائي', desc: 'مراجعة نصك لغوياً وإملائياً وأسلوبياً مع إبقاء أفكارك وصياغتك الأصلية.', aud: ['undergrad', 'grad', 'researcher', 'faculty'] },
+    { id: 'report-format', cat: 'lang', icon: '📐', title: 'تنسيق التقارير وبحوث التخرج', desc: 'ضبط الهوامش والفهارس والترقيم وفق قالب جامعتك وقسمك.', aud: ['undergrad'] },
+    { id: 'thesis-format', cat: 'lang', icon: '📘', title: 'تنسيق الرسائل والأطاريح', desc: 'تنسيق شامل للرسالة أو الأطروحة وفق متطلبات الجامعة والدراسات العليا.', aud: ['grad'] },
+    { id: 'references', cat: 'lang', icon: '🔗', title: 'توثيق المراجع (APA / IEEE / Harvard)', desc: 'ضبط أسلوب التوثيق وربط الاستشهادات بقائمة المراجع بدقة.', aud: ['undergrad', 'grad', 'researcher', 'faculty'] },
+    { id: 'methodology', cat: 'guide', icon: '🧭', title: 'الإرشاد المنهجي للبحث', desc: 'توجيه في صياغة المشكلة والأهداف والفرضيات واختيار المنهج، دون كتابة البحث عنك.', aud: ['grad', 'researcher'] },
+    { id: 'statistics', cat: 'guide', icon: '📈', title: 'الإرشاد الإحصائي والتحليل (SPSS)', desc: 'نشرح لك الاختبار المناسب وكيفية تنفيذه وتفسير مخرجاته لتنجزه بنفسك.', aud: ['grad', 'researcher', 'faculty'] },
+    { id: 'presentation', cat: 'train', icon: '🖼️', title: 'تصميم العروض التقديمية', desc: 'تحسين تصميم الشرائح وتنظيمها لعرض مناقشة أو مؤتمر، بمحتواك أنت.', aud: ['undergrad', 'grad', 'researcher', 'faculty'] },
+    { id: 'journal', cat: 'pub', icon: '📰', title: 'اختيار المجلات ودعم النشر العلمي', desc: 'مساعدتك على فهم المجلات المفهرسة (Scopus / Clarivate) وتهيئة المخطوطة لشروط النشر.', aud: ['researcher', 'faculty', 'grad'] },
+    { id: 'promotion', cat: 'pub', icon: '🗂️', title: 'تنظيم ملف الترقية العلمية', desc: 'ترتيب وتوثيق بنود الترقية وفحص اكتمال المستمسكات وفق التعليمات النافذة.', aud: ['faculty'] },
+    { id: 'training', cat: 'train', icon: '🎓', title: 'تدريب وورش أكاديمية', desc: 'ورش قصيرة في مهارات البحث، إدارة المراجع، وأدوات الكتابة العلمية.', aud: ['undergrad', 'grad', 'researcher', 'faculty'] },
   ];
 
   /* ---------- بنود الترقية (قيم استرشادية قابلة للتعديل) ---------- */
@@ -120,8 +121,19 @@
   const fmt = (n) => nf.format(n);
   const store = {
     get(k, d = null) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch { return d; } },
-    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* ignore */ } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch { return false; } },
+    remove(k) { try { localStorage.removeItem(k); return true; } catch { return false; } },
   };
+  async function copyText(text, button) {
+    const original = button.textContent;
+    try {
+      await navigator.clipboard.writeText(text);
+      button.textContent = 'تم النسخ ✓';
+    } catch {
+      button.textContent = 'تعذّر النسخ؛ حدّد النص وانسخه يدوياً';
+    }
+    setTimeout(() => { button.textContent = original; }, 2500);
+  }
   const el = (tag, props = {}, ...kids) => {
     const n = document.createElement(tag);
     Object.entries(props).forEach(([k, v]) => {
@@ -195,6 +207,7 @@
           el('div', { class: 'card-icon', 'aria-hidden': 'true', text: s.icon }),
           el('h3', { text: s.title }),
           el('p', { text: s.desc }),
+          el('button', { type: 'button', class: 'btn btn-teal', 'data-request-service': s.id, text: 'فتح نموذج الطلب' }),
           btn,
         ));
       });
@@ -269,7 +282,7 @@
       $('#services').scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 
-    setAudience('all'); // الواجهة الرئيسية بلا خدمات حتى يختار الزائر فئته
+    setAudience(store.get(LS.audience, 'all'), false);
     syncTab();
   }
 
@@ -290,7 +303,7 @@
       syncPoints();
 
       const saved = store.get(LS.promo, []);
-      this.items = Array.isArray(saved) ? saved.filter((x) => x && Number.isFinite(+x.points) && Number.isFinite(+x.count)) : [];
+      this.items = Array.isArray(saved) ? saved.filter((x) => x && Number.isFinite(+x.points) && +x.points >= 0 && Number.isSafeInteger(+x.count) && +x.count >= 1) : [];
       const t = store.get(LS.target, '');
       if (t) $('#promoTarget').value = t;
 
@@ -299,7 +312,7 @@
         const b = e.target.closest('.row-del');
         if (b) this.remove(b.dataset.id);
       });
-      $('#promoTarget').addEventListener('input', () => { store.set(LS.target, $('#promoTarget').value); this.render(); });
+      $('#promoTarget').addEventListener('input', () => { if (!store.set(LS.target, $('#promoTarget').value)) this.msg('تعذّر حفظ الهدف على هذا الجهاز.'); this.render(); });
       $('#promoClear').addEventListener('click', () => {
         if (this.items.length && confirm('هل تريد مسح جميع البنود؟')) { this.items = []; this.save(); this.render(); }
       });
@@ -312,7 +325,7 @@
       const type = $('#promoType').value;
       const title = $('#promoTitle').value.trim();
       const points = parseFloat($('#promoPoints').value);
-      const count = parseInt($('#promoCount').value, 10);
+      const count = Number($('#promoCount').value);
 
       if (type === 'بند مخصص' && !title) return this.msg('يرجى كتابة عنوان البند المخصص.');
       if (!Number.isFinite(points) || points < 0) return this.msg('النقاط يجب أن تكون رقماً صفراً أو أكبر.');
@@ -327,7 +340,7 @@
       $('#promoTitle').focus();
     },
     remove(id) { this.items = this.items.filter((x) => x.id !== id); this.save(); this.render(); },
-    save() { store.set(LS.promo, this.items); },
+    save() { if (!store.set(LS.promo, this.items)) this.msg('تعذّر الحفظ على هذا الجهاز. صدّر CSV للاحتفاظ بالبنود.'); },
     total() { return this.items.reduce((s, x) => s + x.points * x.count, 0); },
     render() {
       const body = $('#promoBody');
@@ -391,7 +404,7 @@
   function initWordCounter() {
     const ta = $('#wcText');
     const limitEl = $('#wcLimit');
-    const wordRe = /[\p{L}\p{N}]+(?:['’\-][\p{L}\p{N}]+)*/gu;
+    const wordRe = /[\p{L}\p{N}][\p{L}\p{N}\p{M}]*(?:['’\-][\p{L}\p{N}][\p{L}\p{N}\p{M}]*)*/gu;
 
     const update = () => {
       const text = ta.value;
@@ -439,9 +452,10 @@
       const p = parseFloat($('#ssP').value) / 100;
       const resp = parseFloat($('#ssResp').value) / 100;
 
-      if (!(e > 0 && e < 0.5) || !(p > 0 && p < 1) || !(resp > 0 && resp <= 1)) {
+      if (!(e >= 0.005 && e <= 0.5) || !(p >= 0.01 && p <= 0.99) || !(resp >= 0.01 && resp <= 1)
+        || ($('#ssPop').value.trim() && !(Number.isSafeInteger(N) && N > 0))) {
         out.textContent = '—';
-        det.textContent = 'تحقق من القيم المدخلة (هامش الخطأ 0.5–50، النسبة 1–99، الاستجابة 1–100).';
+        det.textContent = 'أدخل مجتمعاً صحيحاً موجباً أو اتركه فارغاً؛ هامش الخطأ 0.5–50، النسبة 1–99، والاستجابة 1–100.';
         return;
       }
       const n0 = (z * z * p * (1 - p)) / (e * e);
@@ -494,14 +508,14 @@
       } else if (mode === 'gpa-points') {
         phW = 'الساعات (Credit)';
         phV = 'النقاط (مثلاً 3.75)';
-        maxV = '5';
+        maxV = $('#gpaScale').value;
         stepV = '0.01';
       }
 
       const row = el('div', { class: 'gpa-row' },
-        el('input', { type: 'text', class: 'g-name', placeholder: 'اسم المقرر', maxlength: '60', value: name }),
-        el('input', { type: 'number', class: 'g-units', placeholder: phW, min: '0.5', step: '0.5', inputmode: 'decimal', value: w }),
-        el('input', { type: 'number', class: 'g-mark', placeholder: phV, min: '0', max: maxV, step: stepV, inputmode: 'decimal', value: val }),
+        el('input', { type: 'text', class: 'g-name', 'aria-label': 'اسم المقرر', placeholder: 'اسم المقرر', maxlength: '60', value: name }),
+        el('input', { type: 'number', class: 'g-units', 'aria-label': phW, placeholder: phW, min: '0.5', step: '0.5', inputmode: 'decimal', value: w }),
+        el('input', { type: 'number', class: 'g-mark', 'aria-label': phV, placeholder: phV, min: '0', max: maxV, step: stepV, inputmode: 'decimal', value: val }),
         el('button', { type: 'button', class: 'row-del', 'aria-label': 'حذف المقرر', text: '✕' }),
       );
       wrap.append(row);
@@ -511,17 +525,27 @@
       let sumW = 0;
       let sumWeighted = 0;
       let hasFx = false;
+      let invalid = false;
+      const maximum = mode === 'gpa-points' ? Number($('#gpaScale').value) : 100;
 
       $$('.gpa-row', wrap).forEach((r) => {
         const w = parseFloat($('.g-units', r).value);
         const v = parseFloat($('.g-mark', r).value);
-        if (w > 0 && Number.isFinite(v) && v >= 0) {
+        if (!$('.g-units', r).value && !$('.g-mark', r).value) return;
+        if (!(Number.isFinite(w) && w >= 0.5 && Number.isFinite(v) && v >= 0 && v <= maximum)) invalid = true;
+        else {
           sumW += w;
           sumWeighted += w * v;
           if (mode === 'bologna' && v >= 45 && v < 50) hasFx = true;
         }
       });
 
+      if (invalid || !Number.isFinite(sumWeighted) || !Number.isFinite(sumW)) {
+        resEl.textContent = '—';
+        grdEl.textContent = `تحقق من جميع المقررات: وزن موجب لا يقل عن 0.5، ودرجة بين 0 و${maximum}.`;
+        detEl.textContent = '';
+        return;
+      }
       if (!sumW) {
         resEl.textContent = '—';
         grdEl.textContent = 'أدخل المقررات والوحدات والدرجات لحساب النتيجة.';
@@ -533,22 +557,22 @@
 
       if (mode === 'percent') {
         resLbl.textContent = 'المعدل المئوي الموزون';
-        resEl.textContent = `${fmt(Math.round(avg * 100) / 100)}%`;
+        resEl.textContent = `${new Intl.NumberFormat('en-US', { maximumFractionDigits: 8 }).format(avg)}%`;
         const grade = avg >= 90 ? 'امتياز (Excellent)' : avg >= 80 ? 'جيد جداً (Very Good)' : avg >= 70 ? 'جيد (Good)' : avg >= 60 ? 'متوسط (Medium)' : avg >= 50 ? 'مقبول (Pass)' : 'راسب (Fail)';
         grdEl.textContent = `التقدير العام: ${grade}`;
         detEl.textContent = `إجمالي عدد الوحدات الموزونة: ${fmt(sumW)}`;
       } else if (mode === 'bologna') {
         resLbl.textContent = 'معدل بولونيا ECTS التراكمي';
-        resEl.textContent = `${fmt(Math.round(avg * 100) / 100)}%`;
+        resEl.textContent = `${new Intl.NumberFormat('en-US', { maximumFractionDigits: 8 }).format(avg)}%`;
         let grade = avg >= 90 ? 'امتياز (A - Excellent)' : avg >= 80 ? 'جيد جداً (B - Very Good)' : avg >= 70 ? 'جيد (C - Good)' : avg >= 60 ? 'متوسط (D - Medium)' : avg >= 50 ? 'مقبول (E - Pass)' : (avg >= 45 ? 'راسب مشروط (FX - Fail)' : 'راسب (F - Fail)');
         if (hasFx) grade += ' [توجد مقررات في نطاق FX تتطلب معالجة]';
         grdEl.textContent = `التصنيف الوزاري: ${grade}`;
         detEl.textContent = `إجمالي وحدات ECTS المدخلة: ${fmt(sumW)} (الفصل المرجعي = 30 ECTS)`;
       } else {
         resLbl.textContent = 'معدل نقاط GPA المحسوب';
-        resEl.textContent = fmt(Math.round(avg * 1000) / 1000);
+        resEl.textContent = new Intl.NumberFormat('en-US', { maximumFractionDigits: 8 }).format(avg);
         const grade = avg >= 3.7 ? 'مرتبة شرف / امتياز' : avg >= 3.0 ? 'جيد جداً' : avg >= 2.5 ? 'جيد' : avg >= 2.0 ? 'مقبول' : 'إنذار أكاديمي';
-        grdEl.textContent = `التقدير التقريبي: ${grade}`;
+        grdEl.textContent = maximum === 4 ? `التقدير التقريبي: ${grade} — راجع سلم جامعتك.` : 'تحديد التقدير على سلم 5 يتبع جدول جامعتك.';
         detEl.textContent = `إجمالي الساعات المعتمدة: ${fmt(sumW)}`;
       }
     };
@@ -573,6 +597,7 @@
         $$('#gpaModes .mode-tab').forEach((t) => t.classList.remove('active'));
         tab.classList.add('active');
         mode = tab.dataset.mode;
+        $('#gpaScaleField').hidden = mode !== 'gpa-points';
         noteEl.textContent = NOTES[mode];
         reset();
       });
@@ -584,6 +609,10 @@
     });
     $('#gpaAdd').addEventListener('click', () => { addRow(); $$('.g-name', wrap).at(-1).focus(); });
     $('#gpaReset').addEventListener('click', reset);
+    $('#gpaScale').addEventListener('change', () => {
+      $$('.g-mark', wrap).forEach(input => { input.max = $('#gpaScale').value; });
+      calc();
+    });
     reset();
   }
 
@@ -592,7 +621,9 @@
      ===================================================== */
   function initReferences() {
     let currentStyle = 'apa'; // 'apa' | 'ieee'
-    const savedList = [];
+    let savedList = store.get(LS.references, []);
+    savedList = Array.isArray(savedList) ? savedList.filter(d => d && typeof d === 'object'
+      && ['authors', 'title', 'journal', 'year', 'volume', 'issue', 'pages', 'url'].every(k => typeof d[k] === 'string')) : [];
 
     const getRefData = () => ({
       authors: $('#refAuthors').value.trim(),
@@ -605,11 +636,16 @@
       url: $('#refUrl').value.trim(),
     });
 
+    const referenceKey = d => {
+      const doi = d.url.match(/(?:doi\.org\/|^doi:)\s*(10\.[^?#\s]+)/i);
+      return doi ? doi[1].toLowerCase().replace(/\/$/, '') : `${d.title}|${d.authors}|${d.year}`.toLowerCase().replace(/\s+/g, ' ').trim();
+    };
+    const refNumber = d => { const i = savedList.findIndex(x => referenceKey(x) === referenceKey(d)); return i < 0 ? savedList.length + 1 : i + 1; };
     const formatInText = (d) => {
       if (!d.authors) return '(المؤلف، ' + (d.year || 'د.ت') + ')';
       const parts = d.authors.split(/[;؛]/).map((a) => a.trim()).filter(Boolean);
       const first = parts[0].split(/[,،]/)[0].trim() || parts[0];
-      if (currentStyle === 'ieee') return '[1]';
+      if (currentStyle === 'ieee') return `[${refNumber(d)}]`;
       if (parts.length === 1) return `(${first}، ${d.year || 'د.ت'})`;
       if (parts.length === 2) {
         const second = parts[1].split(/[,،]/)[0].trim() || parts[1];
@@ -618,7 +654,7 @@
       return `(${first} وآخرون، ${d.year || 'د.ت'})`;
     };
 
-    const formatRefList = (d) => {
+    const formatRefList = (d, number = refNumber(d)) => {
       if (!d.authors && !d.title) return 'أدخل بيانات المرجع أو اجلبها عبر DOI لعرض التوثيق.';
       const a = d.authors || 'اسم المؤلف';
       const y = d.year ? `(${d.year})` : '(د.ت)';
@@ -638,13 +674,17 @@
       const issIeee = i ? `no. ${d.issue}, ` : '';
       const ppIeee = d.pages ? `pp. ${d.pages}, ` : '';
       const yrIeee = d.year ? `${d.year}.` : '';
-      return `[1] ${a}, "${t}," ${j}, ${volIeee}${issIeee}${ppIeee}${yrIeee}${u}`;
+      return `[${number}] ${a}, "${t}," ${j}, ${volIeee}${issIeee}${ppIeee}${yrIeee}${u}`;
     };
 
     const updatePreviews = () => {
       const data = getRefData();
       $('#previewInText').textContent = formatInText(data);
       $('#previewRefList').textContent = formatRefList(data);
+      $('#savedRefsWrapper').hidden = savedList.length === 0;
+      $('#copyAllRefsBtn').hidden = savedList.length === 0;
+      $('#savedRefsCount').textContent = String(savedList.length);
+      $('#savedRefsList').replaceChildren(...savedList.map((d, i) => el('li', { text: formatRefList(d, i + 1) })));
     };
 
     // DOI Fetching via Crossref REST API
@@ -663,7 +703,7 @@
 
       try {
         const res = await fetch(`https://api.crossref.org/works/${encodeURIComponent(cleanDoi)}`, {
-          headers: { Accept: 'application/json' },
+          headers: { Accept: 'application/json' }, signal: AbortSignal.timeout(20000),
         });
         if (!res.ok) throw new Error('لم يتم العثور على المعرف في Crossref.');
         const json = await res.json();
@@ -673,12 +713,12 @@
         $('#refTitle').value = (item.title && item.title[0]) || '';
         // Extract authors
         if (item.author && Array.isArray(item.author)) {
-          $('#refAuthors').value = item.author.map((x) => `${x.family || ''}, ${x.given ? x.given[0] + '.' : ''}`).filter(Boolean).join('; ');
+          $('#refAuthors').value = item.author.map((x) => `${x.family || ''}, ${x.given ? x.given.split(/[\s-]+/).filter(Boolean).map(n => n[0] + '.').join(' ') : ''}`).filter(Boolean).join('; ');
         }
         // Extract Journal
         $('#refJournal').value = (item['container-title'] && item['container-title'][0]) || item.publisher || '';
         // Extract Year
-        const dateParts = item['published-print']?.['date-parts'] || item['published-online']?.['date-parts'] || item.created?.['date-parts'];
+        const dateParts = item['published-print']?.['date-parts'] || item['published-online']?.['date-parts'] || item.published?.['date-parts'];
         $('#refYear').value = (dateParts && dateParts[0] && dateParts[0][0]) || '';
         // Volume, Issue, Page, URL
         $('#refVol').value = item.volume || '';
@@ -720,32 +760,29 @@
     };
 
     $('#copyInTextBtn').addEventListener('click', () => {
-      navigator.clipboard.writeText($('#previewInText').textContent);
-      flashBtn($('#copyInTextBtn'), '📋 نسخ الاستشهاد');
+      copyText($('#previewInText').textContent, $('#copyInTextBtn'));
     });
 
     $('#copyRefBtn').addEventListener('click', () => {
-      navigator.clipboard.writeText($('#previewRefList').textContent);
-      flashBtn($('#copyRefBtn'), '📋 نسخ المرجع');
+      copyText($('#previewRefList').textContent, $('#copyRefBtn'));
     });
 
     // Add to saved list
     $('#addRefToList').addEventListener('click', () => {
-      const refText = $('#previewRefList').textContent;
-      if (refText && !refText.startsWith('أدخل')) {
-        savedList.push(refText);
-        $('#savedRefsWrapper').hidden = false;
-        $('#copyAllRefsBtn').hidden = false;
-        $('#savedRefsCount').textContent = String(savedList.length);
-        const li = el('li', { text: refText });
-        $('#savedRefsList').append(li);
-        flashBtn($('#addRefToList'), '➕ إضافة إلى قائمة مراجعي');
-      }
+      const data = getRefData();
+      const msg = $('#refSaveMsg');
+      if (!data.title || !data.authors) { msg.textContent = 'أدخل العنوان والمؤلفين قبل الحفظ.'; return; }
+      if (savedList.some(x => referenceKey(x) === referenceKey(data))) { msg.textContent = 'هذا المرجع موجود في قائمتك بالفعل.'; return; }
+      const next = [...savedList, data];
+      if (!store.set(LS.references, next)) { msg.textContent = 'تعذّر حفظ القائمة. انسخ المرجع للاحتفاظ به.'; return; }
+      savedList = next;
+      msg.textContent = 'تم حفظ المرجع على هذا المتصفح.';
+      updatePreviews();
+      flashBtn($('#addRefToList'), '➕ إضافة إلى قائمة مراجعي');
     });
 
     $('#copyAllRefsBtn').addEventListener('click', () => {
-      navigator.clipboard.writeText(savedList.map((r, i) => `${i + 1}. ${r}`).join('\n\n'));
-      flashBtn($('#copyAllRefsBtn'), '📋 نسخ القائمة كاملة');
+      copyText(savedList.map((d, i) => formatRefList(d, i + 1)).join('\n\n'), $('#copyAllRefsBtn'));
     });
 
     $('#clearRefsBtn').addEventListener('click', () => {
@@ -756,6 +793,7 @@
     });
 
     updatePreviews();
+    document.addEventListener('localprofiledeleted', () => { savedList = []; updatePreviews(); });
   }
 
   /* =====================================================
@@ -832,12 +870,17 @@
         let inCelsius = v;
         if (fromKey === 'k') inCelsius = v - 273.15;
         else if (fromKey === 'f') inCelsius = (v - 32) * (5 / 9);
+        if (inCelsius < -273.15 - 1e-9) {
+          outRes.textContent = '—';
+          eqDesc.textContent = 'الحرارة لا يمكن أن تقل عن الصفر المطلق (0 K).';
+          return;
+        }
 
         let result = inCelsius;
         if (toKey === 'k') result = inCelsius + 273.15;
         else if (toKey === 'f') result = inCelsius * (9 / 5) + 32;
 
-        outRes.textContent = fmt(Math.round(result * 1000) / 1000);
+        outRes.textContent = new Intl.NumberFormat('en-US', { maximumSignificantDigits: 10 }).format(result);
         eqDesc.textContent = `تحويل إزاحي: K = °C + 273.15 | °F = °C × 1.8 + 32`;
         return;
       }
@@ -847,7 +890,8 @@
       const inBase = v * fromFactor;
       const result = inBase / toFactor;
 
-      outRes.textContent = Math.abs(result) < 1e-4 || Math.abs(result) > 1e6 ? result.toExponential(4) : fmt(Math.round(result * 10000) / 10000);
+      if (!Number.isFinite(result)) { outRes.textContent = '—'; eqDesc.textContent = 'القيمة أكبر من نطاق الحساب؛ استخدم رقماً أصغر.'; return; }
+      outRes.textContent = result !== 0 && (Math.abs(result) < 1e-6 || Math.abs(result) > 1e9) ? result.toExponential(6) : new Intl.NumberFormat('en-US', { maximumSignificantDigits: 10 }).format(result);
       eqDesc.textContent = `القيمة بالوحدة المعيارية (SI): ${inBase.toPrecision(5)}`;
     };
 
@@ -864,10 +908,7 @@
     });
 
     $('#unitCopyBtn').addEventListener('click', () => {
-      navigator.clipboard.writeText(outRes.textContent);
-      const btn = $('#unitCopyBtn');
-      btn.textContent = 'تم النسخ ✓';
-      setTimeout(() => { btn.textContent = '📋 نسخ النتيجة'; }, 1800);
+      copyText(outRes.textContent, $('#unitCopyBtn'));
     });
 
     populateUnits();
@@ -909,12 +950,95 @@
     const setupView = $('#quizSetupView');
     const playView = $('#quizPlayView');
     const reportView = $('#quizReportView');
+    const reviewView = $('#quizReviewView');
+    const teacherMode = $('#quizTeacherMode');
+    const exportAnswers = $('#quizExportAnswers');
+    const updateTeacherMode = () => {
+      const enabled = teacherMode.checked;
+      $$('#quizReviewList input, #quizReviewList textarea').forEach(input => { input.readOnly = !enabled; });
+      $$('#quizReviewList .quiz-answer-field, #quizReviewList details').forEach(node => { node.hidden = !enabled; });
+      $('#quizExportAnswersField').hidden = !enabled;
+      exportAnswers.disabled = !enabled;
+      if (!enabled) exportAnswers.checked = false;
+      $('#quizExportMsg').textContent = '';
+    };
+    teacherMode.addEventListener('change', updateTeacherMode);
+    const bankTexts = {
+      ethics: [
+        'التوثيق المرجعي يربط الاقتباس بمصدره ويتيح للقارئ الرجوع إلى العمل الأصلي.',
+        'الاقتباس المباشر ينقل كلمات المؤلف ويحتاج علامات اقتباس وتوثيقاً واضحاً للمصدر.',
+        'إعادة الصياغة تعرض الفكرة بكلمات الباحث وتظل بحاجة إلى توثيق المصدر الأصلي.',
+        'الانتحال العلمي يشمل عرض عمل الآخرين بوصفه عملاً شخصياً دون نسبة واضحة.',
+        'النزاهة البحثية تتطلب عرض البيانات بأمانة وتجنب اختلاق النتائج أو تحريفها.',
+        'موافقة المشاركين يجب أن تبنى على معرفة هدف الدراسة وطبيعة المشاركة.',
+        'سرية البيانات تستلزم حماية هوية المشاركين وقصر الوصول على الأشخاص المخولين.',
+        'تضارب المصالح يجب التصريح به عندما يمكن أن يؤثر في تقييم البحث.',
+        'قائمة المراجع تضم المصادر المستشهد بها وتساعد على التحقق من المعلومات.',
+        'المراجعة العلمية تتطلب فحص الأدلة والمصادر قبل اعتماد استنتاجات البحث النهائية.',
+      ].join('\n'),
+      bologna: [
+        'وحدات ECTS تعبّر عن عبء تعلم الطالب ولا تعني نقاط GPA على مقياس أربعة.',
+        'المعدل الموزون يحسب مجموع حاصل ضرب الدرجات بوحداتها مقسوماً على مجموع الوحدات.',
+        'التقييم التكويني يتابع تقدم الطالب خلال التعلم وفق قواعد البرنامج المعتمدة.',
+        'التقييم التلخيصي يقيس حصيلة التعلم في نهاية المرحلة وفق نظام المؤسسة.',
+        'مخرجات التعلم تصف المعارف والمهارات التي ينبغي للطالب اكتسابها من المقرر.',
+        'الخطة الدراسية تحدد مقررات البرنامج ووحداتها وتوزيعها على المراحل والفصول.',
+        'إعادة المقرر تخضع لقواعد المؤسسة المعتمدة ولا تعتمد على افتراض موحد.',
+        'السجل الأكاديمي الرسمي يصدر عن المؤسسة ويظل المرجع المعتمد لنتائج الطالب.',
+        'التعليمات الأكاديمية تحتاج إلى مصدر وتاريخ سريان ومراجعة قبل تطبيقها.',
+        'حساب الوحدات المكتسبة يتطلب التحقق من نجاح المقررات وفق قواعد البرنامج.',
+      ].join('\n'),
+    };
+    let fileController = null;
+    let readingFile = false;
+    const fileInput = $('#quizFileInput');
+    const sourceInput = $('#quizCustomText');
+    const fileStatus = $('#quizFileStatus');
+    fileInput.addEventListener('change', async () => {
+      fileController?.abort();
+      const file = fileInput.files[0];
+      if (!file) {
+        fileController = null; readingFile = false;
+        sourceInput.disabled = false; $('#startQuizBuildBtn').disabled = false;
+        $('#quizRemoveFile').hidden = true;
+        fileStatus.textContent = 'تم إلغاء اختيار الملف. يمكنك تعديل النص أو اختيار ملف آخر.';
+        return;
+      }
+      const controller = new AbortController(); fileController = controller;
+      readingFile = true; sourceInput.disabled = true;
+      $('#startQuizBuildBtn').disabled = true;
+      $('#quizRemoveFile').hidden = false;
+      fileStatus.textContent = 'جاري قراءة الملف محلياً…';
+      try {
+        const text = await MunjizQuiz.extractFile(file, controller.signal, message => {
+          if (fileController === controller) fileStatus.textContent = message;
+        });
+        if (fileController !== controller) return;
+        sourceInput.value = text; $('#quizPresetSelect').value = 'custom';
+        fileStatus.textContent = `تمت قراءة ${file.name}: ${fmt(text.length)} حرفاً. راجع النص المستخرج ثم اختر العدد والنوع.`;
+        $('#quizBuildMsg').textContent = `المحتوى يكفي لنحو ${MunjizQuiz.prepare(text).length} سؤالاً مختلفاً.`;
+      } catch (error) {
+        if (fileController === controller) fileStatus.textContent = error.message || 'تعذّر قراءة الملف؛ استخدم نسخة نصية.';
+      } finally {
+        if (fileController === controller) {
+          readingFile = false; sourceInput.disabled = false; $('#startQuizBuildBtn').disabled = false;
+        }
+      }
+    });
+    $('#quizRemoveFile').addEventListener('click', () => {
+      fileController?.abort(); fileController = null; readingFile = false;
+      fileInput.value = ''; sourceInput.value = ''; sourceInput.disabled = false;
+      fileStatus.textContent = ''; $('#quizBuildMsg').textContent = '';
+      $('#quizRemoveFile').hidden = true; $('#startQuizBuildBtn').disabled = false;
+    });
+    sourceInput.addEventListener('input', () => { if (sourceInput.value.trim()) $('#quizPresetSelect').value = 'custom'; });
 
     const switchQuizStep = (step) => {
       [step1Tab, step2Tab, step3Tab].forEach((t) => t.classList.remove('active'));
       setupView.hidden = true;
       playView.hidden = true;
       reportView.hidden = true;
+      reviewView.hidden = true;
 
       if (step === 1) {
         step1Tab.classList.add('active');
@@ -925,6 +1049,8 @@
       } else if (step === 3) {
         step3Tab.classList.add('active');
         reportView.hidden = false;
+      } else if (step === 4) {
+        step1Tab.classList.add('active'); reviewView.hidden = false;
       }
     };
 
@@ -936,20 +1062,36 @@
 
       const optsBox = $('#qCurrentOptions');
       optsBox.replaceChildren();
+      const answered = userAnswers[currentIdx] !== undefined;
 
       item.opts.forEach((optText, i) => {
         const isSelected = userAnswers[currentIdx] === i;
         const optBtn = el('button', {
           type: 'button',
-          class: `q-opt ${isSelected ? 'selected' : ''}`,
+          class: `q-opt${isSelected ? ' selected' : ''}${answered && i === item.a ? ' correct' : ''}${answered && isSelected && i !== item.a ? ' incorrect' : ''}`,
+          'aria-pressed': String(isSelected),
           text: optText,
         });
+        optBtn.disabled = answered;
         optBtn.addEventListener('click', () => {
+          if (userAnswers[currentIdx] !== undefined) return;
           userAnswers[currentIdx] = i;
           renderQuestion();
+          $('#qAnswerFeedback').focus();
         });
         optsBox.append(optBtn);
       });
+
+      const feedback = $('#qAnswerFeedback');
+      feedback.replaceChildren(); feedback.hidden = !answered;
+      feedback.classList.toggle('incorrect', answered && userAnswers[currentIdx] !== item.a);
+      if (answered) {
+        feedback.append(
+          el('strong', { text: userAnswers[currentIdx] === item.a ? 'إجابتك صحيحة ✓' : 'إجابتك غير صحيحة ✗' }),
+          el('p', { text: `الإجابة الصحيحة: ${item.opts[item.a]}` }),
+          el('p', { class: 'q-explain', text: `المصدر / التفسير: ${item.source || item.exp || 'لا يوجد تفسير إضافي.'}` }),
+        );
+      }
 
       $('#qPrevBtn').disabled = currentIdx === 0;
       const isLast = currentIdx === activeQuestions.length - 1;
@@ -975,10 +1117,10 @@
           el('div', { style: 'margin-top: .4rem; font-size: .95rem;' },
             el('span', { text: `إجابتك: ${userText} ${isCorrect ? '✓ (صحيحة)' : '✗ (خاطئة)'}` }),
           ),
-          (!isCorrect ? el('div', { style: 'color: #1E8E4E; font-weight: 700; margin-top: .2rem;' },
+          (userA !== undefined && !isCorrect ? el('div', { style: 'color: #1E8E4E; font-weight: 700; margin-top: .2rem;' },
             el('span', { text: `الإجابة المعتمدة: ${correctText}` }),
           ) : el('span')),
-          el('div', { class: 'q-explain', text: `التفسير العلمي: ${item.exp}` }),
+          el('div', { class: 'q-explain', text: userA === undefined ? 'الحل مخفي لأنك لم تجب. أعد تدريب الأسئلة المتروكة للإجابة عنها.' : `المصدر / التفسير: ${item.source || item.exp || 'لا يوجد تفسير إضافي.'}` }),
         );
         detailedList.append(card);
       });
@@ -997,16 +1139,76 @@
 
     $('#startQuizBuildBtn').addEventListener('click', () => {
       const preset = $('#quizPresetSelect').value;
-      const count = parseInt($('#quizCountSelect').value, 10);
-      const basePool = QUIZ_PRESETS[preset] || QUIZ_PRESETS['research-methods'];
-
-      // Pick questions
-      activeQuestions = basePool.slice(0, count);
-      currentIdx = 0;
-      userAnswers = {};
-      switchQuizStep(2);
-      renderQuestion();
+      const count = Number($('#quizCountSelect').value);
+      const type = $('#quizTypeSelect').value;
+      const msg = $('#quizBuildMsg'); msg.textContent = '';
+      if (readingFile) { msg.textContent = 'انتظر انتهاء قراءة الملف.'; return; }
+      try {
+        if (!Number.isInteger(count) || count < 1 || count > 50) throw new Error('اختر عدداً صحيحاً بين 1 و50.');
+        const text = sourceInput.value.trim();
+        if (text || preset === 'custom' || bankTexts[preset]) {
+          activeQuestions = MunjizQuiz.generate(text || bankTexts[preset] || '', count, type);
+        } else {
+          const pool = (QUIZ_PRESETS[preset] || []).filter(q => type === 'mixed' || (type === 'tf' ? q.opts.length === 2 : q.opts.length > 2));
+          if (pool.length < count) throw new Error(`البنك يحتوي ${pool.length} سؤالاً من النوع المحدد. خفّض العدد أو ارفع محاضرة لتوليد المزيد.`);
+          activeQuestions = MunjizQuiz.shuffle(pool).slice(0, count).map(q => {
+            const pairs = MunjizQuiz.shuffle(q.opts.map((text, i) => ({ text, correct: i === q.a })));
+            return { ...q, opts: pairs.map(p => p.text), a: pairs.findIndex(p => p.correct), source: q.exp };
+          });
+        }
+        const list = $('#quizReviewList'); list.replaceChildren();
+        activeQuestions.forEach((item, index) => {
+          const card = el('section', { class: 'q-detail-card' });
+          const question = el('textarea', { maxlength: '1600', 'aria-label': `نص السؤال ${index + 1}` }); question.value = item.q;
+          question.addEventListener('input', () => { item.q = question.value; });
+          card.append(el('h4', { text: `السؤال ${index + 1}` }), question);
+          const answer = el('select', { 'aria-label': `الإجابة الصحيحة للسؤال ${index + 1}` });
+          item.opts.forEach((text, i) => {
+            const input = el('input', { type: 'text', maxlength: '800', value: text, 'aria-label': `الخيار ${i + 1} للسؤال ${index + 1}` });
+            answer.append(el('option', { value: String(i), text: `الخيار ${i + 1}: ${text}` }));
+            input.addEventListener('input', () => { item.opts[i] = input.value; answer.options[i].textContent = `الخيار ${i + 1}: ${input.value}`; });
+            card.append(el('label', { class: 'field' }, el('span', { text: `الخيار ${i + 1}` }), input));
+          });
+          answer.value = String(item.a);
+          answer.addEventListener('change', () => { item.a = Number(answer.value); });
+          card.append(el('label', { class: 'field quiz-answer-field' }, el('span', { text: 'الإجابة الصحيحة' }), answer));
+          card.append(el('details', {}, el('summary', { text: 'المقطع المصدر / التفسير' }), el('p', { text: item.source || item.exp })));
+          list.append(card);
+        });
+        teacherMode.checked = false; updateTeacherMode();
+        $('#quizReviewMsg').textContent = ''; switchQuizStep(4);
+      } catch (error) { msg.textContent = error.message; }
     });
+    $('#quizConfirmStart').addEventListener('click', () => {
+      const invalid = activeQuestions.some(item => !item.q.trim() || item.opts.some(x => !x.trim())
+        || new Set(item.opts.map(x => x.trim().toLowerCase())).size !== item.opts.length
+        || !Number.isInteger(item.a) || item.a < 0 || item.a >= item.opts.length);
+      if (invalid) { $('#quizReviewMsg').textContent = 'أكمل الأسئلة والخيارات، وتجنب الخيارات المتكررة، وحدّد مفتاحاً صحيحاً.'; return; }
+      currentIdx = 0; userAnswers = {}; switchQuizStep(2); renderQuestion();
+    });
+    $('#quizExportDocx').addEventListener('click', async () => {
+      const button = $('#quizExportDocx');
+      const msg = $('#quizExportMsg');
+      button.disabled = true; msg.textContent = 'جاري تجهيز ملف Word محلياً…';
+      let url;
+      try {
+        const includeAnswers = teacherMode.checked && exportAnswers.checked;
+        const blob = await MunjizQuizExport.buildDocx(activeQuestions, {
+          title: $('#quizExportTitle').value.trim() || 'اختبار أكاديمي',
+          teacher: $('#quizExportTeacher').value.trim(), includeAnswers,
+        });
+        url = URL.createObjectURL(blob);
+        const link = el('a', { href: url, download: `munjiz-quiz-${includeAnswers ? 'teacher' : 'students'}.docx` });
+        document.body.append(link); link.click(); link.remove();
+        msg.textContent = includeAnswers ? 'تم تجهيز نسخة المدرّس بمفتاح الإجابات في صفحة مستقلة. تحقق من التنزيلات.' : 'تم تجهيز نسخة الطلاب دون حلول. تحقق من التنزيلات.';
+      } catch (error) {
+        msg.textContent = error.message || 'تعذّر تجهيز الملف. راجع الأسئلة ثم أعد المحاولة.';
+      } finally {
+        button.disabled = false;
+        if (url) setTimeout(() => URL.revokeObjectURL(url), 60000);
+      }
+    });
+    $('#quizBackSetup').addEventListener('click', () => switchQuizStep(1));
 
     $('#qPrevBtn').addEventListener('click', () => {
       if (currentIdx > 0) { currentIdx--; renderQuestion(); }
@@ -1111,7 +1313,8 @@
       }
       this.configureUI();
       const p = store.get(LS.profile);
-      this.setUser(p && p.email ? { name: p.name || p.email.split('@')[0], email: p.email, local: true } : null);
+      this.setUser(p && typeof p.email === 'string' && EMAIL_RE.test(p.email)
+        ? { name: typeof p.name === 'string' && p.name.trim() ? p.name : p.email.split('@')[0], email: p.email, local: true } : null);
     },
 
     fromFb(u) {
@@ -1178,7 +1381,8 @@
 
     setUser(u) {
       this.user = u;
-      $('#authBtnText').textContent = u ? u.name.split(' ')[0] : 'تسجيل / دخول';
+      $('#authBtnText').textContent = u ? u.name.split(' ')[0] : (this.isLocal() ? 'ملفي المحلي' : 'تسجيل / دخول');
+      $('#authBtn').setAttribute('aria-label', u ? `ملف ${u.name}` : 'الحساب والدخول الاختياري');
       if (u) {
         const p = store.get(LS.profile);
         if (p && p.email === u.email && p.audience) setAudience(p.audience, false); // يتذكّر فئتك
@@ -1209,7 +1413,7 @@
       try {
         const nm = name || email.split('@')[0];
         if (this.isLocal()) {
-          store.set(LS.profile, { name: nm, email, audience: aud });
+          if (!store.set(LS.profile, { name: nm, email, audience: aud })) return this.msg('تعذّر حفظ ملفك؛ تخزين المتصفح غير متاح.');
           this.setUser({ name: nm, email, local: true });
           notice = 'تم حفظ ملفك على هذا الجهاز.';
         } else {
@@ -1252,8 +1456,17 @@
     },
 
     async logout() {
+      if (this.isLocal() && !confirm('حذف الملف المحلي وبنود الترقية والمراجع المحفوظة من هذا المتصفح؟ صدّر أو انسخ ما تحتاجه أولاً.')) return;
       try { if (this.fb) await this.fb.A.signOut(this.fb.a); } catch { /* ignore */ }
-      try { localStorage.removeItem(LS.profile); } catch { /* ignore */ }
+      if (this.isLocal()) {
+        for (const key of [LS.promo, LS.target, LS.references, LS.audience, LS.charter]) {
+          if (!store.remove(key)) { $('#accMsg').textContent = 'تعذّر حذف البيانات؛ تحقق من إعدادات التخزين.'; return; }
+        }
+        promo.items = []; $('#promoTarget').value = ''; promo.render();
+        document.dispatchEvent(new Event('localprofiledeleted'));
+        setAudience('all', false);
+      }
+      if (!store.remove(LS.profile)) { $('#accMsg').textContent = 'تعذّر حذف الملف المحلي.'; return; }
       this.setUser(null);
       this.showView();
     },
@@ -1310,5 +1523,33 @@
     initQuiz();
     modals.init();
     auth.init();
+    MunjizServiceAssistant.init({
+      services: SERVICES, audiences: AUDIENCES,
+      getAudience: () => currentAudience, getProfile: () => auth.user,
+      whatsappNumber: CONFIG.WHATSAPP_NUMBER,
+      openDialog: dialog => modals.open(dialog),
+    });
+    initVisitorCounter();
   });
+
+  async function initVisitorCounter() {
+    const badge = $('#visitorBadge');
+    const count = $('#visitorCount');
+    const unavailable = () => {
+      count.textContent = '—';
+      badge.setAttribute('aria-label', 'عدد الزوار غير متاح حالياً');
+      badge.title = 'عدد الزوار غير متاح حالياً.';
+    };
+    if (!['http:', 'https:'].includes(location.protocol)) { unavailable(); return; }
+    try {
+      const response = await fetch('/api/visitors', { method: 'POST', credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' }, body: '{}', signal: AbortSignal.timeout(8000) });
+      if (!response.ok) throw new Error('Counter unavailable');
+      const data = await response.json();
+      if (!Number.isSafeInteger(data.visitors) || data.visitors < 0) throw new Error('Invalid counter');
+      count.textContent = new Intl.NumberFormat('ar-IQ', { notation: 'compact', maximumFractionDigits: 1 }).format(data.visitors);
+      badge.setAttribute('aria-label', `عدد المتصفحات الزائرة: ${fmt(data.visitors)}`);
+      badge.title = `${fmt(data.visitors)} متصفح زائر. يُعد المتصفح مرة واحدة ما دام يحتفظ بملف تعريف الارتباط؛ ليس تعداداً للأشخاص أو المتصلين الآن.`;
+    } catch { unavailable(); }
+  }
 })();

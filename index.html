@@ -27,18 +27,23 @@
         </span>
       </a>
 
-      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="mainNav" aria-label="القائمة">
-        <span></span><span></span><span></span>
-      </button>
-
       <nav class="main-nav" id="mainNav" aria-label="التنقل الرئيسي">
         <a href="#tools">الأدوات الأكاديمية</a>
         <a href="#assistant">المساعد البحثي</a>
         <a href="#services">الخدمات</a>
         <a href="#library">المكتبة والموارد</a>
         <button type="button" class="btn btn-gold btn-sm" data-open-charter>ميثاق النزاهة</button>
-        <button type="button" class="btn btn-light-outline btn-sm" id="authBtn" data-open-auth aria-haspopup="dialog">👤 <span id="authBtnText">تسجيل / دخول</span></button>
       </nav>
+      <div class="header-actions">
+        <span class="visitor-badge" id="visitorBadge" role="status" aria-label="جاري قراءة عدد الزوار" title="جاري قراءة عدد الزوار">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="7" r="3"/><path d="M3 20v-3a6 6 0 0 1 12 0v3M16 4a3 3 0 0 1 0 6M21 20v-3a6 6 0 0 0-4-5"/></svg>
+          <span class="header-label">الزوار</span><strong id="visitorCount">—</strong>
+        </span>
+        <button type="button" class="header-account" id="authBtn" data-open-auth aria-haspopup="dialog" aria-label="الحساب والدخول الاختياري" title="الحساب اختياري؛ يمكنك التصفح والطلب كزائر">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 22v-2a8 8 0 0 1 16 0v2"/></svg><span id="authBtnText">دخول اختياري</span>
+        </button>
+        <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="mainNav" aria-label="القائمة"><span></span><span></span><span></span></button>
+      </div>
     </div>
   </header>
 
@@ -51,6 +56,7 @@
           <h1>لا نكتب عنك… <em>نُنجز معك</em></h1>
           <p class="lead">دعم أكاديمي مسؤول وأدوات مجانية لطلبة الدراسات الأولية والعليا والباحثين والتدريسيين. ندقّق وننسّق ونرشد ونُنجز معك الخطوات، أما العمل العلمي فيبقى لك.</p>
           <div class="hero-actions">
+            <button type="button" class="btn btn-gold" data-open-service-assistant aria-haspopup="dialog">ساعدني في اختيار الخدمة</button>
             <a class="btn btn-gold" href="#services">اختر فئتك وابدأ</a>
             <a class="btn btn-wa-hero" id="heroWaBtn" href="#" target="_blank" rel="noopener noreferrer">
               <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
@@ -60,6 +66,7 @@
             </a>
             <a class="btn btn-ghost" href="#tools">جرّب الأدوات المجانية</a>
           </div>
+          <p class="guest-note">التصفح والأدوات وطلب الخدمات متاحة دون تسجيل. حسابك اختياري.</p>
         </div>
         <ul class="hero-points" aria-label="مميزات المنصة">
           <li>
@@ -111,6 +118,10 @@
           <h2 id="servicesTitle">مركز الخدمات</h2>
           <p id="servicesSub">جميع الخدمات المتاحة. اختر فئتك في الأعلى لتصفية ما يناسبك.</p>
         </header>
+        <div class="service-guide-callout">
+          <div><h3>مساعد اختيار الخدمة الأكاديمية</h3><p>أجب عن أسئلة بسيطة حول احتياجك؛ نقترح الخدمة المناسبة ونفتح نموذج طلبها مباشرة.</p></div>
+          <button type="button" class="btn btn-teal" data-open-service-assistant aria-haspopup="dialog">اكتشف الخدمة المناسبة</button>
+        </div>
         <div class="cat-grid" id="categoryPicker"></div>
 
         <div class="services-panel" id="servicesPanel" hidden>
@@ -128,7 +139,7 @@
       <div class="container">
         <header class="section-head">
           <h2 id="toolsTitle">الأدوات المجانية</h2>
-          <p>أدوات خفيفة تعمل على جهازك مباشرة، ولا يُرسل أي نص أو بيانات إلى أي خادم.</p>
+          <p>الحسابات والنصوص والملفات تُعالج محلياً على جهازك. جلب DOI يتصل بـCrossref، والخطوط تُحمّل من Google Fonts.</p>
         </header>
 
         <div class="tool-tiles" id="toolTiles">
@@ -357,6 +368,10 @@
               <div class="tool-note" id="gpaNote">
                 نظام المعدل الموزون: مجموع (الدرجة × الوحدات) ÷ مجموع الوحدات. يُرجى مراجعة نظام كليتك.
               </div>
+              <label class="field" id="gpaScaleField" hidden>
+                <span>سلم نقاط GPA</span>
+                <select id="gpaScale"><option value="4">4.0</option><option value="5">5.0</option></select>
+              </label>
 
               <div id="gpaContainer">
                 <div id="gpaRows" class="gpa-rows"></div>
@@ -468,6 +483,8 @@
                 <button type="button" class="btn btn-outline btn-sm" id="copyAllRefsBtn" hidden>📋 نسخ القائمة كاملة</button>
                 <button type="button" class="btn btn-danger btn-sm" id="clearRefsBtn">مسح الحقول</button>
               </div>
+              <p class="form-msg" id="refSaveMsg" role="status"></p>
+              <p class="tool-note">تُحفظ القائمة على هذا المتصفح فقط. راجع بيانات المرجع وقواعد التوثيق قبل الاعتماد الأكاديمي.</p>
 
               <!-- قائمة المراجع المتراكمة -->
               <div id="savedRefsWrapper" hidden>
@@ -490,7 +507,7 @@
               <!-- اختيار الكمية -->
               <div class="field">
                 <span>المجموعة الفيزيائية</span>
-                <select id="unitCategorySelect">
+                <select id="unitCategorySelect" aria-label="المجموعة الفيزيائية">
                   <option value="length">الطول (Length)</option>
                   <option value="mass">الكتلة (Mass)</option>
                   <option value="time">الزمن (Time)</option>
@@ -551,7 +568,7 @@
 
               <!-- المرحلة 1: الإعداد -->
               <div id="quizSetupView">
-                <p class="tool-note">أنشئ اختباراً تدريبياً فورياً من موضوع محدد أو الصق نص محاضرتك؛ يتضمن خيارات متعددة وصح/خطأ مع تصحيح حتمي بمفتاح إجابة وتفسير لكل سؤال.</p>
+                <p class="tool-note">اختبار تدريبي من البنك أو من نص محاضرتك وملفك. التوليد المحلي يحوّل مقاطع النص إلى أسئلة إكمال وصح/خطأ؛ راجع الأسئلة ومصادرها قبل البدء. لا يُرفع الملف إلى خادم ولا يُستخدم اشتراك ذكاء اصطناعي.</p>
                 
                 <div class="form-grid">
                   <label class="field span-2">
@@ -566,16 +583,21 @@
                   </label>
 
                   <label class="field span-2">
-                    <span>موضوع مخصص أو نص المحاضرة (اختياري)</span>
-                    <textarea id="quizCustomText" rows="3" placeholder="اكتب أو الصق نص المحاضرة أو النقاط الأساسية لتوليد الأسئلة منها..."></textarea>
+                    <span>نص المحاضرة أو محتوى الملف (يمكنك مراجعته وتعديله)</span>
+                    <textarea id="quizCustomText" rows="6" maxlength="200000" placeholder="الصق محتوى علمياً يتضمن عدة جمل أو تعريفات؛ عنوان الموضوع وحده لا يكفي لتوليد أسئلة."></textarea>
                   </label>
+                  <label class="field span-2">
+                    <span>رفع محاضرة: TXT أو DOCX أو PDF نصي — حتى 10 ميغابايت</span>
+                    <input type="file" id="quizFileInput" accept=".txt,.docx,.pdf" aria-describedby="quizFileStatus">
+                  </label>
+                  <div class="field span-2">
+                    <p class="form-msg" id="quizFileStatus" role="status" aria-live="polite"></p>
+                    <button type="button" class="btn btn-outline btn-sm" id="quizRemoveFile" hidden>إزالة الملف ونصه</button>
+                  </div>
 
                   <label class="field">
                     <span>عدد الأسئلة</span>
-                    <select id="quizCountSelect">
-                      <option value="5">5 أسئلة</option>
-                      <option value="10" selected>10 أسئلة (معيار القبول M1)</option>
-                    </select>
+                    <input type="number" id="quizCountSelect" min="1" max="50" step="1" value="10" inputmode="numeric" aria-describedby="quizBuildMsg">
                   </label>
 
                   <label class="field">
@@ -587,9 +609,32 @@
                     </select>
                   </label>
                 </div>
+                <p class="form-msg" id="quizBuildMsg" role="status" aria-live="polite"></p>
 
                 <div style="margin-top: 1.2rem;">
-                  <button type="button" class="btn btn-teal" id="startQuizBuildBtn">🚀 إنشاء وبدء الاختبار</button>
+                  <button type="button" class="btn btn-teal" id="startQuizBuildBtn">🚀 توليد الأسئلة ومراجعتها</button>
+                </div>
+              </div>
+              <div id="quizReviewView" hidden>
+                <h4>معاينة الأسئلة قبل الاختبار</h4>
+                <p class="tool-note">الحلول مخفية حتى تجيب. لتعديل الأسئلة ومراجعة المفتاح والمصدر، فعّل وضع إعداد المدرّس. هذه أسئلة تدريبية وليست تصحيحاً رسمياً.</p>
+                <label class="quiz-check"><input type="checkbox" id="quizTeacherMode"> إعداد المدرّس: تحرير الأسئلة وإظهار مفتاح الإجابات</label>
+                <fieldset class="quiz-export-panel">
+                  <legend>تنزيل الأسئلة للأساتذة</legend>
+                  <div class="form-grid">
+                    <label class="field"><span>عنوان الاختبار</span><input type="text" id="quizExportTitle" maxlength="120" value="اختبار أكاديمي"></label>
+                    <label class="field"><span>اسم المدرّس (اختياري)</span><input type="text" id="quizExportTeacher" maxlength="120" placeholder="اسم المدرّس"></label>
+                  </div>
+                  <label class="quiz-check" id="quizExportAnswersField" hidden><input type="checkbox" id="quizExportAnswers" disabled> إضافة مفتاح الإجابات في صفحة مستقلة — نسخة المدرّس</label>
+                  <p class="tool-note">النسخة الافتراضية للطلاب تتضمن الأسئلة والخيارات فقط، دون الحلول أو التفسيرات.</p>
+                  <button type="button" class="btn btn-outline" id="quizExportDocx">تنزيل الأسئلة بصيغة Word (.docx)</button>
+                  <p class="form-msg" id="quizExportMsg" role="status" aria-live="polite"></p>
+                </fieldset>
+                <div id="quizReviewList" class="quiz-detailed-list"></div>
+                <p class="form-msg" id="quizReviewMsg" role="status"></p>
+                <div class="tool-actions">
+                  <button type="button" class="btn btn-teal" id="quizConfirmStart">بدء الاختبار بعد المراجعة</button>
+                  <button type="button" class="btn btn-outline" id="quizBackSetup">العودة للإعدادات</button>
                 </div>
               </div>
 
@@ -608,6 +653,8 @@
                 <div class="question-card" id="quizQuestionBox">
                   <h4 id="qCurrentText" class="q-title">نص السؤال يظهر هنا...</h4>
                   <div class="q-options" id="qCurrentOptions"></div>
+                  <p class="tool-note">اختر إجابتك لتثبيتها وإظهار الحل. يمكنك إعادة الأسئلة الخاطئة بعد انتهاء الاختبار.</p>
+                  <div id="qAnswerFeedback" class="q-feedback" role="status" aria-live="polite" tabindex="-1" hidden></div>
                 </div>
 
                 <div class="quiz-nav-actions">
@@ -738,8 +785,8 @@
           <p>ثلاث خطوات واضحة وشفافة.</p>
         </header>
         <ol class="steps">
-          <li><span class="step-num">1</span><h3>اختر فئتك وخدمتك</h3><p>حدّد من أنت ثم اختر الخدمة الأقرب لاحتياجك.</p></li>
-          <li><span class="step-num">2</span><h3>تواصل عبر واتساب</h3><p>تُجهَّز رسالتك تلقائياً بنوع الخدمة والفئة، فتبدأ المحادثة مباشرة.</p></li>
+          <li><span class="step-num">1</span><h3>اكتشف الخدمة المناسبة</h3><p>أجب عن أسئلة المساعد أو اختر الخدمة مباشرة؛ التسجيل اختياري.</p></li>
+          <li><span class="step-num">2</span><h3>جهّز طلبك وتواصل</h3><p>راجع تفاصيل نموذج الطلب، ثم أرسل الرسالة بنفسك عبر واتساب.</p></li>
           <li><span class="step-num">3</span><h3>نُنجز معك</h3><p>نعمل معك خطوة بخطوة ضمن ميثاق النزاهة، وتبقى أنت صاحب العمل.</p></li>
         </ol>
       </div>
@@ -765,6 +812,7 @@
         <p>لا نكتب عنك... نُنجز معك</p>
       </div>
       <p class="copy">© <span id="year"></span> مُنجز أكاديمي. جميع الحقوق محفوظة.</p>
+      <p class="visitor-note">عداد الزوار تقريبي ويعتمد على ملف تعريف ارتباط مجهول للمتصفح.</p>
     </div>
   </footer>
 
@@ -774,6 +822,41 @@
   </a>
 
   <!-- ============ Integrity Charter Modal ============ -->
+  <dialog class="modal" id="serviceRequestModal" aria-labelledby="serviceFlowTitle">
+    <div class="modal-box">
+      <button type="button" class="modal-close" data-close-modal aria-label="إغلاق">✕</button>
+      <h2 id="serviceFlowTitle">مساعد اختيار الخدمة الأكاديمية</h2>
+      <p class="modal-lead">يمكنك اختيار الخدمة وطلبها كزائر دون إنشاء حساب.</p>
+      <div id="serviceWizard">
+        <p id="serviceWizardProgress" class="form-msg"></p>
+        <h3 id="serviceWizardQuestion" tabindex="-1"></h3>
+        <div id="serviceWizardChoices" class="service-wizard-choices"></div>
+        <div class="tool-actions"><button type="button" class="btn btn-outline" id="serviceWizardBack" disabled>السابق</button></div>
+      </div>
+      <div id="serviceOrderView" hidden>
+        <div class="service-recommendation" id="serviceRecommendation" role="status"></div>
+        <button type="button" class="link-btn" id="serviceChooseAgain">اختيار خدمة أخرى بالمساعد</button>
+        <form id="serviceOrderForm">
+          <div class="form-grid">
+            <label class="field span-2"><span>الخدمة المطلوبة</span><select id="orderService" required></select></label>
+            <label class="field"><span>فئتك (اختياري)</span><select id="orderAudience"></select></label>
+            <label class="field"><span>الاسم (اختياري)</span><input type="text" id="orderName" autocomplete="name" maxlength="80"></label>
+            <label class="field span-2"><span>وصف احتياجك</span><textarea id="orderDetails" rows="4" minlength="10" maxlength="2500" required placeholder="اذكر نوع العمل والمساعدة المطلوبة، دون إضافة معلومات حساسة."></textarea></label>
+            <label class="field"><span>الموعد المفضل (اختياري)</span><input type="date" id="orderDeadline"></label>
+          </div>
+          <label class="quiz-check"><input type="checkbox" id="orderIntegrity" required> أفهم أن الخدمة للتدقيق والتنسيق والإرشاد، وليست كتابة العمل العلمي نيابة عني.</label>
+          <p class="tool-note">تُجهّز التفاصيل محلياً. لا يُرسل الطلب قبل أن تفتح واتساب وترسل الرسالة بنفسك.</p>
+          <p class="form-msg" id="serviceOrderMsg" role="status" aria-live="polite"></p>
+          <button type="submit" class="btn btn-teal">تجهيز الطلب</button>
+        </form>
+        <div id="serviceOrderReady" hidden>
+          <label class="field"><span>معاينة تفاصيل الطلب</span><textarea id="serviceOrderPreview" rows="8" readonly></textarea></label>
+          <div class="tool-actions"><a class="btn btn-wa" id="serviceOrderWhatsapp" target="_blank" rel="noopener noreferrer">فتح الطلب في واتساب</a><button type="button" class="btn btn-outline" id="serviceOrderCopy">نسخ تفاصيل الطلب</button></div>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
   <dialog class="modal" id="charterModal" aria-labelledby="charterTitle">
     <div class="modal-box">
       <button type="button" class="modal-close" data-close-charter aria-label="إغلاق">✕</button>
@@ -814,6 +897,7 @@
     <div class="modal-box">
       <button type="button" class="modal-close" data-close-modal aria-label="إغلاق">✕</button>
       <h2 id="authTitle">👤 حسابك (اختياري)</h2>
+      <p class="modal-lead">التصفح واستخدام الأدوات وطلب الخدمات متاح لك دون تسجيل.</p>
       <p class="modal-lead">التسجيل <strong>اختياري تماماً</strong>. جميع الخدمات والأدوات متاحة لك بدون حساب.</p>
 
       <!-- زائر -->
@@ -850,6 +934,7 @@
           <button type="button" class="link-btn" id="authForgot" hidden>نسيت كلمة المرور؟</button>
         </form>
         <p class="auth-note" id="authModeNote"></p>
+        <button type="button" class="btn btn-outline btn-block" data-close-modal>متابعة كزائر</button>
       </div>
 
       <!-- مستخدم مسجّل -->
@@ -871,6 +956,9 @@
     </div>
   </dialog>
 
+  <script src="quiz-core.js"></script>
+  <script src="quiz-export.js"></script>
+  <script src="service-assistant.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
