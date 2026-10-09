@@ -9,7 +9,7 @@ from xml.sax.saxutils import escape
 from zipfile import ZipFile, ZIP_DEFLATED
 from playwright.sync_api import sync_playwright, expect
 
-URL = os.environ.get('MUNJIZ_TEST_URL', 'http://127.0.0.1:8000')
+URL = os.environ.get('MUNJIZ_TEST_URL', 'http://127.0.0.1:8000').rstrip('/') + '/tools.html'
 checks = []
 
 def make_pdf(path, sentences=()):
@@ -60,12 +60,13 @@ with tempfile.TemporaryDirectory(prefix='munjiz-test-') as temporary, sync_playw
     def close_tool(name): page.locator(f'#dlg-{name} [data-close-modal]').click()
     def check(name): checks.append(name); print('PASS:', name, flush=True)
 
-    page.locator('[data-pick="grad"]').click(); page.reload(wait_until='networkidle')
-    expect(page.locator('#categoryPicker')).to_be_visible()
+    page.evaluate("localStorage.setItem('munjaz.audience', JSON.stringify('grad'))")
+    page.reload(wait_until='networkidle')
+    expect(page.locator('#toolTiles')).to_be_visible()
     assert page.evaluate("JSON.parse(localStorage.getItem('munjaz.audience'))") == 'grad'
-    page.locator('[data-pick="grad"]').click()
-    expect(page.locator('#servicesPanel')).to_be_visible()
-    check('audience persistence, category-first services and application startup')
+    expect(page.locator('.tool-tile[data-open-tool="gpa"] .badge-rec')).to_be_visible()
+    assert page.locator('.tool-tile').count() == 7
+    check('audience persistence, single free-tool directory and application startup')
     open_tool('gpa')
     rows = page.locator('.gpa-row')
     for i, (weight, mark) in enumerate(((3, 85), (2, 90))):

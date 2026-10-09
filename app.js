@@ -68,7 +68,6 @@
 
   /* ---------- الخدمات المهنية المعتمدة ---------- */
   const SERVICES = MunjizAcademicServices.items;
-  let selectedServiceCategory = null;
 
   /* ---------- بنود الترقية (قيم استرشادية قابلة للتعديل) ---------- */
   const PROMO_TYPES = [
@@ -145,15 +144,6 @@
      ===================================================== */
   let currentAudience = 'all';
 
-  function renderServices() {
-    MunjizAcademicServices.render({ category: selectedServiceCategory, onSelect: group => {
-      selectedServiceCategory = group.id;
-      setAudience(group.audience);
-      $('#panelTitle').setAttribute('tabindex', '-1'); $('#panelTitle').focus();
-      $('#services').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    } });
-  }
-
   function renderBanner() {
     const box = $('#audienceBanner');
     if (!box) return;
@@ -178,7 +168,6 @@
     $$('#audienceChips .chip').forEach((c) => c.setAttribute('aria-checked', String(c.dataset.audience === key)));
     if (persist) store.set(LS.audience, key);
     renderBanner();
-    renderServices();
     markTools();
     $('#waFloat').href = waLink('');
     if ($('#heroWaBtn')) $('#heroWaBtn').href = waLink('استشارة أكاديمية عامة');
@@ -205,14 +194,6 @@
     });
 
     // زر العودة لاختيار الفئة + بطاقات الفئات داخل قسم الخدمات
-    $('#backToCategories').addEventListener('click', () => {
-      selectedServiceCategory = null;
-      setAudience('all');
-      syncTab();
-      $('#services').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-
-
     setAudience(store.get(LS.audience, 'all'), false);
     syncTab();
   }
@@ -1318,7 +1299,6 @@
         const p = store.get(LS.profile);
         if (p && p.email === u.email && p.audience) setAudience(p.audience, false); // يتذكّر فئتك
       }
-      renderServices();                     // لتحديث روابط واتساب (الاسم)
       $('#waFloat').href = waLink('');
       if ($('#heroWaBtn')) $('#heroWaBtn').href = waLink('استشارة أكاديمية عامة');
       if ($('#authModal').open) this.showView();
@@ -1393,7 +1373,8 @@
         for (const key of [LS.promo, LS.target, LS.references, LS.audience, LS.charter]) {
           if (!store.remove(key)) { $('#accMsg').textContent = 'تعذّر حذف البيانات؛ تحقق من إعدادات التخزين.'; return; }
         }
-        promo.items = []; $('#promoTarget').value = ''; promo.render();
+        promo.items = [];
+        if ($('#promoTarget')) { $('#promoTarget').value = ''; promo.render(); }
         document.dispatchEvent(new Event('localprofiledeleted'));
         setAudience('all', false);
       }
@@ -1442,24 +1423,44 @@
 
   /* ---------- التشغيل ---------- */
   document.addEventListener('DOMContentLoaded', () => {
+    // Old bookmarks continue to work after moving the tool directory.
+    const redirectLegacyHash = () => {
+      if ($('#toolTiles')) return false;
+      if (['#tools', '#assistant', '#library'].includes(location.hash) || /^#tool-[a-z]+$/.test(location.hash)) {
+        location.replace('tools.html' + location.hash); return true;
+      }
+      if (location.hash === '#services') { location.replace('services.html'); return true; }
+      return false;
+    };
+    if (redirectLegacyHash()) return;
     $('#year').textContent = new Date().getFullYear();
     initNav();
     initGateway();
-    promo.init();
-    initWordCounter();
-    initSampleSize();
-    initGpa();
-    initReferences();
-    initUnits();
-    initQuiz();
+    if ($('#toolTiles')) {
+      promo.init();
+      initWordCounter();
+      initSampleSize();
+      initGpa();
+      initReferences();
+      initUnits();
+      initQuiz();
+    }
     modals.init();
     auth.init();
-    MunjizServiceAssistant.init({
+    if ($('#serviceRequestModal')) MunjizServiceAssistant.init({
       services: SERVICES, categories: MunjizAcademicServices.categories,
       openDialog: dialog => modals.open(dialog),
     });
     MunjizVisitorCounter.init();
     if (location.hash === '#account') auth.open();
+    const openLinkedTool = () => {
+      if (!$('#toolTiles') || !/^#tool-[a-z]+$/.test(location.hash)) return;
+      const id = location.hash.slice(6);
+      const button = $(`.tool-tile[data-open-tool="${id}"]`);
+      if (button) { button.focus(); modals.open($('#dlg-' + id)); }
+    };
+    window.addEventListener('hashchange', () => { if (!redirectLegacyHash()) openLinkedTool(); });
+    openLinkedTool();
   });
 
 })();

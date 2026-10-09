@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>خدماتنا الأكاديمية | مُنجز أكاديمي</title>
+  <title>الخدمات الأكاديمية المدفوعة | مُنجز أكاديمي</title>
   <meta name="description" content="خدمات أكاديمية مهنية لطلبة الدراسات الأولية والعليا والأساتذة والباحثين. اختر فئتك واطلب الخدمة مباشرة عبر واتساب.">
   <meta name="theme-color" content="#0E6B66">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,7 +15,7 @@
   <a class="skip-link" href="#main">تخطَّ إلى المحتوى</a>
   <header class="site-header" id="top">
     <div class="container header-inner">
-      <a class="brand" href="#top" aria-label="مُنجز أكاديمي - الرئيسية">
+      <a class="brand" href="index.html" aria-label="مُنجز أكاديمي - الرئيسية">
         <span class="brand-mark" aria-hidden="true">
           <svg viewBox="0 0 32 32" width="30" height="30"><path d="M16 4 2 11l14 7 14-7-14-7Z" fill="#fff"/><path d="M8 15.5v6c0 1.7 3.6 4 8 4s8-2.300 8-4v-6l-8 4-8-4Z" fill="#E9C16C"/></svg>
         </span>
@@ -26,10 +26,9 @@
       </a>
 
       <nav class="main-nav" id="mainNav" aria-label="التنقل الرئيسي">
-        <a href="index.html#tools">الأدوات الأكاديمية</a>
-        <a href="index.html#assistant">المساعد البحثي</a>
-        <a href="services.html" aria-current="page">خدماتنا الأكاديمية</a>
-        <a href="index.html#library">المكتبة والموارد</a>
+        <a href="index.html">الرئيسية</a>
+        <a href="tools.html">الأدوات المجانية</a>
+        <a href="services.html" aria-current="page">الخدمات المدفوعة</a>
         <button type="button" class="btn btn-gold btn-sm" data-open-charter>ميثاق النزاهة</button>
       </nav>
       <div class="header-actions">
@@ -46,21 +45,21 @@
   </header>
   <main id="main">
     <section class="services-page-intro"><div class="container">
-      <span class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>دعم أكاديمي مسؤول</span>
-      <h1>خدماتنا الأكاديمية</h1>
+      <span class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>خدمات مهنية مدفوعة</span>
+      <h1>الخدمات الأكاديمية المدفوعة</h1>
       <p>15 خدمة مهنية ضمن ثلاث فئات، تُقدَّم بالتعاون مع صاحب العمل العلمي. اختر الفئة المناسبة لعرض خدماتها.</p>
       <p>الخدمات مدفوعة، والأدوات الأكاديمية مجانية. التصفح والطلب دون تسجيل.</p>
-      <a class="btn btn-ghost" href="index.html#tools">جرّب الأدوات المجانية</a>
+      <a class="breadcrumb" href="index.html">الرئيسية ←</a>
     </div></section>
     <section class="section" id="services" aria-labelledby="servicesTitle">
       <div class="container">
         <header class="section-head">
-          <h2 id="servicesTitle">خدماتنا الأكاديمية</h2>
+          <h2 id="servicesTitle">اختر فئتك لعرض خدماتها</h2>
           <p id="servicesSub">جميع الخدمات المتاحة. اختر فئتك في الأعلى لتصفية ما يناسبك.</p>
         </header>
         <div class="service-guide-callout">
-          <div><h3>مساعد اختيار الخدمة الأكاديمية</h3><p>أجب عن أسئلة بسيطة حول احتياجك؛ نقترح الخدمة المناسبة، ثم تواصل مباشرة عبر واتساب برسالة جاهزة.</p></div>
-          <button type="button" class="btn btn-teal" data-open-service-assistant aria-haspopup="dialog">اكتشف الخدمة المناسبة</button>
+          <div><h3>مساعد اختيار الخدمة المدفوعة</h3><p>أجب عن أسئلة بسيطة حول احتياجك؛ نقترح الخدمة المناسبة، ثم تواصل مباشرة عبر واتساب برسالة جاهزة.</p></div>
+          <button type="button" class="btn btn-gold" data-open-service-assistant aria-haspopup="dialog">اكتشف الخدمة المناسبة</button>
         </div>
         <p class="services-integrity-note">دعم علمي وتحريري بالتعاون مع صاحب العمل؛ يبقى المحتوى والبيانات والعمل العلمي مسؤولية صاحبه.</p>
         <div class="cat-grid" id="categoryPicker"></div>
@@ -93,7 +92,7 @@
   <dialog class="modal" id="serviceRequestModal" aria-labelledby="serviceFlowTitle">
     <div class="modal-box">
       <button type="button" class="modal-close" data-close-modal aria-label="إغلاق">✕</button>
-      <h2 id="serviceFlowTitle">مساعد اختيار الخدمة الأكاديمية</h2>
+      <h2 id="serviceFlowTitle">مساعد اختيار الخدمة المدفوعة</h2>
       <p class="modal-lead">حدد احتياجك بأسئلة بسيطة. الطلب مباشرة عبر واتساب دون تسجيل أو استمارة معلومات.</p>
       <div id="serviceWizard">
         <p id="serviceWizardProgress" class="form-msg"></p>

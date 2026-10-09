@@ -40,7 +40,7 @@
         button.dataset.serviceCategory = group.id; button.dataset.pick = group.audience;
         button.setAttribute('aria-label', `${group.title}، ${items.filter(item => item.category === group.id).length} خدمات`);
         button.append(make('span', group.icon, 'cat-icon'), make('strong', group.title),
-          make('small', group.description), make('span', `${items.filter(item => item.category === group.id).length} خدمات ←`, 'cat-count'));
+          make('small', group.description), make('span', `${items.filter(item => item.category === group.id).length} خدمات مدفوعة ←`, 'cat-count'));
         button.addEventListener('click', () => onSelect(group)); $('#categoryPicker').append(button);
       });
       return;
@@ -49,7 +49,7 @@
     const grid = make('div', '', 'cards academic-service-cards');
     items.filter(item => item.category === category).forEach(service => {
       const card = make('article', '', 'card academic-service-card'); card.dataset.serviceId = service.id;
-      const button = make('a', 'اطلب الخدمة', 'btn btn-teal');
+      const button = make('a', 'اطلب الخدمة', 'btn btn-gold');
       button.href = requestUrl(service.id); button.target = '_blank'; button.rel = 'noopener noreferrer';
       button.dataset.requestService = service.id;
       button.setAttribute('aria-label', `اطلب الخدمة عبر واتساب: ${service.title}`);

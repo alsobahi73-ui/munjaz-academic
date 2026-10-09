@@ -82,8 +82,11 @@ with sync_playwright() as p:
     page.goto(URL,wait_until='networkidle')
     page.evaluate("localStorage.setItem('munjaz.audience', JSON.stringify('grad'))")
     page.reload(wait_until='networkidle')
-    assert page.locator('[data-service-category]').count() == 3
+    assert page.locator('.platform-route').count() == 2
+    assert page.locator('[data-service-category], [data-open-tool]').count() == 0
     assert page.locator('.academic-service-card').count() == 0
+    page.locator('.route-paid a').click()
+    expect(page.locator('[data-service-category]')).to_have_count(3)
     page.locator('[data-service-category="professionals"]').click()
     assert page.locator('.academic-service-card').count() == 6
     page.locator('#backToCategories').click()
@@ -92,7 +95,7 @@ with sync_playwright() as p:
     page.goto(URL + '/services.html',wait_until='networkidle'); page.locator('#authBtn').click()
     expect(page.locator('#authModal')).to_be_visible()
     page.get_by_role('button', name='متابعة كزائر', exact=True).click()
-    check('homepage also stays category-first; guest browsing and optional account link work')
+    check('homepage separates free/paid routes; services remain category-first and account is optional')
     assert not errors, errors
     fallback = context.new_page()
     fallback.route('**/api/visitors', lambda route: route.fulfill(status=503,body='{}',content_type='application/json'))

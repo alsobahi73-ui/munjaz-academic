@@ -191,7 +191,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .form-grid .field { margin-bottom: 0; }
 .field > span { font-size: .9rem; font-weight: 700; color: var(--teal-dark); }
 .field-btn { justify-content: flex-end; }
-input[type="text"], input[type="number"], select, textarea {
+input[type="text"], input[type="number"], input[type="search"], select, textarea {
   width: 100%; padding: .6rem .8rem; border: 2px solid var(--line); border-radius: 10px; background: #fff; transition: border-color .2s;
 }
 input[type="email"], input[type="password"], input[type="url"], input[type="file"] {
@@ -325,6 +325,7 @@ textarea { resize: vertical; min-height: 130px; }
 .tile-icon { width: 72px; height: 72px; display: grid; place-items: center; font-size: 2.2rem; border-radius: 20px; background: linear-gradient(135deg, var(--teal-dark), var(--teal)); margin-bottom: .4rem; }
 .tool-tile strong { color: var(--teal-dark); font-size: 1.1rem; }
 .tool-tile small { color: var(--muted); font-size: .88rem; }
+.tool-tile[hidden] { display: none; }
 .tool-tile .badge-rec { position: absolute; top: .6rem; inset-inline-end: .6rem; }
 
 /* ===== Modals: tools & auth ===== */
@@ -447,7 +448,7 @@ textarea { resize: vertical; min-height: 130px; }
   .hero-points li { padding: 1.25rem 1.35rem; min-height: 112px; }
   .hero-actions .btn { padding: .85rem 1.4rem; }
 }
-.hero-actions .btn-gold { background: var(--teal-dark); border-color: rgba(255,255,255,.15); }
+.hero-actions .btn-gold { background: var(--gold-dark); border-color: var(--gold-dark); }
 .hero-actions .btn-wa-hero { background: var(--teal); border-color: var(--teal); }
 .hero .guest-note { margin: 1rem 0 0; font-size: .9rem; color: #E7F2F1; }
 .service-guide-callout { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding: 1.5rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--teal-light); margin-bottom: 1.5rem; }
@@ -465,6 +466,48 @@ textarea { resize: vertical; min-height: 130px; }
 .services-page-intro h1 { color: #fff; font-size: clamp(2rem,4vw,3.2rem); }
 .services-page-intro p { max-width: 45rem; }
 .services-page-intro .eyebrow { margin-bottom: 1rem; }
+/* Separate free self-service tools from paid professional support with words and color. */
+.main-nav a[aria-current="page"] { color: #E9C16C; text-decoration: underline; text-underline-offset: .45rem; }
+.platform-routes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; }
+.platform-route { display: flex; flex-direction: column; align-items: flex-start; padding: 2rem; border: 1px solid var(--line); border-top: 5px solid var(--teal); border-radius: var(--radius); background: var(--teal-light); }
+.platform-route.route-paid { border-top-color: var(--gold); background: var(--gold-soft); }
+.platform-route h3 { font-size: 1.5rem; margin-top: .8rem; }
+.platform-route > .btn { margin-top: auto; }
+.platform-route .route-meta { color: var(--muted); font-size: .95rem; font-weight: 700; }
+.route-note { color: var(--muted); margin: 1rem 0 0; }
+.access-badge { display: inline-flex; align-items: center; width: fit-content; border-radius: 999px; padding: .1rem .75rem; font-size: .85rem; font-weight: 800; }
+.access-free { color: var(--teal-dark); background: var(--teal-light); border: 1px solid #B9D8D5; }
+.access-paid { color: var(--gold-dark); background: var(--gold-soft); border: 1px solid #D9B578; }
+.workspace-intro { padding: 2rem 0; background: var(--teal-light); }
+.workspace-intro h1 { margin-top: .75rem; font-size: clamp(1.9rem, 4vw, 2.8rem); }
+.workspace-intro p { max-width: 52rem; }
+.breadcrumb { display: block; width: fit-content; font-weight: 700; margin-bottom: .9rem; }
+.services-page-intro .breadcrumb { color: #fff; margin-bottom: 0; }
+.workspace-links { display: flex; flex-wrap: wrap; gap: .8rem 1.5rem; }
+.workspace-links a { font-weight: 700; text-underline-offset: .3rem; }
+.tool-directory-controls { margin-bottom: 1.5rem; }
+.tool-directory-controls .field { max-width: 40rem; }
+.tool-filters { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
+.tool-filters button { cursor: pointer; background: #fff; color: var(--teal-dark); border: 1px solid var(--line); border-radius: 999px; padding: .35rem .85rem; font-weight: 700; }
+.tool-filters button[aria-pressed="true"] { background: var(--teal); color: #fff; border-color: var(--teal); }
+.directory-status { color: var(--muted); margin: .8rem 0 0; font-size: .9rem; }
+.directory-empty { border: 1px dashed var(--teal); padding: 1rem; border-radius: var(--radius); }
+.guidance-tip { border-inline-start: 3px solid var(--teal); padding-inline-start: .8rem; font-size: .92rem; }
+.resource-availability { font-size: .85rem; font-weight: 700; color: var(--muted); }
+.workspace-privacy { color: var(--muted); padding-bottom: 1rem; font-size: .9rem; }
+.tools-page #tools { padding-top: 1.5rem; }
+.tools-page .wa-float { display: none; }
+@media (max-width: 640px) {
+  .platform-routes { grid-template-columns: 1fr; }
+  .platform-route { padding: 1.4rem; }
+  .tool-filters button { font-size: .85rem; }
+  .tools-page .tool-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem; }
+  .tools-page .tool-tile { min-width: 0; padding: 2rem .6rem 1rem; }
+  .tools-page .tile-icon { width: 56px; height: 56px; border-radius: 16px; }
+  .tools-page .tool-tile strong { font-size: 1rem; }
+  .tools-page .tool-tile small { font-size: .8rem; }
+  .tools-page .tool-tile .access-badge { font-size: .75rem; }
+}
 .card > .btn + .btn { margin-top: .6rem; }
 .service-wizard-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; margin-top: 1rem; }
 .service-wizard-choice { text-align: start; display: flex; flex-direction: column; gap: .2rem; padding: 1rem; border: 2px solid var(--line); border-radius: 12px; background: #fff; cursor: pointer; }
