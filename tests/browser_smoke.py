@@ -9,7 +9,7 @@ from xml.sax.saxutils import escape
 from zipfile import ZipFile, ZIP_DEFLATED
 from playwright.sync_api import sync_playwright, expect
 
-URL = 'http://127.0.0.1:8000'
+URL = os.environ.get('MUNJIZ_TEST_URL', 'http://127.0.0.1:8000')
 checks = []
 
 def make_pdf(path, sentences=()):
@@ -61,8 +61,11 @@ with tempfile.TemporaryDirectory(prefix='munjiz-test-') as temporary, sync_playw
     def check(name): checks.append(name); print('PASS:', name, flush=True)
 
     page.locator('[data-pick="grad"]').click(); page.reload(wait_until='networkidle')
+    expect(page.locator('#categoryPicker')).to_be_visible()
+    assert page.evaluate("JSON.parse(localStorage.getItem('munjaz.audience'))") == 'grad'
+    page.locator('[data-pick="grad"]').click()
     expect(page.locator('#servicesPanel')).to_be_visible()
-    check('audience persistence and application startup')
+    check('audience persistence, category-first services and application startup')
     open_tool('gpa')
     rows = page.locator('.gpa-row')
     for i, (weight, mark) in enumerate(((3, 85), (2, 90))):

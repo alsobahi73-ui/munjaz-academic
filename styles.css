@@ -71,6 +71,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .header-account:hover { background: rgba(255,255,255,.12); }
 .visitor-badge svg { color: #E9C16C; flex-shrink: 0; }
 .visitor-badge strong { max-width: 4.5rem; overflow: hidden; text-overflow: ellipsis; }
+.footer-visitors { align-self: center; }
 .header-account svg { flex-shrink: 0; }
 .brand { display: flex; align-items: center; gap: .7rem; color: #fff; text-decoration: none; }
 .brand-mark { width: 44px; height: 44px; display: grid; place-items: center; background: var(--teal); border-radius: 12px; border: 2px solid var(--gold); }
@@ -453,6 +454,17 @@ textarea { resize: vertical; min-height: 130px; }
 .service-guide-callout h3 { font-size: 1.3rem; }
 .service-guide-callout p { margin-bottom: 0; color: var(--muted); }
 .service-guide-callout .btn { flex-shrink: 0; }
+.services-integrity-note { border-inline-start: 3px solid var(--gold); padding: .6rem 1rem; color: var(--muted); background: var(--gold-soft); border-radius: 8px; }
+.services-directory-link { display: inline-block; margin-bottom: 1rem; font-weight: 700; }
+.academic-service-cards { grid-template-columns: repeat(auto-fit, minmax(min(290px, 100%), 1fr)); }
+.academic-service-card { position: relative; }
+.academic-service-card .card-icon { align-self: flex-start; }
+.paid-service-badge { align-self: flex-start; background: var(--gold-soft); color: var(--gold-dark); border-radius: 999px; font-size: .8rem; font-weight: 700; padding: .1rem .6rem; margin-bottom: .7rem; }
+.academic-service-card > .btn { margin-top: auto; }
+.services-page-intro { color: #fff; background: linear-gradient(135deg,var(--teal-dark),var(--teal)); padding: 3rem 0; }
+.services-page-intro h1 { color: #fff; font-size: clamp(2rem,4vw,3.2rem); }
+.services-page-intro p { max-width: 45rem; }
+.services-page-intro .eyebrow { margin-bottom: 1rem; }
 .card > .btn + .btn { margin-top: .6rem; }
 .service-wizard-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; margin-top: 1rem; }
 .service-wizard-choice { text-align: start; display: flex; flex-direction: column; gap: .2rem; padding: 1rem; border: 2px solid var(--line); border-radius: 12px; background: #fff; cursor: pointer; }
@@ -461,9 +473,6 @@ textarea { resize: vertical; min-height: 130px; }
 .service-recommendation { padding: 1rem; background: var(--teal-light); border-radius: var(--radius); margin-bottom: 1rem; }
 .service-recommendation p { margin-bottom: 0; }
 .recommendation-label { display: block; color: var(--gold-dark); font-weight: 700; margin-bottom: .4rem; }
-#serviceOrderForm { margin-top: 1rem; }
-#serviceOrderPreview { min-height: 210px; }
-input[type="date"] { width: 100%; padding: .65rem .8rem; border: 2px solid var(--line); border-radius: 10px; background: #fff; min-width: 0; }
 @media (max-width: 1100px) {
   .nav-toggle { display: block; }
   .main-nav { position: absolute; top: 100%; inset-inline: 0; background: var(--teal-dark); flex-direction: column; align-items: stretch; gap: 0; padding: .5rem 1rem 1rem; display: none; border-top: 1px solid rgba(255,255,255,.15); }

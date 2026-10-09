@@ -66,27 +66,9 @@
 
   const AUD_KEYS = ['undergrad', 'grad', 'researcher', 'faculty'];
 
-  /* ---------- أبواب الخدمات داخل كل فئة ---------- */
-  const SERVICE_CATS = [
-    { key: 'lang', icon: '📝', label: 'التدقيق والتنسيق والتوثيق' },
-    { key: 'guide', icon: '🧭', label: 'الإرشاد المنهجي والإحصائي' },
-    { key: 'pub', icon: '📰', label: 'النشر والترقية العلمية' },
-    { key: 'train', icon: '🎓', label: 'العروض والتدريب' },
-  ];
-
-  /* ---------- بيانات الخدمات ---------- */
-  const SERVICES = [
-    { id: 'proofreading', cat: 'lang', icon: '🔤', title: 'التدقيق اللغوي والإملائي', desc: 'مراجعة نصك لغوياً وإملائياً وأسلوبياً مع إبقاء أفكارك وصياغتك الأصلية.', aud: ['undergrad', 'grad', 'researcher', 'faculty'] },
-    { id: 'report-format', cat: 'lang', icon: '📐', title: 'تنسيق التقارير وبحوث التخرج', desc: 'ضبط الهوامش والفهارس والترقيم وفق قالب جامعتك وقسمك.', aud: ['undergrad'] },
-    { id: 'thesis-format', cat: 'lang', icon: '📘', title: 'تنسيق الرسائل والأطاريح', desc: 'تنسيق شامل للرسالة أو الأطروحة وفق متطلبات الجامعة والدراسات العليا.', aud: ['grad'] },
-    { id: 'references', cat: 'lang', icon: '🔗', title: 'توثيق المراجع (APA / IEEE / Harvard)', desc: 'ضبط أسلوب التوثيق وربط الاستشهادات بقائمة المراجع بدقة.', aud: ['undergrad', 'grad', 'researcher', 'faculty'] },
-    { id: 'methodology', cat: 'guide', icon: '🧭', title: 'الإرشاد المنهجي للبحث', desc: 'توجيه في صياغة المشكلة والأهداف والفرضيات واختيار المنهج، دون كتابة البحث عنك.', aud: ['grad', 'researcher'] },
-    { id: 'statistics', cat: 'guide', icon: '📈', title: 'الإرشاد الإحصائي والتحليل (SPSS)', desc: 'نشرح لك الاختبار المناسب وكيفية تنفيذه وتفسير مخرجاته لتنجزه بنفسك.', aud: ['grad', 'researcher', 'faculty'] },
-    { id: 'presentation', cat: 'train', icon: '🖼️', title: 'تصميم العروض التقديمية', desc: 'تحسين تصميم الشرائح وتنظيمها لعرض مناقشة أو مؤتمر، بمحتواك أنت.', aud: ['undergrad', 'grad', 'researcher', 'faculty'] },
-    { id: 'journal', cat: 'pub', icon: '📰', title: 'اختيار المجلات ودعم النشر العلمي', desc: 'مساعدتك على فهم المجلات المفهرسة (Scopus / Clarivate) وتهيئة المخطوطة لشروط النشر.', aud: ['researcher', 'faculty', 'grad'] },
-    { id: 'promotion', cat: 'pub', icon: '🗂️', title: 'تنظيم ملف الترقية العلمية', desc: 'ترتيب وتوثيق بنود الترقية وفحص اكتمال المستمسكات وفق التعليمات النافذة.', aud: ['faculty'] },
-    { id: 'training', cat: 'train', icon: '🎓', title: 'تدريب وورش أكاديمية', desc: 'ورش قصيرة في مهارات البحث، إدارة المراجع، وأدوات الكتابة العلمية.', aud: ['undergrad', 'grad', 'researcher', 'faculty'] },
-  ];
+  /* ---------- الخدمات المهنية المعتمدة ---------- */
+  const SERVICES = MunjizAcademicServices.items;
+  let selectedServiceCategory = null;
 
   /* ---------- بنود الترقية (قيم استرشادية قابلة للتعديل) ---------- */
   const PROMO_TYPES = [
@@ -164,58 +146,12 @@
   let currentAudience = 'all';
 
   function renderServices() {
-    const picker = $('#categoryPicker');
-    const panel = $('#servicesPanel');
-    const sub = $('#servicesSub');
-    const hasAud = currentAudience !== 'all';
-
-    picker.hidden = hasAud;
-    panel.hidden = !hasAud;
-
-    if (!hasAud) {
-      // الواجهة الرئيسية: بطاقات الفئات فقط (دون عرض الخدمات)
-      sub.textContent = 'اختر فئتك لتظهر لك الخدمات المبوّبة الخاصة بها.';
-      picker.replaceChildren();
-      AUD_KEYS.forEach((k) => {
-        const a = AUDIENCES[k];
-        const count = SERVICES.filter((s) => s.aud.includes(k)).length;
-        picker.append(el('button', { type: 'button', class: 'cat-card', 'data-pick': k },
-          el('span', { class: 'cat-icon', 'aria-hidden': 'true', text: a.icon }),
-          el('strong', { text: a.label }),
-          el('small', { text: a.text }),
-          el('span', { class: 'cat-count', text: `${count} خدمات ←` }),
-        ));
-      });
-      return;
-    }
-
-    const list = SERVICES.filter((s) => s.aud.includes(currentAudience));
-    sub.textContent = `خدمات فئة «${AUDIENCES[currentAudience].label}» (${list.length})`;
-    $('#panelTitle').textContent = `${AUDIENCES[currentAudience].icon} ${AUDIENCES[currentAudience].label}`;
-
-    const wrap = $('#servicesGroups');
-    wrap.replaceChildren();
-    let idx = 0;
-    SERVICE_CATS.forEach((cat) => {
-      const items = list.filter((s) => s.cat === cat.key);
-      if (!items.length) return;
-      const grid = el('div', { class: 'cards' });
-      items.forEach((s) => {
-        const btn = el('a', { class: 'btn btn-wa', href: waLink(s.title), target: '_blank', rel: 'noopener noreferrer' });
-        btn.textContent = '💬 اطلب عبر واتساب';
-        grid.append(el('article', { class: 'card', style: `animation-delay:${Math.min(idx++, 8) * 40}ms` },
-          el('div', { class: 'card-icon', 'aria-hidden': 'true', text: s.icon }),
-          el('h3', { text: s.title }),
-          el('p', { text: s.desc }),
-          el('button', { type: 'button', class: 'btn btn-teal', 'data-request-service': s.id, text: 'فتح نموذج الطلب' }),
-          btn,
-        ));
-      });
-      wrap.append(el('section', { class: 'svc-group', 'aria-label': cat.label },
-        el('h3', { class: 'svc-group-title' }, el('span', { 'aria-hidden': 'true', text: cat.icon }), ` ${cat.label}`),
-        grid,
-      ));
-    });
+    MunjizAcademicServices.render({ category: selectedServiceCategory, onSelect: group => {
+      selectedServiceCategory = group.id;
+      setAudience(group.audience);
+      $('#panelTitle').setAttribute('tabindex', '-1'); $('#panelTitle').focus();
+      $('#services').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } });
   }
 
   function renderBanner() {
@@ -270,17 +206,12 @@
 
     // زر العودة لاختيار الفئة + بطاقات الفئات داخل قسم الخدمات
     $('#backToCategories').addEventListener('click', () => {
+      selectedServiceCategory = null;
       setAudience('all');
       syncTab();
       $('#services').scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
-    $('#categoryPicker').addEventListener('click', (e) => {
-      const b = e.target.closest('[data-pick]');
-      if (!b) return;
-      setAudience(b.dataset.pick);
-      syncTab();
-      $('#services').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
+
 
     setAudience(store.get(LS.audience, 'all'), false);
     syncTab();
@@ -1524,32 +1455,11 @@
     modals.init();
     auth.init();
     MunjizServiceAssistant.init({
-      services: SERVICES, audiences: AUDIENCES,
-      getAudience: () => currentAudience, getProfile: () => auth.user,
-      whatsappNumber: CONFIG.WHATSAPP_NUMBER,
+      services: SERVICES, categories: MunjizAcademicServices.categories,
       openDialog: dialog => modals.open(dialog),
     });
-    initVisitorCounter();
+    MunjizVisitorCounter.init();
+    if (location.hash === '#account') auth.open();
   });
 
-  async function initVisitorCounter() {
-    const badge = $('#visitorBadge');
-    const count = $('#visitorCount');
-    const unavailable = () => {
-      count.textContent = '—';
-      badge.setAttribute('aria-label', 'عدد الزوار غير متاح حالياً');
-      badge.title = 'عدد الزوار غير متاح حالياً.';
-    };
-    if (!['http:', 'https:'].includes(location.protocol)) { unavailable(); return; }
-    try {
-      const response = await fetch('/api/visitors', { method: 'POST', credentials: 'same-origin',
-        headers: { 'Content-Type': 'application/json' }, body: '{}', signal: AbortSignal.timeout(8000) });
-      if (!response.ok) throw new Error('Counter unavailable');
-      const data = await response.json();
-      if (!Number.isSafeInteger(data.visitors) || data.visitors < 0) throw new Error('Invalid counter');
-      count.textContent = new Intl.NumberFormat('ar-IQ', { notation: 'compact', maximumFractionDigits: 1 }).format(data.visitors);
-      badge.setAttribute('aria-label', `عدد المتصفحات الزائرة: ${fmt(data.visitors)}`);
-      badge.title = `${fmt(data.visitors)} متصفح زائر. يُعد المتصفح مرة واحدة ما دام يحتفظ بملف تعريف الارتباط؛ ليس تعداداً للأشخاص أو المتصلين الآن.`;
-    } catch { unavailable(); }
-  }
 })();

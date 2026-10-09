@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>خدماتنا الأكاديمية | مُنجز أكاديمي</title>
+  <meta name="description" content="خدمات أكاديمية مهنية لطلبة الدراسات الأولية والعليا والأساتذة والباحثين. اختر فئتك واطلب الخدمة مباشرة عبر واتساب.">
+  <meta name="theme-color" content="#0E6B66">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="services-page">
+  <a class="skip-link" href="#main">تخطَّ إلى المحتوى</a>
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a class="brand" href="#top" aria-label="مُنجز أكاديمي - الرئيسية">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="30" height="30"><path d="M16 4 2 11l14 7 14-7-14-7Z" fill="#fff"/><path d="M8 15.5v6c0 1.7 3.6 4 8 4s8-2.300 8-4v-6l-8 4-8-4Z" fill="#E9C16C"/></svg>
+        </span>
+        <span class="brand-text">
+          <strong>مُنجز أكاديمي</strong>
+          <small>Munjiz Academic</small>
+        </span>
+      </a>
+
+      <nav class="main-nav" id="mainNav" aria-label="التنقل الرئيسي">
+        <a href="index.html#tools">الأدوات الأكاديمية</a>
+        <a href="index.html#assistant">المساعد البحثي</a>
+        <a href="services.html" aria-current="page">خدماتنا الأكاديمية</a>
+        <a href="index.html#library">المكتبة والموارد</a>
+        <button type="button" class="btn btn-gold btn-sm" data-open-charter>ميثاق النزاهة</button>
+      </nav>
+      <div class="header-actions">
+        <span class="visitor-badge" id="visitorBadge" data-visitor-badge role="status" aria-label="جاري قراءة عدد الزوار" title="جاري قراءة عدد الزوار">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="7" r="3"/><path d="M3 20v-3a6 6 0 0 1 12 0v3M16 4a3 3 0 0 1 0 6M21 20v-3a6 6 0 0 0-4-5"/></svg>
+          <span class="header-label">الزوار</span><strong id="visitorCount" data-visitor-count>—</strong>
+        </span>
+        <a class="header-account" id="authBtn" href="index.html#account" aria-label="الحساب والدخول الاختياري" title="الحساب اختياري؛ يمكنك التصفح والطلب كزائر">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 22v-2a8 8 0 0 1 16 0v2"/></svg><span id="authBtnText">دخول اختياري</span>
+        </a>
+        <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="mainNav" aria-label="القائمة"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </header>
+  <main id="main">
+    <section class="services-page-intro"><div class="container">
+      <span class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>دعم أكاديمي مسؤول</span>
+      <h1>خدماتنا الأكاديمية</h1>
+      <p>15 خدمة مهنية ضمن ثلاث فئات، تُقدَّم بالتعاون مع صاحب العمل العلمي. اختر الفئة المناسبة لعرض خدماتها.</p>
+      <p>الخدمات مدفوعة، والأدوات الأكاديمية مجانية. التصفح والطلب دون تسجيل.</p>
+      <a class="btn btn-ghost" href="index.html#tools">جرّب الأدوات المجانية</a>
+    </div></section>
+    <section class="section" id="services" aria-labelledby="servicesTitle">
+      <div class="container">
+        <header class="section-head">
+          <h2 id="servicesTitle">خدماتنا الأكاديمية</h2>
+          <p id="servicesSub">جميع الخدمات المتاحة. اختر فئتك في الأعلى لتصفية ما يناسبك.</p>
+        </header>
+        <div class="service-guide-callout">
+          <div><h3>مساعد اختيار الخدمة الأكاديمية</h3><p>أجب عن أسئلة بسيطة حول احتياجك؛ نقترح الخدمة المناسبة، ثم تواصل مباشرة عبر واتساب برسالة جاهزة.</p></div>
+          <button type="button" class="btn btn-teal" data-open-service-assistant aria-haspopup="dialog">اكتشف الخدمة المناسبة</button>
+        </div>
+        <p class="services-integrity-note">دعم علمي وتحريري بالتعاون مع صاحب العمل؛ يبقى المحتوى والبيانات والعمل العلمي مسؤولية صاحبه.</p>
+        <div class="cat-grid" id="categoryPicker"></div>
+
+        <div class="services-panel" id="servicesPanel" hidden>
+          <div class="panel-bar">
+            <h3 id="panelTitle"></h3>
+            <button type="button" class="btn btn-outline btn-sm" id="backToCategories">→ تغيير الفئة</button>
+          </div>
+          <div id="servicesGroups"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <strong>مُنجز أكاديمي</strong>
+        <p>لا نكتب عنك... نُنجز معك</p>
+      </div>
+      <p class="copy">© <span id="year"></span> مُنجز أكاديمي. جميع الحقوق محفوظة.</p>
+      <span class="visitor-badge footer-visitors" id="visitorFooterBadge" data-visitor-badge role="status" aria-label="جاري قراءة عدد الزوار" title="جاري قراءة عدد الزوار">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="7" r="3"/><path d="M3 20v-3a6 6 0 0 1 12 0v3M16 4a3 3 0 0 1 0 6M21 20v-3a6 6 0 0 0-4-5"/></svg>
+        <span>عدد الزوار</span><strong data-visitor-count>—</strong>
+      </span>
+      <p class="visitor-note">عداد الزوار تقريبي ويعتمد على ملف تعريف ارتباط مجهول للمتصفح.</p>
+    </div>
+  </footer>
+  <dialog class="modal" id="serviceRequestModal" aria-labelledby="serviceFlowTitle">
+    <div class="modal-box">
+      <button type="button" class="modal-close" data-close-modal aria-label="إغلاق">✕</button>
+      <h2 id="serviceFlowTitle">مساعد اختيار الخدمة الأكاديمية</h2>
+      <p class="modal-lead">حدد احتياجك بأسئلة بسيطة. الطلب مباشرة عبر واتساب دون تسجيل أو استمارة معلومات.</p>
+      <div id="serviceWizard">
+        <p id="serviceWizardProgress" class="form-msg"></p>
+        <h3 id="serviceWizardQuestion" tabindex="-1"></h3>
+        <div id="serviceWizardChoices" class="service-wizard-choices"></div>
+        <div class="tool-actions"><button type="button" class="btn btn-outline" id="serviceWizardBack" disabled>السابق</button></div>
+      </div>
+      <div id="serviceSuggestionView" hidden>
+        <div class="service-recommendation" id="serviceRecommendation" role="status"></div>
+        <a class="btn btn-wa" id="serviceDirectWhatsapp" target="_blank" rel="noopener noreferrer">اطلب الخدمة عبر واتساب</a>
+        <p class="tool-note">يفتح واتساب برسالة جاهزة تحمل اسم الخدمة وفئتها؛ راجعها وأرسلها من واتساب.</p>
+        <button type="button" class="link-btn" id="serviceChooseAgain">اختيار خدمة أخرى بالمساعد</button>
+      </div>
+    </div>
+  </dialog>
+  <dialog class="modal" id="charterModal" aria-labelledby="charterTitle">
+    <div class="modal-box">
+      <button type="button" class="modal-close" data-close-charter aria-label="إغلاق">✕</button>
+      <h2 id="charterTitle">🛡️ ميثاق النزاهة الأكاديمية</h2>
+      <p class="modal-lead">نؤمن بأن الإنجاز الحقيقي هو ما يصنعه صاحبه. لذلك نلتزم بما يلي بوضوح:</p>
+
+      <div class="charter-cols">
+        <div class="charter-col yes">
+          <h3>✅ ما نقدّمه</h3>
+          <ul>
+            <li>التدقيق اللغوي والإملائي لنصوصك.</li>
+            <li>التنسيق وفق قوالب الجامعات وأنظمة التوثيق (APA وغيرها).</li>
+            <li>الإرشاد المنهجي والإحصائي وتوضيح الخطوات.</li>
+            <li>مساعدتك في تنظيم ملفاتك وإنجاز مهامك بنفسك.</li>
+          </ul>
+        </div>
+        <div class="charter-col no">
+          <h3>⛔ ما لا نقدّمه</h3>
+          <ul>
+            <li>كتابة الرسائل أو الأطاريح أو البحوث نيابةً عن أحد.</li>
+            <li>إعداد الواجبات أو الامتحانات بدلاً من الطالب.</li>
+            <li>تزييف البيانات أو النتائج أو المراجع.</li>
+            <li>أي عمل يخالف تعليمات النزاهة في جامعتك.</li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="modal-foot">بتواصلك معنا فإنك تُقرّ بأن العمل العلمي من إعدادك، وأن دورنا مقتصر على المساعدة والتدقيق والتنسيق والإرشاد.</p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-teal" id="charterAgree">فهمت وأوافق</button>
+        <button type="button" class="btn btn-outline" data-close-charter>إغلاق</button>
+      </div>
+    </div>
+  </dialog>
+  <script src="visitor-counter.js"></script>
+  <script src="services-catalog.js"></script>
+  <script src="service-assistant.js"></script>
+  <script src="services-page.js"></script>
+</body>
+</html>
