@@ -12,6 +12,7 @@
   const submit = $('#requestSubmit');
   let sending = false;
   let requestId = null;
+  let lastPayload = null;
   let returnFocus = null;
 
   catalog.forEach(group => {
@@ -25,7 +26,6 @@
     if (sending) return;
     status.textContent = '';
     status.classList.remove('ok');
-    requestId = null;
   }
 
   function updateCategory() {
@@ -119,11 +119,16 @@
       status.textContent = 'استقبال الطلبات غير متاح حالياً. احتفظ برسالتك وحاول لاحقاً.';
       return;
     }
-    requestId ||= crypto.randomUUID();
-    const payload = {
-      requestId, service: select.value, name: name.value.trim(), phone: phone.value.trim(),
+    const draft = {
+      service: select.value, name: name.value.trim(), phone: phone.value.trim(),
       details: details.value.trim(), consent: $('#requestConsent').checked,
     };
+    const fingerprint = JSON.stringify(draft);
+    if (!requestId || fingerprint !== lastPayload) {
+      requestId = crypto.randomUUID();
+      lastPayload = fingerprint;
+    }
+    const payload = { requestId, ...draft };
     sending = true;
     status.classList.remove('ok');
     status.textContent = 'جارٍ إرسال طلبك…';
@@ -157,6 +162,7 @@
       form.reset();
       updateCategory();
       requestId = null;
+      lastPayload = null;
       status.classList.add('ok');
       status.textContent = 'تم إرسال طلبك إلى فريق مُنجز أكاديمي. شكراً لتواصلك معنا.';
     } catch (error) {
