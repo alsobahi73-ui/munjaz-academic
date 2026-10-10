@@ -1,0 +1,6 @@
+PyYAML==6.0.2
+beautifulsoup4==4.13.4
+feedparser==6.0.11
+sgmllib3k==1.0.0
+soupsieve==3.0.1
+typing_extensions==4.16.0

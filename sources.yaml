@@ -1,0 +1,14 @@
+# No unverified section or university URLs are enabled.
+# Complete the ministry-directory audit described in collector/README.md.
+version: 1
+directory_status: pending_network_access
+ministry_home: https://mohesr.gov.iq/
+schedule_hours:
+  ministry: 1
+  university: 6
+request_delay_seconds: 2
+user_agent: MunjazAcademicCollector/1.0 (+https://github.com/alsobahi73-ui/munjaz-academic)
+# The current checkout does not define the seven news category identifiers.
+# Replace this provisional taxonomy after confirming the publisher contract.
+categories: [general]
+sources: []
