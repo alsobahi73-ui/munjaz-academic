@@ -27,10 +27,6 @@
 .academic-consent { display: flex; align-items: flex-start; gap: .7rem; padding: .9rem; border-radius: 10px; background: var(--teal-light); font-size: .92rem; }
 .academic-consent input { flex: none; width: 1.2rem; height: 1.2rem; margin-top: .3rem; accent-color: var(--teal); }
 .academic-privacy-note { color: var(--muted); font-size: .85rem; margin: .7rem 0 1rem; }
-.academic-request-preview { margin-top: 1.5rem; padding-top: 1.2rem; border-top: 2px solid var(--line); }
-.academic-request-preview textarea { min-height: 240px; background: var(--teal-light); }
-/* Ensure hidden receipt/actions stay hidden despite shared display:flex styles. */
-#academicRequestDialog [hidden] { display: none !important; }
 @media (max-width: 960px) { .academic-service-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 640px) {
   .academic-category-grid, .academic-service-cards, .academic-form-grid { grid-template-columns: 1fr; }
@@ -38,3 +34,8 @@
   .academic-services-hero .hero-actions { align-items: stretch; flex-direction: column; }
   .academic-group { margin-bottom: 2rem; }
 }
+
+.academic-contact-details { margin-bottom: 1rem; background: var(--teal-light); border-radius: 10px; padding: .7rem 1rem; }
+.academic-contact-details summary { cursor: pointer; font-weight: 700; color: var(--teal-dark); }
+.academic-contact-details p { font-size: .9rem; color: var(--muted); margin: .5rem 0; }
+#requestSubmit:disabled { opacity: .65; cursor: wait; }
