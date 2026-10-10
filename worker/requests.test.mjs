@@ -29,3 +29,21 @@ test('missing secrets and wrong origins never send', async () => {
  assert.equal((await worker.fetch(request(), { SITE_ORIGIN: env.SITE_ORIGIN })).status, 503);
  assert.equal((await worker.fetch(request(), { ...env, SITE_ORIGIN: 'https://other.example' })).status, 403);
 });
+
+test('worker normalized POST/preflight and safe CORS diagnostics share the same comparison', async () => {
+ let calls = 0;
+ const worker = createWorker(ctx.window.AcademicServicesCatalog, async () => { calls++; return Response.json({ ok: true, result: { message_id: 1 } }); });
+ const configuredEnv = { ...env, SITE_ORIGIN: ' \u200e\u202e' + env.SITE_ORIGIN + '/\u2069\ufeff ' };
+ assert.equal((await worker.fetch(request(), configuredEnv)).status, 201);
+ const preflight = await worker.fetch(new Request('https://worker.example/api/academic-requests', { method: 'OPTIONS', headers: { Origin: env.SITE_ORIGIN + '/' } }), configuredEnv);
+ assert.equal(preflight.status, 204);
+ assert.equal(preflight.headers.get('Access-Control-Allow-Origin'), env.SITE_ORIGIN);
+ for (const [receivedOrigin, config, match] of [[env.SITE_ORIGIN, configuredEnv, true], ['https://attacker.example', configuredEnv, false], [null, configuredEnv, false], [env.SITE_ORIGIN, {}, false], [env.SITE_ORIGIN, { SITE_ORIGIN: ' \u200b/ ' }, false]]) {
+  const response = await worker.fetch(new Request('https://worker.example/debug-cors', { headers: receivedOrigin ? { Origin: receivedOrigin } : {} }), config);
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get('Cache-Control'), 'no-store');
+  assert.deepEqual(await response.json(), { receivedOrigin, configured: config === configuredEnv, match });
+ }
+ assert.equal((await worker.fetch(new Request('https://worker.example/debug-cors', { method: 'POST' }), configuredEnv)).status, 404);
+ assert.equal(calls, 1);
+});

@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
 import { Script, createContext } from 'node:vm';
-import { createRequestHandler } from './telegram-requests.mjs';
+import { createRequestHandler, corsDiagnostics, normalizeOrigin } from './telegram-requests.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const context = createContext({ window: {} });
@@ -30,6 +30,15 @@ const server = createServer(async (req, res) => {
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   try {
     const pathname = new URL(req.url, 'http://localhost').pathname;
+    if (pathname === '/debug-cors' && req.method === 'GET') {
+      const diagnostics = corsDiagnostics(req.headers.origin ?? null, process.env.SITE_ORIGIN);
+      res.writeHead(200, {
+        'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store',
+        ...(diagnostics.match ? { 'Access-Control-Allow-Origin': normalizeOrigin(req.headers.origin), 'Vary': 'Origin' } : {}),
+      });
+      res.end(JSON.stringify(diagnostics));
+      return;
+    }
     if (pathname === '/api/academic-requests') {
       let size = 0;
       const chunks = [];

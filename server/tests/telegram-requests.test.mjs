@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { Script, createContext } from 'node:vm';
-import { createRequestHandler } from '../telegram-requests.mjs';
+import { createRequestHandler, normalizeOrigin } from '../telegram-requests.mjs';
 const ctx = createContext({window:{}});
 new Script(await readFile(new URL('../../academic-services-data.js', import.meta.url),'utf8')).runInContext(ctx);
 const catalog=ctx.window.AcademicServicesCatalog;
@@ -64,4 +64,28 @@ test('uncertain sends are cached, not automatically retried or falsely confirmed
  let calls=0;const handler=makeHandler(async()=>{calls++;throw Error('token-secret-in-provider-url');});
  const input=payload();assert.deepEqual(await (await handler(makeRequest(input))).json(),{error:'delivery_uncertain'});
  assert.equal((await handler(makeRequest(input))).status,502);assert.equal(calls,1);
+});
+
+test('origin normalization removes slashes, whitespace, controls and invisible Unicode on both sides', async () => {
+ const variants = [origin + '/', '  ' + origin + ' / ', '\u200e\u202e' + origin + '\u2069\u200b\ufeff/', origin.replace('example', '\u00adex\u034fam\u0000ple')];
+ for (const value of variants) {
+  assert.equal(normalizeOrigin(value), origin);
+  const handler = makeHandler(async () => ok(), { siteOrigin: value });
+  const post = await handler(makeRequest(payload()));
+  assert.equal(post.status, 201);
+  assert.equal(post.headers.get('Access-Control-Allow-Origin'), origin);
+  // A request-like object permits Unicode/control values disallowed by HTTP Headers.
+  const preflight = await handler({ method: 'OPTIONS', headers: { get: () => value } });
+  assert.equal(preflight.status, 204);
+  assert.equal(preflight.headers.get('Access-Control-Allow-Origin'), origin);
+ }
+});
+test('normalization retains strict origin boundaries and fails closed without configuration', async () => {
+ const handler = makeHandler(async () => { throw Error('Must not send'); });
+ for (const value of [null, '', 'null', '*', 'http://munjiz.example', origin + '.attacker.example', origin + '/path', origin + ':443', 'https://other.example']) {
+  assert.equal((await handler({ method: 'OPTIONS', headers: { get: () => value } })).status, 403);
+ }
+ for (const siteOrigin of [undefined, '', ' \u200e\u200b/']) {
+  assert.equal((await makeHandler(async () => ok(), { siteOrigin })(makeRequest(payload()))).status, 403);
+ }
 });

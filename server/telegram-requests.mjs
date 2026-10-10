@@ -4,8 +4,24 @@ const normalizeDigits = value => value.replace(/[٠-٩]/g, char => String(char.c
   .replace(/[۰-۹]/g, char => String(char.charCodeAt(0) - 0x6f0));
 const digest = value => createHash('sha256').update(value).digest('hex');
 
+// Remove whitespace, control/format characters (including bidi marks), and
+// default-ignorable Unicode characters; retain strict equality afterwards.
+export const normalizeOrigin = value => typeof value === 'string'
+  ? value.replace(/[\s\p{Cc}\p{Cf}\p{Default_Ignorable_Code_Point}]/gu, '').replace(/\/+$/, '')
+  : '';
+
+export function corsDiagnostics(receivedOrigin, siteOrigin) {
+  const allowedOrigin = normalizeOrigin(siteOrigin);
+  return {
+    receivedOrigin,
+    configured: Boolean(allowedOrigin),
+    match: Boolean(allowedOrigin) && normalizeOrigin(receivedOrigin) === allowedOrigin,
+  };
+}
+
 // A handler factory makes provider calls testable without sending real messages.
 export function createRequestHandler({ catalog, token, chatId, siteOrigin, fetchImpl = fetch, now = Date.now }) {
+  siteOrigin = normalizeOrigin(siteOrigin);
   const services = new Map(catalog.flatMap(group => group.services.map(service =>
     [service.id, { ...service, category: group.title }])));
   const requests = new Map();
@@ -23,7 +39,7 @@ export function createRequestHandler({ catalog, token, chatId, siteOrigin, fetch
 
   return async function handle(request, clientAddress = 'unknown') {
     const origin = request.headers.get('Origin');
-    if (!siteOrigin || origin !== siteOrigin) return reply(403, { error: 'forbidden' });
+    if (!siteOrigin || normalizeOrigin(origin) !== siteOrigin) return reply(403, { error: 'forbidden' });
     if (request.method === 'OPTIONS') {
       return new Response(null, { status: 204, headers: {
         'Access-Control-Allow-Origin': siteOrigin, 'Vary': 'Origin',
