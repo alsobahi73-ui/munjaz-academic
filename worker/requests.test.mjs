@@ -1,0 +1,31 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import { Script, createContext } from 'node:vm';
+import { randomUUID } from 'node:crypto';
+import { createWorker } from './index.mjs';
+const ctx = createContext({ window: {} });
+new Script(await readFile(new URL('../academic-services-data.js', import.meta.url), 'utf8')).runInContext(ctx);
+const env = { TELEGRAM_BOT_TOKEN: 'FAKE_TEST_TOKEN', TELEGRAM_CHAT_ID: '1234', SITE_ORIGIN: 'https://site.example' };
+const request = (id = randomUUID(), ip = '192.0.2.1') => new Request('https://worker.example/api/academic-requests', { method: 'POST', headers: { Origin: env.SITE_ORIGIN, 'Content-Type': 'application/json', 'CF-Connecting-IP': ip }, body: JSON.stringify({ requestId: id, service: 'reports', details: 'طلب اختبار معزول للخدمة الأكاديمية', consent: true }) });
+test('worker routes, CORS, delivery and deduplication survive separate fetch calls', async () => {
+ let calls = 0;
+ const worker = createWorker(ctx.window.AcademicServicesCatalog, async () => { calls++; return Response.json({ ok: true, result: { message_id: 1 } }); });
+ assert.equal((await worker.fetch(new Request('https://worker.example/healthz'), {})).status, 200);
+ assert.equal((await worker.fetch(new Request('https://worker.example/server/index.mjs'), env)).status, 404);
+ const preflight = await worker.fetch(new Request('https://worker.example/api/academic-requests', { method: 'OPTIONS', headers: { Origin: env.SITE_ORIGIN } }), env);
+ assert.equal(preflight.status, 204);
+ assert.equal(preflight.headers.get('Access-Control-Allow-Origin'), env.SITE_ORIGIN);
+ const id = randomUUID();
+ assert.equal((await worker.fetch(request(id), env)).status, 201);
+ assert.equal((await worker.fetch(request(id), { ...env })).status, 201);
+ assert.equal(calls, 1);
+ for (let i = 0; i < 4; i++) assert.equal((await worker.fetch(request(), env)).status, 201);
+ assert.equal((await worker.fetch(request(), env)).status, 429);
+ assert.equal((await worker.fetch(request(undefined, '192.0.2.2'), env)).status, 201);
+});
+test('missing secrets and wrong origins never send', async () => {
+ const worker = createWorker(ctx.window.AcademicServicesCatalog, async () => { throw Error('Must not send'); });
+ assert.equal((await worker.fetch(request(), { SITE_ORIGIN: env.SITE_ORIGIN })).status, 503);
+ assert.equal((await worker.fetch(request(), { ...env, SITE_ORIGIN: 'https://other.example' })).status, 403);
+});
