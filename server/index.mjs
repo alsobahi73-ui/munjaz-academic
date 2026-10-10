@@ -16,6 +16,8 @@ const handle = createRequestHandler({
 });
 // Serve only public application files. Source, secrets, Git metadata and environment files are inaccessible.
 const publicFiles = new Map([
+  ['/news.json', ['news.json', 'application/json']],
+  ['/scripts/news-feed.js', ['scripts/news-feed.js', 'text/javascript']],
   ['/', ['index.html', 'text/html']], ['/index.html', ['index.html', 'text/html']],
   ['/services.html', ['services.html', 'text/html']], ['/styles.css', ['styles.css', 'text/css']],
   ['/app.js', ['app.js', 'text/javascript']], ['/academic-services.css', ['academic-services.css', 'text/css']],

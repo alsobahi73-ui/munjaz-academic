@@ -1,0 +1,43 @@
+name: Publish official news
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+  workflow_run:
+    workflows: ['Collect news']
+    types: [completed]
+permissions:
+  contents: write
+# Collector/approval workflows must use the same group when writing these files.
+concurrency:
+  group: news-publication-state
+  cancel-in-progress: false
+jobs:
+  publish:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Publish and persist confirmed deliveries even when one destination fails
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+        shell: bash
+        run: |
+          status=0
+          node scripts/publish-official.mjs || status=$?
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          for file in news.json news_queue.json published.json; do
+            if [ -f "$file" ]; then git add -- "$file"; fi
+          done
+          if ! git diff --cached --quiet; then
+            git commit -m 'Publish official news and persist delivery state'
+            git push origin HEAD:main
+          fi
+          exit "$status"

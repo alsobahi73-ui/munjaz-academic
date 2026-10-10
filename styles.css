@@ -415,3 +415,9 @@ textarea { resize: vertical; min-height: 130px; }
   .tool-actions, #promoForm, .target-row, .row-del, .tool-note { display: none !important; }
 }
 
+
+/* Official source headlines retain their original text. */
+.official-news-list { padding-inline-start: 1.5rem; }
+.official-news-list li { margin-block: 1rem; overflow-wrap: anywhere; }
+.official-news-list a { color: #0E6B66; }
+.official-news-list p { margin-block: .4rem; }
