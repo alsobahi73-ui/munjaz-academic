@@ -3,10 +3,10 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { runInNewContext } from 'node:vm';
 const script = await readFile(new URL('../news-feed.js', import.meta.url), 'utf8');
-function element() { return { children: [], append(...nodes) { this.children.push(...nodes); } }; }
+function element() { return { children: [], replaceChildren() { this.children = []; }, append(...nodes) { this.children.push(...nodes); } }; }
 async function render(items, ok = true) {
  const list = element(), section = { hidden: true, querySelector: () => list };
- await runInNewContext(script, { document: { getElementById: () => section, createElement: element }, URL,
+ await runInNewContext(script, { document: { getElementById: () => section, createElement: element }, URL, AbortSignal,
    fetch: async () => ({ ok, json: async () => items }) });
  return { list, section };
 }

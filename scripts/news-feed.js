@@ -1,30 +1,33 @@
 (async () => {
   const section = document.getElementById('officialNews');
   if (!section) return;
-  try {
-    const response = await fetch('news.json', { cache: 'no-cache' });
-    if (!response.ok) return;
-    const items = await response.json();
-    if (!Array.isArray(items)) return;
-    const list = section.querySelector('ul');
+  // The current checkout has no embedded articles; an empty fallback is intentional.
+  const NEWS = [];
+  const list = section.querySelector('ul');
+  function render(items) {
+    list.replaceChildren();
     for (const item of items.slice().reverse().slice(0, 20)) {
-      if (!item || typeof item.title !== 'string' || typeof item.source !== 'string') continue;
+      if (!item || typeof item.title !== 'string' || !item.title.trim() || typeof item.source !== 'string' || !item.source.trim() || item.title.includes('تجريبي:')) continue;
       let url;
       try { url = new URL(item.url); } catch { continue; }
-      if (!['https:', 'http:'].includes(url.protocol)) continue;
+      if (!['https:', 'http:'].includes(url.protocol) || url.username || url.password) continue;
       const row = document.createElement('li');
       const link = document.createElement('a');
-      link.href = url.href;
-      link.textContent = item.title;
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
+      link.href = url.href; link.textContent = item.title; link.target = '_blank'; link.rel = 'noopener noreferrer';
       const summary = document.createElement('p');
-      summary.textContent = typeof item.summary === 'string' ? item.summary : '';
+      summary.className = 'news-summary'; summary.textContent = typeof item.summary === 'string' ? item.summary : '';
       const attribution = document.createElement('p');
       attribution.textContent = `المصدر: ${item.source} | ${item.date || ''}`;
-      row.append(link, summary, attribution);
-      list.append(row);
+      row.append(link, summary, attribution); list.append(row);
     }
     section.hidden = !list.children.length;
-  } catch { /* Keep the empty feed hidden; do not invent placeholder news. */ }
+  }
+  render(NEWS);
+  try {
+    const response = await fetch('news.json', { cache: 'no-cache', signal: AbortSignal.timeout(8000) });
+    if (!response.ok) throw Error('feed_unavailable');
+    const items = await response.json();
+    if (!Array.isArray(items)) throw Error('invalid_feed');
+    render(items);
+  } catch { render(NEWS); }
 })();

@@ -1,0 +1,45 @@
+name: Review unofficial news
+on:
+  workflow_run:
+    workflows: ['Collect news']
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'sync لإرسال المراجعات، publish للاعتماد، ignore للتجاهل، status لفحص الحالة'
+        type: choice
+        options: [sync, status, publish, ignore]
+        default: sync
+      item_id:
+        description: 'معرّف المراجعة من رسالة البوت (للاعتماد أو التجاهل)'
+        type: string
+        required: false
+      channel_message_id:
+        description: 'لإعادة الإرسال اليدوية فقط: رقم رسالة الخبر المعتمد الموجود فعلاً في القناة'
+        type: string
+        required: false
+permissions:
+  contents: read
+concurrency:
+  group: news-publication-state
+  cancel-in-progress: false
+jobs:
+  review:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Dispatch or resolve owner review
+        env:
+          APPROVAL_WORKER_URL: ${{ secrets.APPROVAL_WORKER_URL }}
+          APPROVAL_ADMIN_SECRET: ${{ secrets.APPROVAL_ADMIN_SECRET }}
+          APPROVAL_ACTION: ${{ inputs.action || 'sync' }}
+          APPROVAL_ITEM_ID: ${{ inputs.item_id }}
+          APPROVAL_CHANNEL_MESSAGE_ID: ${{ inputs.channel_message_id }}
+        run: node news-approval/admin.mjs

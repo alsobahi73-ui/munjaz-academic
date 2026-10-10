@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "munjaz-news-approval",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-10-10",
+  "workers_dev": true,
+  "vars": {
+    "GITHUB_REPOSITORY": "alsobahi73-ui/munjaz-academic",
+    "GITHUB_BRANCH": "main"
+  },
+  "durable_objects": { "bindings": [{ "name": "APPROVAL", "class_name": "ApprovalQueue" }] },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["ApprovalQueue"] }],
+  "triggers": { "crons": ["0 * * * *"] }
+}
