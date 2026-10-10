@@ -8,7 +8,7 @@
   <meta name="theme-color" content="#0E6B66">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="academic-services.css">
 </head>
@@ -37,7 +37,7 @@
         <a href="#assistant">المساعد البحثي</a>
         <a href="services.html">خدماتنا الأكاديمية</a>
         <a href="#library">المكتبة والموارد</a>
-        <button type="button" class="btn btn-gold btn-sm" data-open-charter>ميثاق النزاهة</button>
+        <button type="button" class="btn btn-teal btn-sm" data-open-charter>ميثاق النزاهة</button>
         <button type="button" class="btn btn-light-outline btn-sm" id="authBtn" data-open-auth aria-haspopup="dialog">👤 <span id="authBtnText">تسجيل / دخول</span></button>
       </nav>
     </div>
@@ -59,12 +59,10 @@
           <h1>لا نكتب عنك… <em>نُنجز معك</em></h1>
           <p class="lead">دعم أكاديمي مسؤول وأدوات مجانية لطلبة الدراسات الأولية والعليا والباحثين والتدريسيين. ندقّق وننسّق ونرشد ونُنجز معك الخطوات، أما العمل العلمي فيبقى لك.</p>
           <div class="hero-actions">
-            <a class="btn btn-gold" href="services.html">اختر فئتك وابدأ</a>
-            <a class="btn btn-wa-hero" id="heroWaBtn" href="#" target="_blank" rel="noopener noreferrer">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
-                <path d="M12 2C6.48 2 2 6.48 2 12c0 1.82.49 3.53 1.34 5L2.1 21.9l5.03-1.22A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm5.46 14.13c-.23.64-1.15 1.18-1.6 1.22-.44.05-1 .07-3.15-.79-2.58-1.04-4.22-3.66-4.35-3.83-.13-.17-1.05-1.4-1.05-2.67 0-1.27.66-1.89.9-2.14.23-.26.51-.32.68-.32.17 0 .34 0 .49.01.16.01.37-.06.58.44.22.53.75 1.83.82 1.96.07.14.11.3.02.48-.09.17-.14.28-.27.43-.14.16-.29.35-.42.47-.14.14-.29.3-.13.57.17.28.74 1.22 1.59 1.98 1.09.98 2.01 1.28 2.3 1.42.28.14.45.12.62-.07.17-.2.72-.84.91-1.13.2-.28.39-.24.66-.14.27.1.1.72 1.72 1.52.2.1.34.15.39.24.05.08.05.48-.18 1.12z"/>
-              </svg>
-              استشارة فورية عبر واتساب
+            <a class="btn btn-teal" href="services.html">اختر فئتك وابدأ</a>
+            <a class="btn btn-telegram-hero" id="heroTelegramBtn" href="https://t.me/MunjazAcademicBot" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M21.7 3.3 18.4 20c-.2 1.2-.9 1.5-1.9.9l-5-3.7-2.4 2.3c-.3.3-.5.5-1 .5l.4-5.1 9.3-8.4c.4-.4-.1-.6-.6-.3L5.7 13.4.8 11.9c-1.1-.3-1.1-1.1.2-1.6L20.2 2.9c.9-.3 1.7.2 1.5.4Z"/></svg>
+              تواصل عبر تيليجرام
             </a>
             <a class="btn btn-ghost" href="#tools">جرّب الأدوات المجانية</a>
           </div>
@@ -105,7 +103,7 @@
             </span>
             <div>
               <strong>تواصل فوري</strong>
-              <small>عبر واتساب الأعمال برسالة جاهزة</small>
+              <small>عبر بوت تيليجرام</small>
             </div>
           </li>
         </ul>
@@ -633,7 +631,7 @@
                 <div class="quiz-nav-actions">
                   <button type="button" class="btn btn-outline" id="qPrevBtn" disabled>السابق</button>
                   <button type="button" class="btn btn-teal" id="qNextBtn">التالي</button>
-                  <button type="button" class="btn btn-gold" id="qSubmitBtn" hidden>تسليم الاختبار والتصحيح ✓</button>
+                  <button type="button" class="btn btn-teal" id="qSubmitBtn" hidden>تسليم الاختبار والتصحيح ✓</button>
                 </div>
               </div>
 
@@ -772,12 +770,23 @@
           <h2 id="integrityTitle">🛡️ ميثاق النزاهة</h2>
           <p>نلتزم بمعايير النزاهة الأكاديمية. نساعد في <strong>التدقيق والتنسيق والإنجاز</strong> فقط، ولا نكتب الرسائل أو البحوث نيابة عن أحد.</p>
         </div>
-        <button type="button" class="btn btn-gold" data-open-charter>اقرأ الميثاق كاملاً</button>
+        <button type="button" class="btn btn-teal" data-open-charter>اقرأ الميثاق كاملاً</button>
+      </div>
+    </section>
+    <section class="section faq-section" aria-labelledby="faqTitle">
+      <div class="container">
+        <h2 id="faqTitle">الأسئلة الشائعة</h2>
+        <details class="faq-item" name="faq"><summary>كيف أطلب خدمة؟</summary><p>اضغط «اطلب خدمة»، واختر الخدمة ووضّح احتياجك في النموذج، ثم أرسل الطلب بعد الموافقة على الإقرار.</p></details>
+        <details class="faq-item" name="faq"><summary>كيف تُحتسب الأسعار؟</summary><p>تُحدّد التكلفة بحسب نوع الخدمة ونطاق العمل بعد مراجعة طلبك، ويُتفق عليها قبل البدء.</p></details>
+        <details class="faq-item" name="faq"><summary>ما سياسة النزاهة الأكاديمية؟</summary><p>نقدّم التدقيق والتنسيق والإرشاد بالتعاون معك؛ لا نكتب الأعمال نيابةً عنك ولا نزيّف البيانات، وتبقى مسؤولية العمل وأصالته لك.</p></details>
+        <details class="faq-item" name="faq"><summary>كم تستغرق الخدمة؟</summary><p>تعتمد المدة على نطاق الطلب ومتطلباته، ويُتفق على موعد الإنجاز بعد مراجعته.</p></details>
+        <details class="faq-item" name="faq"><summary>هل بياناتي سرية؟</summary><p>تُرسل تفاصيل الطلب وبيانات التواصل التي تضيفها إلى فريق مُنجز أكاديمي عبر تيليجرام لمعالجة طلبك؛ تجنّب إرفاق بيانات حساسة غير لازمة.</p></details>
       </div>
     </section>
   </main>
 
   <!-- ============ Footer ============ -->
+  <div class="mobile-request-bar" aria-label="طلب خدمة"><a class="btn btn-teal" href="services.html?request=1">اطلب خدمة</a></div>
   <footer class="site-footer">
     <div class="container footer-inner">
       <div>
@@ -788,9 +797,9 @@
     </div>
   </footer>
 
-  <!-- Floating WhatsApp -->
-  <a class="wa-float" id="waFloat" href="#" target="_blank" rel="noopener noreferrer" aria-label="تواصل عبر واتساب">
-    <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><path fill="currentColor" d="M16 3C9 3 3.400 8.600 3.400 15.500c0 2.400.7 4.700 1.900 6.600L3.200 29l7.100-2.100c1.800 1 3.800 1.500 5.800 1.500 7 0 12.600-5.600 12.600-12.500S23 3 16 3Zm0 22.700c-1.800 0-3.600-.5-5.100-1.400l-.4-.2-4.200 1.200 1.300-4-.3-.4c-1-1.600-1.500-3.400-1.500-5.300C5.800 10 10.300 5.600 16 5.600s10.200 4.400 10.200 9.900S21.700 25.700 16 25.700Zm5.600-7.400c-.3-.2-1.800-.9-2.100-1-.3-.1-.5-.2-.7.200-.2.300-.8 1-.9 1.200-.2.200-.3.200-.6.100-1.700-.8-2.800-1.500-3.900-3.400-.3-.5.300-.5.900-1.600.1-.2 0-.4 0-.5-.1-.2-.7-1.600-.9-2.200-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.100-.8.400-.3.300-1 1-1 2.500s1.100 2.900 1.200 3.100c.2.200 2.100 3.300 5.200 4.600 1.900.8 2.700.9 3.600.8.600-.1 1.800-.7 2-1.400.3-.7.300-1.300.2-1.400-.1-.2-.3-.2-.6-.4Z"/></svg>
+  <!-- Floating Telegram -->
+  <a class="telegram-float" id="telegramFloat" href="https://t.me/MunjazAcademicBot" target="_blank" rel="noopener noreferrer" aria-label="تواصل عبر تيليجرام">
+    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M21.7 3.3 18.4 20c-.2 1.2-.9 1.5-1.9.9l-5-3.7-2.4 2.3c-.3.3-.5.5-1 .5l.4-5.1 9.3-8.4c.4-.4-.1-.6-.6-.3L5.7 13.4.8 11.9c-1.1-.3-1.1-1.1.2-1.6L20.2 2.9c.9-.3 1.7.2 1.5.4Z"/></svg>
   </a>
 
   <!-- ============ Integrity Charter Modal ============ -->
@@ -891,6 +900,7 @@
     </div>
   </dialog>
 
+  <script src="academic-services-config.js"></script>
   <script src="app.js"></script>
   <script src="scripts/news-feed.js" defer></script>
 </body>

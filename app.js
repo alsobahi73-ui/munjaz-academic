@@ -4,10 +4,8 @@
 (() => {
   'use strict';
 
-  /* ---------- الإعدادات: عدّل رقم واتساب الأعمال هنا ---------- */
+  /* ---------- الإعدادات العامة ---------- */
   const CONFIG = {
-    // الصيغة الدولية بدون + أو أصفار: مثال العراق 9647XXXXXXXXX
-    WHATSAPP_NUMBER: '9647819934210',
     BRAND: 'مُنجز أكاديمي',
     /* التسجيل بالبريد الإلكتروني (اختياري):
        - اتركه null  => "ملف محلي" يُحفظ على جهاز الزائر فقط (بدون كلمة مرور ولا حساب سحابي).
@@ -111,17 +109,9 @@
     return n;
   };
 
-  /* ---------- واتساب ---------- */
-  function waLink(service) {
-    const aud = currentAudience === 'all' ? 'لم أحدد بعد' : AUDIENCES[currentAudience].label;
-    const lines = [
-      `السلام عليكم، أتواصل معكم من منصة ${CONFIG.BRAND}.`,
-      service ? `الخدمة المطلوبة: ${service}` : 'أرغب بالاستفسار عن خدماتكم.',
-      `الفئة: ${aud}`,
-      ...(auth.user ? [`الاسم: ${auth.user.name}`] : []),
-      'وأُقرّ بالالتزام بميثاق النزاهة (الخدمة للتدقيق والتنسيق والإرشاد فقط).',
-    ];
-    return `https://wa.me/${CONFIG.WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`;
+  /* ---------- تيليجرام: الاسم من إعدادات الخدمات المشتركة ---------- */
+  function telegramLink() {
+    return `https://t.me/${window.AcademicServicesConfig.telegramBotUsername}`;
   }
 
   /* =====================================================
@@ -154,8 +144,8 @@
     if (persist) store.set(LS.audience, key);
     renderBanner();
     markTools();
-    $('#waFloat').href = waLink('');
-    if ($('#heroWaBtn')) $('#heroWaBtn').href = waLink('استشارة أكاديمية عامة');
+    $('#telegramFloat').href = telegramLink();
+    if ($('#heroTelegramBtn')) $('#heroTelegramBtn').href = telegramLink();
   }
 
   function initGateway() {
@@ -1092,8 +1082,8 @@
         const p = store.get(LS.profile);
         if (p && p.email === u.email && p.audience) setAudience(p.audience, false); // يتذكّر فئتك
       }
-      $('#waFloat').href = waLink('');
-      if ($('#heroWaBtn')) $('#heroWaBtn').href = waLink('استشارة أكاديمية عامة');
+      $('#telegramFloat').href = telegramLink();
+      if ($('#heroTelegramBtn')) $('#heroTelegramBtn').href = telegramLink();
       if ($('#authModal').open) this.showView();
     },
 

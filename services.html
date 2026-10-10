@@ -8,7 +8,7 @@
   <meta name="theme-color" content="#0E6B66">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="academic-services.css">
 </head>
@@ -36,7 +36,7 @@
         <a href="index.html#assistant">المساعد البحثي</a>
         <a href="services.html" aria-current="page">خدماتنا الأكاديمية</a>
         <a href="index.html#library">المكتبة والموارد</a>
-        <button type="button" class="btn btn-gold btn-sm" data-open-charter>ميثاق النزاهة</button>
+        <button type="button" class="btn btn-teal btn-sm" data-open-charter>ميثاق النزاهة</button>
       </nav>
     </div>
   </header>
@@ -49,7 +49,7 @@
         <h1 id="servicesPageTitle">خدماتنا الأكاديمية</h1>
         <p class="lead">دعم علمي وتحريري يرافقك في رحلتك الأكاديمية، بالتعاون معك وبما يحفظ أصالة عملك.</p>
         <div class="hero-actions">
-          <a class="btn btn-gold" href="#undergrad">الدراسات الأولية · ٤</a>
+          <a class="btn btn-teal" href="#undergrad">الدراسات الأولية · ٤</a>
           <a class="btn btn-ghost" href="#grad">الدراسات العليا · ٥</a>
           <a class="btn btn-ghost" href="#faculty-researchers">الأساتذة والباحثون · ٦</a>
         </div>
@@ -182,8 +182,19 @@
         </aside>
       </div>
     </section>
+    <section class="section faq-section" aria-labelledby="faqTitle">
+      <div class="container">
+        <h2 id="faqTitle">الأسئلة الشائعة</h2>
+        <details class="faq-item" name="faq"><summary>كيف أطلب خدمة؟</summary><p>اضغط «اطلب خدمة»، واختر الخدمة ووضّح احتياجك في النموذج، ثم أرسل الطلب بعد الموافقة على الإقرار.</p></details>
+        <details class="faq-item" name="faq"><summary>كيف تُحتسب الأسعار؟</summary><p>تُحدّد التكلفة بحسب نوع الخدمة ونطاق العمل بعد مراجعة طلبك، ويُتفق عليها قبل البدء.</p></details>
+        <details class="faq-item" name="faq"><summary>ما سياسة النزاهة الأكاديمية؟</summary><p>نقدّم التدقيق والتنسيق والإرشاد بالتعاون معك؛ لا نكتب الأعمال نيابةً عنك ولا نزيّف البيانات، وتبقى مسؤولية العمل وأصالته لك.</p></details>
+        <details class="faq-item" name="faq"><summary>كم تستغرق الخدمة؟</summary><p>تعتمد المدة على نطاق الطلب ومتطلباته، ويُتفق على موعد الإنجاز بعد مراجعته.</p></details>
+        <details class="faq-item" name="faq"><summary>هل بياناتي سرية؟</summary><p>تُرسل تفاصيل الطلب وبيانات التواصل التي تضيفها إلى فريق مُنجز أكاديمي عبر تيليجرام لمعالجة طلبك؛ تجنّب إرفاق بيانات حساسة غير لازمة.</p></details>
+      </div>
+    </section>
   </main>
   <!-- ============ Footer ============ -->
+  <div class="mobile-request-bar" aria-label="طلب خدمة"><button type="button" class="btn btn-teal" data-open-request aria-haspopup="dialog" aria-controls="academicRequestDialog">اطلب خدمة</button></div>
   <footer class="site-footer">
     <div class="container footer-inner">
       <div>
@@ -239,16 +250,16 @@
         <label class="field"><span>الخدمة المطلوبة *</span><select id="requestService" name="service" required></select></label>
         <p class="academic-request-category" id="requestCategory" aria-live="polite"></p>
         <label class="field"><span>اكتب نوع طلبك وتفاصيله *</span><textarea id="requestDetails" name="details" required minlength="10" maxlength="2500" placeholder="اكتب هنا الدعم الذي تحتاجه وموضوع العمل ومتطلباتك."></textarea></label>
-        <details class="academic-contact-details">
-          <summary>بيانات التواصل (اختيارية)</summary>
+        <div class="academic-contact-fields">
+          <p class="academic-contact-label">بيانات التواصل (اختيارية)</p>
           <p>أضف بيانات تواصلك إذا رغبت أن نرد عليك.</p>
           <div class="academic-form-grid">
             <label class="field"><span>الاسم</span><input id="requestName" name="name" type="text" autocomplete="name" maxlength="100"></label>
-            <label class="field"><span>رقم التواصل</span><input id="requestPhone" name="phone" type="tel" dir="ltr" autocomplete="tel" maxlength="30" placeholder="+964 …"></label>
+            <label class="field"><span>رقم الهاتف</span><input id="requestPhone" name="phone" type="tel" dir="ltr" autocomplete="tel" maxlength="30" placeholder="+964 …"></label>
           </div>
-        </details>
-        <label class="academic-consent"><input id="requestConsent" name="consent" type="checkbox" required><span>أوافق على أن الخدمة مدفوعة، وأنها دعم علمي وتحريري بالتعاون معي، مع الالتزام بالنزاهة الأكاديمية وبقاء مسؤولية العمل وأصالته لي.</span></label>
-        <p class="academic-privacy-note">عند الضغط على «إرسال الطلب»، تُرسل رسالتك وبياناتك التي أضفتها إلى فريق مُنجز أكاديمي عبر تلكرام. ستبقى داخل الموقع.</p>
+        </div>
+        <label class="academic-consent"><input id="requestConsent" name="consent" type="checkbox" required><span>أوافق على خدمة مدفوعة للدعم الأكاديمي مع التزامي بالنزاهة ومسؤوليتي عن أصالة عملي.</span></label>
+        <p class="academic-privacy-note">عند الضغط على «إرسال الطلب»، تُرسل رسالتك وبياناتك التي أضفتها إلى فريق مُنجز أكاديمي عبر تيليجرام. ستبقى داخل الموقع.</p>
         <button class="btn btn-teal btn-block" id="requestSubmit" type="submit">إرسال الطلب</button>
         <p class="form-msg" id="requestStatus" role="status" aria-live="polite" tabindex="-1"></p>
       </form>

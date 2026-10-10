@@ -63,6 +63,11 @@
     toggle.setAttribute('aria-expanded', String(nav.classList.toggle('open')));
   });
   nav.querySelectorAll('a').forEach(link => link.addEventListener('click', closeNav));
+
+  if (new URLSearchParams(location.search).get('request') === '1') {
+    openRequest(select.value, document.querySelector('.mobile-request-bar .btn'));
+  }
+
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape' && nav.classList.contains('open')) {
       closeNav();
@@ -83,6 +88,8 @@
   document.addEventListener('click', event => {
     const request = event.target.closest('[data-request-service]');
     if (request) openRequest(request.dataset.requestService, request);
+    const genericRequest = event.target.closest('[data-open-request]');
+    if (genericRequest) openRequest(select.value, genericRequest);
     if (event.target.closest('[data-close-request]')) dialog.close();
     if (event.target.closest('[data-open-charter]')) {
       const charter = $('#charterModal');
