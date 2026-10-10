@@ -8,8 +8,10 @@
   const form = $('#academicRequestForm');
   const dialog = $('#academicRequestDialog');
   const select = $('#requestService');
-  const preview = $('#requestPreview');
-  const summary = $('#requestSummary');
+  const status = $('#requestStatus');
+  const submit = $('#requestSubmit');
+  let sending = false;
+  let requestId = null;
   let returnFocus = null;
 
   catalog.forEach(group => {
@@ -19,12 +21,11 @@
     select.append(options);
   });
 
-  function invalidatePreview() {
-    preview.hidden = true;
-    summary.value = '';
-    $('#requestSend').hidden = true;
-    $('#requestSend').removeAttribute('href');
-    $('#requestCopyStatus').textContent = '';
+  function clearStatus() {
+    if (sending) return;
+    status.textContent = '';
+    status.classList.remove('ok');
+    requestId = null;
   }
 
   function updateCategory() {
@@ -33,10 +34,17 @@
 
   function openRequest(serviceId, trigger) {
     if (!byId.has(serviceId)) return;
+    if (sending) {
+      returnFocus = trigger;
+      if (!dialog.open) dialog.showModal();
+      document.body.style.overflow = 'hidden';
+      status.focus();
+      return;
+    }
     // Preserve unfinished details when comparing services; consent is specific to this request.
     select.value = serviceId;
     $('#requestConsent').checked = false;
-    invalidatePreview();
+    clearStatus();
     updateCategory();
     returnFocus = trigger;
     closeNav();
@@ -88,67 +96,81 @@
 
   form.addEventListener('input', event => {
     event.target.setCustomValidity?.('');
-    invalidatePreview();
+    clearStatus();
   });
-  form.addEventListener('change', () => { invalidatePreview(); updateCategory(); });
+  form.addEventListener('change', () => { clearStatus(); updateCategory(); });
 
   const normalizeDigits = value => value.replace(/[٠-٩]/g, char => String(char.charCodeAt(0) - 0x660))
     .replace(/[۰-۹]/g, char => String(char.charCodeAt(0) - 0x6f0));
 
-  form.addEventListener('submit', event => {
+  form.addEventListener('submit', async event => {
     event.preventDefault();
+    if (sending) return;
     const name = $('#requestName');
     const phone = $('#requestPhone');
     const details = $('#requestDetails');
     const phoneText = normalizeDigits(phone.value.trim());
-    name.setCustomValidity(name.value.trim().length >= 2 ? '' : 'يرجى إدخال الاسم الكامل.');
-    phone.setCustomValidity(/^[+\d\s()-]+$/.test(phoneText) && phoneText.replace(/\D/g, '').length >= 7
-      ? '' : 'يرجى إدخال رقم تواصل صحيح يتضمن سبعة أرقام على الأقل.');
+    phone.setCustomValidity(!phoneText || (/^[+\d\s()-]+$/.test(phoneText) && phoneText.replace(/\D/g, '').length >= 7)
+      ? '' : 'يرجى إدخال رقم تواصل صحيح أو ترك الحقل فارغاً.');
     details.setCustomValidity(details.value.trim().length >= 10 ? '' : 'يرجى توضيح طلبك بعشرة أحرف على الأقل.');
-    if (!form.reportValidity()) return;
-    const service = byId.get(select.value);
-    if (!service) return;
-    const lines = [
-      'السلام عليكم، أرغب بطلب خدمة من منصة مُنجز أكاديمي.',
-      `الفئة: ${service.category}`,
-      `الخدمة المطلوبة: ${service.title}`,
-      `الاسم: ${name.value.trim()}`,
-      `رقم التواصل: ${phone.value.trim()}`,
-      ...($('#requestEmail').value.trim() ? [`البريد الإلكتروني: ${$('#requestEmail').value.trim()}`] : []),
-      ...($('#requestInstitution').value.trim() ? [`الجامعة / المؤسسة: ${$('#requestInstitution').value.trim()}`] : []),
-      `تفاصيل الطلب:\n${details.value.trim()}`,
-      'أوافق على أن الخدمة مدفوعة وأن التكلفة ونطاق الدعم يُحدَّدان بالاتفاق بعد مراجعة الطلب.',
-      'ألتزم بالنزاهة الأكاديمية، وأن الخدمة دعم علمي وتحريري بالتعاون معي، وتبقى مسؤولية العمل وأصالته لي.',
-    ];
-    summary.value = lines.join('\n');
-    const number = window.AcademicServicesConfig?.whatsappNumber || '';
-    const configured = /^[1-9]\d{7,14}$/.test(number) && number !== '9647700000000';
-    const send = $('#requestSend');
-    send.hidden = !configured;
-    if (configured) {
-      send.href = `https://wa.me/${number}?text=${encodeURIComponent(summary.value)}`;
-      $('#requestDeliveryNote').textContent = 'راجع طلبك ثم افتح واتساب وأكّد إرساله هناك. تجهيز الطلب لا يعني أنه أُرسل.';
-    } else {
-      send.removeAttribute('href');
-      $('#requestDeliveryNote').textContent = 'الإرسال المباشر غير متاح حتى اعتماد رقم التواصل الرسمي. يمكنك نسخ طلبك للاحتفاظ به.';
+    if (!form.reportValidity() || !byId.has(select.value)) return;
+    const endpoint = window.AcademicServicesConfig?.requestEndpoint;
+    if (!endpoint) {
+      status.textContent = 'استقبال الطلبات غير متاح حالياً. احتفظ برسالتك وحاول لاحقاً.';
+      return;
     }
-    preview.hidden = false;
-    $('#requestPreviewTitle').tabIndex = -1;
-    $('#requestPreviewTitle').focus();
-  });
-
-  $('#requestCopy').addEventListener('click', async () => {
-    const status = $('#requestCopyStatus');
+    requestId ||= crypto.randomUUID();
+    const payload = {
+      requestId, service: select.value, name: name.value.trim(), phone: phone.value.trim(),
+      details: details.value.trim(), consent: $('#requestConsent').checked,
+    };
+    sending = true;
+    status.classList.remove('ok');
+    status.textContent = 'جارٍ إرسال طلبك…';
+    submit.disabled = true;
+    submit.textContent = 'جارٍ الإرسال…';
+    form.setAttribute('aria-busy', 'true');
+    // Freeze the draft so retrying an uncertain response uses the same request ID and content.
+    const fields = [...form.querySelectorAll('input, select, textarea')];
+    fields.forEach(field => { field.disabled = true; });
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 45000);
     try {
-      if (!navigator.clipboard?.writeText) throw new Error('Clipboard unavailable');
-      await navigator.clipboard.writeText(summary.value);
+      const response = await fetch(endpoint, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload), signal: controller.signal, credentials: 'omit',
+      });
+      const result = await response.json();
+      if (!response.ok || result.status !== 'sent' || result.requestId !== requestId) {
+        const messages = {
+          invalid_request: 'يرجى مراجعة بيانات الطلب والموافقة على شروط الخدمة.',
+          rate_limited: 'أُرسلت عدة طلبات خلال وقت قصير. يرجى الانتظار ثم المحاولة.',
+          unavailable: 'استقبال الطلبات غير متاح حالياً. احتفظ برسالتك وحاول لاحقاً.',
+          delivery_failed: 'تعذّر إرسال الطلب. احتفظ برسالتك وحاول لاحقاً.',
+          delivery_uncertain: 'تعذّر تأكيد وصول الطلب. احتفظ ببياناته قبل المحاولة لاحقاً.',
+          conflict: 'يرجى تعديل الرسالة ثم إعادة المحاولة.',
+        };
+        throw Object.assign(new Error(), {
+          userMessage: messages[result.error] || 'تعذّر تأكيد إرسال الطلب. احتفظ برسالتك وحاول لاحقاً.',
+        });
+      }
+      form.reset();
+      updateCategory();
+      requestId = null;
       status.classList.add('ok');
-      status.textContent = 'تم نسخ الطلب. يمكنك مشاركته عبر قناة التواصل المعتمدة.';
-    } catch {
-      summary.focus();
-      summary.select();
-      status.classList.remove('ok');
-      status.textContent = 'حدّدنا نص الطلب؛ انسخه يدوياً من حقل التفاصيل.';
+      status.textContent = 'تم إرسال طلبك إلى فريق مُنجز أكاديمي. شكراً لتواصلك معنا.';
+    } catch (error) {
+      status.textContent = error.name === 'AbortError' || error instanceof TypeError
+        ? 'تعذّر تأكيد وصول الطلب بسبب الاتصال. احتفظ برسالتك وحاول لاحقاً.'
+        : (error.userMessage || 'تعذّر تأكيد إرسال الطلب. احتفظ برسالتك وحاول لاحقاً.');
+    } finally {
+      clearTimeout(timeout);
+      sending = false;
+      fields.forEach(field => { field.disabled = false; });
+      submit.disabled = false;
+      submit.textContent = 'إرسال الطلب';
+      form.removeAttribute('aria-busy');
+      status.focus();
     }
   });
   $('#year').textContent = new Date().getFullYear();

@@ -38,3 +38,8 @@
   .academic-services-hero .hero-actions { align-items: stretch; flex-direction: column; }
   .academic-group { margin-bottom: 2rem; }
 }
+
+.academic-contact-details { margin-bottom: 1rem; background: var(--teal-light); border-radius: 10px; padding: .7rem 1rem; }
+.academic-contact-details summary { cursor: pointer; font-weight: 700; color: var(--teal-dark); }
+.academic-contact-details p { font-size: .9rem; color: var(--muted); margin: .5rem 0; }
+#requestSubmit:disabled { opacity: .65; cursor: wait; }

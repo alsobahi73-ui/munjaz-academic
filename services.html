@@ -238,27 +238,20 @@
       <form id="academicRequestForm">
         <label class="field"><span>الخدمة المطلوبة *</span><select id="requestService" name="service" required></select></label>
         <p class="academic-request-category" id="requestCategory" aria-live="polite"></p>
-        <div class="academic-form-grid">
-          <label class="field"><span>الاسم الكامل *</span><input id="requestName" name="name" type="text" autocomplete="name" required minlength="2" maxlength="100"></label>
-          <label class="field"><span>رقم التواصل / واتساب *</span><input id="requestPhone" name="phone" type="tel" dir="ltr" autocomplete="tel" required minlength="7" maxlength="30" placeholder="+964 …"></label>
-          <label class="field"><span>البريد الإلكتروني (اختياري)</span><input id="requestEmail" name="email" type="email" dir="ltr" autocomplete="email" maxlength="160"></label>
-          <label class="field"><span>الجامعة / المؤسسة (اختياري)</span><input id="requestInstitution" name="institution" type="text" maxlength="160" autocomplete="organization"></label>
-        </div>
-        <label class="field"><span>تفاصيل طلبك *</span><textarea id="requestDetails" name="details" required minlength="10" maxlength="4000" placeholder="وضّح موضوع العمل، الدعم المطلوب، والمتطلبات الجامعية أو موعد التسليم إن وجد."></textarea></label>
+        <label class="field"><span>اكتب نوع طلبك وتفاصيله *</span><textarea id="requestDetails" name="details" required minlength="10" maxlength="2500" placeholder="اكتب هنا الدعم الذي تحتاجه وموضوع العمل ومتطلباتك."></textarea></label>
+        <details class="academic-contact-details">
+          <summary>بيانات التواصل (اختيارية)</summary>
+          <p>أضف بيانات تواصلك إذا رغبت أن نرد عليك.</p>
+          <div class="academic-form-grid">
+            <label class="field"><span>الاسم</span><input id="requestName" name="name" type="text" autocomplete="name" maxlength="100"></label>
+            <label class="field"><span>رقم التواصل</span><input id="requestPhone" name="phone" type="tel" dir="ltr" autocomplete="tel" maxlength="30" placeholder="+964 …"></label>
+          </div>
+        </details>
         <label class="academic-consent"><input id="requestConsent" name="consent" type="checkbox" required><span>أوافق على أن الخدمة مدفوعة، وأنها دعم علمي وتحريري بالتعاون معي، مع الالتزام بالنزاهة الأكاديمية وبقاء مسؤولية العمل وأصالته لي.</span></label>
-        <p class="academic-privacy-note">تبقى بيانات النموذج في هذه الصفحة حتى تختار مشاركتها عبر واتساب. لا تُحفظ الطلبات في حساب أو خادم.</p>
-        <button class="btn btn-teal btn-block" type="submit">تجهيز الطلب</button>
+        <p class="academic-privacy-note">عند الضغط على «إرسال الطلب»، تُرسل رسالتك وبياناتك التي أضفتها إلى فريق مُنجز أكاديمي عبر تلكرام. ستبقى داخل الموقع.</p>
+        <button class="btn btn-teal btn-block" id="requestSubmit" type="submit">إرسال الطلب</button>
+        <p class="form-msg" id="requestStatus" role="status" aria-live="polite" tabindex="-1"></p>
       </form>
-      <section class="academic-request-preview" id="requestPreview" hidden aria-labelledby="requestPreviewTitle">
-        <h3 id="requestPreviewTitle">طلبك جاهز للمشاركة</h3>
-        <p id="requestDeliveryNote" role="status"></p>
-        <label class="field"><span>تفاصيل الطلب</span><textarea id="requestSummary" readonly dir="rtl"></textarea></label>
-        <div class="modal-actions">
-          <a class="btn btn-wa" id="requestSend" target="_blank" rel="noopener noreferrer" hidden>إرسال عبر واتساب</a>
-          <button class="btn btn-outline" id="requestCopy" type="button">نسخ الطلب</button>
-        </div>
-        <p class="form-msg" id="requestCopyStatus" role="status"></p>
-      </section>
     </div>
   </dialog>
   <noscript><p class="container academic-notice">فعّل JavaScript لفتح نموذج طلب الخدمة الموحد. يمكنك استعراض جميع الخدمات أعلاه.</p></noscript>
