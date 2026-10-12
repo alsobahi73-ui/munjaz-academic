@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>أرشيف أخبار التعليم العالي | مُنجز أكاديمي</title>
+  <meta name="description" content="أرشيف أخبار التعليم العالي في العراق: قرارات وزارة التعليم العالي والبحث العلمي وأخبار الجامعات الحكومية والأهلية — تُحدَّث تلقائيًا مع ذكر المصدر.">
+  <meta name="theme-color" content="#0E6B66">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">تخطَّ إلى المحتوى</a>
+
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="مُنجز أكاديمي - الرئيسية">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 40 40" width="30" height="30" aria-hidden="true"><path d="M33.5 20a13.5 13.5 0 1 1-4-9.6" fill="none" stroke="#FFFFFF" stroke-width="3.4" stroke-linecap="round"/><path d="M14 20.5l6.5 6.5L30 15" fill="none" stroke="#E9B949" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="brand-text">
+          <strong>مُنجز أكاديمي</strong>
+          <small>Munjaz Academic</small>
+        </span>
+      </a>
+
+      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="mainNav" aria-label="القائمة">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="main-nav" id="mainNav" aria-label="التنقل الرئيسي">
+        <a href="index.html">الرئيسية</a>
+        <a href="index.html#tools">الأدوات الأكاديمية</a>
+        <a href="services.html">خدماتنا الأكاديمية</a>
+        <a href="index.html#news">أخبار التعليم العالي</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="section" aria-labelledby="archiveTitle">
+      <div class="container">
+        <header class="section-head">
+          <h2 id="archiveTitle">أرشيف أخبار التعليم العالي</h2>
+          <p>جميع الأخبار من وزارة التعليم العالي والبحث العلمي والجامعات العراقية الحكومية والأهلية — تُحدَّث تلقائيًا، وكل خبر منسوب إلى مصدره الأصلي.</p>
+        </header>
+
+        <div class="news-controls">
+          <input type="search" class="news-search" id="archiveSearch" placeholder="ابحث في الأخبار..." aria-label="البحث في الأخبار">
+          <select class="news-select" id="archiveCategory" aria-label="فلترة حسب الفئة">
+            <option value="">كل الفئات</option>
+          </select>
+          <select class="news-select" id="archiveSource" aria-label="فلترة حسب المصدر">
+            <option value="">كل المصادر</option>
+          </select>
+          <span class="news-count" id="archiveCount" aria-live="polite"></span>
+        </div>
+
+        <div class="news-grid" id="archiveGrid"></div>
+        <p class="news-empty" id="archiveEmpty" hidden>لا توجد أخبار مطابقة حاليًا.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <strong>مُنجز أكاديمي</strong>
+        <p>لا نكتب عنك... نُنجز معك</p>
+      </div>
+      <p class="copy">© <span id="year"></span> مُنجز أكاديمي. جميع الحقوق محفوظة.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    var t = document.getElementById('navToggle'), n = document.getElementById('mainNav');
+    if (t && n) t.addEventListener('click', function () {
+      var open = n.classList.toggle('open');
+      t.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  </script>
+  <script src="scripts/news-archive.js" defer></script>
+</body>
+</html>
