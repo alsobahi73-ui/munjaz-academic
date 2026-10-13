@@ -82,18 +82,25 @@ class Client:
             try:
                 body = self.raw(origin + '/robots.txt').decode('utf-8', 'replace')
             except HTTPError as exc:
-                if exc.code in (301, 302, 303, 307, 308):
-                    # Same-origin robots.txt redirect (e.g. trailing slash): follow once
-                    # for the policy document only. Content URLs still refuse redirects.
-                    target = exc.headers.get('Location', '')
-                    if urlsplit(target).netloc.lower() == urlsplit(origin).netloc.lower():
-                        body = self.raw(target).decode('utf-8', 'replace')
-                    else:
-                        raise ValueError('robots.txt unavailable; refusing to crawl') from exc
-                elif exc.code in (404, 410):
+                if exc.code in (404, 410):
                     body = ''
                 else:
                     raise ValueError('robots.txt unavailable; refusing to crawl') from exc
+            except ValueError as exc:
+                # raw() wraps redirect responses in ValueError: follow a same-origin
+                # robots.txt redirect once (e.g. trailing slash) for the policy
+                # document only. Content URLs still refuse redirects.
+                cause = exc.__cause__
+                target = cause.headers.get('Location', '') if isinstance(cause, HTTPError) else ''
+                if (isinstance(cause, HTTPError)
+                        and cause.code in (301, 302, 303, 307, 308)
+                        and urlsplit(target).netloc.lower() == urlsplit(origin).netloc.lower()):
+                    try:
+                        body = self.raw(target).decode('utf-8', 'replace')
+                    except (HTTPError, ValueError) as exc2:
+                        raise ValueError('robots.txt unavailable; refusing to crawl') from exc2
+                else:
+                    raise
             robot.parse(body.splitlines())
             self.robots[origin] = robot
         if not self.robots[origin].can_fetch(self.agent, url):
