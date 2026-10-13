@@ -1,4 +1,5 @@
 // Telegram incoming-message webhook for @MunjazAcademicBot.
+// redeploy: pick up dashboard secrets
 // POST /telegram-webhook on the worker. Verifies the Telegram secret header
 // when TELEGRAM_WEBHOOK_SECRET is configured. Never throws: Telegram
 // retries on non-2xx, so the handler always answers 200 for valid updates.
