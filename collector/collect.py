@@ -81,12 +81,20 @@ class Client:
             robot = RobotFileParser()
             try:
                 body = self.raw(origin + '/robots.txt').decode('utf-8', 'replace')
-                robot.parse(body.splitlines())
             except HTTPError as exc:
-                if exc.code in (404, 410):
-                    robot.parse([])
+                if exc.code in (301, 302, 303, 307, 308):
+                    # Same-origin robots.txt redirect (e.g. trailing slash): follow once
+                    # for the policy document only. Content URLs still refuse redirects.
+                    target = exc.headers.get('Location', '')
+                    if urlsplit(target).netloc.lower() == urlsplit(origin).netloc.lower():
+                        body = self.raw(target).decode('utf-8', 'replace')
+                    else:
+                        raise ValueError('robots.txt unavailable; refusing to crawl') from exc
+                elif exc.code in (404, 410):
+                    body = ''
                 else:
                     raise ValueError('robots.txt unavailable; refusing to crawl') from exc
+            robot.parse(body.splitlines())
             self.robots[origin] = robot
         if not self.robots[origin].can_fetch(self.agent, url):
             raise ValueError('robots.txt disallows URL')
