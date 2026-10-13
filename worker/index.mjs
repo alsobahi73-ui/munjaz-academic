@@ -14,6 +14,14 @@ export function createWorker(catalog, fetchImpl = fetch) {
           ...(diagnostics.match ? { 'Access-Control-Allow-Origin': normalizeOrigin(request.headers.get('Origin')), 'Vary': 'Origin' } : {}),
         } });
       }
+      if (path === '/debug-env' && request.method === 'GET') {
+        const names = Object.keys(env || {}).filter(k => !/TOKEN|SECRET|CHAT_ID/.test(k));
+        const present = {};
+        for (const k of ['SITE_ORIGIN', 'TELEGRAM_BOT_TOKEN', 'TELEGRAM_CHAT_ID', 'TELEGRAM_WEBHOOK_SECRET']) {
+          present[k] = Boolean(env[k]);
+        }
+        return Response.json({ present, other: names });
+      }
       if (path === '/telegram-webhook') {
         const hook = createTelegramWebhook({
           token: env.TELEGRAM_BOT_TOKEN,
