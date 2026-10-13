@@ -15,7 +15,7 @@ export function createWorker(catalog, fetchImpl = fetch) {
         } });
       }
       if (path === '/debug-env' && request.method === 'GET') {
-        const names = Object.keys(env || {}).filter(k => !/TOKEN|SECRET|CHAT_ID/.test(k));
+        const names = Object.keys(env || {});
         const present = {};
         for (const k of ['SITE_ORIGIN', 'TELEGRAM_BOT_TOKEN', 'TELEGRAM_CHAT_ID', 'TELEGRAM_WEBHOOK_SECRET']) {
           present[k] = Boolean(env[k]);
