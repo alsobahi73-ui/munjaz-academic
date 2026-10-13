@@ -123,6 +123,37 @@ class CollectorTests(unittest.TestCase):
         with patch.object(client, 'raw', side_effect=[HTTPError('url', 404, 'Missing', {}, None), RSS]):
             self.assertEqual(client.get('https://fixture.test/'), RSS)
 
+    def test_date_backfill_from_article_page(self):
+        from collector.collect import backfill_dates
+        import io
+        listing = b"""<html><body><div class="grid"><li><a class="_link" href="https://fixture.test/post/1"><div class="title">Headline one</div></a></li></div></body></html>"""
+        article = b"""<html><body><img class="post-img"/><div class="post-views"><div class="date">13-10-2026</div></div></body></html>"""
+        source = dict(SOURCE)
+        source['selectors'] = {'item': 'div.grid li', 'title': 'div.title', 'link': 'a._link'}
+        source['date_page_selector'] = 'img.post-img + div.post-views div.date'
+        client = FakeClient({'https://fixture.test/': listing,
+                             'https://fixture.test/post/1': article})
+        batch = articles(source, client)
+        self.assertEqual(batch[0]['date'], '')
+        log = io.StringIO()
+        kept = backfill_dates(batch, source, client, log)
+        self.assertEqual(len(kept), 1)
+        self.assertEqual(kept[0]['date'], '13-10-2026')
 
+    def test_dateless_article_page_drops_item(self):
+        from collector.collect import backfill_dates
+        import io
+        listing = b"""<html><body><div class="grid"><li><a class="_link" href="https://fixture.test/post/9"><div class="title">No date anywhere</div></a></li></div></body></html>"""
+        article = b"""<html><body><p>No date here</p></body></html>"""
+        source = dict(SOURCE)
+        source['selectors'] = {'item': 'div.grid li', 'title': 'div.title', 'link': 'a._link'}
+        source['date_page_selector'] = 'img.post-img + div.post-views div.date'
+        client = FakeClient({'https://fixture.test/': listing,
+                             'https://fixture.test/post/9': article})
+        batch = articles(source, client)
+        log = io.StringIO()
+        kept = backfill_dates(batch, source, client, log)
+        self.assertEqual(kept, [])
+        self.assertIn('no date on article page', log.getvalue())
 if __name__ == '__main__':
     unittest.main()
