@@ -73,3 +73,6 @@
 {"time": "2026-10-13T20:48:36.469177+00:00", "id": "college-ashtar-news", "new_items": 5, "status": "ok", "needs_attention": false, "consecutive_failures": 0}
 {"time": "2026-10-13T20:48:36.469177+00:00", "new_items": 2902}
 {"time": "2026-10-13T21:44:44.735153+00:00", "new_items": 0}
+{"time": "2026-10-13T22:44:53.896513+00:00", "id": "mohesr-ministry-news", "new_items": 0, "status": "ok", "needs_attention": false, "consecutive_failures": 0}
+{"time": "2026-10-13T22:44:53.896513+00:00", "id": "mohesr-universities-news", "new_items": 0, "status": "ok", "needs_attention": false, "consecutive_failures": 0}
+{"time": "2026-10-13T22:44:53.896513+00:00", "new_items": 0}
