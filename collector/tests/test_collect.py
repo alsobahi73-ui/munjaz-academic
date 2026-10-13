@@ -155,5 +155,30 @@ class CollectorTests(unittest.TestCase):
         kept = backfill_dates(batch, source, client, log)
         self.assertEqual(kept, [])
         self.assertIn('no date on article page', log.getvalue())
+    def test_robots_txt_same_origin_redirect_followed(self):
+        # robots.txt 301 to a same-origin URL (e.g. trailing slash) must not
+        # kill the source; content URLs still refuse redirects.
+        from urllib.error import HTTPError
+        client = Client('MunjazAcademicCollector/1.0')
+        def fake_raw(url):
+            if url.endswith('/robots.txt'):
+                raise HTTPError(url, 301, 'Moved', {'Location': url + '/'}, None)
+            if url.endswith('/robots.txt/'):
+                return b'User-agent: *\nDisallow:\n'
+            return RSS
+        with patch.object(Client, 'raw', side_effect=fake_raw):
+            body = client.get('https://fixture.test/?feed=rss2')
+        self.assertEqual(body, RSS)
+
+    def test_robots_txt_cross_origin_redirect_refused(self):
+        from urllib.error import HTTPError
+        client = Client('MunjazAcademicCollector/1.0')
+        def fake_raw(url):
+            if url.endswith('/robots.txt'):
+                raise HTTPError(url, 301, 'Moved', {'Location': 'https://evil.test/robots.txt'}, None)
+            return RSS
+        with patch.object(Client, 'raw', side_effect=fake_raw):
+            with self.assertRaises(ValueError):
+                client.get('https://fixture.test/')
 if __name__ == '__main__':
     unittest.main()
