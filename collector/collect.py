@@ -121,16 +121,53 @@ def extract_page(body, source, base):
     if not rows:
         raise ValueError('News selector matched no articles')
     result = []
+    date_sel = selectors.get('date')
     for row in rows:
-        title, link, date = (row.select_one(selectors[key]) for key in ('title', 'link', 'date'))
+        title = row.select_one(selectors['title'])
+        link = row.select_one(selectors['link'])
+        date = row.select_one(date_sel) if date_sel else None
         summary = row.select_one(selectors['summary']) if selectors.get('summary') else None
-        if not title or not link or not date or not link.get('href'):
-            raise ValueError('HTML article missing title/link/publication date')
+        if not title or not link or not link.get('href'):
+            raise ValueError('HTML article missing title/link')
+        if not date and not source.get('date_page_selector'):
+            raise ValueError('HTML article missing publication date')
         result.append({'title': title.get_text(' ', strip=True),
                        'url': web_url(link['href'], base),
-                       'date': date.get('datetime') or date.get_text(' ', strip=True),
+                       'date': (date.get('datetime') or date.get_text(' ', strip=True)) if date else '',
                        'summary': summary.get_text(' ', strip=True)[:350] if summary else ''})
     return result
+
+
+def backfill_dates(batch, source, client, log):
+    """Fetch each dateless item's page and extract its date.
+
+    Only used when the listing has no dates but date_page_selector is set.
+    Items whose page yields no date are dropped (never invent dates).
+    """
+    selector = source.get('date_page_selector')
+    if not selector:
+        return batch
+    kept = []
+    for item in batch:
+        if item.get('date'):
+            kept.append(item)
+            continue
+        try:
+            page = BeautifulSoup(client.get(item['url']), 'html.parser')
+            found = page.select_one(selector)
+            item['date'] = (found.get('datetime') or found.get_text(' ', strip=True)) if found else ''
+        except Exception as exc:
+            log.write(json.dumps({'time': stamp(utcnow()), 'id': source['id'],
+                                  'skipped': item['url'], 'reason': f'{type(exc).__name__}: {exc}'},
+                                 ensure_ascii=False) + '\n')
+            continue
+        if item['date']:
+            kept.append(item)
+        else:
+            log.write(json.dumps({'time': stamp(utcnow()), 'id': source['id'],
+                                  'skipped': item['url'], 'reason': 'no date on article page'},
+                                 ensure_ascii=False) + '\n')
+    return kept
 
 
 def articles(source, client):
@@ -192,6 +229,7 @@ def collect(config, output, client=None, now=None, force=False):
                 if source['category'] not in config['categories']:
                     raise ValueError('Unknown category')
                 batch = articles(source, client)
+                batch = backfill_dates(batch, source, client, log)
                 for item in batch:
                     digest = hashlib.sha256((item['url'] + '\n' + item['title']).encode()).hexdigest()
                     if digest in seen:
