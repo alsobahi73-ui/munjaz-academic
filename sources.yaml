@@ -1,14 +1,1109 @@
-# No unverified section or university URLs are enabled.
-# Complete the ministry-directory audit described in collector/README.md.
-version: 1
-directory_status: pending_network_access
+categories:
+- general
+directory_status: verified
 ministry_home: https://mohesr.gov.iq/
+request_delay_seconds: 2
 schedule_hours:
   ministry: 1
   university: 6
-request_delay_seconds: 2
+sources:
+- category: general
+  date_page_selector: div.post-views div.date
+  enabled: true
+  id: mohesr-ministry-news
+  name: وزارة التعليم العالي والبحث العلمي — أخبار الوزارة
+  selectors:
+    item: div.side-news-grid li
+    link: a._link
+    title: div.title
+  tier: ministry
+  type: official
+  url: https://mohesr.gov.iq/ar/homeNews/newsTerm_more/6
+- category: general
+  date_page_selector: div.post-views div.date
+  enabled: true
+  id: mohesr-universities-news
+  name: وزارة التعليم العالي والبحث العلمي — أخبار الجامعات
+  selectors:
+    item: div.side-news-grid li
+    link: a._link
+    title: div.title
+  tier: ministry
+  type: official
+  url: https://mohesr.gov.iq/ar/homeNews/newsTerm_more/55
+- category: general
+  enabled: true
+  feed_url: https://nc.uobaghdad.edu.iq/?feed=rss2
+  id: univ-baghdad-news
+  name: جامعة بغداد
+  tier: university
+  type: official
+  url: https://nc.uobaghdad.edu.iq/
+- category: general
+  enabled: true
+  id: univ-mosul-news
+  name: جامعة الموصل
+  selectors:
+    date: .fusion-tb-published-date
+    item: li.fusion-post-cards-grid-column
+    link: .fusion-title-heading a
+    summary: .fusion-content-tb p
+    title: .fusion-title-heading a
+  tier: university
+  type: official
+  url: https://uomosul.edu.iq/more-news/
+- category: general
+  enabled: true
+  id: univ-basra-news
+  name: جامعة البصرة
+  selectors:
+    date: .card-footer small
+    item: div.card
+    link: .card-block > a
+    summary: .card-footer p.card-text
+    title: h4.card-title
+  tier: university
+  type: official
+  url: https://uobasrah.edu.iq/news
+- category: general
+  enabled: true
+  id: univ-nahrain-news
+  name: جامعة النهرين
+  selectors:
+    date: .views-field-created .field-content
+    item: table.views-view-grid td
+    link: .views-field-title a
+    title: .views-field-title a
+  tier: university
+  type: official
+  url: https://nahrainuniv.edu.iq/ar/all-news-en
+- category: general
+  enabled: true
+  feed_url: https://qu.edu.iq/?cat=10&feed=rss2
+  id: univ-alqadsya-news
+  name: جامعة القادسية
+  tier: university
+  type: official
+  url: https://qu.edu.iq/?cat=10
+- category: general
+  enabled: true
+  feed_url: https://www.tu.edu.iq/index.php/ar/tu-news?format=feed&type=rss
+  id: univ-tikrit-news
+  name: جامعة تكريت
+  tier: university
+  type: official
+  url: https://www.tu.edu.iq/index.php/ar/tu-news
+- category: general
+  enabled: true
+  id: univ-anbar-news
+  name: جامعة الأنبار
+  selectors:
+    date: .card-header sup
+    item: .c-main .card
+    link: a.card-title
+    summary: .card-block p.card-text
+    title: a.card-title
+  tier: university
+  type: official
+  url: https://www.uoanbar.edu.iq/Sectors.php?ID=2
+- category: general
+  enabled: true
+  feed_url: https://aliraqia.edu.iq/feed/
+  id: univ-iraqi-news
+  name: الجامعة العراقية
+  tier: university
+  type: official
+  url: https://aliraqia.edu.iq/news/
+- category: general
+  enabled: true
+  feed_url: https://uodiyala.edu.iq/feed/
+  id: univ-diyala-news
+  name: جامعة ديالى
+  tier: university
+  type: official
+  url: https://uodiyala.edu.iq/feed/
+- category: general
+  enabled: false
+  id: univ-karbala-news
+  name: جامعة كربلاء
+  tier: university
+  type: official
+  url: https://uokerbala.edu.iq
+- category: general
+  enabled: false
+  id: univ-dhi-qar-news
+  name: جامعة ذي قار
+  tier: university
+  type: official
+  url: https://utq.edu.iq
+- category: general
+  enabled: true
+  id: univ-wasit-news
+  name: جامعة واسط
+  selectors:
+    date: .viewAndDate .col-auto:last-child
+    item: .news-card
+    link: a.imageBigNews
+    summary: .news-card .text-muted
+    title: .news-title
+  tier: university
+  type: official
+  url: https://uowasit.edu.iq/news
+- category: general
+  date_page_selector: .uok-hero-meta-panel .uok-meta-pill:first-child span
+  enabled: true
+  id: univ-kirkuk-news
+  name: جامعة كركوك
+  selectors:
+    item: .news-item
+    link: a.title
+    title: div.item_description
+  tier: university
+  type: official
+  url: https://uokirkuk.edu.iq/ar/index.php/general-news/all-news
+- category: general
+  enabled: true
+  feed_url: https://uomisan.edu.iq/ar/feed/
+  id: univ-maysan-news
+  name: جامعة ميسان
+  tier: university
+  type: official
+  url: https://uomisan.edu.iq/ar/feed/
+- category: general
+  enabled: true
+  feed_url: https://mu.edu.iq/feed/
+  id: univ-muthanna-news
+  name: جامعة المثنى
+  tier: university
+  type: official
+  url: https://mu.edu.iq/feed/
+- category: general
+  enabled: true
+  feed_url: https://uosamarra.edu.iq/feed/
+  id: univ-samarra-news
+  name: جامعة سامراء
+  tier: university
+  type: official
+  url: https://uosamarra.edu.iq/feed/
+- category: general
+  enabled: true
+  id: univ-alqasm-alkhdraa-news
+  name: جامعة القاسم الخضراء
+  selectors:
+    date: h5.w3-opacity
+    item: a[href^="News/"]
+    link: a[href^="News/"]
+    summary: p
+    title: h4 b
+  tier: university
+  type: official
+  url: https://www.uoqasim.edu.iq/news-and-events
+- category: general
+  enabled: true
+  id: univ-swmr-news
+  name: جامعة سومر
+  selectors:
+    date: .card-news span.color:first-of-type
+    item: .card-news
+    link: h3 a
+    title: h3 a
+  tier: university
+  type: official
+  url: https://www.uos.edu.iq/media/latest.aspx
+- category: general
+  enabled: false
+  id: univ-fallujah-news
+  name: جامعة الفلوجة
+  tier: university
+  type: official
+  url: https://www.uofallujah.edu.iq
+- category: general
+  enabled: true
+  feed_url: https://uoninevah.edu.iq/feed/
+  id: univ-nineveh-news
+  name: جامعة نينوى
+  tier: university
+  type: official
+  url: https://uoninevah.edu.iq/feed/
+- category: general
+  enabled: true
+  id: univ-alkrkh-llalwm-news
+  name: جامعة الكرخ للعلوم
+  selectors:
+    date: .bi-calendar3 + span
+    item: article.president-activity-card
+    link: a[href*="/news/details/"]
+    summary: p
+    title: h3
+  tier: university
+  type: official
+  url: https://kus.edu.iq/
+- category: general
+  date_page_selector: .properties
+  enabled: true
+  id: univ-ibn-sina-med-pharm-news
+  name: جامعة أبن سينا للعلوم الطبية والصيدلانية
+  selectors:
+    item: div.entityContent
+    link: p a
+    title: p a
+  tier: university
+  type: official
+  url: https://ibnsina.edu.iq/
+- category: general
+  date_page_selector: div.mb-10 > span
+  enabled: true
+  id: univ-basra-llnft-walghaz-news
+  name: جامعة البصرة للنفط والغاز
+  selectors:
+    item: article.glass-card
+    link: h3 a
+    summary: p.line-clamp-3
+    title: h3 a
+  tier: university
+  type: official
+  url: https://buog.edu.iq/announcements
+- category: general
+  enabled: true
+  feed_url: https://jmu.edu.iq/ar/?feed=rss2&cat=55
+  id: jabr-bn-hayyan-medical-news
+  name: جابر بن حيان الطبية
+  tier: university
+  type: official
+  url: https://jmu.edu.iq/ar/?cat=55
+- category: general
+  enabled: true
+  feed_url: https://www.uohamdaniya.edu.iq/feed/
+  id: univ-hamdaniya-news
+  name: جامعة الحمدانية
+  tier: university
+  type: official
+  url: https://www.uohamdaniya.edu.iq/category/university-news/
+- category: general
+  enabled: false
+  id: univ-talafar-news
+  name: جامعة تلعفر
+  tier: university
+  type: official
+  url: https://uotelafer.edu.iq/
+- category: general
+  enabled: true
+  feed_url: https://uoitc.edu.iq/ar/feed/
+  id: univ-tknwlwjya-almalwmat-walatsalat-news
+  name: جامعة تكنولوجيا المعلومات والأتصالات
+  tier: university
+  type: official
+  url: https://uoitc.edu.iq/ar/
+- category: general
+  enabled: false
+  id: univ-tech-alshmalya-news
+  name: الجامعة التقنية الشمالية
+  tier: university
+  type: official
+  url: https://ntu.edu.iq/
+- category: general
+  enabled: true
+  id: univ-tech-aljnwbya-news
+  name: الجامعة التقنية الجنوبية
+  selectors:
+    date: span.gdlr-core-blog-info-date a
+    item: .gdlr-core-item-list.gdlr-core-blog-full
+    link: h3.gdlr-core-blog-title a
+    title: h3.gdlr-core-blog-title a
+  tier: university
+  type: official
+  url: https://www.stu.edu.iq/News/category/%d8%a7%d9%84%d8%a7%d8%ae%d8%a8%d8%a7%d8%b1/
+- category: general
+  enabled: false
+  id: univ-tech-alwsta-news
+  name: الجامعة التقنية الوسطى
+  tier: university
+  type: official
+  url: https://www.mtu.edu.iq/
+- category: general
+  date_page_selector: div.meta span
+  enabled: true
+  id: univ-furat-alawst-tech-news
+  name: جامعة الفرات الأوسط التقنية
+  selectors:
+    item: article.post
+    link: a
+    summary: .opacity-90
+    title: h3
+  tier: university
+  type: official
+  url: https://atu.edu.iq/category/%d8%a7%d9%84%d8%a7%d8%ae%d8%a8%d8%a7%d8%b1-%d8%a7%d9%84%d8%ac%d8%a7%d9%85%d8%b9%d8%a9-%d8%a7%d9%84%d8%aa%d9%82%d9%86%d9%8a%d8%a9/
+- category: general
+  enabled: true
+  id: college-mansour-univ-news
+  name: كلية المنصور الجامعة
+  selectors:
+    date: .newsitem h6 a
+    item: .newsitem
+    link: .newsitem h4 a
+    title: .newsitem h4 a
+  tier: university
+  type: official
+  url: https://www.muc.edu.iq/news/
+- category: general
+  enabled: true
+  id: college-rafidain-univ-news
+  name: كلية الرافدين الجامعة
+  selectors:
+    date: time.entry-date
+    item: article
+    link: .entry-title a
+    summary: .entry-content p
+    title: .entry-title a
+  tier: university
+  type: official
+  url: https://ruc.edu.iq/category/news_ruc/
+- category: general
+  enabled: true
+  id: college-almamwn-univ-news
+  name: كلية المامون الجامعة
+  selectors:
+    date: .category-page-post-item .date a
+    item: .category-page-post-item
+    link: .category-page-post-item h3 a
+    title: .category-page-post-item h3 a
+  tier: university
+  type: official
+  url: https://almamonuc.edu.iq/category/41
+- category: general
+  enabled: true
+  id: college-sht-alarb-univ-news
+  name: كلية شط العرب الجامعة
+  selectors:
+    date: .news-date span
+    item: .news-card
+    link: .news-title a
+    summary: .news-excerpt
+    title: .news-title a
+  tier: university
+  type: official
+  url: https://sa-uc.edu.iq/ar/news
+- category: general
+  date_page_selector: time.datetime
+  enabled: true
+  id: college-hadba-univ-news
+  name: كلية الحدباء الجامعة
+  selectors:
+    item: .views-view-responsive-grid__item
+    link: .news-content h3 a
+    title: .news-content h3 a
+  tier: university
+  type: official
+  url: https://hu.edu.iq/news
+- category: general
+  enabled: true
+  feed_url: https://al-yarmok.edu.iq/feed/
+  id: college-alyrmwk-univ-news
+  name: كلية اليرموك الجامعة
+  selectors:
+    date: .date_label
+    item: article.post-item
+    link: .post-photo-wrapper a
+    title: .post-title
+  tier: university
+  type: official
+  url: https://al-yarmok.edu.iq/news/
+- category: general
+  enabled: true
+  id: univ-sciences-iraqi-news
+  name: جامعة العلوم العراقية
+  selectors:
+    date: .topic-date
+    item: .post-card
+    link: .post-card a
+    summary: .card-text
+    title: .post-card .card-title
+  tier: university
+  type: official
+  url: https://aisu.edu.iq/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1
+- category: general
+  enabled: true
+  feed_url: https://bcms.edu.iq/feed/
+  id: college-baghdad-llalwm-medical-news
+  name: كلية بغداد للعلوم الطبية
+  tier: university
+  type: official
+  url: https://bcms.edu.iq/activities/
+- category: general
+  enabled: true
+  id: univ-ahl-bait-news
+  name: جامعة اهل البيت
+  selectors:
+    date: .news-grid__meta span:not(.tag)
+    item: .news-grid__card
+    link: .news-grid__card
+    title: .news-grid__title
+  tier: university
+  type: official
+  url: https://abu.edu.iq/news
+- category: general
+  enabled: true
+  id: univ-alaslamya-news
+  name: الجامعة الأسلامية
+  selectors:
+    date: .elementor-post-date
+    item: article.elementor-post
+    link: .elementor-post__title a
+    title: .elementor-post__title a
+  tier: university
+  type: official
+  url: https://iunajaf.edu.iq/category/%D8%A7%D8%AE%D8%A8%D8%A7%D8%B1
+- category: general
+  enabled: true
+  id: univ-kafeel-news
+  name: جامعة الكفيل
+  selectors:
+    date: .date_and_view .dir_text_lft span
+    item: .post
+    link: .layer_news
+    title: .title_news_card span:not(.new_news_)
+  tier: university
+  type: official
+  url: https://alkafeel.edu.iq/news/view_list
+- category: general
+  enabled: true
+  feed_url: https://altoosi.edu.iq/ar/feed/
+  id: college-alshykh-altwsy-univ-news
+  name: كلية الشيخ الطوسي الجامعة
+  tier: university
+  type: official
+  url: https://altoosi.edu.iq/ar/%D8%A7%D9%84%D8%A7%D8%AE%D8%A8%D8%A7%D8%B1/
+- category: general
+  enabled: true
+  id: college-rasheed-univ-news
+  name: كلية الرشيد الجامعة
+  selectors:
+    date: .entry-meta time
+    item: article.entry
+    link: .entry-title a
+    summary: .entry-content p
+    title: .entry-title a
+  tier: university
+  type: official
+  url: https://www.alrasheedcol.edu.iq/news-c1
+- category: general
+  enabled: true
+  feed_url: https://iuc.edu.iq/feed/
+  id: college-iraq-univ-news
+  name: كلية العراق الجامعة
+  tier: university
+  type: official
+  url: https://iuc.edu.iq/general-news/
+- category: general
+  enabled: true
+  id: college-alhsyn-a-univ-news
+  name: كلية الحسين (ع) الجامعة
+  selectors:
+    date: .course-item .border-top small:first-child
+    item: .course-item
+    link: .course-item a
+    title: .course-item h6
+  tier: university
+  type: official
+  url: https://www.huciraq.edu.iq/ar/category/1
+- category: general
+  enabled: false
+  id: college-turath-univ-news
+  name: كلية التراث الجامعة
+  tier: university
+  type: official
+  url: ''
+- category: general
+  enabled: false
+  id: college-maarif-univ-news
+  name: كلية المعارف الجامعة
+  tier: university
+  type: official
+  url: ''
+- category: general
+  enabled: false
+  id: college-salam-univ-news
+  name: كلية السلام الجامعة
+  tier: university
+  type: official
+  url: ''
+- category: general
+  enabled: false
+  id: college-city-elm-univ-news
+  name: كلية مدينة العلم الجامعة
+  tier: university
+  type: official
+  url: ''
+- category: general
+  enabled: false
+  id: college-dijlah-univ-news
+  name: كلية دجلة الجامعة
+  tier: university
+  type: official
+  url: ''
+- category: general
+  enabled: false
+  id: univ-alamam-jafralsadq-a-news
+  name: جامعة الامام جعفرالصادق ع
+  tier: university
+  type: official
+  url: ''
+- category: general
+  enabled: false
+  id: college-sdr-iraq-univ-news
+  name: كلية صدر العراق الجامعة
+  tier: university
+  type: official
+  url: ''
+- category: general
+  enabled: false
+  id: college-alqlm-univ-news
+  name: كلية القلم الجامعة
+  tier: university
+  type: official
+  url: ''
+- category: general
+  enabled: false
+  id: college-hikma-univ-news
+  name: كلية الحكمة الجامعة
+  tier: university
+  type: official
+  url: ''
+- category: general
+  enabled: false
+  id: univ-mustaqbal-news
+  name: جامعة المستقبل
+  tier: university
+  type: official
+  url: ''
+- category: general
+  enabled: false
+  id: college-alamam-aljamaa-bld-news
+  name: كلية الامام الجامعة/ بلد
+  tier: university
+  type: official
+  url: ''
+- category: general
+  enabled: false
+  id: college-alasraa-univ-news
+  name: كلية الاسراء الجامعة
+  tier: university
+  type: official
+  url: https://www.esraa.edu.iq/news-c1
+- category: general
+  enabled: true
+  feed_url: https://almustafauniversity.edu.iq/feed/
+  id: college-almstfa-univ-news
+  name: كلية المصطفى الجامعة
+  tier: university
+  type: official
+  url: https://almustafauniversity.edu.iq/%D9%86%D8%B4%D8%A7%D8%B7%D8%A7%D8%AA/
+- category: general
+  enabled: true
+  id: college-almzaya-univ-news
+  name: كلية المزايا الجامعة
+  selectors:
+    date: time
+    item: article
+    link: a
+    title: h2
+  tier: university
+  type: official
+  url: https://www.mpu.edu.iq/news
+- category: general
+  enabled: true
+  id: college-altf-univ-news
+  name: كلية الطف الجامعة
+  selectors:
+    date: div.news-item div.flex-wrap > span
+    item: div.news-item
+    link: a
+    title: h3
+  tier: university
+  type: official
+  url: https://www.altuff.edu.iq/news
+- category: general
+  enabled: true
+  feed_url: https://ouc.edu.iq/feed/
+  id: college-aswl-aldin-univ-news
+  name: كلية اصول الدين الجامعة
+  tier: university
+  type: official
+  url: https://ouc.edu.iq/%D8%AC%D9%85%D9%8A%D8%B9-%D8%A7%D9%84%D8%A7%D8%AE%D8%A8%D8%A7%D8%B1/
+- category: general
+  enabled: true
+  feed_url: https://alfarabiuc.edu.iq/feed/
+  id: college-farabi-univ-news
+  name: كلية الفارابي الجامعة
+  selectors:
+    date: span.elementor-post-date
+    item: article.elementor-post
+    link: h3.elementor-post__title a
+    title: h3.elementor-post__title
+  tier: university
+  type: official
+  url: https://alfarabiuc.edu.iq/news/
+- category: general
+  enabled: true
+  id: college-kunuz-univ-news
+  name: كلية الكنوز الجامعة
+  selectors:
+    date: a.card .meta .date
+    item: a.card
+    link: a.card
+    summary: a.card p
+    title: a.card h2
+  tier: university
+  type: official
+  url: https://www.kunoozu.edu.iq/news
+- category: general
+  enabled: true
+  feed_url: https://alnukhba.edu.iq/feed/
+  id: college-nukhba-univ-news
+  name: كلية النخبة الجامعة
+  selectors:
+    date: div.upk-date
+    item: div.upk-item
+    link: h3.upk-title a
+    title: h3.upk-title
+  tier: university
+  type: official
+  url: https://alnukhba.edu.iq/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1/
+- category: general
+  enabled: true
+  feed_url: https://alsafwa.edu.iq/feed/
+  id: college-safwa-univ-news
+  name: كلية الصفوة الجامعة
+  selectors:
+    date: span.cz_data_date
+    item: div.cz_grid_item
+    link: a.cz_grid_link
+    title: h3.cz_grid_post_title
+  tier: university
+  type: official
+  url: https://alsafwa.edu.iq/
+- category: general
+  enabled: true
+  id: univ-alamyd-news
+  name: جامعة العميد
+  selectors:
+    date: .sec-uni-news-info span.font-tahome
+    item: div.col-uni-news-summary
+    link: h4 a
+    summary: .sec-uni-news-summary > p
+    title: h4
+  tier: university
+  type: official
+  url: https://alameed.edu.iq/%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D8%AC%D8%A7%D9%85%D8%B9%D8%A9
+- category: general
+  enabled: true
+  feed_url: https://uoalkitab.edu.iq/feed/
+  id: univ-alktab-news
+  name: جامعة الكتاب
+  selectors:
+    date: div.upk-date
+    item: div.upk-item
+    link: h3.upk-title a
+    title: h3.upk-title
+  tier: university
+  type: official
+  url: https://uoalkitab.edu.iq/news-en/
+- category: general
+  enabled: true
+  id: univ-awrwk-private-news
+  name: جامعة اوروك الاهلية
+  selectors:
+    date: .dateCatgCard
+    item: .mySwiperColleges .swiper-slide
+    link: a.cardSlider
+    summary: .textCardSlider
+    title: .NameCardSlider
+  tier: university
+  type: official
+  url: https://www.uruk.edu.iq/
+- category: general
+  enabled: true
+  id: univ-bayan-news
+  name: جامعة البيان
+  selectors:
+    date: .fusion-date-box
+    item: article.type-post
+    link: h2.entry-title a
+    summary: div.fusion-post-content
+    title: h2.entry-title
+  tier: university
+  type: official
+  url: https://albayan.edu.iq/colleges/news/
+- category: general
+  enabled: true
+  id: univ-warth-alanbyaa-news
+  name: جامعة وارث الانبياء
+  selectors:
+    date: small.text-date
+    item: section.col-md-8 div.col-md-6
+    link: div.col-md-6 > a
+    summary: p.content
+    title: h5.title
+  tier: university
+  type: official
+  url: https://uowa.edu.iq/arabic/universitynews
+- category: general
+  enabled: true
+  feed_url: https://alnoor.edu.iq/ar/feed/
+  id: college-alnwr-univ-news
+  name: كلية النور الجامعة
+  selectors:
+    date: span.elementor-post-date
+    item: article.elementor-post
+    link: h3.elementor-post__title a
+    title: h3.elementor-post__title
+  tier: university
+  type: official
+  url: https://alnoor.edu.iq/ar/
+- category: general
+  enabled: true
+  id: college-kut-univ-news
+  name: كلية الكوت الجامعة
+  selectors:
+    date: .ahdath-card-footer span
+    item: article.ahdath-card-item
+    link: h3.ahdath-card-title a
+    summary: p.ahdath-card-excerpt
+    title: h3.ahdath-card-title
+  tier: university
+  type: official
+  url: https://uokut.edu.iq/news
+- category: general
+  enabled: false
+  id: college-hilla-univ-news
+  name: كلية الحلة الجامعة
+  tier: university
+  type: official
+  url: https://www.hilla-unc.edu.iq/
+- category: general
+  enabled: false
+  id: univ-farahidi-news
+  name: جامعة الفراهيدي
+  tier: university
+  type: official
+  url: https://www.alfarahidiuc.edu.iq/
+- category: general
+  enabled: false
+  id: college-alfqh-univ-news
+  name: كلية الفقه الجامعة
+  tier: university
+  type: official
+  url: http://alfiqh.education/
+- category: general
+  enabled: false
+  id: college-bilad-rafidain-univ-news
+  name: كلية بلاد الرافدين الجامعة
+  tier: university
+  type: official
+  url: https://www.reg.bauc14.edu.iq/
+- category: general
+  enabled: false
+  id: college-basra-sciences-technology-news
+  name: كلية البصرة للعلوم والتكنولوجيا
+  tier: university
+  type: official
+  url: https://www.basrah-college.edu.iq/
+- category: general
+  enabled: false
+  id: college-alhady-univ-news
+  name: كلية الهادي الجامعة
+  tier: university
+  type: official
+  url: https://www.huc.edu.iq/
+- category: general
+  enabled: false
+  id: college-nusour-univ-news
+  name: كلية النسور الجامعة
+  tier: university
+  type: official
+  url: https://www.nuc.edu.iq/
+- category: general
+  enabled: false
+  id: univ-alwtnya-sciences-technology-news
+  name: الجامعة الوطنية للعلوم والتكنولوجيا
+  tier: university
+  type: official
+  url: https://nust.edu.iq/
+- category: general
+  enabled: false
+  id: college-zahrawi-news
+  name: كلية الزهراوي
+  tier: university
+  type: official
+  url: https://alzahu.edu.iq/news
+- category: general
+  enabled: true
+  id: univ-alayn-news
+  name: جامعة العين
+  selectors:
+    date: .date_post_sm span
+    item: a.row_news_import
+    link: a.row_news_import
+    title: .small_title_news
+  tier: university
+  type: official
+  url: https://alayen.edu.iq/news/view_list
+- category: general
+  enabled: true
+  feed_url: https://alameen.edu.iq/feed/
+  id: univ-alamyn-news
+  name: جامعة الأمين
+  tier: university
+  type: official
+  url: https://alameen.edu.iq/%D8%A7%D9%84%D8%A7%D8%AE%D8%A8%D8%A7%D8%B1/
+- category: general
+  enabled: false
+  id: college-ashwr-news
+  name: كلية أشور
+  tier: university
+  type: official
+  url: https://www.au.edu.iq/news_archive/1/normal?lang=ar
+- category: general
+  enabled: false
+  id: college-almnara-news
+  name: كلية المنارة
+  tier: university
+  type: official
+  url: https://uomanara.edu.iq/posts
+- category: general
+  enabled: true
+  id: college-east-alawst-news
+  name: كلية الشرق الاوسط
+  selectors:
+    date: .date-user .date
+    item: div.category-page-post-item
+    link: h3 a
+    title: h3 a
+  tier: university
+  type: official
+  url: https://meuc.edu.iq/category/42
+- category: general
+  enabled: true
+  feed_url: https://alamarahuc.edu.iq/feed/
+  id: college-amarah-univ-news
+  name: كلية العمارة الجامعة
+  tier: university
+  type: official
+  url: https://alamarahuc.edu.iq/all_news/
+- category: general
+  enabled: false
+  id: jnat-iraq-news
+  name: جنات العراق
+  tier: university
+  type: official
+  url: https://jic.edu.iq
+- category: general
+  enabled: true
+  id: univ-zahraa-alyha-salam-llbnat-news
+  name: جامعة الزهراء ( عليها السلام ) للبنات
+  selectors:
+    date: time
+    item: article.news-card
+    link: .news-card__title a
+    summary: .news-card__desc
+    title: .news-card__title a
+  tier: university
+  type: official
+  url: https://alzahraa.edu.iq/ar/category/unversity-news
+- category: general
+  enabled: false
+  id: univ-klkamsh-news
+  name: جامعة كلكامش
+  tier: university
+  type: official
+  url: https://www.gu.edu.iq/ar
+- category: general
+  enabled: true
+  feed_url: https://auib.edu.iq/feed/
+  id: univ-alamrykya-news
+  name: الجامعة الامريكية
+  tier: university
+  type: official
+  url: https://auib.edu.iq/news/
+- category: general
+  enabled: true
+  feed_url: https://almaaqal.edu.iq/category/%D8%A7%D9%84%D8%A7%D8%AE%D8%A8%D8%A7%D8%B1/feed/
+  id: univ-almaql-news
+  name: جامعة المعقل
+  tier: university
+  type: official
+  url: https://almaaqal.edu.iq/category/%d8%a7%d9%84%d8%a7%d8%ae%d8%a8%d8%a7%d8%b1/
+- category: general
+  enabled: false
+  id: univ-mashriq-news
+  name: جامعة المشرق
+  tier: university
+  type: official
+  url: https://www.uom.edu.iq/news/
+- category: general
+  enabled: false
+  id: univ-sawa-news
+  name: جامعة ساوة
+  tier: university
+  type: official
+  url: https://www.sawa-un.edu.iq
+- category: general
+  enabled: true
+  id: college-alhda-news
+  name: كلية الهدى
+  selectors:
+    date: .news-date
+    item: a.news-card
+    link: a.news-card
+    summary: p
+    title: h4
+  tier: university
+  type: official
+  url: https://uoalhuda.edu.iq/news
+- category: general
+  enabled: true
+  feed_url: https://ik.edu.iq/feed/
+  id: college-ibn-khldwn-news
+  name: كلية ابن خلدون
+  tier: university
+  type: official
+  url: https://ik.edu.iq/%d8%a7%d8%ae%d8%b1-%d8%a7%d9%84%d8%a7%d8%ae%d8%a8%d8%a7%d8%b1-2/
+- category: general
+  enabled: true
+  id: college-alaml-sciences-medical-altkhssya-news
+  name: كلية الامل للعلوم الطبية التخصصية
+  selectors:
+    date: small.text-muted
+    item: div.album .row > a
+    link: a
+    title: p.card-text
+  tier: university
+  type: official
+  url: https://www.alamal.edu.iq/ar/news/
+- category: general
+  enabled: true
+  feed_url: https://alshaab.edu.iq/feed/
+  id: univ-alshab-news
+  name: جامعة الشعب
+  tier: university
+  type: official
+  url: https://alshaab.edu.iq/news/
+- category: general
+  enabled: false
+  id: univ-alsraj-private-news
+  name: جامعة السراج الأهلية
+  tier: university
+  type: official
+  url: https://www.uosj.edu.iq/
+- category: general
+  enabled: true
+  id: college-east-sciences-tech-altkhssya-news
+  name: كلية الشرق للعلوم التقنية التخصصية
+  selectors:
+    date: p.text-xs
+    item: a.group.relative.bg-white
+    link: a
+    summary: p.text-sm
+    title: h3
+  tier: university
+  type: official
+  url: https://shau.edu.iq/ar/news
+- category: general
+  enabled: true
+  id: univ-shl-nineveh-news
+  name: جامعة سهل نينوى
+  selectors:
+    date: time
+    item: ul.grid > li
+    link: a
+    summary: p.line-clamp-3
+    title: h2
+  tier: university
+  type: official
+  url: https://snu.edu.iq/news
+- category: general
+  enabled: true
+  id: univ-qrtba-news
+  name: جامعة قرطبة
+  selectors:
+    date: .news-card-date
+    item: div.news-card
+    link: a.read-more-btn
+    title: .news-card-title
+  tier: university
+  type: official
+  url: https://cur.edu.iq/news
+- category: general
+  enabled: false
+  id: college-alqbs-private-news
+  name: كلية القبس الاهلية
+  tier: university
+  type: official
+  url: https://alqabas.edu.iq/
+- category: general
+  enabled: true
+  feed_url: https://alnaji-uni.edu.iq/feed/
+  id: univ-alnajy-news
+  name: جامعة الناجي
+  tier: university
+  type: official
+  url: https://alnaji-uni.edu.iq/blog/
+- category: general
+  enabled: true
+  feed_url: https://ishtaruc.edu.iq/category/%D8%A7%D9%84%D8%A7%D8%AE%D8%A8%D8%A7%D8%B1/feed/
+  id: college-ashtar-news
+  name: كلية عشتار
+  tier: university
+  type: official
+  url: https://ishtaruc.edu.iq/category/%D8%A7%D9%84%D8%A7%D8%AE%D8%A8%D8%A7%D8%B1/
+- category: general
+  enabled: false
+  id: univ-mhd-alhdarat-news
+  name: جامعة مهد الحضارات
+  tier: university
+  type: official
+  url: ''
+- category: general
+  enabled: false
+  id: univ-mustansiriyah-news
+  name: الجامعة المستنصرية
+  tier: university
+  type: official
+  url: https://uomustansiriyah.edu.iq/web_archive.php?id_dept=221&t=n&lang=ar
+- category: general
+  enabled: false
+  id: univ-technology-news
+  name: الجامعة التكنولوجية
+  tier: university
+  type: official
+  url: https://uotechnology.edu.iq
+- category: general
+  enabled: false
+  id: univ-alkwfa-news
+  name: جامعة الكوفة
+  tier: university
+  type: official
+  url: https://uokufa.edu.iq/archives/category/اخبار
+- category: general
+  enabled: false
+  id: univ-babylon-news
+  name: جامعة بابل
+  tier: university
+  type: official
+  url: https://www.uobabylon.edu.iq/
+- category: general
+  enabled: false
+  id: univ-shatra-news
+  name: جامعة الشطرة
+  tier: university
+  type: official
+  url: ''
+- category: general
+  enabled: false
+  id: college-amal-univ-news
+  name: كلية الآمال الجامعة
+  tier: university
+  type: official
+  url: ''
 user_agent: MunjazAcademicCollector/1.0 (+https://github.com/alsobahi73-ui/munjaz-academic)
-# The current checkout does not define the seven news category identifiers.
-# Replace this provisional taxonomy after confirming the publisher contract.
-categories: [general]
-sources: []
+version: 1
