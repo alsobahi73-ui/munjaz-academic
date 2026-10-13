@@ -158,11 +158,16 @@ class CollectorTests(unittest.TestCase):
     def test_robots_txt_same_origin_redirect_followed(self):
         # robots.txt 301 to a same-origin URL (e.g. trailing slash) must not
         # kill the source; content URLs still refuse redirects.
+        # NOTE: raw() wraps redirect HTTPError in ValueError — replicate that.
         from urllib.error import HTTPError
+        def _wrap(exc):
+            err = ValueError('Redirect requires verified canonical URL')
+            err.__cause__ = exc
+            return err
         client = Client('MunjazAcademicCollector/1.0')
         def fake_raw(url):
             if url.endswith('/robots.txt'):
-                raise HTTPError(url, 301, 'Moved', {'Location': url + '/'}, None)
+                raise _wrap(HTTPError(url, 301, 'Moved', {'Location': url + '/'}, None))
             if url.endswith('/robots.txt/'):
                 return b'User-agent: *\nDisallow:\n'
             return RSS
@@ -172,10 +177,14 @@ class CollectorTests(unittest.TestCase):
 
     def test_robots_txt_cross_origin_redirect_refused(self):
         from urllib.error import HTTPError
+        def _wrap(exc):
+            err = ValueError('Redirect requires verified canonical URL')
+            err.__cause__ = exc
+            return err
         client = Client('MunjazAcademicCollector/1.0')
         def fake_raw(url):
             if url.endswith('/robots.txt'):
-                raise HTTPError(url, 301, 'Moved', {'Location': 'https://evil.test/robots.txt'}, None)
+                raise _wrap(HTTPError(url, 301, 'Moved', {'Location': 'https://evil.test/robots.txt'}, None))
             return RSS
         with patch.object(Client, 'raw', side_effect=fake_raw):
             with self.assertRaises(ValueError):
