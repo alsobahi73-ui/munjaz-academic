@@ -1,4 +1,5 @@
 import { createRequestHandler, corsDiagnostics, normalizeOrigin } from '../server/telegram-requests.mjs';
+import { createTelegramWebhook } from './telegram-webhook.mjs';
 
 export function createWorker(catalog, fetchImpl = fetch) {
   let handler, previous;
@@ -12,6 +13,14 @@ export function createWorker(catalog, fetchImpl = fetch) {
           'Cache-Control': 'no-store',
           ...(diagnostics.match ? { 'Access-Control-Allow-Origin': normalizeOrigin(request.headers.get('Origin')), 'Vary': 'Origin' } : {}),
         } });
+      }
+      if (path === '/telegram-webhook') {
+        const hook = createTelegramWebhook({
+          token: env.TELEGRAM_BOT_TOKEN,
+          adminChatId: env.TELEGRAM_CHAT_ID,
+          webhookSecret: env.TELEGRAM_WEBHOOK_SECRET,
+        });
+        return hook(request);
       }
       if (path !== '/api/academic-requests') return new Response(null, { status: 404 });
       if (!previous || previous.token !== env.TELEGRAM_BOT_TOKEN || previous.chatId !== env.TELEGRAM_CHAT_ID || previous.origin !== env.SITE_ORIGIN) {
