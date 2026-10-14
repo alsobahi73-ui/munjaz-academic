@@ -20,6 +20,13 @@
       attribution.textContent = `المصدر: ${item.source} | ${item.date || ''}`;
       row.append(link, summary, attribution); list.append(row);
     }
+    if (list.children.length) {
+      // Seamless loop: duplicate items so the -50% keyframe wraps cleanly,
+      // then pace the animation by content width (~65px/s, min 45s).
+      list.innerHTML += list.innerHTML;
+      const half = list.scrollWidth / 2;
+      list.style.animationDuration = Math.max(45, Math.round(half / 65)) + 's';
+    }
     section.hidden = !list.children.length;
   }
   render(NEWS);
