@@ -225,7 +225,7 @@
     fetch('featured-researchers.json', { cache: 'no-cache' })
       .then(function (r) { return r.json(); })
       .then(function (people) {
-        people = people.filter(function (p) { return p && p.name && p.name.indexOf('مثال:') !== 0; });
+        people = people.filter(function (p) { return p && p.name; });
         if (!people.length) return;
         document.getElementById('featuredWrap').hidden = false;
         var card = document.getElementById('featuredCard');
