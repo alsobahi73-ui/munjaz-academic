@@ -451,6 +451,7 @@ textarea { resize: vertical; min-height: 130px; }
   box-shadow: 0 1px 4px rgba(0, 0, 0, .25); }
 .ticker-state { padding-inline: 1.5rem; }
 .ticker-loading { color: rgba(255, 255, 255, .75); animation: ticker-pulse 1.4s ease-in-out infinite; }
+.ticker-error { color: #F5D67B; font-weight: 600; }
 @keyframes ticker-pulse { 50% { opacity: .4; } }
 .official-news-list .news-summary { display: none; }
 .news-ticker:hover .official-news-list, .news-ticker:focus-within .official-news-list { animation-play-state: paused; }
