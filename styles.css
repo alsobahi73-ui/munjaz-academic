@@ -577,3 +577,10 @@ textarea { resize: vertical; min-height: 130px; }
 /* ===== Embedded Google Form ===== */
 .job-form-embed { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(14,107,102,.1); border: 1px solid #e8e8e8; }
 .job-form-embed iframe { display: block; border: none; width: 100%; height: 900px; }
+
+/* ===== Portal card (jobs gateway) ===== */
+.portal-card { background: #fff; border-radius: 20px; padding: 3rem 2rem; text-align: center; box-shadow: 0 8px 30px rgba(14,107,102,.12); border: 2px solid #0E6B66; max-width: 480px; margin: 0 auto; }
+.portal-icon { font-size: 4rem; margin-bottom: 1rem; }
+.portal-card h3 { color: #06302C; font-size: 1.3rem; margin: 0 0 1rem; }
+.portal-card p { color: #666; line-height: 1.9; margin-bottom: 1.5rem; }
+.portal-card .btn-lg { font-size: 1.1rem; padding: .9rem 2.5rem; }
