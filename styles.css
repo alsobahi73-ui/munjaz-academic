@@ -559,3 +559,11 @@ textarea { resize: vertical; min-height: 130px; }
 .form-status.ok { color: #0E6B66; }
 .form-status.err { color: #c0392b; }
 .job-form .btn { margin-top: .5rem; }
+
+/* ===== Side-by-side duo (defenses + jobs) ===== */
+.duo-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 0; align-items: start; }
+.duo-wrap .duo-col { padding-top: 2.5rem; padding-bottom: 2.5rem; }
+.duo-wrap .duo-col .container { max-width: 100%; padding: 0 1.5rem; }
+@media (max-width: 900px) {
+  .duo-wrap { grid-template-columns: 1fr; }
+}
