@@ -418,18 +418,37 @@ textarea { resize: vertical; min-height: 130px; }
 
 /* Published headlines retain their text and source attribution. */
 .news-ticker[hidden] { display: none; }
-.news-ticker { min-height: 52px; overflow: hidden; background: linear-gradient(180deg, #0E6B66, #0B5B57); color: #fff; direction: rtl; border-block: 1px solid rgba(185, 122, 18, .5); }
+.news-ticker { min-height: 58px; overflow: hidden; direction: rtl; color: #fff;
+  background:
+    radial-gradient(ellipse 90% 130% at 50% -20%, rgba(255, 255, 255, .09), transparent 60%),
+    linear-gradient(90deg, #093F3B 0%, #0E6B66 28%, #0E6B66 72%, #093F3B 100%);
+  border-block: 1px solid rgba(185, 122, 18, .6);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .14), 0 4px 16px rgba(9, 63, 59, .28); }
 .news-ticker-inner { display: flex; align-items: stretch; height: 100%; min-width: 0; }
-.news-ticker h2 { flex: none; display: flex; align-items: center; gap: .5rem; margin: 0; font-size: .85rem; font-weight: 700; color: #fff; background: #B97A12; padding: 0 1rem; white-space: nowrap; }
-.news-ticker h2 .dot { width: 8px; height: 8px; flex: none; border-radius: 50%; background: #fff; animation: ticker-pulse 1.6s ease-in-out infinite; }
-@keyframes ticker-pulse { 50% { opacity: .3; } }
-.news-ticker-viewport { flex: 1; min-width: 0; overflow: hidden; display: flex; align-items: center; -webkit-mask-image: linear-gradient(to left, transparent, #000 4%, #000 96%, transparent); mask-image: linear-gradient(to left, transparent, #000 4%, #000 96%, transparent); }
-.official-news-list { display: flex; align-items: center; width: max-content; list-style: none; margin: 0; padding: 0; animation: munjaz-news-scroll 90s linear infinite; }
-.official-news-list li { display: flex; align-items: center; gap: .6rem; white-space: nowrap; padding-inline: 1.4rem; }
-.official-news-list li + li { border-inline-start: 1px solid rgba(255, 255, 255, .28); }
-.official-news-list a { color: #fff; font-size: .92rem; }
-.official-news-list a:hover { color: #F5D67B; text-decoration: underline; }
-.official-news-list p { margin: 0; font-size: .72rem; color: rgba(255, 255, 255, .72); }
+.news-ticker h2 { flex: none; display: flex; align-items: center; gap: .6rem; margin: 0; padding: 0 1.5rem 0 1.7rem;
+  font-size: .92rem; font-weight: 800; color: #fff; white-space: nowrap;
+  background: linear-gradient(180deg, #D69E2E 0%, #B97A12 100%);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .28);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 16px 100%); }
+.news-ticker h2 .dot { width: 9px; height: 9px; flex: none; border-radius: 50%; background: #fff;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, .22); animation: ticker-pulse 1.6s ease-in-out infinite; }
+@keyframes ticker-pulse { 50% { opacity: .35; } }
+.news-ticker-viewport { flex: 1; min-width: 0; overflow: hidden; display: flex; align-items: center;
+  -webkit-mask-image: linear-gradient(to left, transparent, #000 5%, #000 95%, transparent);
+  mask-image: linear-gradient(to left, transparent, #000 5%, #000 95%, transparent); }
+.official-news-list { display: flex; align-items: center; width: max-content; list-style: none; margin: 0; padding: 0;
+  animation: munjaz-news-scroll 90s linear infinite; }
+.official-news-list li { position: relative; display: flex; align-items: center; gap: .7rem;
+  white-space: nowrap; padding-inline: 1.6rem; }
+.official-news-list li + li::before { content: ""; position: absolute; inset-inline-start: -4px; top: 50%;
+  width: 8px; height: 8px; margin-top: -4px; transform: rotate(45deg);
+  background: linear-gradient(135deg, #F5D67B, #B97A12);
+  box-shadow: 0 0 6px rgba(233, 185, 73, .55); }
+.official-news-list a { color: #fff; font-size: .95rem; font-weight: 600; text-shadow: 0 1px 2px rgba(0, 0, 0, .22); }
+.official-news-list a:hover { color: #F5D67B; }
+.official-news-list p { margin: 0; font-size: .7rem; font-weight: 600; color: #FFE9B8; white-space: nowrap;
+  background: rgba(0, 0, 0, .24); border: 1px solid rgba(233, 185, 73, .5);
+  border-radius: 999px; padding: .18rem .75rem; }
 .official-news-list .news-summary { display: none; }
 .news-ticker:hover .official-news-list, .news-ticker:focus-within .official-news-list { animation-play-state: paused; }
 @keyframes munjaz-news-scroll { from { transform: translateX(-50%); } to { transform: translateX(0); } }
