@@ -47,3 +47,20 @@ test('worker normalized POST/preflight and safe CORS diagnostics share the same 
  assert.equal((await worker.fetch(new Request('https://worker.example/debug-cors', { method: 'POST' }), configuredEnv)).status, 404);
  assert.equal(calls, 1);
 });
+test('health reports configuration readiness without disclosing secrets or claiming delivery', async () => {
+ let calls = 0;
+ const worker = createWorker(ctx.window.AcademicServicesCatalog, async () => { calls++; throw Error('must not send'); });
+ for (const [settings, ready] of [[{}, false], [env, true], [{ ...env, TELEGRAM_CHAT_ID: '@MunjazAcademicBot' }, false]]) {
+  const response = await worker.fetch(new Request('https://worker.example/healthz'), settings);
+  assert.deepEqual(await response.json(), { ok: true, requestsConfigured: ready });
+  assert.equal(response.headers.get('Cache-Control'), 'no-store');
+ }
+ assert.equal(calls, 0);
+});
+test('deployment targets the worker used by the frontend', async () => {
+ const configuration = await readFile(new URL('../wrangler.toml', import.meta.url), 'utf8');
+ const frontend = await readFile(new URL('../academic-services-config.js', import.meta.url), 'utf8');
+ const workerName = configuration.match(/^name\s*=\s*"([^"]+)"/m)[1];
+ const endpoint = new URL(frontend.match(/requestEndpoint:\s*'([^']+)'/)[1]);
+ assert.equal(endpoint.hostname.split('.')[0], workerName);
+});

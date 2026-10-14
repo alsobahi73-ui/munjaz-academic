@@ -10,6 +10,30 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <style>
+    .latest-ticker[hidden] { display: none; }
+    .latest-ticker { display: flex; align-items: center; gap: .75rem; min-width: 0; margin-bottom: 1.5rem; padding: .65rem .75rem; background: linear-gradient(110deg, #0B4F4B, #0E6B66); border-block-start: 3px solid #B97A12; border-radius: .75rem; color: #fff; direction: rtl; font-family: "Noto Kufi Arabic", sans-serif; font-size: .8rem; }
+    .latest-ticker-badge { flex: none; background: #B97A12; color: #fff; padding: .35rem .8rem; border-radius: .4rem; font-size: 1.2rem; font-weight: 800; }
+    .latest-ticker-viewport { flex: 1; min-width: 0; overflow: hidden; }
+    .latest-ticker-track { display: flex; direction: rtl; width: max-content; animation: latest-news-scroll var(--ticker-duration, 90s) linear infinite; }
+    .latest-ticker-list { display: flex; flex: none; align-items: center; gap: 1.25rem; list-style: none; padding: 0 1rem; margin: 0; }
+    .latest-ticker-list li { flex: none; display: flex; align-items: center; gap: 1.25rem; white-space: nowrap; }
+    .latest-ticker-list li::after { content: ""; width: 6px; height: 6px; flex: none; border-radius: 50%; background: #B97A12; }
+    .latest-ticker-list li:nth-child(even) a { background: rgb(185 122 18 / 18%); }
+    .latest-ticker a { display: block; padding: .35rem .75rem; border-radius: .4rem; background: rgb(255 255 255 / 10%); color: #fff; text-decoration: none; }
+    .latest-ticker a:hover { background: #0B4F4B; text-decoration: underline; text-decoration-color: #B97A12; text-underline-offset: .3rem; }
+    .latest-ticker a:focus-visible { outline: 2px solid #B97A12; outline-offset: 3px; }
+    @media (hover: hover) and (pointer: fine) {
+      .latest-ticker:hover .latest-ticker-track { animation-play-state: paused; }
+    }
+    .latest-ticker:has(a:focus-visible) .latest-ticker-track { animation-play-state: paused; }
+    @keyframes latest-news-scroll { from { transform: translateX(0); } to { transform: translateX(50%); } }
+    @media (prefers-reduced-motion: reduce) {
+      .latest-ticker-track { animation: none; transform: none; }
+      .latest-ticker-viewport { overflow-x: auto; }
+      .latest-ticker-copy, .latest-ticker-repeat { display: none; }
+    }
+  </style>
 </head>
 <body>
   <a class="skip-link" href="#main">تخطَّ إلى المحتوى</a>
@@ -42,6 +66,12 @@
   <main id="main">
     <section class="section" aria-labelledby="archiveTitle">
       <div class="container">
+        <aside class="latest-ticker" id="latestNewsTicker" dir="rtl" aria-label="آخر الأخبار" hidden>
+          <span class="latest-ticker-badge">أخبار</span>
+          <div class="latest-ticker-viewport">
+            <div class="latest-ticker-track"><ul class="latest-ticker-list"></ul></div>
+          </div>
+        </aside>
         <header class="section-head">
           <h2 id="archiveTitle">أرشيف أخبار التعليم العالي</h2>
           <p>جميع الأخبار من وزارة التعليم العالي والبحث العلمي والجامعات العراقية الحكومية والأهلية — تُحدَّث تلقائيًا، وكل خبر منسوب إلى مصدره الأصلي.</p>
@@ -83,5 +113,69 @@
     });
   </script>
   <script src="scripts/news-archive.js" defer></script>
+  <script>
+    (async function () {
+      const ticker = document.getElementById('latestNewsTicker');
+      const viewport = ticker.querySelector('.latest-ticker-viewport');
+      const track = ticker.querySelector('.latest-ticker-track');
+      const list = ticker.querySelector('ul');
+      function valid(item) {
+        if (!item || typeof item.title !== 'string' || !item.title.trim() ||
+            typeof item.source !== 'string' || !item.source.trim() ||
+            item.title.includes('تجريبي:') || typeof item.url !== 'string') return false;
+        try {
+          const url = new URL(item.url);
+          return ['https:', 'http:'].includes(url.protocol) && !url.username && !url.password;
+        } catch { return false; }
+      }
+      function decorativeCopy(node, className) {
+        const copy = node.cloneNode(true);
+        copy.classList.add(className);
+        copy.setAttribute('aria-hidden', 'true');
+        copy.querySelectorAll('a').forEach(link => { link.tabIndex = -1; });
+        return copy;
+      }
+      function fitLoop() {
+        track.querySelector('.latest-ticker-copy')?.remove();
+        list.querySelectorAll('.latest-ticker-repeat').forEach(item => item.remove());
+        const originals = Array.from(list.children);
+        // Fill short feeds before duplicating the track, so the loop has no empty interval.
+        const width = list.getBoundingClientRect().width;
+        if (width > 0) {
+          while (list.getBoundingClientRect().width < viewport.clientWidth) {
+            originals.forEach(item => list.append(decorativeCopy(item, 'latest-ticker-repeat')));
+          }
+        }
+        track.append(decorativeCopy(list, 'latest-ticker-copy'));
+        // A fixed distance per second keeps long feeds as readable as short feeds.
+        const pixelsPerSecond = viewport.clientWidth < 640 ? 10 : 12;
+        track.style.setProperty('--ticker-duration', Math.max(60, list.getBoundingClientRect().width / pixelsPerSecond) + 's');
+      }
+      try {
+        const response = await fetch('news.json', { cache: 'no-cache', signal: AbortSignal.timeout(8000) });
+        if (!response.ok) return;
+        const data = await response.json();
+        if (!Array.isArray(data)) return;
+        // Preserve feed order, matching the existing news section's validation rules.
+        const items = data.filter(valid).slice(0, 15);
+        if (!items.length) return;
+        items.forEach(item => {
+          const row = document.createElement('li');
+          const link = document.createElement('a');
+          link.textContent = item.title;
+          link.href = item.url;
+          link.target = '_blank';
+          link.rel = 'noopener noreferrer';
+          link.title = 'المصدر: ' + item.source;
+          row.append(link);
+          list.append(row);
+        });
+        ticker.hidden = false;
+        // The homepage section can still be hidden while its existing script loads.
+        new ResizeObserver(fitLoop).observe(viewport);
+        fitLoop();
+      } catch { /* No news or unavailable feed: keep the ticker hidden. */ }
+    })();
+  </script>
 </body>
 </html>

@@ -152,9 +152,15 @@
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload), signal: controller.signal, credentials: 'omit',
       });
+      if (!response.headers.get('Content-Type')?.includes('application/json')) {
+        throw Object.assign(new Error(), {
+          userMessage: 'تعذّر الوصول إلى خدمة استقبال الطلبات. احتفظ برسالتك وحاول لاحقًا.',
+        });
+      }
       const result = await response.json();
       if (!response.ok || result.status !== 'sent' || result.requestId !== requestId) {
         const messages = {
+          forbidden: 'تعذّر الإرسال من عنوان الموقع الحالي. احتفظ برسالتك حتى يُستكمل ربط الموقع.',
           invalid_request: 'يرجى مراجعة بيانات الطلب والموافقة على شروط الخدمة.',
           rate_limited: 'أُرسلت عدة طلبات خلال وقت قصير. يرجى الانتظار ثم المحاولة.',
           unavailable: 'استقبال الطلبات غير متاح حالياً. احتفظ برسالتك وحاول لاحقاً.',

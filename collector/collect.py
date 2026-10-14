@@ -109,8 +109,53 @@ class Client:
         return self.raw(url)
 
 
+def repair_encoding(value):
+    """Reverse lossless UTF-8 decoded as a legacy charset; never guess lost bytes."""
+    if not isinstance(value, str):
+        return value
+    def damage(text):
+        return len(re.findall(r'[طظØÙ][^\s]', text))
+    for _ in range(2):
+        score = damage(value)
+        if not score:
+            break
+        candidates = []
+        for encoding in ('cp1256', 'cp1252', 'latin1'):
+            try:
+                candidate = value.encode(encoding).decode('utf-8')
+            except UnicodeError:
+                continue
+            if damage(candidate) < score and re.search(r'[\u0600-\u06ff]', candidate):
+                candidates.append(candidate)
+        if not candidates:
+            break
+        value = min(candidates, key=damage)
+    return value
+
+
+def html_page(body):
+    # UTF-8 without a charset declaration was previously guessed as Windows-1256.
+    if isinstance(body, bytes):
+        try:
+            body = body.decode('utf-8-sig')
+        except UnicodeDecodeError:
+            pass  # BeautifulSoup can honor a declared legacy charset.
+    return BeautifulSoup(body, 'html.parser')
+
+
+def news_item(item):
+    """Reject navigation and punctuation-only entries, not English news headlines."""
+    title = item.get('title', '').strip()
+    if not any(character.isalnum() for character in title):
+        return False
+    if title.casefold() in {'sitemap', 'site map', 'خريطة الموقع', 'موقع الجامعة'}:
+        return False
+    path = urlsplit(item.get('url', '')).path.rstrip('/')
+    return path not in ('', '/feed', '/sitemap.xml', '/sitemap_index.xml')
+
+
 def text(value):
-    return BeautifulSoup(value or '', 'html.parser').get_text(' ', strip=True)
+    return repair_encoding(BeautifulSoup(value or '', 'html.parser').get_text(' ', strip=True))
 
 
 # --- Content curation (2026-10-14, per owner directive) ---
@@ -167,7 +212,7 @@ def parse_feed(body, source, base):
         date = entry.get('published') or entry.get('updated')
         if not title or not link or not date:
             raise ValueError('Feed item missing title/link/publication date')
-        result.append({'title': title, 'url': web_url(link, base), 'date': date,
+        result.append({'title': repair_encoding(title), 'url': web_url(link, base), 'date': date,
                        'summary': text(entry.get('summary', ''))[:350]})
     return result
 
@@ -176,7 +221,7 @@ def extract_page(body, source, base):
     selectors = source.get('selectors')
     if not selectors:
         raise ValueError('No official feed and no verified HTML selectors')
-    page = BeautifulSoup(body, 'html.parser')
+    page = html_page(body)
     rows = page.select(selectors['item'])
     if not rows:
         raise ValueError('News selector matched no articles')
@@ -191,10 +236,10 @@ def extract_page(body, source, base):
             raise ValueError('HTML article missing title/link')
         if not date and not source.get('date_page_selector'):
             raise ValueError('HTML article missing publication date')
-        result.append({'title': title.get_text(' ', strip=True),
+        result.append({'title': repair_encoding(title.get_text(' ', strip=True)),
                        'url': web_url(link['href'], base),
                        'date': (date.get('datetime') or date.get_text(' ', strip=True)) if date else '',
-                       'summary': summary.get_text(' ', strip=True)[:350] if summary else ''})
+                       'summary': repair_encoding(summary.get_text(' ', strip=True))[:350] if summary else ''})
     return result
 
 
@@ -213,7 +258,7 @@ def backfill_dates(batch, source, client, log):
             kept.append(item)
             continue
         try:
-            page = BeautifulSoup(client.get(item['url']), 'html.parser')
+            page = html_page(client.get(item['url']))
             found = page.select_one(selector)
             item['date'] = (found.get('datetime') or found.get_text(' ', strip=True)) if found else ''
         except Exception as exc:
@@ -236,7 +281,7 @@ def articles(source, client):
     parsed = feedparser.parse(body)
     if parsed.version:
         return parse_feed(body, source, base)
-    page = BeautifulSoup(body, 'html.parser')
+    page = html_page(body)
     feeds = [web_url(link['href'], base) for link in page.select('link[href]')
              if 'alternate' in link.get('rel', []) and
              link.get('type', '').lower() in ('application/rss+xml', 'application/atom+xml')]
@@ -303,6 +348,8 @@ def collect(config, output, client=None, now=None, force=False):
                     kept.append(item)
                 batch = kept
                 for item in batch:
+                    if not news_item(item):
+                        continue
                     digest = hashlib.sha256((item['url'] + '\n' + item['title']).encode()).hexdigest()
                     if digest in seen:
                         continue

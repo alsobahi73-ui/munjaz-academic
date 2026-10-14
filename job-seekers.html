@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>الباحثون عن عمل | مُنجز أكاديمي</title>
+  <meta name="description" content="استمارة الباحثين عن عمل لحملة البكالوريوس والماجستير والدكتوراه في مُنجز أكاديمي. استقبال الطلبات قيد التجهيز.">
+  <meta name="theme-color" content="#0E6B66">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body { font-family: "Noto Kufi Arabic", sans-serif; }
+    .job-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 1rem; flex-wrap: wrap; }
+    .job-brand { display: inline-flex; align-items: center; gap: .65rem; color: #0E6B66; text-decoration: none; font-weight: 800; }
+    .job-brand small { display: block; font-size: .65rem; direction: ltr; }
+    .job-intro { background: #0E6B66; color: #fff; padding-block: 2.5rem; }
+    .job-intro h1 { color: #fff; margin-bottom: .75rem; }
+    .job-intro p { max-width: 65ch; }
+    .job-status { border-inline-start: 4px solid #B97A12; padding: 1rem; margin-block: 1.25rem; background: #fff; color: #0E6B66; }
+    .job-status strong { color: #B97A12; }
+    .job-tabs { display: flex; gap: .65rem; flex-wrap: wrap; margin-block: 1rem 1.5rem; }
+    .job-tabs button { flex: 1; min-width: 85px; border: 1px solid #0E6B66; background: #fff; color: #0E6B66; padding: .75rem; font: inherit; cursor: pointer; border-radius: .5rem; }
+    .job-tabs button[aria-selected="true"] { background: #0E6B66; color: #fff; box-shadow: inset 0 -3px #B97A12; }
+    .job-form { background: #fff; padding: clamp(1rem, 3vw, 2rem); border: 1px solid #0E6B66; border-radius: .75rem; }
+    .job-form fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+    .job-form legend { font-weight: 700; color: #0E6B66; margin-bottom: 1rem; }
+    .job-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+    .job-wide { grid-column: 1 / -1; }
+    .job-form .field { min-width: 0; margin: 0; }
+    .job-form input, .job-form select, .job-form textarea { width: 100%; min-width: 0; box-sizing: border-box; font: inherit; }
+    .job-form textarea { min-height: 110px; resize: vertical; }
+    .job-form input[type="file"] { padding: .65rem; font-size: .8rem; }
+    .job-form input[readonly] { color: #0E6B66; background: #fff; border-color: #0E6B66; }
+    .job-help { font-size: .8rem; margin: .3rem 0 0; }
+    .job-actions { margin-top: 1.5rem; }
+    .job-actions button:disabled { background: #0E6B66; color: #fff; opacity: .65; cursor: not-allowed; }
+    .job-file-status { color: #0E6B66; overflow-wrap: anywhere; }
+    .job-tabs button:focus-visible, .job-form :focus-visible { outline: 3px solid #B97A12; outline-offset: 3px; }
+    @media (max-width: 640px) { .job-grid { grid-template-columns: minmax(0, 1fr); } .job-wide { grid-column: auto; } }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">تخطَّ إلى المحتوى</a>
+  <header class="container job-header">
+    <a class="job-brand" href="index.html" aria-label="مُنجز أكاديمي — الرئيسية">
+      <svg viewBox="0 0 40 40" width="38" height="38" aria-hidden="true"><path d="M33.5 20a13.5 13.5 0 1 1-4-9.6" fill="none" stroke="#0E6B66" stroke-width="3.4" stroke-linecap="round"/><path d="M14 20.5l6.5 6.5L30 15" fill="none" stroke="#B97A12" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>مُنجز أكاديمي<small>MUNJAZ ACADEMIC</small></span>
+    </a>
+    <nav aria-label="التنقل الرئيسي"><a href="services.html">العودة إلى الخدمات</a></nav>
+  </header>
+  <main id="main">
+    <section class="job-intro" aria-labelledby="jobTitle"><div class="container">
+      <h1 id="jobTitle">الباحثون عن عمل</h1>
+      <p>اختر شهادتك أولًا، ثم استعرض استمارة معلوماتك الأكاديمية والمهنية.</p>
+    </div></section>
+    <section class="section"><div class="container">
+      <div class="job-status" id="registrationNotice"><strong>قيد التجهيز</strong><p>استقبال طلبات الباحثين عن عمل وإرسال السيرة الذاتية قيد التجهيز. يمكنك تعبئة الاستمارة للاستعراض فقط؛ لن تُرسل بياناتك أو تُحفظ، وستُفقد عند مغادرة الصفحة. التسجيل لا يتضمن وعدًا بالتوظيف.</p></div>
+      <h2 id="degreeHeading">اختر فئتك</h2>
+      <div class="job-tabs" role="tablist" aria-labelledby="degreeHeading">
+        <button id="degreeBachelor" type="button" role="tab" aria-selected="false" aria-controls="applicantPanel" tabindex="0">بكالوريوس</button>
+        <button id="degreeMaster" type="button" role="tab" aria-selected="false" aria-controls="applicantPanel" tabindex="-1">ماجستير</button>
+        <button id="degreeDoctorate" type="button" role="tab" aria-selected="false" aria-controls="applicantPanel" tabindex="-1">دكتوراه</button>
+      </div>
+      <p id="degreePrompt">اختر بكالوريوس أو ماجستير أو دكتوراه لفتح الاستمارة.</p>
+      <div id="applicantPanel" role="tabpanel" aria-labelledby="degreeBachelor" hidden>
+        <form class="job-form" id="jobSeekerForm" aria-describedby="registrationNotice" autocomplete="off">
+          <fieldset><legend>معلومات المتقدم — جميع الحقول مطلوبة</legend><div class="job-grid">
+            <label class="field"><span>الاسم الكامل</span><input name="fullName" autocomplete="name" required maxlength="120"></label>
+            <label class="field"><span>الشهادة</span><input id="applicantDegree" name="degree" readonly required></label>
+            <label class="field"><span>التخصص الدقيق</span><input name="specialization" required maxlength="150"></label>
+            <label class="field"><span>الجامعة</span><input name="university" required maxlength="150"></label>
+            <label class="field"><span>سنة التخرج</span><input id="graduationYear" name="graduationYear" type="number" min="1900" step="1" required inputmode="numeric"></label>
+            <label class="field"><span>المحافظة</span><select name="province" required><option value="">اختر المحافظة</option><option>بغداد</option><option>البصرة</option><option>نينوى</option><option>أربيل</option><option>السليمانية</option><option>دهوك</option><option>حلبجة</option><option>كركوك</option><option>صلاح الدين</option><option>الأنبار</option><option>ديالى</option><option>واسط</option><option>بابل</option><option>كربلاء</option><option>النجف</option><option>ذي قار</option><option>ميسان</option><option>المثنى</option><option>القادسية</option></select></label>
+            <label class="field"><span>رقم الهاتف</span><input name="phone" type="tel" dir="ltr" autocomplete="tel" required maxlength="30" pattern="[+0-9٠-٩۰-۹() -]{7,30}" title="أدخل رقم الهاتف باستخدام الأرقام، ويمكن إضافة + أو مسافات أو أقواس."></label>
+            <label class="field"><span>البريد الإلكتروني</span><input name="email" type="email" dir="ltr" autocomplete="email" required maxlength="254"></label>
+            <label class="field"><span>سنوات الخبرة</span><input name="experienceYears" type="number" min="0" max="80" step="1" required inputmode="numeric"><small class="job-help">أدخل 0 إذا لم تكن لديك خبرة بعد.</small></label>
+            <label class="field"><span>نوع العمل المطلوب</span><select name="workType" required><option value="">اختر نوع العمل</option><option>دوام كامل</option><option>جزئي</option><option>عن بُعد</option><option>استشاري</option></select></label>
+            <label class="field job-wide"><span>المهارات</span><textarea name="skills" required maxlength="2000"></textarea></label>
+            <label class="field job-wide"><span>نبذة مختصرة</span><textarea name="bio" required maxlength="2000"></textarea></label>
+            <label class="field job-wide"><span>السيرة الذاتية (PDF)</span><input id="applicantCv" name="cv" type="file" accept=".pdf,application/pdf" required aria-describedby="cvHelp cvStatus"><small id="cvHelp" class="job-help">اختر ملف PDF بحجم لا يتجاوز 10 ميغابايت. اختيار الملف محلي فقط؛ لا يُرفع حاليًا.</small></label>
+            <p class="job-file-status job-wide" id="cvStatus" role="status" aria-live="polite"></p>
+          </div></fieldset>
+          <div class="job-actions"><button class="btn btn-teal" type="submit" disabled aria-describedby="registrationNotice">إرسال التسجيل — قيد التجهيز</button></div>
+          <p id="jobStatus" role="status" aria-live="polite">لم يُرسل أي طلب. استقبال التسجيل قيد التجهيز.</p>
+        </form>
+      </div>
+      <section class="job-directory" aria-labelledby="directoryTitle" style="margin-top:2.5rem">
+        <h2 id="directoryTitle">استعراض المتقدمين والفلترة</h2>
+        <div class="job-status"><strong>قيد التجهيز</strong><p id="directoryNotice">فلترة سجلات المتقدمين وعرض معلوماتهم غير متاحين حتى اكتمال ربط استقبال الطلبات واسترجاعها وتحديد صلاحيات الاطلاع. لا توجد بيانات متقدمين معروضة في هذه الصفحة.</p></div>
+        <fieldset disabled aria-describedby="directoryNotice" style="border:0;padding:0;min-width:0">
+          <legend>فلاتر المتقدمين — قيد التجهيز</legend>
+          <div class="job-grid">
+            <label class="field"><span>البحث بالاسم أو التخصص أو المهارات</span><input type="search" name="applicantSearch"></label>
+            <label class="field"><span>الشهادة</span><select name="filterDegree"><option value="">كل الشهادات</option><option>بكالوريوس</option><option>ماجستير</option><option>دكتوراه</option></select></label>
+            <label class="field"><span>المحافظة</span><select name="filterProvince"><option value="">كل المحافظات</option><option>بغداد</option><option>البصرة</option><option>نينوى</option><option>أربيل</option><option>السليمانية</option><option>دهوك</option><option>حلبجة</option><option>كركوك</option><option>صلاح الدين</option><option>الأنبار</option><option>ديالى</option><option>واسط</option><option>بابل</option><option>كربلاء</option><option>النجف</option><option>ذي قار</option><option>ميسان</option><option>المثنى</option><option>القادسية</option></select></label>
+            <label class="field"><span>نوع العمل المطلوب</span><select name="filterWorkType"><option value="">كل أنواع العمل</option><option>دوام كامل</option><option>جزئي</option><option>عن بُعد</option><option>استشاري</option></select></label>
+            <label class="field"><span>الحد الأدنى لسنوات الخبرة</span><input name="filterExperience" type="number" min="0" max="80"></label>
+          </div>
+        </fieldset>
+        <p role="status">لم تُحمّل سجلات المتقدمين؛ الربط قيد التجهيز.</p>
+      </section>
+      <noscript><p>فعّل JavaScript لاختيار الشهادة واستعراض الاستمارة. استقبال التسجيل قيد التجهيز.</p></noscript>
+    </div></section>
+  </main>
+  <footer class="site-footer"><div class="container footer-inner"><strong>مُنجز أكاديمي</strong><p>لا نكتب عنك… نُنجز معك</p></div></footer>
+  <script>
+    (() => {
+      const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
+      const panel = document.getElementById('applicantPanel');
+      function selectTab(tab) {
+        tabs.forEach(button => { button.setAttribute('aria-selected', String(button === tab)); button.tabIndex = button === tab ? 0 : -1; });
+        document.getElementById('applicantDegree').value = tab.textContent;
+        panel.setAttribute('aria-labelledby', tab.id);
+        panel.hidden = false;
+        document.getElementById('degreePrompt').hidden = true;
+      }
+      tabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => selectTab(tab));
+        tab.addEventListener('keydown', event => {
+          let next;
+          if (event.key === 'ArrowLeft') next = (index + 1) % tabs.length;
+          if (event.key === 'ArrowRight') next = (index + tabs.length - 1) % tabs.length;
+          if (event.key === 'Home') next = 0;
+          if (event.key === 'End') next = tabs.length - 1;
+          if (next !== undefined) { event.preventDefault(); tabs[next].focus(); selectTab(tabs[next]); }
+        });
+      });
+      document.getElementById('graduationYear').max = String(new Date().getFullYear());
+      const cv = document.getElementById('applicantCv');
+      const cvStatus = document.getElementById('cvStatus');
+      cv.addEventListener('change', async () => {
+        cv.setCustomValidity('');
+        cvStatus.textContent = '';
+        const file = cv.files[0];
+        if (!file) return;
+        let error = '';
+        if (!/\.pdf$/i.test(file.name) || (file.type && file.type !== 'application/pdf')) error = 'يرجى اختيار ملف PDF فقط.';
+        else if (file.size > 10 * 1024 * 1024) error = 'حجم الملف يتجاوز 10 ميغابايت.';
+        else {
+          try {
+            const signature = new TextDecoder().decode(await file.slice(0, 5).arrayBuffer());
+            if (signature !== '%PDF-') error = 'الملف المحدد لا يبدو ملف PDF صالحًا.';
+          } catch { error = 'تعذّر قراءة الملف. اختره مجددًا.'; }
+        }
+        if (cv.files[0] !== file) return;
+        cv.setCustomValidity(error);
+        cvStatus.textContent = error || 'تم اختيار ملف PDF محليًا. لم يُرفع الملف؛ الإرسال قيد التجهيز.';
+      });
+      // The current forms worker supports text-only academic requests, not applicant/PDF submissions.
+      // Keep transmission disabled until that same worker supports this registration contract.
+      document.getElementById('jobSeekerForm').addEventListener('submit', event => {
+        event.preventDefault();
+        document.getElementById('jobStatus').textContent = 'قيد التجهيز — لم تُرسل بياناتك أو سيرتك الذاتية.';
+      });
+    })();
+  </script>
+</body>
+</html>

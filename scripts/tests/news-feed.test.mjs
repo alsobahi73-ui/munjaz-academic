@@ -29,3 +29,26 @@ test('empty or unavailable feed stays hidden', async () => {
    assert.equal((await render(items, ok)).section.hidden, true);
  }
 });
+test('ticker orders headlines by date rather than file order', async () => {
+ const { list } = await render([
+  { title: 'الأحدث', source: 'مصدر', date: '2026-10-13', url: 'https://example.org/new' },
+  { title: 'الأقدم', source: 'مصدر', date: '2026-10-10', url: 'https://example.org/old' },
+ ]);
+ assert.deepEqual(list.children.map(row => row.children[0].textContent), ['الأحدث', 'الأقدم']);
+});
+test('periodic refresh keeps successful headlines when the network fails', async () => {
+ const list = element(), section = { hidden: true, querySelector: () => list };
+ let refresh, requests = 0;
+ await runInNewContext(script, {
+  document: { hidden: false, getElementById: () => section, createElement: element, addEventListener() {} }, URL, AbortSignal,
+  window: { setInterval(callback, delay) { refresh = callback; assert.equal(delay, 60000); } },
+  fetch: async () => {
+   if (++requests > 1) throw Error('offline');
+   return { ok: true, json: async () => [{ title: 'خبر منشور', source: 'مصدر', url: 'https://example.org/news' }] };
+  },
+ });
+ await refresh();
+ assert.equal(requests, 2);
+ assert.equal(section.hidden, false);
+ assert.equal(list.children[0].children[0].textContent, 'خبر منشور');
+});

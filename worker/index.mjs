@@ -6,7 +6,14 @@ export function createWorker(catalog, fetchImpl = fetch) {
   return {
     async fetch(request, env) {
       const path = new URL(request.url).pathname;
-      if (path === '/healthz' && request.method === 'GET') return Response.json({ ok: true });
+      if (path === '/healthz' && request.method === 'GET') {
+        return Response.json({
+          ok: true,
+          requestsConfigured: Boolean(env.TELEGRAM_BOT_TOKEN
+            && /^-?\d+$/.test(String(env.TELEGRAM_CHAT_ID || ''))
+            && normalizeOrigin(env.SITE_ORIGIN)),
+        }, { headers: { 'Cache-Control': 'no-store' } });
+      }
       if (path === '/debug-cors' && request.method === 'GET') {
         const diagnostics = corsDiagnostics(request.headers.get('Origin'), env.SITE_ORIGIN);
         return Response.json(diagnostics, { headers: {
