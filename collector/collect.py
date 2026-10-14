@@ -3,6 +3,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 import time
 from datetime import datetime, timezone, timedelta
@@ -110,6 +111,50 @@ class Client:
 
 def text(value):
     return BeautifulSoup(value or '', 'html.parser').get_text(' ', strip=True)
+
+
+# --- Content curation (2026-10-14, per owner directive) ---
+# Ceremonial / traditional PR items are dropped for ALL sources.
+CEREMONIAL_PATTERNS = [
+    r'يستقبل', r'استقبال وفد',
+    r'يهن[ئى]|تهن[ئى]|تهنئة|تهاني',
+    r'زيارة تفقدية|جولة تفقدية|يتفقد',
+    r'يفتتح (?:مبن|بناية|قاعة|مختبر|مشروع|جسر)|افتتاح (?:مبن|بناية|قاعة|مختبر|مشروع)',
+    r'حفل تخرج|حفل تكريم|احتفالية|تكريم|يكرم',
+    r'مذكرة تفاهم|توقيع اتفاقية|يوقع (?:مذكرة|اتفاقية)',
+    r'برقية|تعزية|يعزي|مواساة',
+    r'كتاب شكر|شكر وتقدير',
+    r'اجتماع مجلس|مجلس (?:الجامعة|الكلية) يعقد|ترأس اجتماع|برئاسة',
+    r'وفد رسمي|يشارك في أعمال',
+]
+
+# Private-sector sources keep ONLY academic-substance items:
+# conferences, research publications, appointments, jobs, journals, publishers.
+PRIVATE_ALLOW_PATTERNS = [
+    r'مؤتمر|مؤتمرات|ندوة علمية',
+    r'بحث علمي|البحوث|بحوث|ورقة علمية|نشر (?:بحث|البحوث|الأبحاث)',
+    r'مجلة|مجلات|دورية علمية',
+    r'دار نشر|دور النشر',
+    r'تعيين|تعيينات|وظيفة|وظائف|فرص عمل|فرصة عمل|درجات وظيفية',
+]
+
+
+def _matches_any(patterns, value):
+    return any(re.search(pattern, value) for pattern in patterns)
+
+
+def content_filter(item, source):
+    """Return a drop-reason string, or None to keep the item.
+
+    Ceremonial items are dropped for every source. Items from private-sector
+    sources are additionally required to match the academic allowlist.
+    """
+    haystack = '{} {}'.format(item.get('title') or '', item.get('summary') or '')
+    if _matches_any(CEREMONIAL_PATTERNS, haystack):
+        return 'ceremonial'
+    if source.get('sector') == 'private' and not _matches_any(PRIVATE_ALLOW_PATTERNS, haystack):
+        return 'private_non_academic'
+    return None
 
 
 def parse_feed(body, source, base):
@@ -245,6 +290,18 @@ def collect(config, output, client=None, now=None, force=False):
                     raise ValueError('Unknown category')
                 batch = articles(source, client)
                 batch = backfill_dates(batch, source, client, log)
+                kept = []
+                for item in batch:
+                    reason = content_filter(item, source)
+                    if reason:
+                        log.write(json.dumps({'time': stamp(now), 'id': sid,
+                                              'skipped': item['url'],
+                                              'reason': 'filtered:' + reason,
+                                              'title': (item.get('title') or '')[:100]},
+                                             ensure_ascii=False) + '\n')
+                        continue
+                    kept.append(item)
+                batch = kept
                 for item in batch:
                     digest = hashlib.sha256((item['url'] + '\n' + item['title']).encode()).hexdigest()
                     if digest in seen:
