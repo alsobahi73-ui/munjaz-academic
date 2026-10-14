@@ -38,6 +38,7 @@
         <a href="services.html">خدماتنا الأكاديمية</a>
         <a href="#library">المكتبة والموارد</a>
         <a href="defenses.html">🎓 المناقشات</a>
+        <a href="#jobs">💼 الباحثون عن التعيين</a>
         <button type="button" class="btn btn-teal btn-sm" data-open-charter>ميثاق النزاهة</button>
         <button type="button" class="btn btn-light-outline btn-sm" id="authBtn" data-open-auth aria-haspopup="dialog">👤 <span id="authBtnText">تسجيل / دخول</span></button>
       </nav>
@@ -190,6 +191,74 @@
       .catch(function () {});
   })();
   </script>
+  <script>
+  // Defenses preview on homepage
+  (function () {
+    var list = document.getElementById('defensesPreviewList');
+    if (!list) return;
+    var KW = ['مناقشة', 'رسالة ماجستير', 'أطروحة دكتوراه', 'اطروحة دكتوراه'];
+    fetch('news.json', { cache: 'no-cache' })
+      .then(function (r) { return r.json(); })
+      .then(function (items) {
+        var found = (items || []).filter(function (it) {
+          var t = (it.title || '') + ' ' + (it.summary || '');
+          return KW.some(function (k) { return t.indexOf(k) !== -1; });
+        }).slice(0, 3);
+        if (!found.length) {
+          list.innerHTML = '<p class="muted">لا توجد مناقشات منشورة حاليًا — <a href="defenses.html">تصفح صفحة المناقشات</a></p>';
+          return;
+        }
+        list.innerHTML = '';
+        found.forEach(function (it) {
+          var card = document.createElement('article');
+          card.className = 'defense-preview-card';
+          var h = document.createElement('h3');
+          var a = document.createElement('a');
+          a.href = it.url || 'defenses.html'; a.target = '_blank'; a.rel = 'noopener';
+          a.textContent = it.title || 'مناقشة';
+          h.appendChild(a);
+          var meta = document.createElement('div');
+          meta.className = 'meta';
+          meta.textContent = (it.source || '') + (it.date ? ' — ' + it.date : '');
+          card.appendChild(h); card.appendChild(meta);
+          list.appendChild(card);
+        });
+      })
+      .catch(function () {
+        list.innerHTML = '<p class="muted"><a href="defenses.html">تصفح صفحة المناقشات ←</a></p>';
+      });
+  })();
+  // Job seeker form submission
+  (function () {
+    var form = document.getElementById('jobSeekerForm');
+    if (!form) return;
+    var status = document.getElementById('jobFormStatus');
+    var WORKER = 'https://munjaz-academic.alsobahi73.workers.dev';
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (!form.checkValidity()) { form.reportValidity(); return; }
+      status.className = 'form-status'; status.textContent = 'جارٍ الإرسال…';
+      var data = {};
+      new FormData(form).forEach(function (v, k) { data[k] = String(v).trim(); });
+      data.kind = 'job-seeker';
+      fetch(WORKER + '/api/academic-requests', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      }).then(function (r) {
+        if (!r.ok) throw new Error('http ' + r.status);
+        return r.json();
+      }).then(function () {
+        status.className = 'form-status ok';
+        status.textContent = 'تم استلام بياناتك بنجاح ✅ سنتواصل معك عند توفر فرصة مناسبة.';
+        form.reset();
+      }).catch(function () {
+        status.className = 'form-status err';
+        status.textContent = 'تعذر الإرسال — حاول مرة أخرى لاحقًا.';
+      });
+    });
+  })();
+  </script>
 
   <main id="main">
     <!-- ============ Hero ============ -->
@@ -248,6 +317,95 @@
             </div>
           </li>
         </ul>
+      </div>
+    </section>
+
+    <!-- ============ Defenses preview ============ -->
+    <section class="section" id="defenses-preview" aria-labelledby="defensesPreviewTitle">
+      <div class="container">
+        <header class="section-head">
+          <h2 id="defensesPreviewTitle">🎓 آخر المناقشات</h2>
+          <p>أحدث مناقشات رسائل الماجستير وأطروحات الدكتوراه في الجامعات العراقية.</p>
+        </header>
+        <div class="defenses-preview-list" id="defensesPreviewList">
+          <p class="muted">جارٍ التحميل…</p>
+        </div>
+        <p style="text-align:center;margin-top:1.5rem">
+          <a class="btn btn-primary" href="defenses.html">جميع المناقشات ←</a>
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ Job seekers portal ============ -->
+    <section class="section section-tint" id="jobs" aria-labelledby="jobsTitle">
+      <div class="container">
+        <header class="section-head">
+          <h2 id="jobsTitle">💼 بوابة الباحثين عن التعيين</h2>
+          <p>سجّل معلوماتك الأساسية لنرشحك للفرص الأكاديمية المناسبة لتخصصك.</p>
+        </header>
+        <form class="job-form" id="jobSeekerForm" novalidate>
+          <div class="form-grid">
+            <label>الاسم الكامل *
+              <input type="text" name="name" required maxlength="100" placeholder="مثال: أحمد محمد علي">
+            </label>
+            <label>العمر *
+              <input type="number" name="age" required min="20" max="70" placeholder="مثال: 32">
+            </label>
+            <label>الجنس
+              <select name="gender">
+                <option value="">— اختر —</option>
+                <option value="ذكر">ذكر</option>
+                <option value="أنثى">أنثى</option>
+              </select>
+            </label>
+            <label>الشهادة *
+              <select name="degree" required>
+                <option value="">— اختر الشهادة —</option>
+                <option value="دكتوراه">دكتوراه</option>
+                <option value="ماجستير">ماجستير</option>
+                <option value="بكالوريوس">بكالوريوس</option>
+                <option value="دبلوم عالٍ">دبلوم عالٍ</option>
+                <option value="دبلوم">دبلوم</option>
+              </select>
+            </label>
+            <label>التخصص الدقيق *
+              <input type="text" name="specialization" required maxlength="120" placeholder="مثال: فيزياء طبية">
+            </label>
+            </label>
+            <label>الجامعة / المعهد
+              <input type="text" name="university" maxlength="120" placeholder="جهة التخرج">
+            </label>
+            <label>سنة التخرج
+              <input type="number" name="graduation_year" min="1980" max="2026" placeholder="مثال: 2022">
+            </label>
+            <label>محافظة السكن *
+              <select name="governorate" required>
+                <option value="">— اختر المحافظة —</option>
+                <option>بغداد</option><option>البصرة</option><option>نينوى</option>
+                <option>أربيل</option><option>السليمانية</option><option>دهوك</option>
+                <option>كركوك</option><option>صلاح الدين</option><option>الأنبار</option>
+                <option>ديالى</option><option>واسط</option><option>بابل</option>
+                <option>كربلاء</option><option>النجف</option><option>ذي قار</option>
+                <option>ميسان</option><option>المثنى</option><option>القادسية</option>
+              </select>
+            </label>
+            <label>رقم الهاتف *
+              <input type="tel" name="phone" required maxlength="20" placeholder="07xxxxxxxxx" dir="ltr">
+            </label>
+            <label>البريد الإلكتروني
+              <input type="email" name="email" maxlength="120" placeholder="name@email.com" dir="ltr">
+            </label>
+            <label>سنوات الخبرة
+              <input type="number" name="experience" min="0" max="40" placeholder="مثال: 3">
+            </label>
+            <label class="full-width">نبذة مختصرة
+              <textarea name="bio" rows="3" maxlength="500" placeholder="خبراتك ومهاراتك باختصار…"></textarea>
+            </label>
+          </div>
+          <p class="form-note">بتسجيلك أنت توافق على مشاركة بياناتك مع الجهات الأكاديمية لغرض التوظيف.</p>
+          <button type="submit" class="btn btn-primary">تسجيل البيانات ←</button>
+          <p class="form-status" id="jobFormStatus" role="status"></p>
+        </form>
       </div>
     </section>
 
