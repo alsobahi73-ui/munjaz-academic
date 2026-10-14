@@ -278,7 +278,7 @@
           <p>سجّل معلوماتك الأساسية لنرشحك للفرص الأكاديمية المناسبة لتخصصك.</p>
         </header>
         <div class="job-form-embed">
-          <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdmPJQXK-o37pj-gWQiRzciKjCcYnJgjLnrIgZNfqWhKEHuqg/viewform?embedded=true"
+          <iframe src="https://docs.google.com/forms/d/1U1y3nsKLVwSdhx6LsnHNGNcogBxeJVmtVFuMeZia084/viewform?embedded=true"
                   width="100%" height="1200" frameborder="0" marginheight="0" marginwidth="0"
                   title="استمارة الباحثين عن التعيين">جارٍ التحميل…</iframe>
         </div>
@@ -1093,5 +1093,43 @@
   <script src="academic-services-config.js"></script>
   <script src="app.js"></script>
 
+  <script>
+  // Defenses preview on homepage
+  (function () {
+    var list = document.getElementById('defensesPreviewList');
+    if (!list) return;
+    var KW = ['مناقشة', 'رسالة ماجستير', 'أطروحة دكتوراه', 'اطروحة دكتوراه'];
+    fetch('news.json', { cache: 'no-cache' })
+      .then(function (r) { return r.json(); })
+      .then(function (items) {
+        var found = (items || []).filter(function (it) {
+          var t = (it.title || '') + ' ' + (it.summary || '');
+          return KW.some(function (k) { return t.indexOf(k) !== -1; });
+        }).slice(0, 4);
+        if (!found.length) {
+          list.innerHTML = '<p class="muted">لا توجد مناقشات منشورة حاليًا — <a href="defenses.html">تصفح صفحة المناقشات</a></p>';
+          return;
+        }
+        list.innerHTML = '';
+        found.forEach(function (it) {
+          var card = document.createElement('article');
+          card.className = 'defense-preview-card';
+          var h = document.createElement('h3');
+          var a = document.createElement('a');
+          a.href = it.url || 'defenses.html'; a.target = '_blank'; a.rel = 'noopener';
+          a.textContent = it.title || 'مناقشة';
+          h.appendChild(a);
+          var meta = document.createElement('div');
+          meta.className = 'meta';
+          meta.textContent = (it.source || '') + (it.date ? ' — ' + it.date : '');
+          card.appendChild(h); card.appendChild(meta);
+          list.appendChild(card);
+        });
+      })
+      .catch(function () {
+        list.innerHTML = '<p class="muted"><a href="defenses.html">تصفح صفحة المناقشات ←</a></p>';
+      });
+  })();
+  </script>
 </body>
 </html>
