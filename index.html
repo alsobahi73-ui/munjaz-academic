@@ -88,20 +88,26 @@
     }
     function render(items) {
       list.innerHTML = '';
-      var count = 0;
+      var count = 0, rejected = 0, firstErr = '';
       var rev = items.slice().reverse();
       for (var i = 0; i < rev.length && count < 15; i++) {
-        var item = rev[i];
-        if (!item || typeof item.title !== 'string' || !item.title.trim() ||
-            typeof item.source !== 'string' || !item.source.trim() ||
-            item.title.indexOf('تجريبي:') !== -1) continue;
-        var url;
-        try { url = new URL(item.url); } catch (e) { continue; }
-        if ((url.protocol !== 'https:' && url.protocol !== 'http:') || url.username || url.password) continue;
-        list.appendChild(buildRow(item.title.trim(), url.href, item.source.trim()));
-        count++;
+        var item = rev[i], reason = '';
+        if (!item || typeof item.title !== 'string' || !item.title.trim()) reason = 'title';
+        else if (typeof item.source !== 'string' || !item.source.trim()) reason = 'source';
+        else if (item.title.indexOf('تجريبي:') !== -1) reason = 'test';
+        else {
+          try {
+            var url = new URL(item.url);
+            if ((url.protocol !== 'https:' && url.protocol !== 'http:') || url.username || url.password) reason = 'url-proto';
+          } catch (e) { reason = 'url-parse:' + (typeof item.url); }
+        }
+        if (reason) { rejected++; if (!firstErr) firstErr = reason; continue; }
+        try {
+          list.appendChild(buildRow(item.title.trim(), new URL(item.url).href, item.source.trim()));
+          count++;
+        } catch (e) { rejected++; if (!firstErr) firstErr = 'build:' + e.message; }
       }
-      if (!count) { setState('لا توجد أخبار متاحة حالياً', 'ticker-error'); return; }
+      if (!count) { setState('تشخيص: ' + items.length + ' خبر، مرفوض ' + rejected + ' (' + firstErr + ')', 'ticker-error'); return; }
       pace();
     }
     var controller = null;
