@@ -6,7 +6,11 @@
 
   // 1) Appear automatically: show immediately with a loading shimmer.
   section.hidden = false;
-  list.innerHTML = '<li class="ticker-state"><span class="ticker-loading">جاري تحميل آخر الأخبار…</span></li>';
+  const setState = (msg, cls) => {
+    list.innerHTML = '<li class="ticker-state"><span class="' + (cls || '') + '">' + msg + '</span></li>';
+  };
+  setState('جاري تحميل آخر الأخبار…', 'ticker-loading');
+  console.info('[ticker] init, fetching news.json…');
 
   function buildRow(title, url, source) {
     const row = document.createElement('li');
@@ -53,8 +57,10 @@
       count++;
     }
     if (!count) {
-      list.innerHTML = '<li class="ticker-state"><span>تابع آخر أخبار التعليم العالي والبحث العلمي</span></li>';
+      setState('لا توجد أخبار متاحة حالياً', 'ticker-error');
+      return;
     }
+    console.info('[ticker] rendering ' + count + ' headlines');
     pace();
   }
 
@@ -64,9 +70,9 @@
     const items = await response.json();
     if (!Array.isArray(items) || !items.length) throw Error('empty_feed');
     render(items);
-  } catch {
-    // 1b) Never hide on failure: show a friendly fallback message instead.
-    list.innerHTML = '<li class="ticker-state"><span>تابع آخر أخبار التعليم العالي والبحث العلمي</span></li>';
-    pace();
+  } catch (err) {
+    // 1b) Never hide on failure: show a diagnostic message instead.
+    console.error('[ticker] fetch failed:', err);
+    setState('تعذر تحميل الأخبار — تحقق من الاتصال بالإنترنت ثم حدث الصفحة', 'ticker-error');
   }
 })();
