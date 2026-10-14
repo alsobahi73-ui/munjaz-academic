@@ -436,7 +436,7 @@ textarea { resize: vertical; min-height: 130px; }
 @keyframes ticker-ping { 0% { transform: scale(.5); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
 .news-ticker-viewport { flex: 1; min-width: 0; overflow: hidden; display: flex; align-items: center; }
 .official-news-list { display: flex; align-items: center; width: max-content; list-style: none; margin: 0; padding: 0;
-  animation: munjaz-news-scroll 80s linear infinite; }
+  animation: none; }
 .official-news-list li { position: relative; display: flex; align-items: center; gap: .8rem;
   white-space: nowrap; padding-inline: 1.9rem; }
 .official-news-list li + li::before { content: "\25C6"; position: absolute; inset-inline-start: -.4rem; top: 50%;
