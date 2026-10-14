@@ -434,9 +434,7 @@ textarea { resize: vertical; min-height: 130px; }
 .news-ticker h2 .dot::after { content: ""; position: absolute; inset: -4px; border-radius: 50%;
   border: 2px solid rgba(255, 255, 255, .7); animation: ticker-ping 1.8s ease-out infinite; }
 @keyframes ticker-ping { 0% { transform: scale(.5); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
-.news-ticker-viewport { flex: 1; min-width: 0; overflow: hidden; display: flex; align-items: center;
-  -webkit-mask-image: linear-gradient(to left, transparent, #000 6%, #000 94%, transparent);
-  mask-image: linear-gradient(to left, transparent, #000 6%, #000 94%, transparent); }
+.news-ticker-viewport { flex: 1; min-width: 0; overflow: hidden; display: flex; align-items: center; }
 .official-news-list { display: flex; align-items: center; width: max-content; list-style: none; margin: 0; padding: 0;
   animation: munjaz-news-scroll 80s linear infinite; }
 .official-news-list li { position: relative; display: flex; align-items: center; gap: .8rem;
