@@ -22,10 +22,10 @@
     }
     if (list.children.length) {
       // Seamless loop: duplicate items so the -50% keyframe wraps cleanly,
-      // then pace the animation by content width (~65px/s, min 45s).
+      // then pace the animation by content width (~30px/s, min 90s).
       list.innerHTML += list.innerHTML;
       const half = list.scrollWidth / 2;
-      list.style.animationDuration = Math.max(45, Math.round(half / 65)) + 's';
+      list.style.animationDuration = Math.max(90, Math.round(half / 30)) + 's';
     }
     section.hidden = !list.children.length;
   }
