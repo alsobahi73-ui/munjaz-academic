@@ -36,6 +36,20 @@
     @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
     .form-note { font-size: .85rem; color: #666; margin-top: 1rem; }
     .form-success { background: #E8F4F3; color: #0E6B66; border-radius: 8px; padding: 1rem; margin-top: 1rem; display: none; font-weight: 700; }
+    /* Featured researchers carousel */
+    .featured-wrap { max-width: 720px; margin: 2.5rem auto; text-align: center; }
+    .featured-title { font-size: 1.4rem; color: #0E6B66; margin-bottom: 1.5rem; }
+    .featured-card { background: #fff; border-radius: 20px; box-shadow: 0 8px 30px rgba(14,107,102,.15); padding: 2.5rem 2rem; border: 3px solid #B97A12; min-height: 420px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; transition: opacity .5s; }
+    .featured-photo { width: 200px; height: 200px; border-radius: 50%; object-fit: cover; border: 5px solid #B97A12; box-shadow: 0 4px 15px rgba(0,0,0,.15); }
+    .featured-photo.placeholder { display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #0E6B66, #06302C); color: #fff; font-size: 4rem; }
+    .featured-name { font-size: 1.5rem; font-weight: 800; color: #06302C; margin: 0; }
+    .featured-degree { display: inline-block; font-size: .85rem; font-weight: 700; border-radius: 999px; padding: .3rem 1rem; background: #FFF3D6; color: #8a5a00; }
+    .featured-univ { color: #0E6B66; font-weight: 700; }
+    .featured-thesis { font-style: italic; color: #444; }
+    .featured-summary { color: #555; line-height: 1.9; max-width: 560px; }
+    .featured-dots { display: flex; gap: .5rem; justify-content: center; margin-top: 1.25rem; }
+    .featured-dot { width: 12px; height: 12px; border-radius: 50%; background: #ccc; border: none; cursor: pointer; padding: 0; }
+    .featured-dot.active { background: #B97A12; transform: scale(1.2); }
   </style>
 </head>
 <body>
@@ -64,6 +78,14 @@
         <p>أخبار مناقشات الرسائل والأطروحات في الجامعات العراقية — تُجمَع تلقائيًا، ويمكنك إضافة إعلان مناقشة</p>
       </div>
     </section>
+
+    <div class="container">
+      <div class="featured-wrap" id="featuredWrap" hidden>
+        <h2 class="featured-title">🎓 باحثون ناقشوا حديثًا</h2>
+        <div class="featured-card" id="featuredCard"></div>
+        <div class="featured-dots" id="featuredDots"></div>
+      </div>
+    </div>
 
     <div class="container">
       <div class="defense-tabs" role="tablist">
@@ -198,6 +220,59 @@
       .catch(function () {
         document.getElementById('manualGrid').innerHTML = '<p>لا توجد إعلانات مضافة بعد.</p>';
       });
+
+    // Featured researchers carousel
+    fetch('featured-researchers.json', { cache: 'no-cache' })
+      .then(function (r) { return r.json(); })
+      .then(function (people) {
+        people = people.filter(function (p) { return p && p.name && p.name.indexOf('مثال:') !== 0; });
+        if (!people.length) return;
+        document.getElementById('featuredWrap').hidden = false;
+        var card = document.getElementById('featuredCard');
+        var dotsWrap = document.getElementById('featuredDots');
+        var idx = 0, timer = null;
+        function show(i) {
+          idx = (i + people.length) % people.length;
+          var p = people[idx];
+          card.style.opacity = 0;
+          setTimeout(function () {
+            card.innerHTML = '';
+            if (p.photo) {
+              var img = document.createElement('img');
+              img.className = 'featured-photo'; img.src = p.photo; img.alt = p.name;
+              card.appendChild(img);
+            } else {
+              var ph = document.createElement('div');
+              ph.className = 'featured-photo placeholder'; ph.textContent = '🎓';
+              card.appendChild(ph);
+            }
+            var name = document.createElement('h3'); name.className = 'featured-name'; name.textContent = p.name;
+            var deg = document.createElement('span'); deg.className = 'featured-degree'; deg.textContent = p.degree || '';
+            var univ = document.createElement('div'); univ.className = 'featured-univ';
+            univ.textContent = (p.university || '') + (p.department ? ' — ' + p.department : '');
+            var thesis = document.createElement('div'); thesis.className = 'featured-thesis';
+            thesis.textContent = '«' + (p.thesis || '') + '»';
+            var sum = document.createElement('p'); sum.className = 'featured-summary'; sum.textContent = p.summary || '';
+            card.append(name, deg, univ, thesis, sum);
+            card.style.opacity = 1;
+            dotsWrap.querySelectorAll('.featured-dot').forEach(function (d, di) {
+              d.classList.toggle('active', di === idx);
+            });
+          }, 300);
+        }
+        people.forEach(function (_, i) {
+          var d = document.createElement('button');
+          d.className = 'featured-dot' + (i === 0 ? ' active' : '');
+          d.setAttribute('aria-label', 'باحث ' + (i + 1));
+          d.addEventListener('click', function () { show(i); restart(); });
+          dotsWrap.appendChild(d);
+        });
+        function restart() { if (timer) clearInterval(timer); timer = setInterval(function () { show(idx + 1); }, 6000); }
+        card.addEventListener('mouseenter', function () { if (timer) clearInterval(timer); });
+        card.addEventListener('mouseleave', restart);
+        show(0); restart();
+      })
+      .catch(function () {});
 
     // Submit form -> Telegram via worker
     document.getElementById('defenseForm').addEventListener('submit', function (e) {
