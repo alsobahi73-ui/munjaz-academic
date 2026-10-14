@@ -47,7 +47,7 @@
 
   <aside id="officialNews" class="news-ticker" aria-labelledby="officialNewsTitle">
     <div class="container news-ticker-inner">
-      <h2 id="officialNewsTitle"><span class="dot" aria-hidden="true"></span>آخر الأخبار</h2>
+      <h2 id="officialNewsTitle"><span class="dot" aria-hidden="true"></span>أخبار مهمة</h2>
       <div class="news-ticker-viewport"><ul class="official-news-list"><li class="ticker-state"><span class="ticker-loading">جاري تحميل آخر الأخبار…</span></li></ul></div>
     </div>
   </aside>
@@ -87,22 +87,37 @@
         } catch (e) {}
       });
     }
+    // Important news only (per owner's curation): conferences, research, journals,
+    // publishers, appointments, jobs. Falls back to recent news if too few.
+    var IMPORTANT_KW = ['مؤتمر', 'ندوة علمية', 'بحث علمي', 'بحوث', 'ورقة علمية', 'نشر بحث',
+      'مجلة', 'دورية علمية', 'دار نشر', 'دور النشر', 'تعيين', 'وظائف', 'وظيفة', 'فرص عمل', 'درجات وظيفية'];
+    function isImportant(item) {
+      var t = (item.title || '') + ' ' + (item.summary || '');
+      return IMPORTANT_KW.some(function (k) { return t.indexOf(k) !== -1; });
+    }
+    function validItem(item) {
+      if (!item || typeof item.title !== 'string' || !item.title.trim() ||
+          typeof item.source !== 'string' || !item.source.trim() ||
+          item.title.indexOf('تجريبي:') !== -1) return false;
+      try {
+        var url = new URL(item.url);
+        if ((url.protocol !== 'https:' && url.protocol !== 'http:') || url.username || url.password) return false;
+      } catch (e) { return false; }
+      return true;
+    }
     function render(items) {
       list.innerHTML = '';
-      var count = 0;
-      var rev = items.slice().reverse();
-      for (var i = 0; i < rev.length && count < 15; i++) {
-        var item = rev[i];
-        if (!item || typeof item.title !== 'string' || !item.title.trim() ||
-            typeof item.source !== 'string' || !item.source.trim() ||
-            item.title.indexOf('تجريبي:') !== -1) continue;
-        var url;
-        try { url = new URL(item.url); } catch (e) { continue; }
-        if ((url.protocol !== 'https:' && url.protocol !== 'http:') || url.username || url.password) continue;
+      var rev = items.slice().reverse().filter(validItem);
+      // Prefer important news; fill with recent if fewer than 5 important
+      var important = rev.filter(isImportant).slice(0, 15);
+      var chosen = important.length >= 5 ? important : important.concat(
+        rev.filter(function (it) { return important.indexOf(it) === -1; }).slice(0, 15 - important.length)
+      );
+      chosen.forEach(function (item) {
+        var url = new URL(item.url);
         list.appendChild(buildRow(item.title.trim(), url.href, item.source.trim()));
-        count++;
-      }
-      if (!count) { setState('لا توجد أخبار متاحة حالياً', 'ticker-error'); return; }
+      });
+      if (!chosen.length) { setState('لا توجد أخبار متاحة حالياً', 'ticker-error'); return; }
       pace();
     }
     var controller = null;
