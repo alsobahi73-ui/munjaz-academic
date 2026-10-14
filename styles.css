@@ -567,3 +567,7 @@ textarea { resize: vertical; min-height: 130px; }
 @media (max-width: 900px) {
   .duo-wrap { grid-template-columns: 1fr; }
 }
+
+/* ===== Embedded Google Form ===== */
+.job-form-embed { max-width: 860px; margin: 0 auto; background: #fff; border-radius: 18px; overflow: hidden; box-shadow: 0 6px 24px rgba(14,107,102,.12); }
+.job-form-embed iframe { display: block; border: none; min-height: 1200px; }
