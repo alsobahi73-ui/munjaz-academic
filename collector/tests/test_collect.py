@@ -155,6 +155,33 @@ class CollectorTests(unittest.TestCase):
         kept = backfill_dates(batch, source, client, log)
         self.assertEqual(kept, [])
         self.assertIn('no date on article page', log.getvalue())
+    def test_ceremonial_filtered_for_all_sources(self):
+        from collector.collect import content_filter
+        item = {'title': 'رئيس الجامعة يستقبل وفداً رسمياً', 'summary': ''}
+        for sector in ('public', 'private', 'ministry'):
+            self.assertEqual(content_filter(item, {'sector': sector}), 'ceremonial')
+        item = {'title': 'الجامعة تهنئ الطلبة المتفوقين', 'summary': ''}
+        self.assertEqual(content_filter(item, {'sector': 'public'}), 'ceremonial')
+
+    def test_private_keeps_only_academic(self):
+        from collector.collect import content_filter
+        src = {'sector': 'private'}
+        for title in ('الكلية تعلن عن مؤتمر علمي دولي',
+                      'نشر بحث جديد لتدريسي في مجلة عالمية',
+                      'الكلية تعلن عن وظائف شاغرة للتعيين',
+                      'دار نشر تتعاون مع الكلية'):
+            self.assertIsNone(content_filter({'title': title, 'summary': ''}, src), title)
+        for title in ('الكلية تنظم دورة تدريبية', 'إعلان نتائج الامتحانات'):
+            self.assertEqual(content_filter({'title': title, 'summary': ''}, src),
+                             'private_non_academic', title)
+
+    def test_public_non_ceremonial_kept(self):
+        from collector.collect import content_filter
+        item = {'title': 'جامعة بغداد تعلن نتائج القبول المركزي', 'summary': ''}
+        self.assertIsNone(content_filter(item, {'sector': 'public'}))
+        item = {'title': 'افتتاح باب التقديم للدراسات العليا', 'summary': ''}
+        self.assertIsNone(content_filter(item, {'sector': 'public'}))
+
     def test_robots_txt_same_origin_redirect_followed(self):
         # robots.txt 301 to a same-origin URL (e.g. trailing slash) must not
         # kill the source; content URLs still refuse redirects.
