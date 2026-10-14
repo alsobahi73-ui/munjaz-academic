@@ -166,3 +166,6 @@
 {"time": "2026-10-14T07:00:01.975524+00:00", "id": "mohesr-universities-news", "new_items": 0, "status": "ok", "needs_attention": false, "consecutive_failures": 0}
 {"time": "2026-10-14T07:00:01.975524+00:00", "new_items": 0}
 {"time": "2026-10-14T07:51:43.057901+00:00", "new_items": 0}
+{"time": "2026-10-14T08:50:09.971754+00:00", "id": "mohesr-ministry-news", "new_items": 0, "status": "ok", "needs_attention": false, "consecutive_failures": 0}
+{"time": "2026-10-14T08:50:09.971754+00:00", "id": "mohesr-universities-news", "new_items": 0, "status": "ok", "needs_attention": false, "consecutive_failures": 0}
+{"time": "2026-10-14T08:50:09.971754+00:00", "new_items": 0}
