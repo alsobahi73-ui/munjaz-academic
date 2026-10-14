@@ -19,6 +19,7 @@ sources:
   tier: ministry
   type: official
   url: https://mohesr.gov.iq/ar/homeNews/newsTerm_more/6
+  sector: ministry
 - category: general
   date_page_selector: div.post-views div.date
   enabled: true
@@ -31,6 +32,7 @@ sources:
   tier: ministry
   type: official
   url: https://mohesr.gov.iq/ar/homeNews/newsTerm_more/55
+  sector: ministry
 - category: general
   enabled: true
   feed_url: https://nc.uobaghdad.edu.iq/?feed=rss2
@@ -39,6 +41,7 @@ sources:
   tier: university
   type: official
   url: https://nc.uobaghdad.edu.iq/
+  sector: public
 - category: general
   enabled: true
   id: univ-mosul-news
@@ -52,6 +55,7 @@ sources:
   tier: university
   type: official
   url: https://uomosul.edu.iq/more-news/
+  sector: public
 - category: general
   enabled: true
   id: univ-basra-news
@@ -65,6 +69,7 @@ sources:
   tier: university
   type: official
   url: https://uobasrah.edu.iq/news
+  sector: public
 - category: general
   enabled: true
   id: univ-nahrain-news
@@ -77,6 +82,7 @@ sources:
   tier: university
   type: official
   url: https://nahrainuniv.edu.iq/ar/all-news-en
+  sector: public
 - category: general
   enabled: true
   feed_url: https://qu.edu.iq/?cat=10&feed=rss2
@@ -85,6 +91,7 @@ sources:
   tier: university
   type: official
   url: https://qu.edu.iq/?cat=10
+  sector: public
 - category: general
   enabled: true
   feed_url: https://www.tu.edu.iq/index.php/ar/tu-news?format=feed&type=rss
@@ -93,6 +100,7 @@ sources:
   tier: university
   type: official
   url: https://www.tu.edu.iq/index.php/ar/tu-news
+  sector: public
 - category: general
   enabled: true
   id: univ-anbar-news
@@ -106,6 +114,7 @@ sources:
   tier: university
   type: official
   url: https://www.uoanbar.edu.iq/Sectors.php?ID=2
+  sector: public
 - category: general
   enabled: true
   feed_url: https://aliraqia.edu.iq/feed/
@@ -114,6 +123,7 @@ sources:
   tier: university
   type: official
   url: https://aliraqia.edu.iq/news/
+  sector: public
 - category: general
   enabled: true
   feed_url: https://uodiyala.edu.iq/feed/
@@ -122,6 +132,7 @@ sources:
   tier: university
   type: official
   url: https://uodiyala.edu.iq/feed/
+  sector: public
 - category: general
   enabled: false
   id: univ-karbala-news
@@ -129,6 +140,7 @@ sources:
   tier: university
   type: official
   url: https://uokerbala.edu.iq
+  sector: public
 - category: general
   enabled: false
   id: univ-dhi-qar-news
@@ -136,6 +148,7 @@ sources:
   tier: university
   type: official
   url: https://utq.edu.iq
+  sector: public
 - category: general
   enabled: true
   id: univ-wasit-news
@@ -149,6 +162,7 @@ sources:
   tier: university
   type: official
   url: https://uowasit.edu.iq/news
+  sector: public
 - category: general
   date_page_selector: .uok-hero-meta-panel .uok-meta-pill:first-child span
   enabled: true
@@ -161,6 +175,7 @@ sources:
   tier: university
   type: official
   url: https://uokirkuk.edu.iq/ar/index.php/general-news/all-news
+  sector: public
 - category: general
   enabled: true
   feed_url: https://uomisan.edu.iq/ar/feed/
@@ -169,6 +184,7 @@ sources:
   tier: university
   type: official
   url: https://uomisan.edu.iq/ar/feed/
+  sector: public
 - category: general
   enabled: true
   feed_url: https://mu.edu.iq/feed/
@@ -177,6 +193,7 @@ sources:
   tier: university
   type: official
   url: https://mu.edu.iq/feed/
+  sector: public
 - category: general
   enabled: true
   feed_url: https://uosamarra.edu.iq/feed/
@@ -185,6 +202,7 @@ sources:
   tier: university
   type: official
   url: https://uosamarra.edu.iq/feed/
+  sector: public
 - category: general
   enabled: true
   id: univ-alqasm-alkhdraa-news
@@ -198,6 +216,7 @@ sources:
   tier: university
   type: official
   url: https://www.uoqasim.edu.iq/news-and-events
+  sector: public
 - category: general
   enabled: true
   id: univ-swmr-news
@@ -210,6 +229,7 @@ sources:
   tier: university
   type: official
   url: https://www.uos.edu.iq/media/latest.aspx
+  sector: public
 - category: general
   enabled: false
   id: univ-fallujah-news
@@ -217,6 +237,7 @@ sources:
   tier: university
   type: official
   url: https://www.uofallujah.edu.iq
+  sector: public
 - category: general
   enabled: true
   feed_url: https://uoninevah.edu.iq/feed/
@@ -225,6 +246,7 @@ sources:
   tier: university
   type: official
   url: https://uoninevah.edu.iq/feed/
+  sector: public
 - category: general
   enabled: true
   id: univ-alkrkh-llalwm-news
@@ -238,6 +260,7 @@ sources:
   tier: university
   type: official
   url: https://kus.edu.iq/
+  sector: public
 - category: general
   date_page_selector: .properties
   enabled: true
@@ -250,6 +273,7 @@ sources:
   tier: university
   type: official
   url: https://ibnsina.edu.iq/
+  sector: private
 - category: general
   date_page_selector: div.mb-10 > span
   enabled: true
@@ -263,6 +287,7 @@ sources:
   tier: university
   type: official
   url: https://buog.edu.iq/announcements
+  sector: public
 - category: general
   enabled: true
   feed_url: https://jmu.edu.iq/ar/?feed=rss2&cat=55
@@ -271,6 +296,7 @@ sources:
   tier: university
   type: official
   url: https://jmu.edu.iq/ar/?cat=55
+  sector: public
 - category: general
   enabled: true
   feed_url: https://www.uohamdaniya.edu.iq/feed/
@@ -279,6 +305,7 @@ sources:
   tier: university
   type: official
   url: https://www.uohamdaniya.edu.iq/category/university-news/
+  sector: public
 - category: general
   enabled: false
   id: univ-talafar-news
@@ -286,6 +313,7 @@ sources:
   tier: university
   type: official
   url: https://uotelafer.edu.iq/
+  sector: public
 - category: general
   enabled: true
   feed_url: https://uoitc.edu.iq/ar/feed/
@@ -294,6 +322,7 @@ sources:
   tier: university
   type: official
   url: https://uoitc.edu.iq/ar/
+  sector: public
 - category: general
   enabled: false
   id: univ-tech-alshmalya-news
@@ -301,6 +330,7 @@ sources:
   tier: university
   type: official
   url: https://ntu.edu.iq/
+  sector: public
 - category: general
   enabled: true
   id: univ-tech-aljnwbya-news
@@ -313,6 +343,7 @@ sources:
   tier: university
   type: official
   url: https://www.stu.edu.iq/News/category/%d8%a7%d9%84%d8%a7%d8%ae%d8%a8%d8%a7%d8%b1/
+  sector: public
 - category: general
   enabled: false
   id: univ-tech-alwsta-news
@@ -320,6 +351,7 @@ sources:
   tier: university
   type: official
   url: https://www.mtu.edu.iq/
+  sector: public
 - category: general
   date_page_selector: div.meta span
   enabled: true
@@ -333,6 +365,7 @@ sources:
   tier: university
   type: official
   url: https://atu.edu.iq/category/%d8%a7%d9%84%d8%a7%d8%ae%d8%a8%d8%a7%d8%b1-%d8%a7%d9%84%d8%ac%d8%a7%d9%85%d8%b9%d8%a9-%d8%a7%d9%84%d8%aa%d9%82%d9%86%d9%8a%d8%a9/
+  sector: public
 - category: general
   enabled: true
   id: college-mansour-univ-news
@@ -345,6 +378,7 @@ sources:
   tier: university
   type: official
   url: https://www.muc.edu.iq/news/
+  sector: private
 - category: general
   enabled: true
   id: college-rafidain-univ-news
@@ -358,6 +392,7 @@ sources:
   tier: university
   type: official
   url: https://ruc.edu.iq/category/news_ruc/
+  sector: private
 - category: general
   enabled: true
   id: college-almamwn-univ-news
@@ -370,6 +405,7 @@ sources:
   tier: university
   type: official
   url: https://almamonuc.edu.iq/category/41
+  sector: private
 - category: general
   enabled: true
   id: college-sht-alarb-univ-news
@@ -383,6 +419,7 @@ sources:
   tier: university
   type: official
   url: https://sa-uc.edu.iq/ar/news
+  sector: private
 - category: general
   date_page_selector: time.datetime
   enabled: true
@@ -395,6 +432,7 @@ sources:
   tier: university
   type: official
   url: https://hu.edu.iq/news
+  sector: private
 - category: general
   enabled: true
   feed_url: https://al-yarmok.edu.iq/feed/
@@ -408,6 +446,7 @@ sources:
   tier: university
   type: official
   url: https://al-yarmok.edu.iq/news/
+  sector: private
 - category: general
   enabled: true
   id: univ-sciences-iraqi-news
@@ -421,6 +460,7 @@ sources:
   tier: university
   type: official
   url: https://aisu.edu.iq/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1
+  sector: private
 - category: general
   enabled: true
   feed_url: https://bcms.edu.iq/feed/
@@ -429,6 +469,7 @@ sources:
   tier: university
   type: official
   url: https://bcms.edu.iq/activities/
+  sector: private
 - category: general
   enabled: true
   id: univ-ahl-bait-news
@@ -441,6 +482,7 @@ sources:
   tier: university
   type: official
   url: https://abu.edu.iq/news
+  sector: private
 - category: general
   enabled: true
   id: univ-alaslamya-news
@@ -453,6 +495,7 @@ sources:
   tier: university
   type: official
   url: https://iunajaf.edu.iq/category/%D8%A7%D8%AE%D8%A8%D8%A7%D8%B1
+  sector: private
 - category: general
   enabled: true
   id: univ-kafeel-news
@@ -465,6 +508,7 @@ sources:
   tier: university
   type: official
   url: https://alkafeel.edu.iq/news/view_list
+  sector: private
 - category: general
   enabled: true
   feed_url: https://altoosi.edu.iq/ar/feed/
@@ -473,6 +517,7 @@ sources:
   tier: university
   type: official
   url: https://altoosi.edu.iq/ar/%D8%A7%D9%84%D8%A7%D8%AE%D8%A8%D8%A7%D8%B1/
+  sector: private
 - category: general
   enabled: true
   id: college-rasheed-univ-news
@@ -486,6 +531,7 @@ sources:
   tier: university
   type: official
   url: https://www.alrasheedcol.edu.iq/news-c1
+  sector: private
 - category: general
   enabled: true
   feed_url: https://iuc.edu.iq/feed/
@@ -494,6 +540,7 @@ sources:
   tier: university
   type: official
   url: https://iuc.edu.iq/general-news/
+  sector: private
 - category: general
   enabled: true
   id: college-alhsyn-a-univ-news
@@ -506,6 +553,7 @@ sources:
   tier: university
   type: official
   url: https://www.huciraq.edu.iq/ar/category/1
+  sector: private
 - category: general
   enabled: false
   id: college-turath-univ-news
@@ -513,6 +561,7 @@ sources:
   tier: university
   type: official
   url: ''
+  sector: private
 - category: general
   enabled: false
   id: college-maarif-univ-news
@@ -520,6 +569,7 @@ sources:
   tier: university
   type: official
   url: ''
+  sector: private
 - category: general
   enabled: false
   id: college-salam-univ-news
@@ -527,6 +577,7 @@ sources:
   tier: university
   type: official
   url: ''
+  sector: private
 - category: general
   enabled: false
   id: college-city-elm-univ-news
@@ -534,6 +585,7 @@ sources:
   tier: university
   type: official
   url: ''
+  sector: private
 - category: general
   enabled: false
   id: college-dijlah-univ-news
@@ -541,6 +593,7 @@ sources:
   tier: university
   type: official
   url: ''
+  sector: private
 - category: general
   enabled: false
   id: univ-alamam-jafralsadq-a-news
@@ -548,6 +601,7 @@ sources:
   tier: university
   type: official
   url: ''
+  sector: private
 - category: general
   enabled: false
   id: college-sdr-iraq-univ-news
@@ -555,6 +609,7 @@ sources:
   tier: university
   type: official
   url: ''
+  sector: private
 - category: general
   enabled: false
   id: college-alqlm-univ-news
@@ -562,6 +617,7 @@ sources:
   tier: university
   type: official
   url: ''
+  sector: private
 - category: general
   enabled: false
   id: college-hikma-univ-news
@@ -569,6 +625,7 @@ sources:
   tier: university
   type: official
   url: ''
+  sector: private
 - category: general
   enabled: false
   id: univ-mustaqbal-news
@@ -576,6 +633,7 @@ sources:
   tier: university
   type: official
   url: ''
+  sector: private
 - category: general
   enabled: false
   id: college-alamam-aljamaa-bld-news
@@ -583,6 +641,7 @@ sources:
   tier: university
   type: official
   url: ''
+  sector: private
 - category: general
   enabled: false
   id: college-alasraa-univ-news
@@ -590,6 +649,7 @@ sources:
   tier: university
   type: official
   url: https://www.esraa.edu.iq/news-c1
+  sector: private
 - category: general
   enabled: true
   feed_url: https://almustafauniversity.edu.iq/feed/
@@ -598,6 +658,7 @@ sources:
   tier: university
   type: official
   url: https://almustafauniversity.edu.iq/%D9%86%D8%B4%D8%A7%D8%B7%D8%A7%D8%AA/
+  sector: private
 - category: general
   enabled: true
   id: college-almzaya-univ-news
@@ -610,6 +671,7 @@ sources:
   tier: university
   type: official
   url: https://www.mpu.edu.iq/news
+  sector: private
 - category: general
   enabled: true
   id: college-altf-univ-news
@@ -622,6 +684,7 @@ sources:
   tier: university
   type: official
   url: https://www.altuff.edu.iq/news
+  sector: private
 - category: general
   enabled: true
   feed_url: https://ouc.edu.iq/feed/
@@ -630,6 +693,7 @@ sources:
   tier: university
   type: official
   url: https://ouc.edu.iq/%D8%AC%D9%85%D9%8A%D8%B9-%D8%A7%D9%84%D8%A7%D8%AE%D8%A8%D8%A7%D8%B1/
+  sector: private
 - category: general
   enabled: true
   feed_url: https://alfarabiuc.edu.iq/feed/
@@ -643,6 +707,7 @@ sources:
   tier: university
   type: official
   url: https://alfarabiuc.edu.iq/news/
+  sector: private
 - category: general
   enabled: true
   id: college-kunuz-univ-news
@@ -656,6 +721,7 @@ sources:
   tier: university
   type: official
   url: https://www.kunoozu.edu.iq/news
+  sector: private
 - category: general
   enabled: true
   feed_url: https://alnukhba.edu.iq/feed/
@@ -669,6 +735,7 @@ sources:
   tier: university
   type: official
   url: https://alnukhba.edu.iq/%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1/
+  sector: private
 - category: general
   enabled: true
   feed_url: https://alsafwa.edu.iq/feed/
@@ -682,6 +749,7 @@ sources:
   tier: university
   type: official
   url: https://alsafwa.edu.iq/
+  sector: private
 - category: general
   enabled: true
   id: univ-alamyd-news
@@ -695,6 +763,7 @@ sources:
   tier: university
   type: official
   url: https://alameed.edu.iq/%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D8%AC%D8%A7%D9%85%D8%B9%D8%A9
+  sector: private
 - category: general
   enabled: true
   feed_url: https://uoalkitab.edu.iq/feed/
@@ -708,6 +777,7 @@ sources:
   tier: university
   type: official
   url: https://uoalkitab.edu.iq/news-en/
+  sector: private
 - category: general
   enabled: true
   id: univ-awrwk-private-news
@@ -721,6 +791,7 @@ sources:
   tier: university
   type: official
   url: https://www.uruk.edu.iq/
+  sector: private
 - category: general
   enabled: true
   id: univ-bayan-news
@@ -734,6 +805,7 @@ sources:
   tier: university
   type: official
   url: https://albayan.edu.iq/colleges/news/
+  sector: private
 - category: general
   enabled: true
   id: univ-warth-alanbyaa-news
@@ -747,6 +819,7 @@ sources:
   tier: university
   type: official
   url: https://uowa.edu.iq/arabic/universitynews
+  sector: private
 - category: general
   enabled: true
   feed_url: https://alnoor.edu.iq/ar/feed/
@@ -760,6 +833,7 @@ sources:
   tier: university
   type: official
   url: https://alnoor.edu.iq/ar/
+  sector: private
 - category: general
   enabled: true
   id: college-kut-univ-news
@@ -773,6 +847,7 @@ sources:
   tier: university
   type: official
   url: https://uokut.edu.iq/news
+  sector: private
 - category: general
   enabled: false
   id: college-hilla-univ-news
@@ -780,6 +855,7 @@ sources:
   tier: university
   type: official
   url: https://www.hilla-unc.edu.iq/
+  sector: private
 - category: general
   enabled: false
   id: univ-farahidi-news
@@ -787,6 +863,7 @@ sources:
   tier: university
   type: official
   url: https://www.alfarahidiuc.edu.iq/
+  sector: private
 - category: general
   enabled: false
   id: college-alfqh-univ-news
@@ -794,6 +871,7 @@ sources:
   tier: university
   type: official
   url: http://alfiqh.education/
+  sector: private
 - category: general
   enabled: false
   id: college-bilad-rafidain-univ-news
@@ -801,6 +879,7 @@ sources:
   tier: university
   type: official
   url: https://www.reg.bauc14.edu.iq/
+  sector: private
 - category: general
   enabled: false
   id: college-basra-sciences-technology-news
@@ -808,6 +887,7 @@ sources:
   tier: university
   type: official
   url: https://www.basrah-college.edu.iq/
+  sector: private
 - category: general
   enabled: false
   id: college-alhady-univ-news
@@ -815,6 +895,7 @@ sources:
   tier: university
   type: official
   url: https://www.huc.edu.iq/
+  sector: private
 - category: general
   enabled: false
   id: college-nusour-univ-news
@@ -822,6 +903,7 @@ sources:
   tier: university
   type: official
   url: https://www.nuc.edu.iq/
+  sector: private
 - category: general
   enabled: false
   id: univ-alwtnya-sciences-technology-news
@@ -829,6 +911,7 @@ sources:
   tier: university
   type: official
   url: https://nust.edu.iq/
+  sector: private
 - category: general
   enabled: false
   id: college-zahrawi-news
@@ -836,6 +919,7 @@ sources:
   tier: university
   type: official
   url: https://alzahu.edu.iq/news
+  sector: private
 - category: general
   enabled: true
   id: univ-alayn-news
@@ -848,6 +932,7 @@ sources:
   tier: university
   type: official
   url: https://alayen.edu.iq/news/view_list
+  sector: private
 - category: general
   enabled: true
   feed_url: https://alameen.edu.iq/feed/
@@ -856,6 +941,7 @@ sources:
   tier: university
   type: official
   url: https://alameen.edu.iq/%D8%A7%D9%84%D8%A7%D8%AE%D8%A8%D8%A7%D8%B1/
+  sector: private
 - category: general
   enabled: false
   id: college-ashwr-news
@@ -863,6 +949,7 @@ sources:
   tier: university
   type: official
   url: https://www.au.edu.iq/news_archive/1/normal?lang=ar
+  sector: private
 - category: general
   enabled: false
   id: college-almnara-news
@@ -870,6 +957,7 @@ sources:
   tier: university
   type: official
   url: https://uomanara.edu.iq/posts
+  sector: private
 - category: general
   enabled: true
   id: college-east-alawst-news
@@ -882,6 +970,7 @@ sources:
   tier: university
   type: official
   url: https://meuc.edu.iq/category/42
+  sector: private
 - category: general
   enabled: true
   feed_url: https://alamarahuc.edu.iq/feed/
@@ -890,6 +979,7 @@ sources:
   tier: university
   type: official
   url: https://alamarahuc.edu.iq/all_news/
+  sector: private
 - category: general
   enabled: false
   id: jnat-iraq-news
@@ -897,6 +987,7 @@ sources:
   tier: university
   type: official
   url: https://jic.edu.iq
+  sector: private
 - category: general
   enabled: true
   id: univ-zahraa-alyha-salam-llbnat-news
@@ -910,6 +1001,7 @@ sources:
   tier: university
   type: official
   url: https://alzahraa.edu.iq/ar/category/unversity-news
+  sector: private
 - category: general
   enabled: false
   id: univ-klkamsh-news
@@ -917,6 +1009,7 @@ sources:
   tier: university
   type: official
   url: https://www.gu.edu.iq/ar
+  sector: private
 - category: general
   enabled: true
   feed_url: https://auib.edu.iq/feed/
@@ -925,6 +1018,7 @@ sources:
   tier: university
   type: official
   url: https://auib.edu.iq/news/
+  sector: private
 - category: general
   enabled: true
   feed_url: https://almaaqal.edu.iq/category/%D8%A7%D9%84%D8%A7%D8%AE%D8%A8%D8%A7%D8%B1/feed/
@@ -933,6 +1027,7 @@ sources:
   tier: university
   type: official
   url: https://almaaqal.edu.iq/category/%d8%a7%d9%84%d8%a7%d8%ae%d8%a8%d8%a7%d8%b1/
+  sector: private
 - category: general
   enabled: false
   id: univ-mashriq-news
@@ -940,6 +1035,7 @@ sources:
   tier: university
   type: official
   url: https://www.uom.edu.iq/news/
+  sector: private
 - category: general
   enabled: false
   id: univ-sawa-news
@@ -947,6 +1043,7 @@ sources:
   tier: university
   type: official
   url: https://www.sawa-un.edu.iq
+  sector: private
 - category: general
   enabled: true
   id: college-alhda-news
@@ -960,6 +1057,7 @@ sources:
   tier: university
   type: official
   url: https://uoalhuda.edu.iq/news
+  sector: private
 - category: general
   enabled: true
   feed_url: https://ik.edu.iq/feed/
@@ -968,6 +1066,7 @@ sources:
   tier: university
   type: official
   url: https://ik.edu.iq/%d8%a7%d8%ae%d8%b1-%d8%a7%d9%84%d8%a7%d8%ae%d8%a8%d8%a7%d8%b1-2/
+  sector: private
 - category: general
   enabled: true
   id: college-alaml-sciences-medical-altkhssya-news
@@ -980,6 +1079,7 @@ sources:
   tier: university
   type: official
   url: https://www.alamal.edu.iq/ar/news/
+  sector: private
 - category: general
   enabled: true
   feed_url: https://alshaab.edu.iq/feed/
@@ -988,6 +1088,7 @@ sources:
   tier: university
   type: official
   url: https://alshaab.edu.iq/news/
+  sector: private
 - category: general
   enabled: false
   id: univ-alsraj-private-news
@@ -995,6 +1096,7 @@ sources:
   tier: university
   type: official
   url: https://www.uosj.edu.iq/
+  sector: private
 - category: general
   enabled: true
   id: college-east-sciences-tech-altkhssya-news
@@ -1008,6 +1110,7 @@ sources:
   tier: university
   type: official
   url: https://shau.edu.iq/ar/news
+  sector: private
 - category: general
   enabled: true
   id: univ-shl-nineveh-news
@@ -1021,6 +1124,7 @@ sources:
   tier: university
   type: official
   url: https://snu.edu.iq/news
+  sector: private
 - category: general
   enabled: true
   id: univ-qrtba-news
@@ -1033,6 +1137,7 @@ sources:
   tier: university
   type: official
   url: https://cur.edu.iq/news
+  sector: private
 - category: general
   enabled: false
   id: college-alqbs-private-news
@@ -1040,6 +1145,7 @@ sources:
   tier: university
   type: official
   url: https://alqabas.edu.iq/
+  sector: private
 - category: general
   enabled: true
   feed_url: https://alnaji-uni.edu.iq/feed/
@@ -1048,6 +1154,7 @@ sources:
   tier: university
   type: official
   url: https://alnaji-uni.edu.iq/blog/
+  sector: private
 - category: general
   enabled: true
   feed_url: https://ishtaruc.edu.iq/category/%D8%A7%D9%84%D8%A7%D8%AE%D8%A8%D8%A7%D8%B1/feed/
@@ -1056,6 +1163,7 @@ sources:
   tier: university
   type: official
   url: https://ishtaruc.edu.iq/category/%D8%A7%D9%84%D8%A7%D8%AE%D8%A8%D8%A7%D8%B1/
+  sector: private
 - category: general
   enabled: false
   id: univ-mhd-alhdarat-news
@@ -1063,6 +1171,7 @@ sources:
   tier: university
   type: official
   url: ''
+  sector: private
 - category: general
   enabled: false
   id: univ-mustansiriyah-news
@@ -1070,6 +1179,7 @@ sources:
   tier: university
   type: official
   url: https://uomustansiriyah.edu.iq/web_archive.php?id_dept=221&t=n&lang=ar
+  sector: public
 - category: general
   enabled: false
   id: univ-technology-news
@@ -1077,6 +1187,7 @@ sources:
   tier: university
   type: official
   url: https://uotechnology.edu.iq
+  sector: public
 - category: general
   enabled: false
   id: univ-alkwfa-news
@@ -1084,6 +1195,7 @@ sources:
   tier: university
   type: official
   url: https://uokufa.edu.iq/archives/category/اخبار
+  sector: public
 - category: general
   enabled: false
   id: univ-babylon-news
@@ -1091,6 +1203,7 @@ sources:
   tier: university
   type: official
   url: https://www.uobabylon.edu.iq/
+  sector: public
 - category: general
   enabled: false
   id: univ-shatra-news
@@ -1098,6 +1211,7 @@ sources:
   tier: university
   type: official
   url: ''
+  sector: public
 - category: general
   enabled: false
   id: college-amal-univ-news
@@ -1105,5 +1219,6 @@ sources:
   tier: university
   type: official
   url: ''
+  sector: private
 user_agent: MunjazAcademicCollector/1.0 (+https://github.com/alsobahi73-ui/munjaz-academic)
 version: 1
