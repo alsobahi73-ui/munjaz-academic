@@ -44,12 +44,79 @@
     </div>
   </header>
 
-  <aside id="officialNews" class="news-ticker" hidden aria-labelledby="officialNewsTitle">
+  <aside id="officialNews" class="news-ticker" aria-labelledby="officialNewsTitle">
     <div class="container news-ticker-inner">
       <h2 id="officialNewsTitle"><span class="dot" aria-hidden="true"></span>آخر الأخبار</h2>
-      <div class="news-ticker-viewport"><ul class="official-news-list"></ul></div>
+      <div class="news-ticker-viewport"><ul class="official-news-list"><li class="ticker-state"><span class="ticker-loading">جاري تحميل آخر الأخبار…</span></li></ul></div>
     </div>
   </aside>
+  <script>
+  // News ticker (inline to avoid ad-blocker/cache issues with external file).
+  (function () {
+    var section = document.getElementById('officialNews');
+    if (!section) return;
+    var list = section.querySelector('ul');
+    if (!list) return;
+    function setState(msg, cls) {
+      list.innerHTML = '<li class="ticker-state"><span class="' + (cls || '') + '">' + msg + '</span></li>';
+    }
+    function buildRow(title, url, source) {
+      var row = document.createElement('li');
+      var link = document.createElement('a');
+      link.href = url; link.textContent = title;
+      link.target = '_blank'; link.rel = 'noopener noreferrer';
+      row.appendChild(link);
+      if (source) {
+        var chip = document.createElement('span');
+        chip.className = 'ticker-source';
+        chip.textContent = source;
+        row.appendChild(chip);
+      }
+      return row;
+    }
+    function pace() {
+      list.innerHTML += list.innerHTML;
+      requestAnimationFrame(function () {
+        try {
+          var half = list.scrollWidth / 2;
+          if (half > 100) {
+            var seconds = Math.min(160, Math.max(60, Math.round(half / 50)));
+            list.style.animationDuration = seconds + 's';
+          }
+        } catch (e) {}
+      });
+    }
+    function render(items) {
+      list.innerHTML = '';
+      var count = 0;
+      var rev = items.slice().reverse();
+      for (var i = 0; i < rev.length && count < 15; i++) {
+        var item = rev[i];
+        if (!item || typeof item.title !== 'string' || !item.title.trim() ||
+            typeof item.source !== 'string' || !item.source.trim() ||
+            item.title.indexOf('تجريبي:') !== -1) continue;
+        var url;
+        try { url = new URL(item.url); } catch (e) { continue; }
+        if ((url.protocol !== 'https:' && url.protocol !== 'http:') || url.username || url.password) continue;
+        list.appendChild(buildRow(item.title.trim(), url.href, item.source.trim()));
+        count++;
+      }
+      if (!count) { setState('لا توجد أخبار متاحة حالياً', 'ticker-error'); return; }
+      pace();
+    }
+    var controller = null;
+    try { controller = new AbortController(); setTimeout(function () { controller.abort(); }, 15000); } catch (e) {}
+    fetch('news.json', { cache: 'no-cache', signal: controller ? controller.signal : undefined })
+      .then(function (r) { if (!r.ok) throw new Error('feed_unavailable'); return r.json(); })
+      .then(function (items) {
+        if (!Array.isArray(items) || !items.length) throw new Error('empty_feed');
+        render(items);
+      })
+      .catch(function () {
+        setState('تعذر تحميل الأخبار — تحقق من الاتصال بالإنترنت ثم حدث الصفحة', 'ticker-error');
+      });
+  })();
+  </script>
 
   <main id="main">
     <!-- ============ Hero ============ -->
@@ -917,7 +984,7 @@
 
   <script src="academic-services-config.js"></script>
   <script src="app.js"></script>
-  <script src="scripts/news-feed.js" defer></script>
+
   <script src="scripts/news-section.js" defer></script>
 </body>
 </html>
