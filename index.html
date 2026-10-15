@@ -160,28 +160,8 @@
               card.appendChild(img);
             } else {
               var ph = document.createElement('div');
-              ph.className = 'featured-photo placeholder avatar-initials';
-              ph.textContent = getInitials(p.name);
-              ph.style.background = getAvatarColor(p.name);
+              ph.className = 'featured-photo placeholder'; ph.textContent = '🎓';
               card.appendChild(ph);
-            }
-            function getInitials(name) {
-              if (!name) return '?';
-              var parts = name.trim().split(/\s+/);
-              if (parts.length >= 2) return parts[0][0] + parts[1][0];
-              return parts[0].substring(0, 2);
-            }
-            function getAvatarColor(name) {
-              var colors = [
-                'linear-gradient(135deg, #0E6B66, #06302C)',
-                'linear-gradient(135deg, #B97A12, #8a5a00)',
-                'linear-gradient(135deg, #0E6B66, #1a9e97)',
-                'linear-gradient(135deg, #6b4fa0, #4a3572)',
-                'linear-gradient(135deg, #c0563f, #8f3d2c)'
-              ];
-              var h = 0;
-              for (var i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) % 100000;
-              return colors[h % colors.length];
             }
             var name = document.createElement('h3'); name.className = 'featured-name'; name.textContent = p.name;
             var deg = document.createElement('span'); deg.className = 'featured-degree'; deg.textContent = p.degree || '';
@@ -205,11 +185,39 @@
           dotsWrap.appendChild(d);
         });
         function restart() { if (timer) clearInterval(timer); timer = setInterval(function () { show(idx + 1); }, 6000); }
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', function () { openModal(people[idx]); });
         card.addEventListener('mouseenter', function () { if (timer) clearInterval(timer); });
         card.addEventListener('mouseleave', restart);
         show(0); restart();
       })
       .catch(function () {});
+  })();
+  // Researcher modal
+  function openModal(p) {
+    var modal = document.getElementById('researcherModal');
+    var body = document.getElementById('modalBody');
+    if (!modal || !body || !p) return;
+    var initials = (p.name || '?').trim().split(/\s+/).slice(0,2).map(function(w){return w[0];}).join('');
+    body.innerHTML =
+      '<div class="modal-photo">' + (p.photo ? '<img src="' + p.photo + '" alt="' + p.name + '">' : '<div class="modal-avatar">' + initials + '</div>') + '</div>' +
+      '<h3>' + esc(p.name) + '</h3>' +
+      '<p class="modal-degree">' + esc(p.degree || '') + '</p>' +
+      '<p class="modal-univ">' + esc(p.university || '') + (p.department ? ' — ' + esc(p.department) : '') + '</p>' +
+      '<div class="modal-thesis">«' + esc(p.thesis || '') + '»</div>' +
+      '<p class="modal-summary">' + esc(p.summary || '') + '</p>' +
+      (p.source ? '<a href="' + esc(p.source) + '" target="_blank" rel="noopener" class="btn btn-primary">المصدر ←</a>' : '');
+    modal.hidden = false;
+    document.body.style.overflow = 'hidden';
+    function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  }
+  (function(){
+    var modal = document.getElementById('researcherModal');
+    if(!modal) return;
+    document.getElementById('modalClose').addEventListener('click', closeModal);
+    document.getElementById('modalBackdrop').addEventListener('click', closeModal);
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModal(); });
+    function closeModal(){ modal.hidden = true; document.body.style.overflow = ''; }
   })();
   </script>
   
@@ -282,10 +290,10 @@
           <h2 id="defensesPreviewTitle">المناقشات</h2>
           <p>باحثون ناقشوا حديثًا في الجامعات العراقية.</p>
         </header>
-        <div class="featured-wrap attraction-only" id="featuredWrapHome">
+        <div class="featured-wrap" id="featuredWrapHome">
           <div class="featured-card" id="featuredCardHome"></div>
           <div class="featured-dots" id="featuredDotsHome"></div>
-          <p style="text-align:center;margin-top:1rem"><span class="btn btn-primary">جميع المناقشات ←</span></p>
+          <p style="text-align:center;margin-top:1rem"><a class="btn btn-primary" href="defenses.html">جميع المناقشات ←</a></p>
         </div>
       </div>
     </section>
@@ -297,11 +305,11 @@
           <h2 id="jobsTitle">بوابة الباحثين عن التعيين</h2>
           <p>سجّل معلوماتك الأساسية لنرشحك للفرص الأكاديمية المناسبة لتخصصك.</p>
         </header>
-        <div class="portal-card clickable-card" onclick="window.location.href='jobs.html'" role="link" tabindex="0" onkeydown="if(event.key==='Enter')window.location.href='jobs.html'">
+        <div class="portal-card">
           <div class="portal-icon"><span>💼</span></div>
           <h3>هل تبحث عن فرصة أكاديمية؟</h3>
           <p>ادخل البوابة وسجّل بياناتك: الشهادة، التخصص، العمر، ومحافظة السكن — وسنطابقك مع الفرص المناسبة.</p>
-          <span class="btn btn-primary btn-lg">ادخل البوابة ←</span>
+          <a class="btn btn-primary btn-lg" href="jobs.html">ادخل البوابة ←</a>
         </div>
       </div>
     </section>
@@ -313,11 +321,11 @@
           <h2 id="oppTitle">فرص وظيفية</h2>
           <p>أحدث إعلانات التوظيف الأكاديمي.</p>
         </header>
-        <div class="portal-card clickable-card" onclick="window.location.href='jobs.html'" role="link" tabindex="0" onkeydown="if(event.key==='Enter')window.location.href='jobs.html'">
+        <div class="portal-card">
           <div class="portal-icon"><span>📢</span></div>
           <h3>وظائف شاغرة الآن</h3>
           <p>تصفح أحدث إعلانات التوظيف في الجامعات العراقية الأهلية والحكومية.</p>
-          <span class="btn btn-primary btn-lg">عرض الفرص ←</span>
+          <a class="btn btn-primary btn-lg" href="jobs.html">عرض الفرص ←</a>
         </div>
       </div>
     </section>
@@ -1121,5 +1129,13 @@
   <script src="academic-services-config.js"></script>
   <script src="app.js"></script>
 
+<!-- Researcher details modal -->
+<div class="researcher-modal" id="researcherModal" hidden>
+  <div class="researcher-modal-backdrop" id="modalBackdrop"></div>
+  <div class="researcher-modal-content" role="dialog" aria-modal="true">
+    <button class="modal-close" id="modalClose" aria-label="إغلاق">✕</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
 </body>
 </html>
