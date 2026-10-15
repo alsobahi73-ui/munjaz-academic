@@ -893,3 +893,19 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
 .trio-wrap .featured-photo.avatar-initials { font-size: 1.8rem; }
 .trio-wrap .featured-name { font-size: 1.1rem; }
 .trio-wrap .featured-card { min-height: 300px; padding: 1.5rem 1rem; }
+
+/* ===== Researcher badge ===== */
+.featured-photo-wrap { position: relative; display: inline-block; margin: 0 auto; }
+.researcher-badge {
+  position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);
+  background: linear-gradient(135deg, #B97A12, #8a5a00); color: #fff;
+  font-size: .75rem; font-weight: 800; padding: .25rem .9rem; border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.2); white-space: nowrap;
+  border: 2px solid #fff;
+}
+.trio-wrap .featured-photo-wrap { margin-bottom: .5rem; }
+/* Distinctive photo */
+.trio-wrap .featured-photo {
+  border: 4px solid #B97A12;
+  box-shadow: 0 6px 20px rgba(185,122,18,.3);
+}
