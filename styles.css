@@ -660,3 +660,23 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
 .job-listing-card details p { margin: .75rem 0 0; font-size: .92rem; color: #555; line-height: 1.9; }
 .job-listing-link { color: #B97A12; font-weight: 700; text-decoration: none; }
 .job-listing-link:hover { text-decoration: underline; }
+
+/* ===== Refined icon system: compact & professional ===== */
+.section-head h2 { font-size: clamp(1.4rem, 3vw, 1.9rem); }
+.portal-icon { font-size: 2.8rem; margin-bottom: .75rem; }
+.section-head { margin-bottom: 1.75rem; }
+.section-head p { font-size: .98rem; margin-top: .5rem; }
+.duo-wrap .section-head h2 { font-size: 1.25rem; }
+.job-listing-meta span { font-size: .85rem; }
+.featured-wrap { margin: 1.5rem auto; }
+.featured-title { font-size: 1.2rem; margin-bottom: 1rem; }
+.featured-card { padding: 1.75rem 1.5rem; min-height: 380px; }
+.featured-photo { width: 150px; height: 150px; }
+.featured-photo.placeholder { font-size: 3rem; }
+.featured-name { font-size: 1.25rem; }
+.job-listings-wrap h3 { font-size: 1.1rem; margin-bottom: 1rem; }
+.job-listing-card { padding: 1.2rem 1.4rem; }
+.job-listing-head h4 { font-size: 1.05rem; }
+.portal-card { padding: 2rem 1.75rem; }
+.portal-card h3 { font-size: 1.15rem; }
+.portal-card p { font-size: .95rem; margin-bottom: 1.25rem; }
