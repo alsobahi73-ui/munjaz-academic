@@ -1111,9 +1111,9 @@
           var bg = colors[idx % colors.length];
           var photoHtml;
           if (p.photo) {
-            photoHtml = '<img class="featured-photo" src="' + esc(p.photo) + '" alt="' + esc(p.name) + '">';
+            photoHtml = '<img class="featured-photo" src="' + esc(p.photo) + '" alt="' + esc(p.name) + '" style="width:64px;height:64px;">';
           } else {
-            photoHtml = '<div class="featured-photo avatar-initials" style="background:' + bg + '">' + esc(initials(p.name)) + '</div>';
+            photoHtml = '<div class="featured-photo avatar-initials" style="background:' + bg + ';width:64px;height:64px;">' + esc(initials(p.name)) + '</div>';
           }
           card.innerHTML = '<div class="featured-photo-wrap">' + photoHtml + '<span class="researcher-badge">باحث</span></div>' +
             '<h3 class="featured-name">' + esc(p.name) + '</h3>' +
