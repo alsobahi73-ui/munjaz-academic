@@ -781,14 +781,15 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
   .trio-wrap .section-head p { display: none; }
 }
 
-/* ===== Tools: horizontal layout ===== */
-#tools .tool-tiles { display: flex; gap: 1.25rem; overflow-x: auto; padding-bottom: 1rem; scroll-snap-type: x mandatory; }
-#tools .tool-tile { flex: 0 0 240px; scroll-snap-align: start; }
-#tools .tool-tiles::-webkit-scrollbar { height: 8px; }
-#tools .tool-tiles::-webkit-scrollbar-track { background: #e6f0ee; border-radius: 4px; }
-#tools .tool-tiles::-webkit-scrollbar-thumb { background: var(--teal); border-radius: 4px; }
-@media (min-width: 1200px) {
-  #tools .tool-tiles { justify-content: center; overflow-x: visible; flex-wrap: nowrap; }
+/* ===== Tools: compact 2-row grid ===== */
+#tools .tool-tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; max-width: 1000px; margin: 0 auto; }
+#tools .tool-tile { padding: 1.25rem .9rem; }
+#tools .tool-tile .tile-icon svg { width: 26px; height: 26px; }
+#tools .tool-tile strong { font-size: .98rem; }
+#tools .tool-tile small { font-size: .8rem; }
+#tools .tool-tile .tool-code { font-size: .7rem; }
+@media (max-width: 800px) {
+  #tools .tool-tiles { grid-template-columns: repeat(2, 1fr); }
 }
 
 /* ===== Services: balanced horizontal ===== */
