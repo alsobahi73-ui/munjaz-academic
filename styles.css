@@ -916,3 +916,9 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
 .trio-wrap .featured-photo-wrap { margin-bottom: .75rem; }
 .trio-wrap .researcher-badge { font-size: .65rem; padding: .15rem .7rem; bottom: -6px; }
 .trio-wrap .featured-card { min-height: 280px; justify-content: center; }
+
+/* ===== Trio headers: refined arrangement ===== */
+.trio-wrap .section-head { text-align: center; margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 2px solid #e8f0ee; }
+.trio-wrap .section-head h2 { font-size: 1.15rem; font-weight: 800; color: #06302C; margin: 0 0 .5rem; display: flex; align-items: center; justify-content: center; gap: .6rem; }
+.trio-wrap .section-head h2::before, .trio-wrap .section-head h2::after { content: ""; width: 8px; height: 8px; background: #B97A12; transform: rotate(45deg); flex-shrink: 0; }
+.trio-wrap .section-head p { font-size: .88rem; color: #666; margin: 0; line-height: 1.6; }
