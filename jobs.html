@@ -23,11 +23,6 @@
       <h2>💼 بوابة الباحثين عن التعيين</h2>
       <p>سجّل معلوماتك الأساسية لنرشحك للفرص الأكاديمية المناسبة لتخصصك.</p>
     </header>
-    <div class="job-listings-wrap">
-      <h3>📢 أحدث إعلانات التوظيف</h3>
-      <div class="job-listings" id="jobListings">
-        <p class="muted">جارٍ التحميل…</p>
-      </div>
     </div>
     <form class="job-form" id="jobSeekerForm" novalidate>
       <div class="form-grid">
@@ -123,43 +118,6 @@
       status.textContent = 'تعذر الإرسال — حاول مرة أخرى لاحقًا.';
     });
   });
-})();
-</script>
-<script>
-(function () {
-  var wrap = document.getElementById('jobListings');
-  if (!wrap) return;
-  fetch('job-listings.json', { cache: 'no-cache' })
-    .then(function (r) { return r.json(); })
-    .then(function (jobs) {
-      if (!jobs || !jobs.length) {
-        wrap.innerHTML = '<p class="muted">لا توجد إعلانات حاليًا.</p>';
-        return;
-      }
-      wrap.innerHTML = '';
-      jobs.forEach(function (j) {
-        var card = document.createElement('article');
-        card.className = 'job-listing-card';
-        card.innerHTML =
-          '<div class="job-listing-head"><h4>' + esc(j.title) + '</h4>' +
-          '<span class="job-listing-univ">' + esc(j.university) + '</span></div>' +
-          '<p>' + esc(j.description) + '</p>' +
-          '<div class="job-listing-meta">' +
-          '<span>🎓 ' + esc(j.requirements) + '</span>' +
-          (j.date ? '<span>📅 ' + esc(j.date) + '</span>' : '') +
-          (j.contact ? '<span>📞 ' + esc(j.contact) + '</span>' : '') +
-          '</div>' +
-          (j.specializations ? '<details><summary>التخصصات المطلوبة</summary><p>' + esc(j.specializations) + '</p></details>' : '') +
-          (j.source ? '<a href="' + esc(j.source) + '" target="_blank" rel="noopener" class="job-listing-link">عرض الإعلان الأصلي ←</a>' : '');
-        wrap.appendChild(card);
-      });
-      function esc(s) {
-        return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-      }
-    })
-    .catch(function () {
-      wrap.innerHTML = '<p class="muted">تعذر تحميل الإعلانات.</p>';
-    });
 })();
 </script>
 </body>
