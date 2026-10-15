@@ -926,3 +926,11 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
 /* ===== Trio headers: strong brand identity ===== */
 .trio-wrap .section-head h2 { color: #0E6B66; }
 .trio-wrap .trio-col:nth-child(2) .section-head { background: linear-gradient(180deg, rgba(14,107,102,.06), transparent); border-radius: 12px; padding: 1rem; margin: -1rem -1rem 1.25rem; }
+
+/* ===== Portal icons: free-tools theme ===== */
+.portal-icon.tools-theme {
+  width: 72px; height: 72px; display: grid; place-items: center;
+  border-radius: 20px; background: linear-gradient(135deg, var(--teal-dark), var(--teal));
+  border: none; margin: 0 auto 1rem;
+}
+.portal-icon.tools-theme::after { display: none; }
