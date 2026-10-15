@@ -1058,7 +1058,7 @@
       $('#fPass').hidden = local;              // لا كلمة مرور في الوضع المحلي
       $('#authLogout').textContent = local ? 'حذف ملفي من هذا الجهاز' : 'تسجيل الخروج';
       $('#authModeNote').textContent = local
-        ? 'ملف محلي: يُحفظ اسمك وبريدك وفئتك على هذا الجهاز فقط ولا يُرسل إلى أي خادم، ولا يوجد حساب سحابي بعد.'
+        ? 'ملف محلي اختياري: يُحفظ اسمك وبريدك وفئتك في متصفح هذا الجهاز فقط، ولا تُرسل هذه البيانات إلى خادم. لا ينتقل الملف إلى جهاز آخر، وقد يُحذف عند مسح بيانات المتصفح. لا يوجد حساب سحابي مفعّل حاليًا.'
         : 'نستخدم بريدك الإلكتروني لتسجيل الدخول فقط. ولا يلزمك أي حساب لاستخدام المنصة.';
       this.setMode('signup');
     },
@@ -1091,7 +1091,7 @@
       const u = this.user;
       $('#authGuest').hidden = !!u;
       $('#authUser').hidden = !u;
-      $('#authTitle').textContent = u ? '👤 حسابك' : '👤 حسابك (اختياري)';
+      $('#authTitle').textContent = this.isLocal() ? 'ملفي على هذا الجهاز (اختياري)' : (u ? 'حسابك' : 'حسابك (اختياري)');
       if (u) {
         $('#accName').textContent = u.name;
         $('#accEmail').textContent = u.email;
@@ -1102,7 +1102,7 @@
 
     setUser(u) {
       this.user = u;
-      $('#authBtnText').textContent = u ? u.name.split(' ')[0] : 'تسجيل / دخول';
+      $('#authBtnText').textContent = u ? u.name.split(' ')[0] : (this.isLocal() ? 'ملفي على هذا الجهاز' : 'تسجيل / دخول');
       if (u) {
         const p = store.get(LS.profile);
         if (p && p.email === u.email && p.audience) setAudience(p.audience, false); // يتذكّر فئتك

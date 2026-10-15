@@ -35,6 +35,7 @@
       .latest-ticker-copy, .latest-ticker-repeat { display: none; }
     }
   </style>
+  <link rel="stylesheet" href="career-panels.css">
 </head>
 <body>
   <a class="skip-link" href="#main">تخطَّ إلى المحتوى</a>
@@ -61,12 +62,16 @@
         <a href="#assistant">المساعد البحثي</a>
         <a href="services.html">خدماتنا الأكاديمية</a>
         <a href="#library">المكتبة والموارد</a>
-        <a href="#news">أخبار التعليم العالي</a>
+        <a href="defenses.html">المناقشات</a>
+        <a href="jobs.html">الباحثون عن التعيين</a>
+        <a href="opportunities.html">فرص وظيفية</a>
         <button type="button" class="btn btn-teal btn-sm" data-open-charter>ميثاق النزاهة</button>
         <button type="button" class="btn btn-light-outline btn-sm" id="authBtn" data-open-auth aria-haspopup="dialog">👤 <span id="authBtnText">تسجيل / دخول</span></button>
       </nav>
     </div>
   </header>
+
+
 
 
   <main id="main">
@@ -148,6 +153,44 @@
         <div class="news-more"><a class="btn btn-teal" href="news.html">عرض كل الأخبار ←</a></div>
       </div>
     </section>
+
+    <!-- ============ Defenses + Jobs side-by-side ============ -->
+    <div class="trio-wrap career-panels" aria-label="المناقشات والمسار المهني">
+      <section class="career-panel" id="defenses-preview" aria-labelledby="defensesPreviewTitle">
+        <h2 id="defensesPreviewTitle">المناقشات العلمية</h2>
+        <div class="researcher-spotlight" data-researcher-carousel>
+          <button class="career-art researcher-photo-button" type="button" data-researcher-open disabled aria-label="تفاصيل المناقشة">
+            <span class="researcher-avatar" aria-hidden="true"><svg viewBox="0 0 120 120" width="120" height="120" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="60" cy="40" r="18"/><path d="M25 101v-8c0-31 70-31 70 0v8M44 74l16 14 16-14"/><path d="M20 17h22M20 25h14" stroke="#B97A12"/></svg></span>
+          </button>
+          <div class="researcher-caption" data-researcher-caption><p role="status">جارٍ تحميل المناقشات…</p></div>
+          <div class="researcher-controls" data-researcher-controls hidden>
+            <button type="button" data-researcher-prev aria-label="الباحث السابق">→</button>
+            <span data-researcher-count></span>
+            <button type="button" data-researcher-next aria-label="الباحث التالي">←</button>
+            <button type="button" data-researcher-pause aria-pressed="false">إيقاف التقليب</button>
+          </div>
+        </div>
+        <a class="career-action" href="defenses.html">جميع المناقشات <span aria-hidden="true">←</span></a>
+      </section>
+      <section class="career-panel" id="jobs" aria-labelledby="jobsTitle">
+        <h2 id="jobsTitle">أبحث عن تعيين</h2>
+        <a class="career-destination" href="jobs.html">
+          <span class="career-art"><svg viewBox="0 0 120 120" width="120" height="120" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="22" y="14" width="62" height="88" rx="8"/><circle cx="48" cy="39" r="10"/><path d="M32 65c0-16 32-16 32 0M33 78h24M33 88h18"/><circle cx="83" cy="78" r="16" fill="#E7F2F1" stroke="#B97A12"/><path d="m95 91 13 13" stroke="#B97A12"/></svg></span>
+          <h3>خطوتك نحو فرصة أكاديمية</h3>
+          <p>استعرض بوابة الباحثين عن التعيين وخيارات تسجيل مؤهلاتك وتخصصك.</p>
+          <span class="career-action">دخول البوابة <span aria-hidden="true">←</span></span>
+        </a>
+      </section>
+      <section class="career-panel" id="opportunities" aria-labelledby="oppTitle">
+        <h2 id="oppTitle">فرص تعيين</h2>
+        <a class="career-destination" href="opportunities.html">
+          <span class="career-art"><svg viewBox="0 0 120 120" width="120" height="120" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="17" y="37" width="86" height="61" rx="8"/><path d="M43 37V26a6 6 0 0 1 6-6h22a6 6 0 0 1 6 6v11M17 58c23 10 63 10 86 0"/><rect x="50" y="57" width="20" height="15" rx="3" fill="#E7F2F1"/><circle cx="94" cy="27" r="16" fill="#E7F2F1" stroke="#B97A12"/><path d="M94 19v16M86 27h16" stroke="#B97A12"/></svg></span>
+          <h3>فرص عمل وتعيين معلنة</h3>
+          <p>تصفّح إعلانات الوظائف الأكاديمية، وتحقق من الشروط والتفاصيل لدى المصدر.</p>
+          <span class="career-action">عرض الفرص <span aria-hidden="true">←</span></span>
+        </a>
+      </section>
+    </div>
 
     <!-- ============ Academic services ============ -->
     <section class="section" id="services" aria-labelledby="servicesTitle">
@@ -804,9 +847,9 @@
           <p>ثلاث خطوات واضحة وشفافة.</p>
         </header>
         <ol class="steps">
-          <li><span class="step-num">1</span><h3>اختر فئتك وخدمتك</h3><p>حدّد من أنت ثم اختر الخدمة الأقرب لاحتياجك.</p></li>
-          <li><span class="step-num">2</span><h3>املأ نموذج الطلب</h3><p>حدّد تفاصيل احتياجك في النموذج الموحد وجهّز طلبك للتواصل.</p></li>
-          <li><span class="step-num">3</span><h3>نُنجز معك</h3><p>نعمل معك خطوة بخطوة ضمن ميثاق النزاهة، وتبقى أنت صاحب العمل.</p></li>
+          <li><h3>اختر فئتك وخدمتك</h3><p>حدّد من أنت ثم اختر الخدمة الأقرب لاحتياجك.</p></li>
+          <li><h3>املأ نموذج الطلب</h3><p>حدّد تفاصيل احتياجك في النموذج الموحد وجهّز طلبك للتواصل.</p></li>
+          <li><h3>نُنجز معك</h3><p>نعمل معك خطوة بخطوة ضمن ميثاق النزاهة، وتبقى أنت صاحب العمل.</p></li>
         </ol>
       </div>
     </section>
@@ -815,20 +858,25 @@
     <section class="section integrity" id="integrity" aria-labelledby="integrityTitle">
       <div class="container integrity-inner">
         <div>
-          <h2 id="integrityTitle">🛡️ ميثاق النزاهة</h2>
+          <h2 id="integrityTitle">ميثاق النزاهة</h2>
           <p>نلتزم بمعايير النزاهة الأكاديمية. نساعد في <strong>التدقيق والتنسيق والإنجاز</strong> فقط، ولا نكتب الرسائل أو البحوث نيابة عن أحد.</p>
         </div>
         <button type="button" class="btn btn-teal" data-open-charter>اقرأ الميثاق كاملاً</button>
       </div>
     </section>
     <section class="section faq-section" aria-labelledby="faqTitle">
-      <div class="container">
-        <h2 id="faqTitle">الأسئلة الشائعة</h2>
-        <details class="faq-item" name="faq"><summary>كيف أطلب خدمة؟</summary><p>اضغط «اطلب خدمة»، واختر الخدمة ووضّح احتياجك في النموذج، ثم أرسل الطلب بعد الموافقة على الإقرار.</p></details>
-        <details class="faq-item" name="faq"><summary>كيف تُحتسب الأسعار؟</summary><p>تُحدّد التكلفة بحسب نوع الخدمة ونطاق العمل بعد مراجعة طلبك، ويُتفق عليها قبل البدء.</p></details>
-        <details class="faq-item" name="faq"><summary>ما سياسة النزاهة الأكاديمية؟</summary><p>نقدّم التدقيق والتنسيق والإرشاد بالتعاون معك؛ لا نكتب الأعمال نيابةً عنك ولا نزيّف البيانات، وتبقى مسؤولية العمل وأصالته لك.</p></details>
-        <details class="faq-item" name="faq"><summary>كم تستغرق الخدمة؟</summary><p>تعتمد المدة على نطاق الطلب ومتطلباته، ويُتفق على موعد الإنجاز بعد مراجعته.</p></details>
-        <details class="faq-item" name="faq"><summary>هل بياناتي سرية؟</summary><p>تُرسل تفاصيل الطلب وبيانات التواصل التي تضيفها إلى فريق مُنجز أكاديمي عبر تيليجرام لمعالجة طلبك؛ تجنّب إرفاق بيانات حساسة غير لازمة.</p></details>
+      <div class="container faq-container">
+        <header class="section-head">
+          <h2 id="faqTitle">الأسئلة الشائعة</h2>
+          <p>إجابات سريعة عن أكثر ما يسأل عنه الباحثون.</p>
+        </header>
+        <div class="faq-list">
+        <details class="faq-item" name="faq"><summary>كيف أطلب خدمة؟</summary><div class="faq-answer"><p>اضغط «اطلب خدمة»، واختر الخدمة ووضّح احتياجك في النموذج، ثم أرسل الطلب بعد الموافقة على الإقرار.</p></div></details>
+        <details class="faq-item" name="faq"><summary>كيف تُحتسب الأسعار؟</summary><div class="faq-answer"><p>تُحدّد التكلفة بحسب نوع الخدمة ونطاق العمل بعد مراجعة طلبك، ويُتفق عليها قبل البدء.</p></div></details>
+        <details class="faq-item" name="faq"><summary>ما سياسة النزاهة الأكاديمية؟</summary><div class="faq-answer"><p>نقدّم التدقيق والتنسيق والإرشاد بالتعاون معك؛ لا نكتب الأعمال نيابةً عنك ولا نزيّف البيانات، وتبقى مسؤولية العمل وأصالته لك.</p></div></details>
+        <details class="faq-item" name="faq"><summary>كم تستغرق الخدمة؟</summary><div class="faq-answer"><p>تعتمد المدة على نطاق الطلب ومتطلباته، ويُتفق على موعد الإنجاز بعد مراجعته.</p></div></details>
+        <details class="faq-item" name="faq"><summary>هل بياناتي سرية؟</summary><div class="faq-answer"><p>تُرسل تفاصيل الطلب وبيانات التواصل التي تضيفها إلى فريق مُنجز أكاديمي عبر تيليجرام لمعالجة طلبك؛ تجنّب إرفاق بيانات حساسة غير لازمة.</p></div></details>
+        </div>
       </div>
     </section>
   </main>
@@ -1022,5 +1070,6 @@
       } catch { /* No news or unavailable feed: keep the ticker hidden. */ }
     })();
   </script>
+  <script src="scripts/researcher-carousel.js" defer></script>
 </body>
 </html>

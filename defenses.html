@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>مناقشات الماجستير والدكتوراه | مُنجز أكاديمي</title>
+  <meta name="description" content="أخبار مناقشات رسائل الماجستير وأطروحات الدكتوراه في الجامعات العراقية — تُجمَع تلقائيًا مع إمكانية إضافة إعلان مناقشة.">
+  <meta name="theme-color" content="#0E6B66">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .defenses-hero { background: linear-gradient(135deg, #06302C, #0E6B66); color: #fff; padding: 3rem 0; text-align: center; }
+    .defenses-hero h1 { font-size: 2rem; margin: 0 0 .5rem; }
+    .defenses-hero p { opacity: .85; margin: 0; }
+    .defense-tabs { display: flex; gap: .75rem; justify-content: center; margin: 2rem 0; flex-wrap: wrap; }
+    .defense-tab { border: 2px solid #0E6B66; background: #fff; color: #0E6B66; border-radius: 999px; padding: .6rem 1.5rem; font-weight: 700; cursor: pointer; font-family: inherit; }
+    .defense-tab.active { background: #0E6B66; color: #fff; }
+    .defense-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.25rem; margin-bottom: 3rem; }
+    .defense-card { background: #fff; border: 1px solid rgba(14,107,102,.15); border-radius: 14px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,.05); }
+    .defense-card img { width: 100%; height: 180px; object-fit: cover; display: block; }
+    .defense-card-body { padding: 1.25rem; display: flex; flex-direction: column; gap: .5rem; }
+    .defense-degree { display: inline-block; font-size: .75rem; font-weight: 700; border-radius: 999px; padding: .2rem .8rem; }
+    .defense-degree.master { background: #E8F4F3; color: #0E6B66; }
+    .defense-degree.phd { background: #FFF3D6; color: #8a5a00; }
+    .defense-card h3 { font-size: 1rem; margin: 0; line-height: 1.8; }
+    .defense-card h3 a { color: inherit; text-decoration: none; }
+    .defense-card h3 a:hover { color: #0E6B66; text-decoration: underline; }
+    .defense-meta { font-size: .82rem; color: #666; }
+    .defense-form { background: #f8fafa; border: 1px solid rgba(14,107,102,.15); border-radius: 14px; padding: 2rem; max-width: 640px; margin: 0 auto 3rem; }
+    .defense-form label { display: block; font-weight: 700; margin: 1rem 0 .35rem; }
+    .defense-form input, .defense-form select, .defense-form textarea { width: 100%; border: 1px solid #ccc; border-radius: 8px; padding: .6rem .8rem; font-family: inherit; font-size: .95rem; }
+    .defense-form textarea { min-height: 90px; resize: vertical; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+    .form-note { font-size: .85rem; color: #666; margin-top: 1rem; }
+    .form-success { background: #E8F4F3; color: #0E6B66; border-radius: 8px; padding: 1rem; margin-top: 1rem; display: none; font-weight: 700; }
+    /* Featured researchers carousel */
+    .featured-wrap { max-width: 720px; margin: 2.5rem auto; text-align: center; }
+    .featured-title { font-size: 1.4rem; color: #0E6B66; margin-bottom: 1.5rem; }
+    .featured-card { background: #fff; border-radius: 20px; box-shadow: 0 8px 30px rgba(14,107,102,.15); padding: 2.5rem 2rem; border: 3px solid #B97A12; min-height: 420px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; transition: opacity .5s; }
+    .featured-photo { width: 200px; height: 200px; border-radius: 50%; object-fit: cover; border: 5px solid #B97A12; box-shadow: 0 4px 15px rgba(0,0,0,.15); }
+    .featured-photo.placeholder { display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #0E6B66, #06302C); color: #fff; font-size: 4rem; }
+    .featured-name { font-size: 1.5rem; font-weight: 800; color: #06302C; margin: 0; }
+    .featured-degree { display: inline-block; font-size: .85rem; font-weight: 700; border-radius: 999px; padding: .3rem 1rem; background: #FFF3D6; color: #8a5a00; }
+    .featured-univ { color: #0E6B66; font-weight: 700; }
+    .featured-thesis { font-style: italic; color: #444; }
+    .featured-summary { color: #555; line-height: 1.9; max-width: 560px; }
+    .featured-dots { display: flex; gap: .5rem; justify-content: center; margin-top: 1.25rem; }
+    .featured-dot { width: 12px; height: 12px; border-radius: 50%; background: #ccc; border: none; cursor: pointer; padding: 0; }
+    .featured-dot.active { background: #B97A12; transform: scale(1.2); }
+  </style>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="career-panels.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">تخطَّ إلى المحتوى</a>
+
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="مُنجز أكاديمي - الرئيسية">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 40 40" width="30" height="30" aria-hidden="true"><path d="M33.5 20a13.5 13.5 0 1 1-4-9.6" fill="none" stroke="#FFFFFF" stroke-width="3.4" stroke-linecap="round"/><path d="M14 20.5l6.5 6.5L30 15" fill="none" stroke="#E9B949" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="brand-text"><strong>مُنجز أكاديمي</strong><small>Munjaz Academic</small></span>
+      </a>
+      <nav class="main-nav" aria-label="التنقل الرئيسي">
+        <a href="index.html">الرئيسية</a>
+        <a href="defenses.html" aria-current="page">🎓 المناقشات</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="defenses-hero">
+      <div class="container">
+        <h1>🎓 مناقشات الماجستير والدكتوراه</h1>
+        <p>أخبار مناقشات الرسائل والأطروحات في الجامعات العراقية — تُجمَع تلقائيًا، ويمكنك إضافة إعلان مناقشة</p>
+      </div>
+    </section>
+
+    <div class="container">
+      <section class="researcher-directory-spotlight" aria-labelledby="completedResearchersTitle">
+        <h2 id="completedResearchersTitle">باحثون أكملوا مناقشاتهم</h2>
+        <div class="researcher-spotlight" data-researcher-carousel>
+          <button class="career-art researcher-photo-button" type="button" data-researcher-open disabled aria-label="تفاصيل المناقشة"><span class="researcher-avatar" aria-hidden="true"><svg viewBox="0 0 120 120" width="120" height="120" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="60" cy="40" r="18"/><path d="M25 101v-8c0-31 70-31 70 0v8M44 74l16 14 16-14"/><path d="M20 17h22M20 25h14" stroke="#B97A12"/></svg></span></button>
+          <div class="researcher-caption" data-researcher-caption><p role="status">جارٍ تحميل المناقشات…</p></div>
+          <div class="researcher-controls" data-researcher-controls hidden>
+            <button type="button" data-researcher-prev aria-label="الباحث السابق">→</button><span data-researcher-count></span><button type="button" data-researcher-next aria-label="الباحث التالي">←</button><button type="button" data-researcher-pause aria-pressed="false">إيقاف التقليب</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="container">
+      <div class="defense-tabs" role="tablist">
+        <button class="defense-tab active" data-tab="auto" role="tab">📰 مناقشات من أخبار الجامعات</button>
+        <button class="defense-tab" data-tab="manual" role="tab">📌 إعلانات مضافة</button>
+        <button class="defense-tab" data-tab="add" role="tab">➕ أضف مناقشة</button>
+      </div>
+
+      <div id="tab-auto">
+        <div class="defense-grid" id="autoGrid"><p>جاري تحميل المناقشات…</p></div>
+      </div>
+
+      <div id="tab-manual" hidden>
+        <div class="defense-grid" id="manualGrid"><p>جاري التحميل…</p></div>
+      </div>
+
+      <div id="tab-add" hidden>
+        <form class="defense-form" id="defenseForm">
+          <h2>أضف إعلان مناقشة</h2>
+          <div class="form-row">
+            <div><label for="fName">اسم الطالب *</label><input id="fName" required></div>
+            <div><label for="fDegree">الشهادة *</label>
+              <select id="fDegree" required><option value="ماجستير">ماجستير</option><option value="دكتوراه">دكتوراه</option></select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div><label for="fUniv">الجامعة *</label><input id="fUniv" required></div>
+            <div><label for="fDept">القسم / الكلية</label><input id="fDept"></div>
+          </div>
+          <label for="fTitle">عنوان الرسالة / الأطروحة *</label><input id="fTitle" required>
+          <div class="form-row">
+            <div><label for="fDate">تاريخ المناقشة</label><input id="fDate" type="date"></div>
+            <div><label for="fImage">رابط الصورة (اختياري)</label><input id="fImage" type="url" placeholder="https://…"></div>
+          </div>
+          <label for="fNotes">ملاحظات إضافية</label><textarea id="fNotes"></textarea>
+          <button type="submit" class="btn btn-teal" style="margin-top:1rem">إرسال للمراجعة والنشر</button>
+          <p class="form-note">يُرسَل الإعلان لفريق المنصة للمراجعة ثم يُنشَر في قسم «إعلانات مضافة».</p>
+          <div class="form-success" id="formSuccess">تم استلام إعلان المناقشة ✅ سيُراجَع ويُنشر قريبًا.</div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script>
+  (function () {
+    'use strict';
+    var DEFENSE_KW = ['مناقشة', 'رسالة ماجستير', 'رساله ماجستير', 'أطروحة دكتوراه', 'اطروحة دكتوراه', 'اطروحه'];
+
+    // Tabs
+    var tabs = document.querySelectorAll('.defense-tab');
+    tabs.forEach(function (t) {
+      t.addEventListener('click', function () {
+        tabs.forEach(function (x) { x.classList.remove('active'); });
+        t.classList.add('active');
+        ['auto', 'manual', 'add'].forEach(function (k) {
+          document.getElementById('tab-' + k).hidden = (k !== t.dataset.tab);
+        });
+      });
+    });
+
+    function isDefense(item) {
+      if (!item || typeof item.title !== 'string') return false;
+      var title = item.title;
+      return DEFENSE_KW.some(function (k) { return title.indexOf(k) !== -1; });
+    }
+
+    function degreeOf(title) {
+      if (title.indexOf('دكتوراه') !== -1 || title.indexOf('أطروحة') !== -1 || title.indexOf('اطروح') !== -1) return 'دكتوراه';
+      return 'ماجستير';
+    }
+
+    function card(item, imageUrl) {
+      var art = document.createElement('article');
+      art.className = 'defense-card';
+      if (imageUrl) {
+        var img = document.createElement('img');
+        img.src = imageUrl; img.alt = ''; img.loading = 'lazy';
+        art.appendChild(img);
+      }
+      var body = document.createElement('div');
+      body.className = 'defense-card-body';
+      var deg = document.createElement('span');
+      var d = degreeOf(item.title || '');
+      deg.className = 'defense-degree ' + (d === 'دكتوراه' ? 'phd' : 'master');
+      deg.textContent = d;
+      body.appendChild(deg);
+      var h = document.createElement('h3');
+      if (item.url) {
+        var a = document.createElement('a');
+        a.href = item.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+        a.textContent = item.title;
+        h.appendChild(a);
+      } else {
+        h.textContent = item.title;
+      }
+      body.appendChild(h);
+      var meta = document.createElement('div');
+      meta.className = 'defense-meta';
+      meta.textContent = 'المصدر: ' + (item.source || '—') + (item.date ? ' | ' + item.date : '');
+      body.appendChild(meta);
+      art.appendChild(body);
+      return art;
+    }
+
+    // Auto defenses from news.json
+    fetch('news.json', { cache: 'no-cache' })
+      .then(function (r) { return r.json(); })
+      .then(function (items) {
+        var grid = document.getElementById('autoGrid');
+        grid.innerHTML = '';
+        var found = 0;
+        items.slice().reverse().forEach(function (it) {
+          if (found >= 24 || !isDefense(it)) return;
+          grid.appendChild(card(it));
+          found++;
+        });
+        if (!found) grid.innerHTML = '<p>لا توجد أخبار مناقشات حاليًا.</p>';
+      })
+      .catch(function () {
+        document.getElementById('autoGrid').innerHTML = '<p>تعذر تحميل الأخبار.</p>';
+      });
+
+    // Manual defenses
+    fetch('defenses-manual.json', { cache: 'no-cache' })
+      .then(function (r) { return r.json(); })
+      .then(function (items) {
+        var grid = document.getElementById('manualGrid');
+        grid.innerHTML = '';
+        if (!items.length) { grid.innerHTML = '<p>لا توجد إعلانات مضافة بعد — كن أول من يضيف مناقشة.</p>'; return; }
+        items.forEach(function (it) { grid.appendChild(card(it, it.image)); });
+      })
+      .catch(function () {
+        document.getElementById('manualGrid').innerHTML = '<p>لا توجد إعلانات مضافة بعد.</p>';
+      });
+
+    // Submit form -> Telegram via worker
+    document.getElementById('defenseForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var data = {
+        requestId: 'defense-' + Date.now(),
+        service: 'defense-announcement',
+        details: 'إعلان مناقشة جديد:\n' +
+          'الطالب: ' + document.getElementById('fName').value + '\n' +
+          'الشهادة: ' + document.getElementById('fDegree').value + '\n' +
+          'الجامعة: ' + document.getElementById('fUniv').value + '\n' +
+          'القسم: ' + (document.getElementById('fDept').value || '—') + '\n' +
+          'العنوان: ' + document.getElementById('fTitle').value + '\n' +
+          'التاريخ: ' + (document.getElementById('fDate').value || '—') + '\n' +
+          'الصورة: ' + (document.getElementById('fImage').value || '—') + '\n' +
+          'ملاحظات: ' + (document.getElementById('fNotes').value || '—'),
+        consent: true
+      };
+      fetch('https://munjaz-academic.alsobahi73.workers.dev/api/academic-requests', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      }).then(function () {
+        document.getElementById('formSuccess').style.display = 'block';
+        document.getElementById('defenseForm').reset();
+      }).catch(function () {
+        document.getElementById('formSuccess').textContent = 'حدث خطأ — حاول مرة أخرى.';
+        document.getElementById('formSuccess').style.display = 'block';
+      });
+    });
+  })();
+  </script>
+<script src="scripts/researcher-carousel.js" defer></script>
+</body>
+</html>

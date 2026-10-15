@@ -1,5 +1,5 @@
 {
-  "time": "2026-10-14T17:46:44.125862+00:00",
+  "time": "2026-10-15T14:49:13.495265+00:00",
   "new_items": 0,
   "sources": [
     {
@@ -44,7 +44,7 @@
     {
       "id": "univ-tikrit-news",
       "status": "not_due",
-      "needs_attention": false
+      "needs_attention": true
     },
     {
       "id": "univ-anbar-news",
@@ -97,7 +97,7 @@
     {
       "id": "univ-alqasm-alkhdraa-news",
       "status": "not_due",
-      "needs_attention": false
+      "needs_attention": true
     },
     {
       "id": "univ-swmr-news",
@@ -116,7 +116,7 @@
     {
       "id": "univ-alkrkh-llalwm-news",
       "status": "not_due",
-      "needs_attention": false
+      "needs_attention": true
     },
     {
       "id": "univ-ibn-sina-med-pharm-news",
@@ -208,12 +208,12 @@
     {
       "id": "univ-ahl-bait-news",
       "status": "not_due",
-      "needs_attention": false
+      "needs_attention": true
     },
     {
       "id": "univ-alaslamya-news",
       "status": "not_due",
-      "needs_attention": false
+      "needs_attention": true
     },
     {
       "id": "univ-kafeel-news",
@@ -296,7 +296,7 @@
     {
       "id": "college-almzaya-univ-news",
       "status": "not_due",
-      "needs_attention": false
+      "needs_attention": true
     },
     {
       "id": "college-altf-univ-news",
@@ -316,12 +316,12 @@
     {
       "id": "college-kunuz-univ-news",
       "status": "not_due",
-      "needs_attention": false
+      "needs_attention": true
     },
     {
       "id": "college-nukhba-univ-news",
       "status": "not_due",
-      "needs_attention": false
+      "needs_attention": true
     },
     {
       "id": "college-safwa-univ-news",
@@ -336,12 +336,12 @@
     {
       "id": "univ-alktab-news",
       "status": "not_due",
-      "needs_attention": false
+      "needs_attention": true
     },
     {
       "id": "univ-awrwk-private-news",
       "status": "not_due",
-      "needs_attention": false
+      "needs_attention": true
     },
     {
       "id": "univ-bayan-news",
@@ -351,7 +351,7 @@
     {
       "id": "univ-warth-alanbyaa-news",
       "status": "not_due",
-      "needs_attention": false
+      "needs_attention": true
     },
     {
       "id": "college-alnwr-univ-news",
@@ -402,7 +402,7 @@
     {
       "id": "univ-alayn-news",
       "status": "not_due",
-      "needs_attention": false
+      "needs_attention": true
     },
     {
       "id": "univ-alamyn-news",
@@ -443,7 +443,7 @@
     {
       "id": "univ-alamrykya-news",
       "status": "not_due",
-      "needs_attention": false
+      "needs_attention": true
     },
     {
       "id": "univ-almaql-news",
@@ -461,7 +461,7 @@
     {
       "id": "college-alhda-news",
       "status": "not_due",
-      "needs_attention": false
+      "needs_attention": true
     },
     {
       "id": "college-ibn-khldwn-news",
@@ -471,12 +471,12 @@
     {
       "id": "college-alaml-sciences-medical-altkhssya-news",
       "status": "not_due",
-      "needs_attention": false
+      "needs_attention": true
     },
     {
       "id": "univ-alshab-news",
       "status": "not_due",
-      "needs_attention": false
+      "needs_attention": true
     },
     {
       "id": "univ-alsraj-private-news",
@@ -485,7 +485,7 @@
     {
       "id": "college-east-sciences-tech-altkhssya-news",
       "status": "not_due",
-      "needs_attention": false
+      "needs_attention": true
     },
     {
       "id": "univ-shl-nineveh-news",
