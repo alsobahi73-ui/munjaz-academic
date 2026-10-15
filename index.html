@@ -1110,7 +1110,7 @@
           idx = ((i % people.length) + people.length) % people.length;
           var p = people[idx];
           var bg = colors[idx % colors.length];
-          var html = '<div class="featured-photo avatar-initials" style="background:' + bg + '">' + esc(initials(p.name)) + '</div>' +
+          var html = '<div class="featured-photo-wrap"><div class="featured-photo avatar-initials" style="background:' + bg + '">' + esc(initials(p.name)) + '</div><span class="researcher-badge">باحث</span></div>' +
             '<h3 class="featured-name">' + esc(p.name) + '</h3>' +
             (p.degree ? '<span class="featured-degree">' + esc(p.degree) + '</span>' : '') +
             '<div class="featured-univ">' + esc(p.university || '') + '</div>' +
