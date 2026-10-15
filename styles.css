@@ -808,3 +808,9 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
 .clickable-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(14,107,102,.18); border-color: var(--gold); }
 .clickable-card:focus { outline: 3px solid var(--gold); outline-offset: 2px; }
 .clickable-card .btn { pointer-events: none; }
+
+/* ===== Custom branded icons ===== */
+.portal-icon.custom-icon { background: #fff; display: grid; place-items: center; }
+.portal-icon.custom-icon svg { display: block; }
+/* Defenses carousel: use graduation icon when no photo */
+.featured-photo.placeholder.custom { background: linear-gradient(135deg, #0E6B66 0%, #06302C 100%); }
