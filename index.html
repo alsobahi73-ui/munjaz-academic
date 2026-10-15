@@ -160,7 +160,12 @@
               card.appendChild(img);
             } else {
               var ph = document.createElement('div');
-              ph.className = 'featured-photo placeholder'; ph.textContent = '🎓';
+              ph.className = 'featured-photo placeholder avatar-initials';
+              var parts = (p.name || '?').trim().split(/\s+/);
+              ph.textContent = parts.length >= 2 ? parts[0][0] + parts[1][0] : parts[0].substring(0, 2);
+              var colors = ['linear-gradient(135deg,#0E6B66,#06302C)','linear-gradient(135deg,#B97A12,#8a5a00)','linear-gradient(135deg,#0E6B66,#1a9e97)','linear-gradient(135deg,#6b4fa0,#4a3572)','linear-gradient(135deg,#c0563f,#8f3d2c)'];
+              var h = 0; for (var ci = 0; ci < p.name.length; ci++) h = (h * 31 + p.name.charCodeAt(ci)) % 100000;
+              ph.style.background = colors[h % colors.length];
               card.appendChild(ph);
             }
             var name = document.createElement('h3'); name.className = 'featured-name'; name.textContent = p.name;
@@ -305,11 +310,11 @@
           <h2 id="jobsTitle">بوابة الباحثين عن التعيين</h2>
           <p>سجّل معلوماتك الأساسية لنرشحك للفرص الأكاديمية المناسبة لتخصصك.</p>
         </header>
-        <div class="portal-card">
+        <div class="portal-card clickable-card" onclick="window.location.href='jobs.html'" role="link" tabindex="0">
           <div class="portal-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
           <h3>هل تبحث عن فرصة أكاديمية؟</h3>
           <p>ادخل البوابة وسجّل بياناتك: الشهادة، التخصص، العمر، ومحافظة السكن — وسنطابقك مع الفرص المناسبة.</p>
-          <a class="btn btn-primary btn-lg" href="jobs.html">ادخل البوابة ←</a>
+          <span class="btn btn-primary btn-lg">ادخل البوابة ←</span>
         </div>
       </div>
     </section>
@@ -321,11 +326,11 @@
           <h2 id="oppTitle">فرص وظيفية</h2>
           <p>أحدث إعلانات التوظيف الأكاديمي.</p>
         </header>
-        <div class="portal-card">
+        <div class="portal-card clickable-card" onclick="window.location.href='opportunities.html'" role="link" tabindex="0">
           <div class="portal-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></div>
           <h3>وظائف شاغرة الآن</h3>
           <p>تصفح أحدث إعلانات التوظيف في الجامعات العراقية الأهلية والحكومية.</p>
-          <a class="btn btn-primary btn-lg" href="opportunities.html">عرض الفرص ←</a>
+          <span class="btn btn-primary btn-lg">عرض الفرص ←</span>
         </div>
       </div>
     </section>
