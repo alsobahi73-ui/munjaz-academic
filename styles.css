@@ -771,7 +771,21 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
 /* Remove old duo styles */
 .duo-wrap { display: none; }
 @media (max-width: 1000px) {
-  .trio-wrap { grid-template-columns: 1fr; gap: 0; }
+  .trio-wrap { grid-template-columns: repeat(3, 1fr); gap: 1rem; padding: 0 1rem; }
+  .trio-wrap .trio-col { padding: 1.5rem 0; }
+  .trio-wrap .section-head h2 { font-size: 1rem; }
+  .trio-wrap .section-head p { font-size: .85rem; }
+  .trio-wrap .portal-card { padding: 1.25rem 1rem; }
+  .trio-wrap .portal-icon { width: 52px; height: 52px; }
+  .trio-wrap .portal-icon span { font-size: 1.5rem; }
+  .trio-wrap .portal-card h3 { font-size: 1rem; }
+  .trio-wrap .portal-card p { font-size: .85rem; }
+  .trio-wrap .portal-card .btn-lg { font-size: .9rem; padding: .7rem 1.5rem; }
+}
+@media (max-width: 640px) {
+  .trio-wrap { gap: .75rem; padding: 0 .75rem; }
+  .trio-wrap .section-head h2 { font-size: .95rem; }
+  .trio-wrap .section-head p { display: none; }
 }
 
 /* ===== Tools: horizontal layout ===== */
