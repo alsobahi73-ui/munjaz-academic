@@ -842,6 +842,11 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
   display: block; width: 32px; height: 32px;
   text-align: center;
 }
+/* SVG icons: geometrically identical by construction */
+.trio-wrap .portal-icon svg {
+  width: 32px !important; height: 32px !important;
+  display: block; color: #0E6B66; flex-shrink: 0;
+}
 /* Equal card heights */
 .trio-wrap .portal-card {
   min-height: 320px;
