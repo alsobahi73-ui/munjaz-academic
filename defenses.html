@@ -51,8 +51,6 @@
     .featured-dot { width: 12px; height: 12px; border-radius: 50%; background: #ccc; border: none; cursor: pointer; padding: 0; }
     .featured-dot.active { background: #B97A12; transform: scale(1.2); }
   </style>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="career-panels.css">
 </head>
 <body>
   <a class="skip-link" href="#main">تخطَّ إلى المحتوى</a>
@@ -81,16 +79,11 @@
     </section>
 
     <div class="container">
-      <section class="researcher-directory-spotlight" aria-labelledby="completedResearchersTitle">
-        <h2 id="completedResearchersTitle">باحثون أكملوا مناقشاتهم</h2>
-        <div class="researcher-spotlight" data-researcher-carousel>
-          <button class="career-art researcher-photo-button" type="button" data-researcher-open disabled aria-label="تفاصيل المناقشة"><span class="researcher-avatar" aria-hidden="true"><svg viewBox="0 0 120 120" width="120" height="120" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="60" cy="40" r="18"/><path d="M25 101v-8c0-31 70-31 70 0v8M44 74l16 14 16-14"/><path d="M20 17h22M20 25h14" stroke="#B97A12"/></svg></span></button>
-          <div class="researcher-caption" data-researcher-caption><p role="status">جارٍ تحميل المناقشات…</p></div>
-          <div class="researcher-controls" data-researcher-controls hidden>
-            <button type="button" data-researcher-prev aria-label="الباحث السابق">→</button><span data-researcher-count></span><button type="button" data-researcher-next aria-label="الباحث التالي">←</button><button type="button" data-researcher-pause aria-pressed="false">إيقاف التقليب</button>
-          </div>
-        </div>
-      </section>
+      <div class="featured-wrap" id="featuredWrap" hidden>
+        <h2 class="featured-title">🎓 باحثون ناقشوا حديثًا</h2>
+        <div class="featured-card" id="featuredCard"></div>
+        <div class="featured-dots" id="featuredDots"></div>
+      </div>
     </div>
 
     <div class="container">
@@ -227,6 +220,59 @@
         document.getElementById('manualGrid').innerHTML = '<p>لا توجد إعلانات مضافة بعد.</p>';
       });
 
+    // Featured researchers carousel
+    fetch('featured-researchers.json', { cache: 'no-cache' })
+      .then(function (r) { return r.json(); })
+      .then(function (people) {
+        people = people.filter(function (p) { return p && p.name; });
+        if (!people.length) return;
+        document.getElementById('featuredWrap').hidden = false;
+        var card = document.getElementById('featuredCard');
+        var dotsWrap = document.getElementById('featuredDots');
+        var idx = 0, timer = null;
+        function show(i) {
+          idx = (i + people.length) % people.length;
+          var p = people[idx];
+          card.style.opacity = 0;
+          setTimeout(function () {
+            card.innerHTML = '';
+            if (p.photo) {
+              var img = document.createElement('img');
+              img.className = 'featured-photo'; img.src = p.photo; img.alt = p.name;
+              card.appendChild(img);
+            } else {
+              var ph = document.createElement('div');
+              ph.className = 'featured-photo placeholder'; ph.textContent = '🎓';
+              card.appendChild(ph);
+            }
+            var name = document.createElement('h3'); name.className = 'featured-name'; name.textContent = p.name;
+            var deg = document.createElement('span'); deg.className = 'featured-degree'; deg.textContent = p.degree || '';
+            var univ = document.createElement('div'); univ.className = 'featured-univ';
+            univ.textContent = (p.university || '') + (p.department ? ' — ' + p.department : '');
+            var thesis = document.createElement('div'); thesis.className = 'featured-thesis';
+            thesis.textContent = '«' + (p.thesis || '') + '»';
+            var sum = document.createElement('p'); sum.className = 'featured-summary'; sum.textContent = p.summary || '';
+            card.append(name, deg, univ, thesis, sum);
+            card.style.opacity = 1;
+            dotsWrap.querySelectorAll('.featured-dot').forEach(function (d, di) {
+              d.classList.toggle('active', di === idx);
+            });
+          }, 300);
+        }
+        people.forEach(function (_, i) {
+          var d = document.createElement('button');
+          d.className = 'featured-dot' + (i === 0 ? ' active' : '');
+          d.setAttribute('aria-label', 'باحث ' + (i + 1));
+          d.addEventListener('click', function () { show(i); restart(); });
+          dotsWrap.appendChild(d);
+        });
+        function restart() { if (timer) clearInterval(timer); timer = setInterval(function () { show(idx + 1); }, 6000); }
+        card.addEventListener('mouseenter', function () { if (timer) clearInterval(timer); });
+        card.addEventListener('mouseleave', restart);
+        show(0); restart();
+      })
+      .catch(function () {});
+
     // Submit form -> Telegram via worker
     document.getElementById('defenseForm').addEventListener('submit', function (e) {
       e.preventDefault();
@@ -258,6 +304,5 @@
     });
   })();
   </script>
-<script src="scripts/researcher-carousel.js" defer></script>
 </body>
 </html>

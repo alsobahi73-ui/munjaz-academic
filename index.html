@@ -11,31 +11,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="academic-services.css">
-  <style>
-    .latest-ticker[hidden] { display: none; }
-    .latest-ticker { display: flex; align-items: center; gap: .75rem; min-width: 0; margin-bottom: 1.5rem; padding: .65rem .75rem; background: linear-gradient(110deg, #0B4F4B, #0E6B66); border-block-start: 3px solid #B97A12; border-radius: .75rem; color: #fff; direction: rtl; font-family: "Noto Kufi Arabic", sans-serif; font-size: .8rem; }
-    .latest-ticker-badge { flex: none; background: #B97A12; color: #fff; padding: .35rem .8rem; border-radius: .4rem; font-size: 1.2rem; font-weight: 800; }
-    .latest-ticker-viewport { flex: 1; min-width: 0; overflow: hidden; }
-    .latest-ticker-track { display: flex; direction: rtl; width: max-content; animation: latest-news-scroll var(--ticker-duration, 90s) linear infinite; }
-    .latest-ticker-list { display: flex; flex: none; align-items: center; gap: 1.25rem; list-style: none; padding: 0 1rem; margin: 0; }
-    .latest-ticker-list li { flex: none; display: flex; align-items: center; gap: 1.25rem; white-space: nowrap; }
-    .latest-ticker-list li::after { content: ""; width: 6px; height: 6px; flex: none; border-radius: 50%; background: #B97A12; }
-    .latest-ticker-list li:nth-child(even) a { background: rgb(185 122 18 / 18%); }
-    .latest-ticker a { display: block; padding: .35rem .75rem; border-radius: .4rem; background: rgb(255 255 255 / 10%); color: #fff; text-decoration: none; }
-    .latest-ticker a:hover { background: #0B4F4B; text-decoration: underline; text-decoration-color: #B97A12; text-underline-offset: .3rem; }
-    .latest-ticker a:focus-visible { outline: 2px solid #B97A12; outline-offset: 3px; }
-    @media (hover: hover) and (pointer: fine) {
-      .latest-ticker:hover .latest-ticker-track { animation-play-state: paused; }
-    }
-    .latest-ticker:has(a:focus-visible) .latest-ticker-track { animation-play-state: paused; }
-    @keyframes latest-news-scroll { from { transform: translateX(0); } to { transform: translateX(50%); } }
-    @media (prefers-reduced-motion: reduce) {
-      .latest-ticker-track { animation: none; transform: none; }
-      .latest-ticker-viewport { overflow-x: auto; }
-      .latest-ticker-copy, .latest-ticker-repeat { display: none; }
-    }
-  </style>
-  <link rel="stylesheet" href="career-panels.css">
 </head>
 <body>
   <a class="skip-link" href="#main">تخطَّ إلى المحتوى</a>
@@ -71,8 +46,178 @@
     </div>
   </header>
 
-
-
+  <aside id="officialNews" class="news-ticker" aria-labelledby="officialNewsTitle">
+    <div class="container news-ticker-inner">
+      <h2 id="officialNewsTitle"><span class="dot" aria-hidden="true"></span>أخبار مهمة</h2>
+      <div class="news-ticker-viewport"><ul class="official-news-list"><li class="ticker-state"><span class="ticker-loading">جاري تحميل آخر الأخبار…</span></li></ul></div>
+    </div>
+  </aside>
+  <script>
+  // News ticker (inline to avoid ad-blocker/cache issues with external file).
+  (function () {
+    var section = document.getElementById('officialNews');
+    if (!section) return;
+    var list = section.querySelector('ul');
+    if (!list) return;
+    function setState(msg, cls) {
+      list.innerHTML = '<li class="ticker-state"><span class="' + (cls || '') + '">' + msg + '</span></li>';
+    }
+    function buildRow(title, url, source) {
+      var row = document.createElement('li');
+      var link = document.createElement('a');
+      link.href = url; link.textContent = title;
+      link.target = '_blank'; link.rel = 'noopener noreferrer';
+      row.appendChild(link);
+      if (source) {
+        var chip = document.createElement('span');
+        chip.className = 'ticker-source';
+        chip.textContent = source;
+        row.appendChild(chip);
+      }
+      return row;
+    }
+    function pace() {
+      list.innerHTML += list.innerHTML;
+      requestAnimationFrame(function () {
+        try {
+          var half = list.scrollWidth / 2;
+          if (half > 100) {
+            var seconds = Math.min(160, Math.max(60, Math.round(half / 50)));
+            list.style.animationDuration = seconds + 's';
+          }
+        } catch (e) {}
+      });
+    }
+    // Important news only (per owner's curation): conferences, research, journals,
+    // publishers, appointments, jobs. Falls back to recent news if too few.
+    var IMPORTANT_KW = ['مؤتمر', 'ندوة علمية', 'بحث علمي', 'بحوث', 'ورقة علمية', 'نشر بحث',
+      'مجلة', 'دورية علمية', 'دار نشر', 'دور النشر', 'تعيين', 'وظائف', 'وظيفة', 'فرص عمل', 'درجات وظيفية',
+      'قبول', 'قبولات', 'القبول المركزي', 'تسجيل', 'التسجيل', 'الدراسات العليا', 'منح دراسية', 'بعثات',
+      'امتحان', 'امتحانات', 'الامتحانات النهائية', 'عطلة', 'عطل', 'العطلة الرسمية',
+      'تقويم جامعي', 'التقويم الجامعي', 'درجات', 'الدرجات', 'قرار', 'قرارات', 'نتائج'];
+    function isImportant(item) {
+      var t = (item.title || '') + ' ' + (item.summary || '');
+      return IMPORTANT_KW.some(function (k) { return t.indexOf(k) !== -1; });
+    }
+    function validItem(item) {
+      if (!item || typeof item.title !== 'string' || !item.title.trim() ||
+          typeof item.source !== 'string' || !item.source.trim() ||
+          item.title.indexOf('تجريبي:') !== -1) return false;
+      try {
+        var url = new URL(item.url);
+        if ((url.protocol !== 'https:' && url.protocol !== 'http:') || url.username || url.password) return false;
+      } catch (e) { return false; }
+      return true;
+    }
+    function render(items) {
+      list.innerHTML = '';
+      var rev = items.slice().reverse().filter(validItem);
+      // Prefer important news; fill with recent if fewer than 5 important
+      var important = rev.filter(isImportant).slice(0, 15);
+      var chosen = important.length >= 5 ? important : important.concat(
+        rev.filter(function (it) { return important.indexOf(it) === -1; }).slice(0, 15 - important.length)
+      );
+      chosen.forEach(function (item) {
+        var url = new URL(item.url);
+        list.appendChild(buildRow(item.title.trim(), url.href, item.source.trim()));
+      });
+      if (!chosen.length) { setState('لا توجد أخبار متاحة حالياً', 'ticker-error'); return; }
+      pace();
+    }
+    var controller = null;
+    try { controller = new AbortController(); setTimeout(function () { controller.abort(); }, 15000); } catch (e) {}
+    fetch('news.json', { cache: 'no-cache', signal: controller ? controller.signal : undefined })
+      .then(function (r) { if (!r.ok) throw new Error('feed_unavailable'); return r.json(); })
+      .then(function (items) {
+        if (!Array.isArray(items) || !items.length) throw new Error('empty_feed');
+        render(items);
+      })
+      .catch(function () {
+        setState('تعذر تحميل الأخبار — تحقق من الاتصال بالإنترنت ثم حدث الصفحة', 'ticker-error');
+      });
+  })();
+  </script>
+  <script>
+  // Featured researchers carousel (homepage) - simplified
+  (function () {
+    var card = document.getElementById('featuredCardHome');
+    var dotsWrap = document.getElementById('featuredDotsHome');
+    if (!card) return;
+    var colors = ['#0E6B66','#B97A12','#1a9e97','#6b4fa0','#c0563f'];
+    function initials(name) {
+      try {
+        var parts = String(name || '').trim().split(/\s+/);
+        if (parts.length >= 2) return parts[0].charAt(0) + parts[1].charAt(0);
+        return String(name || '?').substring(0, 2);
+      } catch(e) { return '?'; }
+    }
+    function esc(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    fetch('featured-researchers.json', { cache: 'no-cache' })
+      .then(function(r){ return r.json(); })
+      .then(function(people){
+        people = (people || []).filter(function(p){ return p && p.name; });
+        if (!people.length) { card.innerHTML = '<p class="muted">لا توجد مناقشات حاليًا.</p>'; return; }
+        var idx = 0, timer = null;
+        function render(i) {
+          idx = ((i % people.length) + people.length) % people.length;
+          var p = people[idx];
+          var bg = colors[idx % colors.length];
+          var html = '<div class="featured-photo avatar-initials" style="background:' + bg + '">' + esc(initials(p.name)) + '</div>' +
+            '<h3 class="featured-name">' + esc(p.name) + '</h3>' +
+            (p.degree ? '<span class="featured-degree">' + esc(p.degree) + '</span>' : '') +
+            '<div class="featured-univ">' + esc(p.university || '') + '</div>' +
+            (p.thesis ? '<div class="featured-thesis">\u00AB' + esc(p.thesis) + '\u00BB</div>' : '');
+          card.innerHTML = html;
+          card.style.opacity = 1;
+          var dots = dotsWrap.querySelectorAll('.featured-dot');
+          for (var d = 0; d < dots.length; d++) dots[d].classList.toggle('active', d === idx);
+        }
+        for (var k = 0; k < people.length; k++) {
+          (function(n){
+            var b = document.createElement('button');
+            b.className = 'featured-dot' + (n === 0 ? ' active' : '');
+            b.setAttribute('aria-label', 'باحث ' + (n+1));
+            b.onclick = function(){ render(n); restart(); };
+            dotsWrap.appendChild(b);
+          })(k);
+        }
+        card.style.cursor = 'pointer';
+        card.onclick = function(){ if (typeof openModal === 'function') openModal(people[idx]); };
+        card.onmouseenter = function(){ if (timer) clearInterval(timer); };
+        card.onmouseleave = function(){ restart(); };
+        function restart(){ if (timer) clearInterval(timer); timer = setInterval(function(){ render(idx+1); }, 6000); }
+        render(0); restart();
+      })
+      .catch(function(){ card.innerHTML = '<p class="muted">تعذر التحميل.</p>'; });
+  })();
+  // Researcher modal
+  function openModal(p) {
+    var modal = document.getElementById('researcherModal');
+    var body = document.getElementById('modalBody');
+    if (!modal || !body || !p) return;
+    var initials = (p.name || '?').trim().split(/\s+/).slice(0,2).map(function(w){return w[0];}).join('');
+    body.innerHTML =
+      '<div class="modal-photo">' + (p.photo ? '<img src="' + p.photo + '" alt="' + p.name + '">' : '<div class="modal-avatar">' + initials + '</div>') + '</div>' +
+      '<h3>' + esc(p.name) + '</h3>' +
+      '<p class="modal-degree">' + esc(p.degree || '') + '</p>' +
+      '<p class="modal-univ">' + esc(p.university || '') + (p.department ? ' — ' + esc(p.department) : '') + '</p>' +
+      '<div class="modal-thesis">«' + esc(p.thesis || '') + '»</div>' +
+      '<p class="modal-summary">' + esc(p.summary || '') + '</p>' +
+      (p.source ? '<a href="' + esc(p.source) + '" target="_blank" rel="noopener" class="btn btn-primary">المصدر ←</a>' : '');
+    modal.hidden = false;
+    document.body.style.overflow = 'hidden';
+    function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  }
+  (function(){
+    var modal = document.getElementById('researcherModal');
+    if(!modal) return;
+    document.getElementById('modalClose').addEventListener('click', closeModal);
+    document.getElementById('modalBackdrop').addEventListener('click', closeModal);
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModal(); });
+    function closeModal(){ modal.hidden = true; document.body.style.overflow = ''; }
+  })();
+  </script>
+  
 
   <main id="main">
     <!-- ============ Hero ============ -->
@@ -134,62 +279,53 @@
       </div>
     </section>
 
-    <!-- ============ Higher-education news ============ -->
-    <section class="section" id="news" aria-labelledby="newsTitle" hidden>
+    <!-- ============ Defenses + Jobs side-by-side ============ -->
+    <div class="trio-wrap">
+    <section class="section trio-col" id="defenses-preview" aria-labelledby="defensesPreviewTitle">
       <div class="container">
-        <aside class="latest-ticker" id="latestNewsTicker" dir="rtl" aria-label="آخر الأخبار" hidden>
-          <span class="latest-ticker-badge">أخبار</span>
-          <div class="latest-ticker-viewport">
-            <div class="latest-ticker-track"><ul class="latest-ticker-list"></ul></div>
-          </div>
-        </aside>
         <header class="section-head">
-          <h2 id="newsTitle">أخبار التعليم العالي</h2>
-          <p>آخر الأخبار من وزارة التعليم العالي والبحث العلمي والجامعات العراقية الحكومية والأهلية — تُحدَّث تلقائيًا مع ذكر المصدر.</p>
+          <h2 id="defensesPreviewTitle">المناقشات</h2>
+          <p>باحثون ناقشوا حديثًا في الجامعات العراقية.</p>
         </header>
-        <article class="news-featured" id="newsFeatured" hidden></article>
-        <div class="news-tabs" role="group" aria-label="فئات الأخبار" id="newsTabs"></div>
-        <div class="news-grid" id="newsGrid"></div>
-        <div class="news-more"><a class="btn btn-teal" href="news.html">عرض كل الأخبار ←</a></div>
+        <div class="featured-wrap" id="featuredWrapHome">
+          <div class="featured-card" id="featuredCardHome"></div>
+          <div class="featured-dots" id="featuredDotsHome"></div>
+          <p style="text-align:center;margin-top:1rem"><a class="btn btn-primary" href="defenses.html">جميع المناقشات ←</a></p>
+        </div>
       </div>
     </section>
 
-    <!-- ============ Defenses + Jobs side-by-side ============ -->
-    <div class="trio-wrap career-panels" aria-label="المناقشات والمسار المهني">
-      <section class="career-panel" id="defenses-preview" aria-labelledby="defensesPreviewTitle">
-        <h2 id="defensesPreviewTitle">المناقشات العلمية</h2>
-        <div class="researcher-spotlight" data-researcher-carousel>
-          <button class="career-art researcher-photo-button" type="button" data-researcher-open disabled aria-label="تفاصيل المناقشة">
-            <span class="researcher-avatar" aria-hidden="true"><svg viewBox="0 0 120 120" width="120" height="120" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="60" cy="40" r="18"/><path d="M25 101v-8c0-31 70-31 70 0v8M44 74l16 14 16-14"/><path d="M20 17h22M20 25h14" stroke="#B97A12"/></svg></span>
-          </button>
-          <div class="researcher-caption" data-researcher-caption><p role="status">جارٍ تحميل المناقشات…</p></div>
-          <div class="researcher-controls" data-researcher-controls hidden>
-            <button type="button" data-researcher-prev aria-label="الباحث السابق">→</button>
-            <span data-researcher-count></span>
-            <button type="button" data-researcher-next aria-label="الباحث التالي">←</button>
-            <button type="button" data-researcher-pause aria-pressed="false">إيقاف التقليب</button>
-          </div>
+    <!-- ============ Job seekers portal ============ -->
+    <section class="section section-tint trio-col" id="jobs" aria-labelledby="jobsTitle">
+      <div class="container">
+        <header class="section-head">
+          <h2 id="jobsTitle">بوابة الباحثين عن التعيين</h2>
+          <p>سجّل معلوماتك الأساسية لنرشحك للفرص الأكاديمية المناسبة لتخصصك.</p>
+        </header>
+        <div class="portal-card clickable-card" onclick="window.location.href='jobs.html'" role="link" tabindex="0">
+          <div class="portal-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
+          <h3>هل تبحث عن فرصة أكاديمية؟</h3>
+          <p>ادخل البوابة وسجّل بياناتك: الشهادة، التخصص، العمر، ومحافظة السكن — وسنطابقك مع الفرص المناسبة.</p>
+          <span class="btn btn-primary btn-lg">ادخل البوابة ←</span>
         </div>
-        <a class="career-action" href="defenses.html">جميع المناقشات <span aria-hidden="true">←</span></a>
-      </section>
-      <section class="career-panel" id="jobs" aria-labelledby="jobsTitle">
-        <h2 id="jobsTitle">أبحث عن تعيين</h2>
-        <a class="career-destination" href="jobs.html">
-          <span class="career-art"><svg viewBox="0 0 120 120" width="120" height="120" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="22" y="14" width="62" height="88" rx="8"/><circle cx="48" cy="39" r="10"/><path d="M32 65c0-16 32-16 32 0M33 78h24M33 88h18"/><circle cx="83" cy="78" r="16" fill="#E7F2F1" stroke="#B97A12"/><path d="m95 91 13 13" stroke="#B97A12"/></svg></span>
-          <h3>خطوتك نحو فرصة أكاديمية</h3>
-          <p>استعرض بوابة الباحثين عن التعيين وخيارات تسجيل مؤهلاتك وتخصصك.</p>
-          <span class="career-action">دخول البوابة <span aria-hidden="true">←</span></span>
-        </a>
-      </section>
-      <section class="career-panel" id="opportunities" aria-labelledby="oppTitle">
-        <h2 id="oppTitle">فرص تعيين</h2>
-        <a class="career-destination" href="opportunities.html">
-          <span class="career-art"><svg viewBox="0 0 120 120" width="120" height="120" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="17" y="37" width="86" height="61" rx="8"/><path d="M43 37V26a6 6 0 0 1 6-6h22a6 6 0 0 1 6 6v11M17 58c23 10 63 10 86 0"/><rect x="50" y="57" width="20" height="15" rx="3" fill="#E7F2F1"/><circle cx="94" cy="27" r="16" fill="#E7F2F1" stroke="#B97A12"/><path d="M94 19v16M86 27h16" stroke="#B97A12"/></svg></span>
-          <h3>فرص عمل وتعيين معلنة</h3>
-          <p>تصفّح إعلانات الوظائف الأكاديمية، وتحقق من الشروط والتفاصيل لدى المصدر.</p>
-          <span class="career-action">عرض الفرص <span aria-hidden="true">←</span></span>
-        </a>
-      </section>
+      </div>
+    </section>
+
+    <!-- ============ Job opportunities (trio) ============ -->
+    <section class="section trio-col" id="opportunities" aria-labelledby="oppTitle">
+      <div class="container">
+        <header class="section-head">
+          <h2 id="oppTitle">فرص وظيفية</h2>
+          <p>أحدث إعلانات التوظيف الأكاديمي.</p>
+        </header>
+        <div class="portal-card clickable-card" onclick="window.location.href='opportunities.html'" role="link" tabindex="0">
+          <div class="portal-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></div>
+          <h3>وظائف شاغرة الآن</h3>
+          <p>تصفح أحدث إعلانات التوظيف في الجامعات العراقية الأهلية والحكومية.</p>
+          <span class="btn btn-primary btn-lg">عرض الفرص ←</span>
+        </div>
+      </div>
+    </section>
     </div>
 
     <!-- ============ Academic services ============ -->
@@ -201,30 +337,41 @@
         </header>
         <div class="cat-grid academic-category-grid">
           <a class="cat-card academic-category-link" href="services.html#undergrad">
-            <span class="cat-icon" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h6a3 3 0 0 1 3 3v14a4 4 0 0 0-4-3H3zM21 4h-6a3 3 0 0 0-3 3v14a4 4 0 0 1 4-3h5z"/></svg></span>
+            <span class="cat-icon rich-icon" aria-hidden="true"><svg viewBox="0 0 80 80" width="52" height="52" fill="none">
+<rect x="8" y="8" width="64" height="64" rx="18" fill="#0E6B66" opacity="0.08"/>
+<path d="M22 36 c6-3 12-3 18 0 c6-3 12-3 18 0 v14 c-6-3-12-3-18 0 c-6-3-12-3-18 0 Z" fill="#fff" stroke="#0E6B66" stroke-width="2.5"/>
+<path d="M40 36 v14" stroke="#0E6B66" stroke-width="2"/>
+<path d="M40 14 L58 22 L40 30 L22 22 Z" fill="#B97A12"/>
+<path d="M52 50 l8-8 4 4-8 8-6 2 Z" fill="#0E6B66"/>
+</svg></span>
             <strong>خدمات طلبة الدراسات الأولية</strong>
             <small>دعم أكاديمي في تقاريرك ومشاريعك وخطواتك المهنية.</small>
             <span class="cat-count">4 خدمات ←</span>
           </a>
           <a class="cat-card academic-category-link" href="services.html#grad">
-            <span class="cat-icon" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="5" height="16" rx="1"/><rect x="9" y="4" width="5" height="16" rx="1"/><path d="m15 5 4-1 3 15-4 1zM4 8h3M10 8h3"/></svg></span>
+            <span class="cat-icon rich-icon" aria-hidden="true"><svg viewBox="0 0 80 80" width="52" height="52" fill="none">
+<rect x="8" y="8" width="64" height="64" rx="18" fill="#0E6B66" opacity="0.08"/>
+<rect x="26" y="18" width="24" height="32" rx="3" fill="#fff" stroke="#0E6B66" stroke-width="2.5"/>
+<line x1="32" y1="28" x2="44" y2="28" stroke="#B97A12" stroke-width="2.5" stroke-linecap="round"/>
+<line x1="32" y1="34" x2="44" y2="34" stroke="#0E6B66" stroke-width="2" opacity="0.6" stroke-linecap="round"/>
+<circle cx="52" cy="52" r="10" fill="#fff" stroke="#B97A12" stroke-width="3"/>
+<line x1="59" y1="59" x2="66" y2="66" stroke="#B97A12" stroke-width="3.5" stroke-linecap="round"/>
+</svg></span>
             <strong>خدمات طلبة الدراسات العليا</strong>
             <small>دعم بحثي ومنهجي وتحريري لرسالتك وبحوثك العلمية.</small>
             <span class="cat-count">5 خدمات ←</span>
           </a>
           <a class="cat-card academic-category-link" href="services.html#faculty-researchers">
-            <span class="cat-icon" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6l-6 10a1 1 0 0 0 1 2h14a1 1 0 0 0 1-2L14 9V3M7 15h10"/><circle cx="11" cy="17" r=".6"/></svg></span>
+            <span class="cat-icon rich-icon" aria-hidden="true"><svg viewBox="0 0 80 80" width="52" height="52" fill="none">
+<rect x="8" y="8" width="64" height="64" rx="18" fill="#0E6B66" opacity="0.08"/>
+<rect x="20" y="16" width="40" height="28" rx="4" fill="#fff" stroke="#0E6B66" stroke-width="2.5"/>
+<path d="M28 28 l6-6 4 4 6-8 8 8" stroke="#B97A12" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+<circle cx="40" cy="56" r="6" fill="#B97A12"/>
+<path d="M30 68 c0-8 20-8 20 0" fill="#0E6B66"/>
+</svg></span>
             <strong>خدمات الأساتذة والباحثين</strong>
             <small>دعم المؤلفات والنشر والنتائج وملفات الترقية العلمية.</small>
             <span class="cat-count">6 خدمات ←</span>
-          </a>
-          <a class="cat-card academic-category-link" href="job-seekers.html">
-            <span class="cat-icon" aria-hidden="true">
-              <svg class="ui-icon" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12h18M10 12v3h4v-3"/></svg>
-            </span>
-            <strong>الباحثون عن عمل</strong>
-            <small>لحملة البكالوريوس والماجستير والدكتوراه.</small>
-            <span class="cat-count">استمارة التسجيل · قيد التجهيز ←</span>
           </a>
         </div>
         <div class="academic-overview-action"><a class="btn btn-teal" href="services.html">استعرض جميع الخدمات</a></div>
@@ -659,30 +806,30 @@
 
               <!-- المرحلة 1: الإعداد -->
               <div id="quizSetupView">
-                <p class="tool-note">اختبر معرفتك من بنك الأسئلة المتاح لمناهج البحث والإحصاء، مع خيارات متعددة وصح/خطأ وتصحيح بمفتاح إجابة وتفسير لكل سؤال. الموضوعات الأخرى والتوليد من نص مخصص قيد التجهيز.</p>
+                <p class="tool-note">أنشئ اختباراً تدريبياً فورياً من موضوع محدد أو الصق نص محاضرتك؛ يتضمن خيارات متعددة وصح/خطأ مع تصحيح حتمي بمفتاح إجابة وتفسير لكل سؤال.</p>
                 
                 <div class="form-grid">
                   <label class="field span-2">
                     <span>اختر موضوعاً أكاديمياً أو اكتب موضوعك</span>
                     <select id="quizPresetSelect">
-                      <option value="custom">نص مخصص — قيد التجهيز</option>
+                      <option value="custom">— سأكتب موضوعي / ألصق نصي —</option>
                       <option value="research-methods" selected>مناهج البحث العلمي وتحديد المشكلة والفرضيات</option>
                       <option value="statistics">الإحصاء الأكاديمي واختبار الفرضيات (T-Test, ANOVA, Chi-Square)</option>
-                      <option value="ethics">قيد التجهيز: أخلاقيات النشر العلمي والنزاهة وتوثيق المراجع APA 7</option>
-                      <option value="bologna">قيد التجهيز: نظام مسار بولونيا العراقي ECTS والتقييم الأكاديمي</option>
+                      <option value="ethics">أخلاقيات النشر العلمي والنزاهة وتوثيق المراجع APA 7</option>
+                      <option value="bologna">نظام مسار بولونيا العراقي ECTS والتقييم الأكاديمي</option>
                     </select>
                   </label>
 
                   <label class="field span-2">
                     <span>موضوع مخصص أو نص المحاضرة (اختياري)</span>
-                    <textarea id="quizCustomText" rows="3" disabled placeholder="توليد أسئلة من نص المحاضرة قيد التجهيز."></textarea>
+                    <textarea id="quizCustomText" rows="3" placeholder="اكتب أو الصق نص المحاضرة أو النقاط الأساسية لتوليد الأسئلة منها..."></textarea>
                   </label>
 
                   <label class="field">
                     <span>عدد الأسئلة</span>
                     <select id="quizCountSelect">
-                      <option value="5">حتى 5 أسئلة متاحة</option>
-                      <option value="10" selected>حتى 10 أسئلة متاحة</option>
+                      <option value="5">5 أسئلة</option>
+                      <option value="10" selected>10 أسئلة (معيار القبول M1)</option>
                     </select>
                   </label>
 
@@ -702,7 +849,6 @@
               </div>
 
               <!-- المرحلة 2: حل الاختبار -->
-              <p id="quizBuildStatus" role="status" aria-live="polite"></p>
               <div id="quizPlayView" hidden>
                 <div class="quiz-play-header">
                   <div>
@@ -759,7 +905,7 @@
 
         <div class="assistant-cards">
           <article class="assist-card">
-            <span class="assist-icon" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m16 8-3 5-5 3 3-5z"/></svg></span>
+            <span class="assist-icon" aria-hidden="true">🧭</span>
             <h3>صياغة المشكلة والفرضيات</h3>
             <p>كيف تحول فكرتك إلى سؤال بحثي دقيق وقابل للقياس، مع صياغة الفرضيات الصفرية والبديلة بما ينسجم مع أهداف دراستك.</p>
             <div class="assist-action">
@@ -768,7 +914,7 @@
           </article>
 
           <article class="assist-card">
-            <span class="assist-icon" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18M7 16v-4M12 16V8M17 16V5"/></svg></span>
+            <span class="assist-icon" aria-hidden="true">📈</span>
             <h3>دليل الاختبار الإحصائي المناسب</h3>
             <p>مرشد سريع لاختيار الاختبار الإحصائي (T-Test, ANOVA, Chi-Square, Pearson) بحسب طبيعة المتغيرات وحجم العينة وتوزيع البيانات.</p>
             <div class="assist-action">
@@ -777,7 +923,7 @@
           </article>
 
           <article class="assist-card">
-            <span class="assist-icon" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H5v18h14V8zM14 3v5h5M8 12h8M8 16h6"/></svg></span>
+            <span class="assist-icon" aria-hidden="true">📑</span>
             <h3>هيكلة الفصول وفق الجامعات العراقية</h3>
             <p>إرشادات تنظيم الإطار النظري، الدراسات السابقة، إجراءات المنهجية، وتحليل النتائج ومناقشتها وفق التقاليد الأكاديمية الرصينة.</p>
             <div class="assist-action">
@@ -786,7 +932,7 @@
           </article>
 
           <article class="assist-card">
-            <span class="assist-icon" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6zM8 12l3 3 5-6"/></svg></span>
+            <span class="assist-icon" aria-hidden="true">🛡️</span>
             <h3>التوثيق الأكاديمي وضبط الاستلال</h3>
             <p>قواعد الاقتباس المباشر وغير المباشر، وتجنب الانتحال العلمي غير المقصود، مع التوثيق المتقن بأنظمة APA 7 و IEEE.</p>
             <div class="assist-action">
@@ -998,78 +1144,14 @@
 
   <script src="academic-services-config.js"></script>
   <script src="app.js"></script>
-  <script src="scripts/news-section.js" defer></script>
-  <script>
-    (async function () {
-      const ticker = document.getElementById('latestNewsTicker');
-      const viewport = ticker.querySelector('.latest-ticker-viewport');
-      const track = ticker.querySelector('.latest-ticker-track');
-      const list = ticker.querySelector('ul');
-      const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
-      function valid(item) {
-        if (!item || typeof item.title !== 'string' || !item.title.trim() ||
-            typeof item.source !== 'string' || !item.source.trim() ||
-            item.title.includes('تجريبي:') || typeof item.url !== 'string') return false;
-        try {
-          const url = new URL(item.url);
-          return ['https:', 'http:'].includes(url.protocol) && !url.username && !url.password;
-        } catch { return false; }
-      }
-      function decorativeCopy(node, className) {
-        const copy = node.cloneNode(true);
-        copy.classList.add(className);
-        copy.setAttribute('aria-hidden', 'true');
-        copy.querySelectorAll('a').forEach(link => { link.tabIndex = -1; });
-        return copy;
-      }
-      function fitLoop() {
-        track.querySelector('.latest-ticker-copy')?.remove();
-        list.querySelectorAll('.latest-ticker-repeat').forEach(item => item.remove());
-        const originals = Array.from(list.children);
-        if (!viewport.clientWidth || motionPreference.matches) return;
-        // Fill short feeds before duplicating the track, so the loop has no empty interval.
-        const width = list.getBoundingClientRect().width;
-        if (width > 0) {
-          let previousWidth = width;
-          while (previousWidth < viewport.clientWidth) {
-            originals.forEach(item => list.append(decorativeCopy(item, 'latest-ticker-repeat')));
-            const nextWidth = list.getBoundingClientRect().width;
-            if (nextWidth <= previousWidth) break;
-            previousWidth = nextWidth;
-          }
-        }
-        track.append(decorativeCopy(list, 'latest-ticker-copy'));
-        // A fixed distance per second keeps long feeds as readable as short feeds.
-        const pixelsPerSecond = viewport.clientWidth < 640 ? 10 : 12;
-        track.style.setProperty('--ticker-duration', Math.max(60, list.getBoundingClientRect().width / pixelsPerSecond) + 's');
-      }
-      try {
-        const response = await fetch('news.json', { cache: 'no-cache', signal: AbortSignal.timeout(8000) });
-        if (!response.ok) return;
-        const data = await response.json();
-        if (!Array.isArray(data)) return;
-        // Preserve feed order, matching the existing news section's validation rules.
-        const items = data.filter(valid).slice(0, 15);
-        if (!items.length) return;
-        items.forEach(item => {
-          const row = document.createElement('li');
-          const link = document.createElement('a');
-          link.textContent = item.title;
-          link.href = item.url;
-          link.target = '_blank';
-          link.rel = 'noopener noreferrer';
-          link.title = 'المصدر: ' + item.source;
-          row.append(link);
-          list.append(row);
-        });
-        ticker.hidden = false;
-        // The homepage section can still be hidden while its existing script loads.
-        new ResizeObserver(fitLoop).observe(viewport);
-        motionPreference.addEventListener('change', fitLoop);
-        fitLoop();
-      } catch { /* No news or unavailable feed: keep the ticker hidden. */ }
-    })();
-  </script>
-  <script src="scripts/researcher-carousel.js" defer></script>
+
+<!-- Researcher details modal -->
+<div class="researcher-modal" id="researcherModal" hidden>
+  <div class="researcher-modal-backdrop" id="modalBackdrop"></div>
+  <div class="researcher-modal-content" role="dialog" aria-modal="true">
+    <button class="modal-close" id="modalClose" aria-label="إغلاق">✕</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
 </body>
 </html>

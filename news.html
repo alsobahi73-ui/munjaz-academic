@@ -119,7 +119,6 @@
       const viewport = ticker.querySelector('.latest-ticker-viewport');
       const track = ticker.querySelector('.latest-ticker-track');
       const list = ticker.querySelector('ul');
-      const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
       function valid(item) {
         if (!item || typeof item.title !== 'string' || !item.title.trim() ||
             typeof item.source !== 'string' || !item.source.trim() ||
@@ -140,16 +139,11 @@
         track.querySelector('.latest-ticker-copy')?.remove();
         list.querySelectorAll('.latest-ticker-repeat').forEach(item => item.remove());
         const originals = Array.from(list.children);
-        if (!viewport.clientWidth || motionPreference.matches) return;
         // Fill short feeds before duplicating the track, so the loop has no empty interval.
         const width = list.getBoundingClientRect().width;
         if (width > 0) {
-          let previousWidth = width;
-          while (previousWidth < viewport.clientWidth) {
+          while (list.getBoundingClientRect().width < viewport.clientWidth) {
             originals.forEach(item => list.append(decorativeCopy(item, 'latest-ticker-repeat')));
-            const nextWidth = list.getBoundingClientRect().width;
-            if (nextWidth <= previousWidth) break;
-            previousWidth = nextWidth;
           }
         }
         track.append(decorativeCopy(list, 'latest-ticker-copy'));
@@ -179,7 +173,6 @@
         ticker.hidden = false;
         // The homepage section can still be hidden while its existing script loads.
         new ResizeObserver(fitLoop).observe(viewport);
-        motionPreference.addEventListener('change', fitLoop);
         fitLoop();
       } catch { /* No news or unavailable feed: keep the ticker hidden. */ }
     })();

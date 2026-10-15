@@ -34,38 +34,13 @@
   }
 
   function timeOf(item) {
-    var date = parsePublicationDate(item.date);
-    return date ? date.getTime() : 0;
-  }
-
-  function parsePublicationDate(value) {
-    if (typeof value !== 'string' || !value.trim()) return null;
-    var match = value.trim().match(/^(\d{1,2})[/-](\d{1,2})[/-](\d{4})$/);
-    var date;
-    if (match) {
-      date = new Date(Date.UTC(Number(match[3]), Number(match[2]) - 1, Number(match[1])));
-      if (date.getUTCDate() !== Number(match[1]) || date.getUTCMonth() !== Number(match[2]) - 1) return null;
-    } else {
-      date = new Date(value);
-    }
-    if (isNaN(date.getTime())) return null;
-    return date;
-  }
-
-  function publicationDate(value) {
-    var date = parsePublicationDate(value);
-    if (!date) return null;
-    var node = el('time', null, new Intl.DateTimeFormat('ar-IQ', {
-      day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Baghdad'
-    }).format(date));
-    node.dateTime = date.toISOString();
-    return node;
+    var t = Date.parse(item.date);
+    return isNaN(t) ? 0 : t;
   }
 
   function el(tag, cls, text) {
     var n = document.createElement(tag);
     if (cls) n.className = cls;
-    if (cls === 'news-summary') n.dir = 'auto';
     if (text != null) n.textContent = text;
     return n;
   }
@@ -87,20 +62,15 @@
     items.forEach(function (it) {
       var art = el('article', 'news-card');
       var h = el('h3');
-      h.dir = 'auto';
       var a = el('a', null, it.title.trim());
-      a.title = it.title.trim();
       a.href = it.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
       h.appendChild(a); art.appendChild(h);
       if (typeof it.summary === 'string' && it.summary.trim()) {
         art.appendChild(el('p', 'news-summary', it.summary.trim()));
       }
       var meta = el('div', 'news-meta');
-      var source = el('span', null, 'المصدر: ' + it.source.trim());
-      source.title = source.textContent;
-      meta.appendChild(source);
-      var date = publicationDate(it.date);
-      if (date) meta.appendChild(date);
+      meta.appendChild(el('span', null, 'المصدر: ' + it.source.trim()));
+      if (it.date) meta.appendChild(el('span', null, it.date));
       art.appendChild(meta);
       if (it.category && CATEGORIES.indexOf(it.category) !== -1) {
         art.appendChild(el('span', 'news-chip', it.category));
