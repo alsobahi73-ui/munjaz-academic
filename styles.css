@@ -738,3 +738,23 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
   border: 1px solid var(--gold); border-radius: 14px; opacity: .3; pointer-events: none;
 }
 .featured-photo { position: relative; z-index: 1; }
+
+/* ===== Balanced icon sizing system ===== */
+/* Headers: no emojis, geometric diamonds only */
+.section-head h2 { font-size: clamp(1.35rem, 2.8vw, 1.8rem); letter-spacing: 0; }
+/* Portal icon: fixed balanced size */
+.portal-card .portal-icon { width: 72px; height: 72px; margin: 0 auto 1.25rem; }
+.portal-card .portal-icon span { font-size: 2rem; line-height: 1; }
+/* Category icons: uniform */
+.cat-icon { width: 60px; height: 60px; font-size: 1.7rem; }
+/* Nav icons: subtle */
+.main-nav a { font-size: .95rem; }
+/* Buttons: no oversized icons */
+.btn { font-size: 1rem; }
+/* Featured: balanced photo */
+.featured-photo { width: 140px; height: 140px; }
+.featured-photo.placeholder { font-size: 2.8rem; }
+/* Job meta icons: tiny */
+.job-listing-meta span { font-size: .85rem; }
+/* Ensure visual rhythm */
+.section-head h2::before, .section-head h2::after { width: 8px; height: 8px; }
