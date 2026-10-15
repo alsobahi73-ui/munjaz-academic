@@ -114,6 +114,18 @@
     return `https://t.me/${window.AcademicServicesConfig.telegramBotUsername}`;
   }
 
+  async function copyToClipboard(text, button) {
+    const original = button.textContent;
+    button.setAttribute('aria-live', 'polite');
+    try {
+      await navigator.clipboard.writeText(text);
+      button.textContent = 'تم النسخ';
+    } catch {
+      button.textContent = 'تعذّر النسخ؛ انسخ النص يدويًا';
+    }
+    setTimeout(() => { button.textContent = original; }, 2200);
+  }
+
   /* =====================================================
      البوابة التفاعلية + الخدمات
      ===================================================== */
@@ -338,7 +350,12 @@
       const p = parseFloat($('#ssP').value) / 100;
       const resp = parseFloat($('#ssResp').value) / 100;
 
-      if (!(e > 0 && e < 0.5) || !(p > 0 && p < 1) || !(resp > 0 && resp <= 1)) {
+      if ($('#ssPop').value.trim() && (!Number.isInteger(N) || N <= 0)) {
+        out.textContent = '—';
+        det.textContent = 'حجم المجتمع يجب أن يكون عددًا صحيحًا موجبًا، أو اتركه فارغًا للمجتمع غير المحدد.';
+        return;
+      }
+      if (!(e >= 0.005 && e <= 0.5) || !(p > 0 && p < 1) || !(resp > 0 && resp <= 1)) {
         out.textContent = '—';
         det.textContent = 'تحقق من القيم المدخلة (هامش الخطأ 0.5–50، النسبة 1–99، الاستجابة 1–100).';
         return;
@@ -410,17 +427,26 @@
       let sumW = 0;
       let sumWeighted = 0;
       let hasFx = false;
+      let invalid = false;
 
       $$('.gpa-row', wrap).forEach((r) => {
         const w = parseFloat($('.g-units', r).value);
         const v = parseFloat($('.g-mark', r).value);
-        if (w > 0 && Number.isFinite(v) && v >= 0) {
+        const limit = mode === 'gpa-points' ? 5 : 100;
+        if (Number.isFinite(v) && (v < 0 || v > limit) || Number.isFinite(w) && w <= 0) invalid = true;
+        if (w > 0 && Number.isFinite(v) && v >= 0 && v <= limit) {
           sumW += w;
           sumWeighted += w * v;
           if (mode === 'bologna' && v >= 45 && v < 50) hasFx = true;
         }
       });
 
+      if (invalid) {
+        resEl.textContent = '—';
+        grdEl.textContent = 'تحقق من الدرجات والوحدات: لا تتجاوز الدرجة الحد الأعلى، ويجب أن تكون الوحدات أكبر من صفر.';
+        detEl.textContent = '';
+        return;
+      }
       if (!sumW) {
         resEl.textContent = '—';
         grdEl.textContent = 'أدخل المقررات والوحدات والدرجات لحساب النتيجة.';
@@ -446,8 +472,7 @@
       } else {
         resLbl.textContent = 'معدل نقاط GPA المحسوب';
         resEl.textContent = fmt(Math.round(avg * 1000) / 1000);
-        const grade = avg >= 3.7 ? 'مرتبة شرف / امتياز' : avg >= 3.0 ? 'جيد جداً' : avg >= 2.5 ? 'جيد' : avg >= 2.0 ? 'مقبول' : 'إنذار أكاديمي';
-        grdEl.textContent = `التقدير التقريبي: ${grade}`;
+        grdEl.textContent = 'التقدير يتحدد وفق مقياس 4 أو 5 وتعليمات جامعتك؛ النتيجة هنا متوسط موزون فقط.';
         detEl.textContent = `إجمالي الساعات المعتمدة: ${fmt(sumW)}`;
       }
     };
@@ -562,7 +587,7 @@
 
       try {
         const res = await fetch(`https://api.crossref.org/works/${encodeURIComponent(cleanDoi)}`, {
-          headers: { Accept: 'application/json' },
+          headers: { Accept: 'application/json' }, signal: AbortSignal.timeout(20000),
         });
         if (!res.ok) throw new Error('لم يتم العثور على المعرف في Crossref.');
         const json = await res.json();
@@ -619,13 +644,11 @@
     };
 
     $('#copyInTextBtn').addEventListener('click', () => {
-      navigator.clipboard.writeText($('#previewInText').textContent);
-      flashBtn($('#copyInTextBtn'), '📋 نسخ الاستشهاد');
+      copyToClipboard($('#previewInText').textContent, $('#copyInTextBtn'));
     });
 
     $('#copyRefBtn').addEventListener('click', () => {
-      navigator.clipboard.writeText($('#previewRefList').textContent);
-      flashBtn($('#copyRefBtn'), '📋 نسخ المرجع');
+      copyToClipboard($('#previewRefList').textContent, $('#copyRefBtn'));
     });
 
     // Add to saved list
@@ -643,8 +666,7 @@
     });
 
     $('#copyAllRefsBtn').addEventListener('click', () => {
-      navigator.clipboard.writeText(savedList.map((r, i) => `${i + 1}. ${r}`).join('\n\n'));
-      flashBtn($('#copyAllRefsBtn'), '📋 نسخ القائمة كاملة');
+      copyToClipboard(savedList.map((r, i) => `${i + 1}. ${r}`).join('\n\n'), $('#copyAllRefsBtn'));
     });
 
     $('#clearRefsBtn').addEventListener('click', () => {
@@ -763,10 +785,7 @@
     });
 
     $('#unitCopyBtn').addEventListener('click', () => {
-      navigator.clipboard.writeText(outRes.textContent);
-      const btn = $('#unitCopyBtn');
-      btn.textContent = 'تم النسخ ✓';
-      setTimeout(() => { btn.textContent = '📋 نسخ النتيجة'; }, 1800);
+      copyToClipboard(outRes.textContent, $('#unitCopyBtn'));
     });
 
     populateUnits();
@@ -897,10 +916,16 @@
     $('#startQuizBuildBtn').addEventListener('click', () => {
       const preset = $('#quizPresetSelect').value;
       const count = parseInt($('#quizCountSelect').value, 10);
-      const basePool = QUIZ_PRESETS[preset] || QUIZ_PRESETS['research-methods'];
-
-      // Pick questions
-      activeQuestions = basePool.slice(0, count);
+      const basePool = QUIZ_PRESETS[preset];
+      if (!basePool) {
+        $('#quizBuildStatus').textContent = 'هذا الموضوع قيد التجهيز. اختر أحد الموضوعين المتاحين؛ توليد الأسئلة من نص مخصص غير متاح حاليًا.';
+        return;
+      }
+      const type = $('#quizTypeSelect').value;
+      const pool = basePool.filter(item => type === 'mixed' || (type === 'tf' ? item.opts.length === 2 : item.opts.length > 2));
+      activeQuestions = pool.slice(0, count);
+      $('#quizBuildStatus').textContent = pool.length < count ? `المتاح من هذا النوع ${pool.length} أسئلة؛ سيشمل الاختبار الأسئلة المتاحة فقط.` : '';
+      if (!activeQuestions.length) return;
       currentIdx = 0;
       userAnswers = {};
       switchQuizStep(2);
@@ -1115,10 +1140,11 @@
           if (signup) {
             const cred = await A.createUserWithEmailAndPassword(a, email, pass);
             try { await A.updateProfile(cred.user, { displayName: nm }); } catch { /* ignore */ }
-            try { await A.sendEmailVerification(cred.user); } catch { /* ignore */ }
+            let verificationSent = false;
+            try { await A.sendEmailVerification(cred.user); verificationSent = true; } catch { /* Show the actual outcome below. */ }
             store.set(LS.profile, { name: nm, email, audience: aud });
             this.setUser({ name: nm, email, verified: false });
-            notice = 'تم إنشاء حسابك. أرسلنا رابط تأكيد إلى بريدك.';
+            notice = verificationSent ? 'تم إنشاء حسابك. أرسلنا رابط تأكيد إلى بريدك.' : 'تم إنشاء حسابك، لكن تعذّر إرسال رابط تأكيد البريد حاليًا.';
           } else {
             await A.signInWithEmailAndPassword(a, email, pass);
             const p = store.get(LS.profile);

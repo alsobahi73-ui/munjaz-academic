@@ -32,13 +32,38 @@
   }
 
   function timeOf(item) {
-    var t = Date.parse(item.date);
-    return isNaN(t) ? 0 : t;
+    var date = parsePublicationDate(item.date);
+    return date ? date.getTime() : 0;
+  }
+
+  function parsePublicationDate(value) {
+    if (typeof value !== 'string' || !value.trim()) return null;
+    var match = value.trim().match(/^(\d{1,2})[/-](\d{1,2})[/-](\d{4})$/);
+    var date;
+    if (match) {
+      date = new Date(Date.UTC(Number(match[3]), Number(match[2]) - 1, Number(match[1])));
+      if (date.getUTCDate() !== Number(match[1]) || date.getUTCMonth() !== Number(match[2]) - 1) return null;
+    } else {
+      date = new Date(value);
+    }
+    if (isNaN(date.getTime())) return null;
+    return date;
+  }
+
+  function publicationDate(value) {
+    var date = parsePublicationDate(value);
+    if (!date) return null;
+    var node = el('time', null, new Intl.DateTimeFormat('ar-IQ', {
+      day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Baghdad'
+    }).format(date));
+    node.dateTime = date.toISOString();
+    return node;
   }
 
   function el(tag, cls, text) {
     var n = document.createElement(tag);
     if (cls) n.className = cls;
+    if (cls === 'news-summary') n.dir = 'auto';
     if (text != null) n.textContent = text;
     return n;
   }
@@ -46,15 +71,20 @@
   function card(item, featured) {
     var art = el('article', featured ? 'news-card news-featured-card' : 'news-card');
     var h = el('h3');
+    h.dir = 'auto';
     var a = el('a', null, item.title.trim());
+    a.title = item.title.trim();
     a.href = item.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
     h.appendChild(a); art.appendChild(h);
     if (typeof item.summary === 'string' && item.summary.trim()) {
       art.appendChild(el('p', 'news-summary', item.summary.trim()));
     }
     var meta = el('div', 'news-meta');
-    meta.appendChild(el('span', null, 'المصدر: ' + item.source.trim()));
-    if (item.date) meta.appendChild(el('span', null, item.date));
+    var source = el('span', null, 'المصدر: ' + item.source.trim());
+    source.title = source.textContent;
+    meta.appendChild(source);
+    var date = publicationDate(item.date);
+    if (date) meta.appendChild(date);
     art.appendChild(meta);
     if (item.category && CATEGORIES.indexOf(item.category) !== -1) {
       art.appendChild(el('span', 'news-chip', item.category));

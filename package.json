@@ -1,10 +1,12 @@
 {
-  "name": "munjiz-academic",
+  "name": "munjaz-academic",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "start": "node server/index.mjs",
-    "test": "node --test server/tests/telegram-requests.test.mjs"
+    "test": "node --test server/tests/*.test.mjs worker/*.test.mjs scripts/tests/*.test.mjs news-approval/tests/*.test.mjs"
   }
 }

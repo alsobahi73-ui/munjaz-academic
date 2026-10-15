@@ -150,14 +150,17 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .cat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; }
 .cat-card {
   display: flex; flex-direction: column; align-items: flex-start; gap: .4rem; text-align: start;
-  background: #fff; border: 2px solid var(--line); border-radius: var(--radius); padding: 1.5rem;
+  background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 1.35rem;
   cursor: pointer; box-shadow: var(--shadow); transition: .2s;
 }
-.cat-card:hover { border-color: var(--gold); transform: translateY(-4px); box-shadow: var(--shadow-lg); }
-.cat-icon { font-size: 2rem; width: 58px; height: 58px; display: grid; place-items: center; background: var(--teal-light); border-radius: 16px; }
-.cat-card strong { font-size: 1.2rem; color: var(--teal-dark); }
+.cat-card:hover { border-color: var(--teal); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(14, 107, 102, .07); }
+.cat-icon, .card-icon, .assist-icon, .tile-icon { flex: none; width: 48px; height: 48px; display: grid; place-items: center; background: var(--teal-light); color: var(--teal); border-radius: 12px; margin-bottom: .75rem; }
+.cat-icon svg, .card-icon svg, .assist-icon svg, .tile-icon svg { width: 26px; height: 26px; stroke: currentColor; }
+.section-icon { display: inline-flex; vertical-align: middle; margin-inline-end: .4rem; color: var(--teal); }
+.section-icon svg { width: 22px; height: 22px; }
+.cat-card strong { font-size: 1.02rem; line-height: 1.8; color: var(--teal-dark); }
 .cat-card small { color: var(--muted); font-size: .92rem; line-height: 1.6; flex: 1; }
-.cat-count { color: var(--gold-dark); font-weight: 800; font-size: .95rem; }
+.cat-count { color: var(--teal); font-weight: 700; font-size: .8rem; margin-top: .5rem; }
 
 /* ===== Services panel (مبوّبة داخل الفئة) ===== */
 .panel-bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; padding: .8rem 1.2rem; background: var(--teal-light); border-radius: var(--radius); border-inline-start: 5px solid var(--gold); }
@@ -301,16 +304,16 @@ textarea { resize: vertical; min-height: 130px; }
 }
 
 /* ===== Tool tiles (الأدوات كأيقونات) ===== */
-.tool-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1.2rem; }
+.tool-tiles { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; }
 .tool-tile {
-  position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; gap: .3rem;
-  background: #fff; border: 2px solid var(--line); border-radius: var(--radius); padding: 1.6rem 1rem 1.3rem;
+  position: relative; display: flex; flex: 0 0 calc((100% - 3rem) / 4); min-width: 0; flex-direction: column; align-items: flex-start; text-align: start; gap: .35rem;
+  background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 1.3rem;
   cursor: pointer; box-shadow: var(--shadow); transition: .2s;
 }
-.tool-tile:hover { border-color: var(--gold); transform: translateY(-4px); box-shadow: var(--shadow-lg); }
-.tile-icon { width: 72px; height: 72px; display: grid; place-items: center; font-size: 2.2rem; border-radius: 20px; background: linear-gradient(135deg, var(--teal-dark), var(--teal)); margin-bottom: .4rem; }
-.tool-tile strong { color: var(--teal-dark); font-size: 1.1rem; }
-.tool-tile small { color: var(--muted); font-size: .88rem; }
+.tool-tile:hover { border-color: var(--teal); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(14, 107, 102, .07); }
+.tile-icon { width: 48px; height: 48px; border-radius: 12px; background: var(--teal-light); margin-bottom: .4rem; }
+.tool-tile strong { color: var(--teal-dark); font-size: .98rem; line-height: 1.8; }
+.tool-tile small { color: var(--muted); font-size: .82rem; line-height: 1.8; }
 .tool-tile .badge-rec { position: absolute; top: .6rem; inset-inline-end: .6rem; }
 
 /* ===== Modals: tools & auth ===== */
@@ -337,7 +340,7 @@ textarea { resize: vertical; min-height: 130px; }
 .account-card small { display: block; color: var(--muted); }
 
 /* ===== M1 Tools Styles ===== */
-.tool-code { font-size: .75rem; font-weight: 800; color: var(--gold-dark); background: var(--gold-soft); padding: 1px 8px; border-radius: 6px; letter-spacing: .05em; margin-bottom: .2rem; display: inline-block; }
+.tool-code { font-size: .65rem; font-weight: 600; color: var(--muted); letter-spacing: .04em; margin-bottom: .1rem; display: inline-block; }
 .badge-tag { font-size: .8rem; font-weight: 700; color: #fff; background: var(--teal); padding: 2px 10px; border-radius: 999px; }
 
 /* Mode Tabs for GPA */
@@ -384,11 +387,11 @@ textarea { resize: vertical; min-height: 130px; }
 .q-explain { font-size: .92rem; color: var(--muted); background: var(--teal-light); padding: .6rem .8rem; border-radius: 8px; margin-top: .6rem; }
 
 /* Assistant & Library Sections */
-.assistant-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.3rem; }
+.assistant-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
 .assist-card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 1.5rem; display: flex; flex-direction: column; box-shadow: var(--shadow); transition: .2s; }
 .assist-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); border-color: var(--teal); }
-.assist-icon { font-size: 2rem; margin-bottom: .6rem; display: block; }
-.assist-card h3 { font-size: 1.18rem; margin-bottom: .5rem; }
+.assist-icon { margin-bottom: .8rem; }
+.assist-card h3 { font-size: 1.05rem; line-height: 1.8; margin-bottom: .5rem; }
 .assist-card p { color: var(--muted); font-size: .95rem; flex: 1; }
 .assist-action { margin-top: 1rem; }
 
@@ -403,16 +406,18 @@ textarea { resize: vertical; min-height: 130px; }
 
 @media (max-width: 640px) {
   .units-grid { grid-template-columns: 1fr; }
-  .swap-col { display: none; }
+  .swap-col { display: flex; justify-content: flex-start; }
 }
 
 /* ===== Print: حاسبة الترقية فقط ===== */
 @media print {
-  body > *:not(#dlg-promotion) { display: none !important; }
-  #dlg-promotion { display: block !important; position: static !important; width: 100%; max-height: none; margin: 0; }
-  #dlg-promotion .modal-box { max-height: none; overflow: visible; box-shadow: none; border-top: 0; padding: 0; }
-  #dlg-promotion .modal-close { display: none; }
-  .tool-actions, #promoForm, .target-row, .row-del, .tool-note { display: none !important; }
+  body:has(#dlg-promotion[open]) { overflow: visible !important; padding: 0; }
+  body:has(#dlg-promotion[open]) > :not(#dlg-promotion) { display: none !important; }
+  #dlg-promotion[open] { display: block !important; position: static !important; width: 100%; max-height: none; margin: 0; border: 0; }
+  #dlg-promotion[open] .modal-box { max-height: none; overflow: visible; box-shadow: none; border-top: 0; padding: 0; }
+  #dlg-promotion[open] .modal-close, #dlg-promotion[open] .tool-actions,
+  #dlg-promotion[open] #promoForm, #dlg-promotion[open] .target-row,
+  #dlg-promotion[open] .row-del, #dlg-promotion[open] .tool-note { display: none !important; }
 }
 
 
@@ -474,7 +479,7 @@ textarea { resize: vertical; min-height: 130px; }
 }
 
 /* ===== Higher-education news windows ===== */
-.news-tabs { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1.4rem 0 1.5rem; }
+.news-tabs { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: .5rem; margin: 1.4rem 0 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(14, 107, 102, .12); }
 .news-tab {
   font-family: inherit; font-size: .88rem; cursor: pointer;
   padding: .45rem 1.1rem; border-radius: 999px;
@@ -483,20 +488,26 @@ textarea { resize: vertical; min-height: 130px; }
 }
 .news-tab:hover { background: rgba(14, 107, 102, .08); }
 .news-tab[aria-pressed="true"] { background: var(--teal); border-color: var(--teal); color: #fff; }
-.news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; }
+.news-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; align-items: stretch; }
 .news-card {
   background: #fff; border: 1px solid rgba(14, 107, 102, .15); border-radius: 14px;
-  padding: 1.25rem; display: flex; flex-direction: column; gap: .6rem;
+  padding: 1.35rem; display: flex; flex-direction: column; gap: .9rem; min-width: 0; text-align: start;
   box-shadow: 0 2px 10px rgba(0, 0, 0, .04);
 }
-.news-card h3 { font-size: 1.02rem; margin: 0; line-height: 1.7; }
+.news-card h3 { font-size: 1rem; margin: 0; line-height: 1.9; min-block-size: 5.7em; overflow-wrap: anywhere; text-align: start; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.news-card h3:dir(ltr) { font-family: system-ui, sans-serif; line-height: 1.7; }
+.news-card .news-summary { text-align: start; overflow-wrap: anywhere; }
 .news-card h3 a { color: inherit; text-decoration: none; }
 .news-card h3 a:hover { color: var(--teal); text-decoration: underline; }
 .news-summary {
   color: #5a5a5a; font-size: .9rem; margin: 0; line-height: 1.8;
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
-.news-meta { font-size: .8rem; color: #888; margin-top: auto; display: flex; flex-wrap: wrap; gap: .25rem .9rem; }
+.news-meta { font-size: .76rem; color: #586967; margin-top: auto; padding-top: .8rem; border-top: 1px solid rgba(14, 107, 102, .12); display: flex; flex-direction: column; gap: .35rem; text-align: start; }
+.news-meta > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.news-meta time { color: #586967; font-size: .75rem; }
+@media (max-width: 960px) { .news-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .news-grid { grid-template-columns: minmax(0, 1fr); } .news-card { padding: 1.1rem; } .news-card h3 { min-block-size: 0; } }
 .news-chip {
   align-self: flex-start; font-size: .74rem; white-space: nowrap;
   background: rgba(14, 107, 102, .1); color: var(--teal-dark);
@@ -513,7 +524,7 @@ textarea { resize: vertical; min-height: 130px; }
   padding: .25rem .95rem; border-radius: 999px;
 }
 .news-featured-card { border: 0; box-shadow: none; padding: 0; }
-.news-featured-card h3 { font-size: 1.3rem; }
+.news-featured-card h3 { font-size: 1.3rem; min-block-size: 0; display: block; overflow: visible; }
 .news-empty { text-align: center; color: #888; padding: 2.5rem 1rem; grid-column: 1 / -1; }
 .news-more { text-align: center; margin-top: 2rem; }
 .news-controls { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; margin-bottom: 1.5rem; }
@@ -525,4 +536,33 @@ textarea { resize: vertical; min-height: 130px; }
 .news-count { font-size: .88rem; color: #888; margin-inline-start: auto; }
 @media (max-width: 560px) {
   .news-featured-card h3 { font-size: 1.12rem; }
+}
+
+/* Consistent card proportions and centered rows for the seven tools. */
+.tool-tile:focus-visible, .cat-card:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; }
+@media (max-width: 960px) {
+  .tool-tile { flex-basis: calc((100% - 1rem) / 2); }
+}
+@media (max-width: 600px) {
+  .assistant-cards { grid-template-columns: minmax(0, 1fr); }
+  .tool-tiles { gap: .75rem; }
+  .tool-tile { flex-basis: calc((100% - .75rem) / 2); padding: 1rem .8rem; }
+  .tool-tile strong { font-size: .88rem; }
+  .tool-tile small { font-size: .75rem; }
+  .tool-tile .badge-rec { position: static; order: 5; margin-top: .25rem; }
+}
+
+/* Keep the navigation on one line instead of compressing the brand and labels. */
+.brand, .brand-mark { flex-shrink: 0; }
+.brand-text { white-space: nowrap; }
+.main-nav { gap: .85rem; font-size: .83rem; }
+.main-nav > a, .main-nav > .btn { white-space: nowrap; }
+.main-nav > .btn { font-size: .8rem; padding: .5rem .8rem; }
+.cat-card, .tool-tile, .assist-card, .academic-service-card { box-shadow: 0 2px 10px rgba(14, 107, 102, .04); }
+.assist-card:hover, .academic-service-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(14, 107, 102, .07); }
+@media (min-width: 821px) and (max-width: 1100px) {
+  .nav-toggle { display: block; }
+  .main-nav { position: absolute; top: 100%; inset-inline: 0; background: var(--teal-dark); flex-direction: column; align-items: stretch; gap: 0; padding: .5rem 1rem 1rem; display: none; border-top: 1px solid rgba(255, 255, 255, .15); }
+  .main-nav.open { display: flex; }
+  .main-nav a { padding: .7rem .2rem; border-bottom: 1px solid rgba(255, 255, 255, .1); }
 }
