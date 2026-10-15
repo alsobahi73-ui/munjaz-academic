@@ -39,6 +39,7 @@
         <a href="#library">المكتبة والموارد</a>
         <a href="defenses.html">🎓 المناقشات</a>
         <a href="jobs.html">💼 الباحثون عن التعيين</a>
+        <a href="#opportunities">📢 فرص وظيفية</a>
         <button type="button" class="btn btn-teal btn-sm" data-open-charter>ميثاق النزاهة</button>
         <button type="button" class="btn btn-light-outline btn-sm" id="authBtn" data-open-auth aria-haspopup="dialog">👤 <span id="authBtnText">تسجيل / دخول</span></button>
       </nav>
@@ -287,6 +288,22 @@
 
     
 
+
+    <!-- ============ Job opportunities ============ -->
+    <section class="section section-tint" id="opportunities" aria-labelledby="oppTitle">
+      <div class="container">
+        <header class="section-head">
+          <h2 id="oppTitle">💼 فرص وظيفية</h2>
+          <p>أحدث إعلانات التوظيف الأكاديمي في الجامعات العراقية.</p>
+        </header>
+        <div class="job-listings" id="oppListings" style="max-width:860px;margin:0 auto">
+          <p class="muted" style="text-align:center">جارٍ التحميل…</p>
+        </div>
+        <p style="text-align:center;margin-top:1.5rem">
+          <a class="btn btn-primary" href="jobs.html">جميع الفرص والتسجيل ←</a>
+        </p>
+      </div>
+    </section>
 
     <!-- ============ Academic services ============ -->
     <section class="section" id="services" aria-labelledby="servicesTitle">
@@ -1086,5 +1103,40 @@
   <script src="academic-services-config.js"></script>
   <script src="app.js"></script>
 
+<script>
+(function () {
+  var wrap = document.getElementById('oppListings');
+  if (!wrap) return;
+  function esc(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  fetch('job-listings.json', { cache: 'no-cache' })
+    .then(function (r) { return r.json(); })
+    .then(function (jobs) {
+      if (!jobs || !jobs.length) {
+        wrap.innerHTML = '<p class="muted" style="text-align:center">لا توجد إعلانات حاليًا.</p>';
+        return;
+      }
+      wrap.innerHTML = '';
+      jobs.slice(0, 3).forEach(function (j) {
+        var card = document.createElement('article');
+        card.className = 'job-listing-card';
+        card.innerHTML =
+          '<div class="job-listing-head"><h4>' + esc(j.title) + '</h4>' +
+          '<span class="job-listing-univ">' + esc(j.university) + '</span></div>' +
+          '<p>' + esc(j.description) + '</p>' +
+          '<div class="job-listing-meta">' +
+          '<span>🎓 ' + esc(j.requirements) + '</span>' +
+          (j.date ? '<span>📅 ' + esc(j.date) + '</span>' : '') +
+          '</div>' +
+          (j.source ? '<a href="' + esc(j.source) + '" target="_blank" rel="noopener" class="job-listing-link">عرض الإعلان ←</a>' : '');
+        wrap.appendChild(card);
+      });
+    })
+    .catch(function () {
+      wrap.innerHTML = '<p class="muted" style="text-align:center"><a href="jobs.html">تصفح الفرص ←</a></p>';
+    });
+})();
+</script>
 </body>
 </html>
