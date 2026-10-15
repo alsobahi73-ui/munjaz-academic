@@ -635,14 +635,17 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
   .duo-wrap { gap: 1.5rem; }
 }
 
-/* ===== Services: vertical layout ===== */
-#services .cat-grid { grid-template-columns: 1fr; max-width: 560px; margin: 0 auto; gap: 1rem; }
-#services .cat-card { flex-direction: row; align-items: center; text-align: right; gap: 1.25rem; padding: 1.4rem 1.6rem; }
-#services .cat-card .cat-icon { font-size: 2.5rem; flex-shrink: 0; }
-#services .cat-card strong { font-size: 1.15rem; }
-#services .cat-card small { font-size: .95rem; }
-#services .cat-card .cat-count { flex-shrink: 0; }
-#services .academic-overview-action { text-align: center; margin-top: 1.75rem; }
+/* ===== Services: balanced horizontal ===== */
+#services .cat-grid { grid-template-columns: repeat(3, 1fr); gap: 1.5rem; max-width: 1080px; margin: 0 auto; }
+#services .cat-card { text-align: center; align-items: center; padding: 2rem 1.5rem; }
+#services .cat-card .cat-icon { margin: 0 auto .75rem; }
+#services .cat-card strong { font-size: 1.1rem; margin-bottom: .5rem; }
+#services .cat-card small { text-align: center; font-size: .92rem; }
+#services .cat-card .cat-count { margin-top: .75rem; }
+#services .academic-overview-action { text-align: center; margin-top: 2rem; }
+@media (max-width: 800px) {
+  #services .cat-grid { grid-template-columns: 1fr; max-width: 480px; }
+}
 
 /* ===== Job listings ===== */
 .job-listings-wrap { max-width: 860px; margin: 0 auto 3rem; }
