@@ -861,3 +861,13 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
 .portal-card.clickable-card .btn { pointer-events: none; }
 /* Avatar initials */
 .featured-photo.avatar-initials { display: flex; align-items: center; justify-content: center; color: #fff; font-size: 2rem; font-weight: 800; text-shadow: 0 2px 4px rgba(0,0,0,.3); }
+
+/* ===== How we work: compact ===== */
+#how .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; max-width: 1000px; margin: 0 auto; list-style: none; padding: 0; }
+#how .steps li { background: #fff; border: 1px solid #e0e8e6; border-radius: 16px; padding: 1.5rem 1.25rem; text-align: center; }
+#how .steps h3 { font-size: 1.05rem; color: #06302C; margin: 0 0 .5rem; }
+#how .steps p { font-size: .9rem; color: #666; margin: 0; line-height: 1.7; }
+#how .section-head { margin-bottom: 1.5rem; }
+@media (max-width: 700px) {
+  #how .steps { grid-template-columns: 1fr; max-width: 420px; }
+}
