@@ -91,7 +91,8 @@
     // Important news only (per owner's curation): conferences, research, journals,
     // publishers, appointments, jobs. Falls back to recent news if too few.
     var IMPORTANT_KW = ['مؤتمر', 'ندوة علمية', 'بحث علمي', 'بحوث', 'ورقة علمية', 'نشر بحث',
-      'مجلة', 'دورية علمية', 'دار نشر', 'دور النشر', 'تعيين', 'وظائف', 'وظيفة', 'فرص عمل', 'درجات وظيفية'];
+      'مجلة', 'دورية علمية', 'دار نشر', 'دور النشر', 'تعيين', 'وظائف', 'وظيفة', 'فرص عمل', 'درجات وظيفية',
+      'قبول', 'قبولات', 'القبول المركزي', 'تسجيل', 'التسجيل', 'الدراسات العليا', 'منح دراسية', 'بعثات'];
     function isImportant(item) {
       var t = (item.title || '') + ' ' + (item.summary || '');
       return IMPORTANT_KW.some(function (k) { return t.indexOf(k) !== -1; });
