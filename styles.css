@@ -594,3 +594,20 @@ textarea { resize: vertical; min-height: 130px; }
 .portal-card h3 { color: #06302C; font-size: 1.3rem; margin: 0 0 1rem; }
 .portal-card p { color: #666; line-height: 1.9; margin-bottom: 1.5rem; }
 .portal-card .btn-lg { font-size: 1.1rem; padding: .9rem 2.5rem; }
+
+/* ===== Job listings ===== */
+.job-listings-wrap { max-width: 860px; margin: 0 auto 3rem; }
+.job-listings-wrap h3 { color: #06302C; font-size: 1.25rem; margin-bottom: 1.25rem; text-align: center; }
+.job-listings { display: grid; gap: 1.25rem; }
+.job-listing-card { background: #fff; border: 1.5px solid #e6f0ee; border-radius: 16px; padding: 1.5rem 1.75rem; border-right: 4px solid #0E6B66; box-shadow: 0 3px 12px rgba(0,0,0,.05); }
+.job-listing-card:hover { border-color: #0E6B66; box-shadow: 0 6px 20px rgba(14,107,102,.12); }
+.job-listing-head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: .75rem; flex-wrap: wrap; }
+.job-listing-head h4 { margin: 0; color: #06302C; font-size: 1.15rem; }
+.job-listing-univ { background: #FFF3D6; color: #8a5a00; font-weight: 700; font-size: .85rem; padding: .3rem .9rem; border-radius: 999px; }
+.job-listing-card > p { color: #555; line-height: 1.8; margin: 0 0 1rem; }
+.job-listing-meta { display: flex; gap: 1.25rem; flex-wrap: wrap; font-size: .9rem; color: #0E6B66; font-weight: 600; margin-bottom: 1rem; }
+.job-listing-card details { margin-bottom: 1rem; background: #f8fdfc; border-radius: 10px; padding: .75rem 1rem; }
+.job-listing-card summary { cursor: pointer; font-weight: 700; color: #06302C; font-size: .95rem; }
+.job-listing-card details p { margin: .75rem 0 0; font-size: .92rem; color: #555; line-height: 1.9; }
+.job-listing-link { color: #B97A12; font-weight: 700; text-decoration: none; }
+.job-listing-link:hover { text-decoration: underline; }
