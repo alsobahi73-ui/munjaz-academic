@@ -909,3 +909,10 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
   border: 4px solid #B97A12;
   box-shadow: 0 6px 20px rgba(185,122,18,.3);
 }
+
+/* ===== Defenses icon equal to neighbors (64px) ===== */
+.trio-wrap .featured-photo { width: 64px !important; height: 64px !important; border-width: 3px; }
+.trio-wrap .featured-photo.avatar-initials { font-size: 1.3rem; }
+.trio-wrap .featured-photo-wrap { margin-bottom: .75rem; }
+.trio-wrap .researcher-badge { font-size: .65rem; padding: .15rem .7rem; bottom: -6px; }
+.trio-wrap .featured-card { min-height: 280px; justify-content: center; }
