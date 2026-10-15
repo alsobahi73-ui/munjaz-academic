@@ -828,3 +828,22 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
 /* Featured card clickable hint */
 #featuredCardHome { cursor: pointer; transition: transform .2s; }
 #featuredCardHome:hover { transform: scale(1.02); }
+
+/* ===== Strict equal icon sizes ===== */
+.trio-wrap .portal-icon {
+  width: 64px !important; height: 64px !important;
+  min-width: 64px; min-height: 64px;
+  display: grid !important; place-items: center;
+  margin: 0 auto 1rem !important;
+  font-size: 2rem !important; line-height: 1 !important;
+}
+.trio-wrap .portal-icon span {
+  font-size: 2rem !important; line-height: 1 !important;
+  display: block; width: 32px; height: 32px;
+  text-align: center;
+}
+/* Equal card heights */
+.trio-wrap .portal-card {
+  min-height: 320px;
+  display: flex; flex-direction: column; justify-content: center;
+}
