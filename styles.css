@@ -852,3 +852,12 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
   min-height: 320px;
   display: flex; flex-direction: column; justify-content: center;
 }
+
+/* ===== Equal icons + clickable cards (final) ===== */
+.trio-wrap .portal-icon { width: 64px; height: 64px; display: grid; place-items: center; margin: 0 auto 1rem; }
+.trio-wrap .portal-icon span { font-size: 2rem; line-height: 1; display: block; }
+.portal-card.clickable-card { cursor: pointer; transition: transform .2s, box-shadow .2s; }
+.portal-card.clickable-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(14,107,102,.15); }
+.portal-card.clickable-card .btn { pointer-events: none; }
+/* Avatar initials */
+.featured-photo.avatar-initials { display: flex; align-items: center; justify-content: center; color: #fff; font-size: 2rem; font-weight: 800; text-shadow: 0 2px 4px rgba(0,0,0,.3); }
