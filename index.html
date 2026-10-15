@@ -160,8 +160,28 @@
               card.appendChild(img);
             } else {
               var ph = document.createElement('div');
-              ph.className = 'featured-photo placeholder'; ph.textContent = '🎓';
+              ph.className = 'featured-photo placeholder avatar-initials';
+              ph.textContent = getInitials(p.name);
+              ph.style.background = getAvatarColor(p.name);
               card.appendChild(ph);
+            }
+            function getInitials(name) {
+              if (!name) return '?';
+              var parts = name.trim().split(/\s+/);
+              if (parts.length >= 2) return parts[0][0] + parts[1][0];
+              return parts[0].substring(0, 2);
+            }
+            function getAvatarColor(name) {
+              var colors = [
+                'linear-gradient(135deg, #0E6B66, #06302C)',
+                'linear-gradient(135deg, #B97A12, #8a5a00)',
+                'linear-gradient(135deg, #0E6B66, #1a9e97)',
+                'linear-gradient(135deg, #6b4fa0, #4a3572)',
+                'linear-gradient(135deg, #c0563f, #8f3d2c)'
+              ];
+              var h = 0;
+              for (var i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) % 100000;
+              return colors[h % colors.length];
             }
             var name = document.createElement('h3'); name.className = 'featured-name'; name.textContent = p.name;
             var deg = document.createElement('span'); deg.className = 'featured-degree'; deg.textContent = p.degree || '';
@@ -262,7 +282,7 @@
           <h2 id="defensesPreviewTitle">المناقشات</h2>
           <p>باحثون ناقشوا حديثًا في الجامعات العراقية.</p>
         </header>
-        <div class="featured-wrap clickable-card" id="featuredWrapHome" onclick="window.location.href='defenses.html'" role="link" tabindex="0" onkeydown="if(event.key==='Enter')window.location.href='defenses.html'">
+        <div class="featured-wrap attraction-only" id="featuredWrapHome">
           <div class="featured-card" id="featuredCardHome"></div>
           <div class="featured-dots" id="featuredDotsHome"></div>
           <p style="text-align:center;margin-top:1rem"><span class="btn btn-primary">جميع المناقشات ←</span></p>
@@ -278,13 +298,7 @@
           <p>سجّل معلوماتك الأساسية لنرشحك للفرص الأكاديمية المناسبة لتخصصك.</p>
         </header>
         <div class="portal-card clickable-card" onclick="window.location.href='jobs.html'" role="link" tabindex="0" onkeydown="if(event.key==='Enter')window.location.href='jobs.html'">
-          <div class="portal-icon custom-icon"><svg viewBox="0 0 64 64" width="40" height="40" fill="none">
-<circle cx="32" cy="32" r="30" fill="#0E6B66" opacity="0.1"/>
-<rect x="14" y="22" width="36" height="24" rx="4" fill="#0E6B66"/>
-<rect x="14" y="22" width="36" height="8" rx="4" fill="#0a544f"/>
-<rect x="26" y="16" width="12" height="8" rx="3" stroke="#B97A12" stroke-width="3" fill="none"/>
-<rect x="29" y="30" width="6" height="6" rx="1" fill="#B97A12"/>
-</svg></div>
+          <div class="portal-icon"><span>💼</span></div>
           <h3>هل تبحث عن فرصة أكاديمية؟</h3>
           <p>ادخل البوابة وسجّل بياناتك: الشهادة، التخصص، العمر، ومحافظة السكن — وسنطابقك مع الفرص المناسبة.</p>
           <span class="btn btn-primary btn-lg">ادخل البوابة ←</span>
@@ -300,14 +314,7 @@
           <p>أحدث إعلانات التوظيف الأكاديمي.</p>
         </header>
         <div class="portal-card clickable-card" onclick="window.location.href='jobs.html'" role="link" tabindex="0" onkeydown="if(event.key==='Enter')window.location.href='jobs.html'">
-          <div class="portal-icon custom-icon"><svg viewBox="0 0 64 64" width="40" height="40" fill="none">
-<circle cx="32" cy="32" r="30" fill="#0E6B66" opacity="0.1"/>
-<path d="M14 26 L38 18 L38 46 L14 38 Z" fill="#0E6B66"/>
-<rect x="38" y="22" width="6" height="20" rx="3" fill="#B97A12"/>
-<path d="M20 38 v8 M28 38 v6" stroke="#B97A12" stroke-width="3" stroke-linecap="round"/>
-<circle cx="48" cy="20" r="2" fill="#B97A12"/>
-<circle cx="52" cy="28" r="2" fill="#B97A12" opacity="0.6"/>
-</svg></div>
+          <div class="portal-icon"><span>📢</span></div>
           <h3>وظائف شاغرة الآن</h3>
           <p>تصفح أحدث إعلانات التوظيف في الجامعات العراقية الأهلية والحكومية.</p>
           <span class="btn btn-primary btn-lg">عرض الفرص ←</span>
