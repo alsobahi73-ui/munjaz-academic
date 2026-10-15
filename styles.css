@@ -876,3 +876,8 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
 /* ===== Rich service icons ===== */
 .cat-icon.rich-icon { width: 76px; height: 76px; display: grid; place-items: center; background: #fff; border: 2px solid #0E6B66; border-radius: 20px; box-shadow: 0 4px 12px rgba(14,107,102,.12); }
 .cat-icon.rich-icon::after { display: none; }
+
+/* ===== Ticker vertical centering ===== */
+.news-ticker, .ticker-wrap { display: flex; align-items: center; }
+.ticker-track { display: flex; align-items: center; }
+.ticker-item { display: flex; align-items: center; line-height: 1.4; }
