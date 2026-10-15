@@ -872,3 +872,8 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
 @media (max-width: 700px) {
   #how .steps { grid-template-columns: 1fr; max-width: 420px; }
 }
+
+/* ===== Ticker vertical centering ===== */
+.news-ticker, .ticker-wrap { display: flex; align-items: center; }
+.ticker-track { display: flex; align-items: center; }
+.ticker-item { display: flex; align-items: center; line-height: 1.4; }
