@@ -802,3 +802,9 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
 @media (max-width: 800px) {
   #services .cat-grid { grid-template-columns: 1fr; max-width: 480px; }
 }
+
+/* ===== Clickable cards ===== */
+.clickable-card { cursor: pointer; transition: transform .2s, box-shadow .2s, border-color .2s; }
+.clickable-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(14,107,102,.18); border-color: var(--gold); }
+.clickable-card:focus { outline: 3px solid var(--gold); outline-offset: 2px; }
+.clickable-card .btn { pointer-events: none; }
