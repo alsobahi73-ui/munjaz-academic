@@ -138,58 +138,7 @@
   })();
   </script>
   <script>
-  // Featured researchers carousel (homepage) - simplified
-  (function () {
-    var card = document.getElementById('featuredCardHome');
-    var dotsWrap = document.getElementById('featuredDotsHome');
-    if (!card) return;
-    var colors = ['#0E6B66','#B97A12','#1a9e97','#6b4fa0','#c0563f'];
-    function initials(name) {
-      try {
-        var parts = String(name || '').trim().split(/\s+/);
-        if (parts.length >= 2) return parts[0].charAt(0) + parts[1].charAt(0);
-        return String(name || '?').substring(0, 2);
-      } catch(e) { return '?'; }
-    }
-    function esc(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-    fetch('featured-researchers.json', { cache: 'no-cache' })
-      .then(function(r){ return r.json(); })
-      .then(function(people){
-        people = (people || []).filter(function(p){ return p && p.name; });
-        if (!people.length) { card.innerHTML = '<p class="muted">لا توجد مناقشات حاليًا.</p>'; return; }
-        var idx = 0, timer = null;
-        function render(i) {
-          idx = ((i % people.length) + people.length) % people.length;
-          var p = people[idx];
-          var bg = colors[idx % colors.length];
-          var html = '<div class="featured-photo avatar-initials" style="background:' + bg + '">' + esc(initials(p.name)) + '</div>' +
-            '<h3 class="featured-name">' + esc(p.name) + '</h3>' +
-            (p.degree ? '<span class="featured-degree">' + esc(p.degree) + '</span>' : '') +
-            '<div class="featured-univ">' + esc(p.university || '') + '</div>' +
-            (p.thesis ? '<div class="featured-thesis">\u00AB' + esc(p.thesis) + '\u00BB</div>' : '');
-          card.innerHTML = html;
-          card.style.opacity = 1;
-          var dots = dotsWrap.querySelectorAll('.featured-dot');
-          for (var d = 0; d < dots.length; d++) dots[d].classList.toggle('active', d === idx);
-        }
-        for (var k = 0; k < people.length; k++) {
-          (function(n){
-            var b = document.createElement('button');
-            b.className = 'featured-dot' + (n === 0 ? ' active' : '');
-            b.setAttribute('aria-label', 'باحث ' + (n+1));
-            b.onclick = function(){ render(n); restart(); };
-            dotsWrap.appendChild(b);
-          })(k);
-        }
-        card.style.cursor = 'pointer';
-        card.onclick = function(){ if (typeof openModal === 'function') openModal(people[idx]); };
-        card.onmouseenter = function(){ if (timer) clearInterval(timer); };
-        card.onmouseleave = function(){ restart(); };
-        function restart(){ if (timer) clearInterval(timer); timer = setInterval(function(){ render(idx+1); }, 6000); }
-        render(0); restart();
-      })
-      .catch(function(){ card.innerHTML = '<p class="muted">تعذر التحميل.</p>'; });
-  })();
+
   // Researcher modal
   function openModal(p) {
     var modal = document.getElementById('researcherModal');
@@ -1134,5 +1083,62 @@
     <div id="modalBody"></div>
   </div>
 </div>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+  // Featured researchers carousel (homepage) - simplified
+  (function () {
+    var card = document.getElementById('featuredCardHome');
+    var dotsWrap = document.getElementById('featuredDotsHome');
+    if (!card) return;
+    var colors = ['#0E6B66','#B97A12','#1a9e97','#6b4fa0','#c0563f'];
+    function initials(name) {
+      try {
+        var parts = String(name || '').trim().split(/\s+/);
+        if (parts.length >= 2) return parts[0].charAt(0) + parts[1].charAt(0);
+        return String(name || '?').substring(0, 2);
+      } catch(e) { return '?'; }
+    }
+    function esc(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    fetch('featured-researchers.json', { cache: 'no-cache' })
+      .then(function(r){ return r.json(); })
+      .then(function(people){
+        people = (people || []).filter(function(p){ return p && p.name; });
+        if (!people.length) { card.innerHTML = '<p class="muted">لا توجد مناقشات حاليًا.</p>'; return; }
+        var idx = 0, timer = null;
+        function render(i) {
+          idx = ((i % people.length) + people.length) % people.length;
+          var p = people[idx];
+          var bg = colors[idx % colors.length];
+          var html = '<div class="featured-photo avatar-initials" style="background:' + bg + '">' + esc(initials(p.name)) + '</div>' +
+            '<h3 class="featured-name">' + esc(p.name) + '</h3>' +
+            (p.degree ? '<span class="featured-degree">' + esc(p.degree) + '</span>' : '') +
+            '<div class="featured-univ">' + esc(p.university || '') + '</div>' +
+            (p.thesis ? '<div class="featured-thesis">\u00AB' + esc(p.thesis) + '\u00BB</div>' : '');
+          card.innerHTML = html;
+          card.style.opacity = 1;
+          var dots = dotsWrap.querySelectorAll('.featured-dot');
+          for (var d = 0; d < dots.length; d++) dots[d].classList.toggle('active', d === idx);
+        }
+        for (var k = 0; k < people.length; k++) {
+          (function(n){
+            var b = document.createElement('button');
+            b.className = 'featured-dot' + (n === 0 ? ' active' : '');
+            b.setAttribute('aria-label', 'باحث ' + (n+1));
+            b.onclick = function(){ render(n); restart(); };
+            dotsWrap.appendChild(b);
+          })(k);
+        }
+        card.style.cursor = 'pointer';
+        card.onclick = function(){ if (typeof openModal === 'function') openModal(people[idx]); };
+        card.onmouseenter = function(){ if (timer) clearInterval(timer); };
+        card.onmouseleave = function(){ restart(); };
+        function restart(){ if (timer) clearInterval(timer); timer = setInterval(function(){ render(idx+1); }, 6000); }
+        render(0); restart();
+      })
+      .catch(function(){ card.innerHTML = '<p class="muted">تعذر التحميل.</p>'; });
+  })();
+  });
+  </script>
 </body>
 </html>
