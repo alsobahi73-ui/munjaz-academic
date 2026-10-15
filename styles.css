@@ -595,6 +595,55 @@ textarea { resize: vertical; min-height: 130px; }
 .portal-card p { color: #666; line-height: 1.9; margin-bottom: 1.5rem; }
 .portal-card .btn-lg { font-size: 1.1rem; padding: .9rem 2.5rem; }
 
+/* ===== Professional layout system ===== */
+:root {
+  --section-pad: clamp(3rem, 6vw, 5rem);
+  --section-gap: 1.5rem;
+}
+.section { padding: var(--section-pad) 0; }
+.section-head { margin-bottom: 2.5rem; }
+.section-head h2 { margin-bottom: .8rem; }
+.section-head p { font-size: 1.05rem; max-width: 640px; margin-inline: auto; }
+
+/* Duo: balanced professional grid */
+.duo-wrap { gap: 2.5rem; align-items: stretch; }
+.duo-wrap .duo-col { display: flex; flex-direction: column; }
+.duo-wrap .duo-col .container { flex: 1; display: flex; flex-direction: column; }
+.duo-wrap .section-head { margin-bottom: 1.75rem; }
+
+/* FAQ: compact professional */
+.faq-section { padding: calc(var(--section-pad) * .8) 0; }
+.faq-container { max-width: 780px; }
+.faq-list { gap: .6rem; }
+.faq-item summary { padding: .95rem 1.25rem; font-size: 1.02rem; }
+.faq-item .faq-answer { padding: 0 1.25rem 1.1rem; }
+.faq-item .faq-answer p { margin: 0; font-size: .97rem; }
+
+/* Hero: tighter */
+.hero { padding: 3.5rem 0 3rem; }
+
+/* Footer spacing */
+footer.site-footer { padding: 2.5rem 0 1.5rem; }
+
+/* Consistent card rhythm */
+.defense-preview-card, .portal-card, .faq-item { scroll-margin-top: 1rem; }
+
+/* Mobile: tighter spacing */
+@media (max-width: 768px) {
+  :root { --section-pad: 2.5rem; }
+  .section-head { margin-bottom: 1.75rem; }
+  .duo-wrap { gap: 1.5rem; }
+}
+
+/* ===== Services: vertical layout ===== */
+#services .cat-grid { grid-template-columns: 1fr; max-width: 560px; margin: 0 auto; gap: 1rem; }
+#services .cat-card { flex-direction: row; align-items: center; text-align: right; gap: 1.25rem; padding: 1.4rem 1.6rem; }
+#services .cat-card .cat-icon { font-size: 2.5rem; flex-shrink: 0; }
+#services .cat-card strong { font-size: 1.15rem; }
+#services .cat-card small { font-size: .95rem; }
+#services .cat-card .cat-count { flex-shrink: 0; }
+#services .academic-overview-action { text-align: center; margin-top: 1.75rem; }
+
 /* ===== Job listings ===== */
 .job-listings-wrap { max-width: 860px; margin: 0 auto 3rem; }
 .job-listings-wrap h3 { color: #06302C; font-size: 1.25rem; margin-bottom: 1.25rem; text-align: center; }
