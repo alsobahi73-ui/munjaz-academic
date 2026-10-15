@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فرص وظيفية — مُنجز أكاديمي</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="index.html" class="brand">مُنجز أكاديمي</a>
+    <nav class="main-nav">
+      <a href="index.html">الرئيسية</a>
+      <a href="jobs.html">بوابة الباحثين عن التعيين</a>
+      <a href="defenses.html">المناقشات</a>
+    </nav>
+  </div>
+</header>
+<main>
+<section class="section" id="opportunities-page">
+  <div class="container">
+    <header class="section-head">
+      <h2>فرص وظيفية</h2>
+      <p>أحدث إعلانات التوظيف الأكاديمي في الجامعات العراقية الأهلية والحكومية.</p>
+    </header>
+    <div class="job-listings-wrap">
+      <div class="job-listings" id="jobListingsPage">
+        <p class="muted" style="text-align:center">جارٍ التحميل…</p>
+      </div>
+    </div>
+    <p style="text-align:center;margin-top:2rem">
+      <a class="btn btn-primary" href="jobs.html">سجّل بياناتك كباحث عن عمل ←</a>
+    </p>
+  </div>
+</section>
+</main>
+<script>
+(function () {
+  var wrap = document.getElementById('jobListingsPage');
+  if (!wrap) return;
+  function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  fetch('job-listings.json', { cache: 'no-cache' })
+    .then(function(r){return r.json();})
+    .then(function(jobs){
+      if(!jobs||!jobs.length){wrap.innerHTML='<p class="muted" style="text-align:center">لا توجد إعلانات حاليًا.</p>';return;}
+      wrap.innerHTML='';
+      jobs.forEach(function(j){
+        var card=document.createElement('article');
+        card.className='job-listing-card';
+        card.innerHTML=
+          '<div class="job-listing-head"><h4>'+esc(j.title)+'</h4><span class="job-listing-univ">'+esc(j.university)+'</span></div>'+
+          '<p>'+esc(j.description)+'</p>'+
+          '<div class="job-listing-meta"><span>🎓 '+esc(j.requirements)+'</span>'+(j.date?'<span>📅 '+esc(j.date)+'</span>':'')+(j.contact?'<span>📞 '+esc(j.contact)+'</span>':'')+'</div>'+
+          (j.specializations?'<details><summary>التخصصات المطلوبة</summary><p>'+esc(j.specializations)+'</p></details>':'')+
+          (j.source?'<a href="'+esc(j.source)+'" target="_blank" rel="noopener" class="job-listing-link">عرض الإعلان الأصلي ←</a>':'');
+        wrap.appendChild(card);
+      });
+    })
+    .catch(function(){wrap.innerHTML='<p class="muted" style="text-align:center">تعذر تحميل الإعلانات.</p>';});
+})();
+</script>
+</body>
+</html>
