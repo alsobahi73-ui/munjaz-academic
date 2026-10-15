@@ -680,3 +680,61 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
 .portal-card { padding: 2rem 1.75rem; }
 .portal-card h3 { font-size: 1.15rem; }
 .portal-card p { font-size: .95rem; margin-bottom: 1.25rem; }
+
+/* ===== Geometric icon system ===== */
+/* Unified geometric header: diamond accent + centered */
+.section-head h2 {
+  display: flex; align-items: center; justify-content: center; gap: .75rem;
+}
+.section-head h2::before {
+  content: ""; width: 10px; height: 10px; background: var(--gold);
+  transform: rotate(45deg); flex-shrink: 0;
+}
+.section-head h2::after {
+  content: ""; width: 10px; height: 10px; background: var(--gold);
+  transform: rotate(45deg); flex-shrink: 0;
+  position: static; margin: 0;
+}
+/* Geometric card icons: consistent hex-like shape */
+.cat-icon, .portal-icon {
+  width: 64px; height: 64px; display: grid; place-items: center;
+  background: linear-gradient(135deg, var(--teal-light) 0%, #fff 100%);
+  border: 2px solid var(--teal); border-radius: 18px;
+  font-size: 1.8rem; position: relative;
+}
+.cat-icon::after, .portal-icon::after {
+  content: ""; position: absolute; inset: -6px;
+  border: 1px dashed var(--gold); border-radius: 22px; opacity: .5;
+}
+/* Portal icon centered */
+.portal-card .portal-icon { margin: 0 auto 1rem; font-size: 2rem; }
+/* Geometric section dividers */
+.section { position: relative; }
+.section:not(.hero):not(.duo-wrap)::before {
+  content: ""; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 120px; height: 3px; border-radius: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: .4;
+}
+/* Duo columns: geometric balance */
+.duo-wrap .duo-col { position: relative; }
+.duo-wrap .duo-col:first-child::after {
+  content: ""; position: absolute; top: 10%; bottom: 10%; inset-inline-end: -1.25rem;
+  width: 1px; background: linear-gradient(180deg, transparent, var(--line), transparent);
+}
+/* Job listing: geometric left accent */
+.job-listing-card { position: relative; overflow: hidden; }
+.job-listing-card::before {
+  content: ""; position: absolute; top: 0; bottom: 0; inset-inline-start: 0;
+  width: 4px; background: linear-gradient(180deg, var(--teal), var(--gold));
+}
+/* FAQ: geometric numbering feel */
+.faq-item { position: relative; }
+.faq-item summary { padding-inline-start: 1.25rem; }
+/* Featured: geometric frame */
+.featured-card { position: relative; }
+.featured-card::before {
+  content: ""; position: absolute; inset: 8px;
+  border: 1px solid var(--gold); border-radius: 14px; opacity: .3; pointer-events: none;
+}
+.featured-photo { position: relative; z-index: 1; }
