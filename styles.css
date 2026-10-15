@@ -809,18 +809,10 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
 .clickable-card:focus { outline: 3px solid var(--gold); outline-offset: 2px; }
 .clickable-card .btn { pointer-events: none; }
 
-/* ===== Custom branded icons ===== */
-.portal-icon.custom-icon { background: #fff; display: grid; place-items: center; }
-.portal-icon.custom-icon svg { display: block; }
-/* Defenses carousel: use graduation icon when no photo */
-.featured-photo.placeholder.custom { background: linear-gradient(135deg, #0E6B66 0%, #06302C 100%); }
-
-/* ===== Defenses: attraction only (not clickable) ===== */
-.featured-wrap.attraction-only { cursor: default; }
-.featured-wrap.attraction-only:hover { transform: none; box-shadow: none; }
-/* Avatar initials: branded */
-.featured-photo.avatar-initials {
-  display: flex; align-items: center; justify-content: center;
-  color: #fff; font-size: 2.2rem; font-weight: 800; font-family: 'Noto Kufi', sans-serif;
-  text-shadow: 0 2px 4px rgba(0,0,0,.3);
+/* ===== FAQ: horizontal grid ===== */
+.faq-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+.faq-item:nth-child(5) { grid-column: 1 / -1; max-width: 50%; margin: 0 auto; width: 100%; }
+@media (max-width: 700px) {
+  .faq-list { grid-template-columns: 1fr; }
+  .faq-item:nth-child(5) { max-width: 100%; }
 }
