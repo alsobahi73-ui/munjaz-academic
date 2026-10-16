@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>قلم حر — مُنجز أكاديمي</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="index.html" class="brand">مُنجز أكاديمي</a>
+    <nav class="main-nav">
+      <a href="index.html">الرئيسية</a>
+      <a href="defenses.html">المناقشات</a>
+      <a href="jobs.html">بوابة التعيين</a>
+      <a href="opportunities.html">فرص وظيفية</a>
+    </nav>
+  </div>
+</header>
+<main>
+<section class="section" id="articles-hero">
+  <div class="container">
+    <header class="section-head">
+      <h2>قلم حر</h2>
+      <p>مساحة مفتوحة لأقلام الطلبة والباحثين والأساتذة. اكتب رأيك، شارك تجربتك، انشر فكرتك.</p>
+    </header>
+    <div class="qalam-cats">
+      <span class="qalam-cat">رأي أكاديمي</span>
+      <span class="qalam-cat">تجربة بحثية</span>
+      <span class="qalam-cat">قضايا تعليمية</span>
+      <span class="qalam-cat">خواطر جامعية</span>
+    </div>
+  </div>
+</section>
+<section class="section section-tint" id="articles-list">
+  <div class="container">
+    <header class="section-head"><h2>أحدث المقالات</h2></header>
+    <div class="qalam-articles" id="articlesList"><p class="muted" style="text-align:center">جارٍ التحميل…</p></div>
+  </div>
+</section>
+<section class="section" id="submit-article">
+  <div class="container" style="max-width:720px">
+    <header class="section-head">
+      <h2>انشر مقالك</h2>
+      <p>املأ النموذج وسيُفتح بريدك لإرسال المقال — نراجعه وننشره باسمك.</p>
+    </header>
+    <form id="articleForm" class="styled-form">
+      <div class="form-row">
+        <label>الاسم الكامل *<input type="text" name="name" required></label>
+        <label>الصفة *
+          <select name="role" required>
+            <option value="">اختر…</option>
+            <option>طالب دراسات أولية</option>
+            <option>طالب دراسات عليا</option>
+            <option>باحث</option>
+            <option>أستاذ جامعي</option>
+          </select>
+        </label>
+      </div>
+      <label>عنوان المقال *<input type="text" name="title" required></label>
+      <label>التصنيف *
+        <select name="category" required>
+          <option value="">اختر…</option>
+          <option>رأي أكاديمي</option>
+          <option>تجربة بحثية</option>
+          <option>قضايا تعليمية</option>
+          <option>خواطر جامعية</option>
+        </select>
+      </label>
+      <label>نص المقال *<textarea name="body" rows="10" required placeholder="اكتب مقالك هنا…"></textarea></label>
+      <label>بريدك للتواصل<input type="email" name="email" dir="ltr"></label>
+      <button type="submit" class="btn btn-primary btn-lg">إرسال المقال ←</button>
+      <p class="form-note">بالضغط على إرسال سيُفتح تطبيق البريد لديك مع المقال جاهزًا للإرسال إلى بريد المنصة.</p>
+    </form>
+  </div>
+</section>
+</main>
+<script>
+(function(){
+  function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  // Load articles
+  var list = document.getElementById('articlesList');
+  fetch('articles.json', {cache:'no-cache'}).then(function(r){return r.json();}).then(function(arts){
+    if(!arts||!arts.length){list.innerHTML='<p class="muted" style="text-align:center">لا توجد مقالات بعد — كن أول من ينشر.</p>';return;}
+    list.innerHTML='';
+    arts.forEach(function(a){
+      var el=document.createElement('article'); el.className='qalam-full'; el.id=a.id||'';
+      el.innerHTML='<span class="qalam-cat">'+esc(a.category||'')+'</span><h3>'+esc(a.title)+'</h3>'+
+        '<div class="qalam-meta"><span>'+esc(a.author||'')+'</span><span>'+esc(a.role||'')+'</span>'+(a.date?'<span>'+esc(a.date)+'</span>':'')+'</div>'+
+        '<div class="qalam-body">'+esc(a.body||'').replace(/\n/g,'<br>')+'</div>';
+      list.appendChild(el);
+    });
+  }).catch(function(){list.innerHTML='<p class="muted" style="text-align:center">تعذر التحميل.</p>';});
+  // Submit via email
+  document.getElementById('articleForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    var f=e.target;
+    var subject='مقال جديد لقلم حر: '+f.title.value;
+    var body='الاسم: '+f.name.value+'\nالصفة: '+f.role.value+'\nالتصنيف: '+f.category.value+'\nالبريد: '+(f.email.value||'—')+'\n\n— نص المقال —\n'+f.body.value;
+    window.location.href='mailto:alsobahi73@gmail.com?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+  });
+})();
+</script>
+</body>
+</html>
