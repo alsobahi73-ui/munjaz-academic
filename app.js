@@ -11,8 +11,15 @@
        - اتركه null  => "ملف محلي" يُحفظ على جهاز الزائر فقط (بدون كلمة مرور ولا حساب سحابي).
        - للتسجيل الحقيقي: أنشئ مشروعاً في Firebase، فعّل Authentication > Email/Password،
          والصق إعدادات تطبيق الويب هنا، مثال:
-         { apiKey: '...', authDomain: 'xxx.firebaseapp.com', projectId: 'xxx', appId: '...' } */
-    FIREBASE: null,
+         } */
+    FIREBASE: {
+      apiKey: "AIzaSyCNiaSYCS5M4qc3d_1W5uMKjPD_tyz_zF4",
+      authDomain: "munjaz-academic.firebaseapp.com",
+      projectId: "munjaz-academic",
+      storageBucket: "munjaz-academic.firebasestorage.app",
+      messagingSenderId: "724285968142",
+      appId: "1:724285968142:web:a24907e5f4b7a42a0d515f"
+    },
   };
 
   const LS = {
