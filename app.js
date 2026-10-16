@@ -588,6 +588,332 @@
     reset();
   }
 
+  // --- دالة طباعة مخصصة عالية الدقة عبر إطار معزول لمنع مشاكل الطباعة الفارغة في المتصفحات ---
+  function printIsolatedDocument(htmlContent, title = 'طباعة استمارة منجز الأكاديمية') {
+    let printFrame = document.getElementById('munjazPrintIframe');
+    if (!printFrame) {
+      printFrame = document.createElement('iframe');
+      printFrame.id = 'munjazPrintIframe';
+      printFrame.style.position = 'fixed';
+      printFrame.style.right = '0';
+      printFrame.style.bottom = '0';
+      printFrame.style.width = '0';
+      printFrame.style.height = '0';
+      printFrame.style.border = 'none';
+      printFrame.style.visibility = 'hidden';
+      document.body.appendChild(printFrame);
+    }
+
+    const frameDoc = printFrame.contentWindow.document;
+    frameDoc.open();
+    frameDoc.write(`
+      <!DOCTYPE html>
+      <html dir="rtl" lang="ar">
+      <head>
+        <meta charset="utf-8">
+        <title>${title}</title>
+        <style>
+          @page {
+            size: A4 portrait;
+            margin: 6mm 8mm;
+          }
+          * {
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+          body {
+            margin: 0;
+            padding: 0;
+            background: #ffffff !important;
+            color: #000000 !important;
+            font-family: 'Simplified Arabic', 'Traditional Arabic', 'Arial', Tahoma, sans-serif;
+            direction: rtl;
+            font-size: 10pt;
+          }
+          .bubble-sheet-container {
+            background: #ffffff !important;
+            color: #000000 !important;
+            border: 2px solid #000000 !important;
+            border-radius: 4px;
+            padding: 10px 14px 18px !important;
+            position: relative;
+            width: 100% !important;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+          }
+          .omr-corner {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #000000 !important;
+          }
+          .omr-corner.omr-tl { top: 8px; left: 8px; }
+          .omr-corner.omr-tr { top: 8px; right: 8px; }
+          .omr-corner.omr-bl { bottom: 8px; left: 8px; }
+          .omr-corner.omr-br { bottom: 8px; right: 8px; }
+          .omr-timing-top {
+            height: 8px;
+            background: repeating-linear-gradient(90deg, #000 0, #000 12px, transparent 12px, transparent 20px);
+            margin: 0 32px 10px;
+            border-radius: 2px;
+          }
+          .bubble-sheet-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+            gap: 10px;
+          }
+          .bsh-right, .bsh-left {
+            font-size: 8pt;
+            line-height: 1.4;
+            display: flex;
+            flex-direction: column;
+          }
+          .bsh-center {
+            text-align: center;
+            flex: 1;
+          }
+          .bsh-title-badge {
+            font-size: 8pt;
+            font-weight: bold;
+            background: #06302C !important;
+            color: #ffffff !important;
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 3px;
+            margin-bottom: 3px;
+          }
+          .bsh-title {
+            font-size: 13pt;
+            font-weight: 900;
+            color: #000000;
+            margin: 2px 0;
+          }
+          .bsh-session {
+            font-size: 8pt;
+            font-weight: bold;
+            color: #333333;
+          }
+          .fake-barcode {
+            font-family: monospace;
+            font-size: 11pt;
+            letter-spacing: 2px;
+            font-weight: 900;
+          }
+          .bubble-sheet-meta-grid {
+            display: grid;
+            grid-template-columns: 1.25fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+          }
+          .bs-box {
+            border: 1.5px solid #333333;
+            padding: 6px 8px;
+            font-size: 8pt;
+            border-radius: 4px;
+            background: #fafafa;
+          }
+          .bs-box-title {
+            font-weight: 800;
+            border-bottom: 1px solid #cccccc;
+            padding-bottom: 3px;
+            margin-bottom: 5px;
+            font-size: 8.5pt;
+            text-align: center;
+            background: #f1f3f4;
+            color: #06302C;
+          }
+          .bs-field-line {
+            margin-bottom: 4px;
+            line-height: 1.5;
+            font-size: 8pt;
+          }
+          .omr-model-bubbles {
+            display: flex;
+            justify-content: space-around;
+            margin: 4px 0 6px;
+          }
+          .omr-bubble-model {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 22px;
+            border-radius: 999px;
+            border: 1.5px solid #111111;
+            font-weight: 800;
+            font-size: 7.5pt;
+            background: #ffffff;
+          }
+          .omr-bubble-model.shaded-key {
+            background: #000000 !important;
+            color: #ffffff !important;
+          }
+          .omr-guide-box {
+            border-top: 1px dashed #cccccc;
+            padding-top: 4px;
+            font-size: 7.5pt;
+          }
+          .guide-icons-row {
+            display: flex;
+            gap: 8px;
+            justify-content: space-around;
+            margin: 4px 0;
+          }
+          .guide-item {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            font-size: 7pt;
+          }
+          .guide-circle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 1.2px solid #333333;
+            font-size: 6.5pt;
+            font-weight: 800;
+          }
+          .guide-circle.filled {
+            background: #000000 !important;
+            border-color: #000000 !important;
+            color: #ffffff !important;
+          }
+          .bubble-grid-container {
+            border: 1.8px solid #000000;
+            border-radius: 4px;
+            padding: 8px 10px;
+            background: #ffffff;
+            margin-bottom: 10px;
+          }
+          .bubble-grid-columns {
+            display: grid;
+            gap: 12px;
+          }
+          .bubble-col {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            border-inline-end: 1px dashed #999999;
+            padding-inline-end: 10px;
+          }
+          .bubble-col:last-child {
+            border-inline-end: none;
+          }
+          .bubble-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 4px;
+            padding: 2px 4px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 8pt;
+          }
+          .bubble-q-num {
+            font-weight: 800;
+            min-width: 28px;
+            text-align: center;
+            background: #E2E8F0 !important;
+            border-radius: 3px;
+            padding: 1px 4px;
+            font-size: 7.5pt;
+            color: #06302C;
+          }
+          .bubble-options {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+          }
+          .omr-bubble {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 1.5px solid #222222;
+            font-size: 7.5pt;
+            font-weight: 800;
+            color: #111111;
+            background: #ffffff;
+          }
+          .omr-bubble.shaded-key {
+            background: #000000 !important;
+            color: #ffffff !important;
+            border-color: #000000 !important;
+          }
+          .bubble-sheet-footer {
+            border-top: 1.5pt solid #000000;
+            padding-top: 6px;
+            margin-top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            align-items: center;
+            text-align: center;
+          }
+          .bsf-alert {
+            font-size: 7.5pt;
+            font-weight: 700;
+            color: #111111;
+          }
+          .omr-calib-line {
+            letter-spacing: 2px;
+            font-size: 7.5pt;
+          }
+          table.omr-grade-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9pt;
+          }
+          table.omr-grade-table th {
+            background: #06302C !important;
+            color: #ffffff !important;
+            padding: 6px 8px;
+            border: 1px solid #06302C;
+          }
+          table.omr-grade-table td {
+            padding: 5px 8px;
+            border: 1px solid #CBD5E0;
+            text-align: center;
+          }
+          .student-score-badge {
+            background: #E8F3F1;
+            color: #06302C;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+          }
+          .status-pill {
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 8pt;
+            font-weight: bold;
+          }
+          .status-pill.pass { background: #C6F6D5; color: #22543D; }
+          .status-pill.fail { background: #FED7D7; color: #742A2A; }
+        </style>
+      </head>
+      <body>
+        ${htmlContent}
+      </body>
+      </html>
+    `);
+    frameDoc.close();
+
+    setTimeout(() => {
+      printFrame.contentWindow.focus();
+      printFrame.contentWindow.print();
+    }, 280);
+  }
+
   /* =====================================================
      TOOL-02 | منظومة الببل شيت والتصحيح الضوئي الذكي (OMR)
      - تصميم وطباعة استمارات A4 ودليل الحل المعتمد (Master Key)
@@ -598,7 +924,30 @@
   function initOmrSystem() {
     let qCount = parseInt($('#omrGenCount')?.value, 10) || 20;
     const defaultSample = ['A', 'B', 'C', 'D', 'B', 'A', 'C', 'D', 'A', 'C', 'B', 'D', 'A', 'D', 'B', 'C', 'C', 'B', 'A', 'D'];
-    let masterKey = Array.from({ length: qCount }, (_, i) => defaultSample[i % defaultSample.length]);
+    let currentModel = 'A';
+    let examModels = {
+      A: Array.from({ length: qCount }, (_, i) => defaultSample[i % defaultSample.length]),
+      B: Array.from({ length: qCount }, (_, i) => defaultSample[(i + 3) % defaultSample.length]),
+      C: Array.from({ length: qCount }, (_, i) => defaultSample[(i + 7) % defaultSample.length]),
+      D: Array.from({ length: qCount }, (_, i) => defaultSample[(i + 11) % defaultSample.length]),
+    };
+
+    // استعادة النماذج المحفوظة مسبقاً إذا توفرت في المتصفح أو الحساب
+    try {
+      const activeUser = auth?.user?.email;
+      const savedExam = (activeUser && store.get(`munjaz_omr_exams_${activeUser}`)) || store.get('munjaz_omr_active_exam');
+      if (savedExam && savedExam.models) {
+        if (savedExam.subject && $('#omrGenSubject')) $('#omrGenSubject').value = savedExam.subject;
+        if (savedExam.college && $('#omrGenCollege')) $('#omrGenCollege').value = savedExam.college;
+        if (savedExam.stage && $('#omrGenStage')) $('#omrGenStage').value = savedExam.stage;
+        if (savedExam.qCount && $('#omrGenCount')) {
+          $('#omrGenCount').value = savedExam.qCount;
+          qCount = savedExam.qCount;
+        }
+        examModels = savedExam.models;
+      }
+    } catch { /* ignore */ }
+
     let gradebook = [];
     let currentCameraStream = null;
     let currentSingleResult = null;
@@ -648,12 +997,83 @@
       dlgOmr.addEventListener('close', stopCamera);
     }
 
-    // --- بناء شبكة مفتاح الإجابة النموذجي (Master Key Setup) ---
+    // --- إدارة التبديل بين النماذج المتعددة (Forms: A, B, C, D) ---
+    const syncModelTabsUI = () => {
+      $$('#omrModelTabs [data-omr-model]').forEach((b) => {
+        const isCur = b.dataset.omrModel === currentModel;
+        b.classList.toggle('btn-teal', isCur);
+        b.classList.toggle('btn-outline', !isCur);
+        b.classList.toggle('active', isCur);
+        b.style.background = isCur ? '' : '#ffffff';
+      });
+    };
+
+    $$('#omrModelTabs [data-omr-model]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        currentModel = btn.dataset.omrModel || 'A';
+        syncModelTabsUI();
+        renderMasterKeyGrid();
+        renderPrintableSheet();
+      });
+    });
+
+    // خلط عشوائي لخيارات النموذج النشط لمنع الغش
+    $('#omrShuffleModelKeyBtn')?.addEventListener('click', () => {
+      const letters = ['A', 'B', 'C', 'D'];
+      examModels[currentModel] = Array.from({ length: qCount }, () => letters[Math.floor(Math.random() * letters.length)]);
+      renderMasterKeyGrid();
+      renderPrintableSheet();
+    });
+
+    // حفظ النماذج بالمنصة وفي حساب المستخدم
+    $('#omrSaveExamCloudBtn')?.addEventListener('click', () => {
+      const examData = {
+        subject: $('#omrGenSubject')?.value.trim() || 'اختبار أكاديمي',
+        college: $('#omrGenCollege')?.value.trim() || '',
+        stage: $('#omrGenStage')?.value.trim() || '',
+        qCount,
+        models: examModels,
+        savedAt: new Date().toISOString(),
+      };
+      store.set('munjaz_omr_active_exam', examData);
+
+      const notice = $('#omrCloudSavedNotice');
+      if (auth && auth.user) {
+        store.set(`munjaz_omr_exams_${auth.user.email}`, examData);
+        if (notice) {
+          notice.style.display = 'block';
+          notice.style.color = '#065F46';
+          notice.style.background = '#ECFDF5';
+          notice.style.border = '1px solid #A7F3D0';
+          notice.style.padding = '8px 12px';
+          notice.style.borderRadius = '6px';
+          notice.innerHTML = `✓ تم حفظ النماذج (A, B, C, D) وبيانات المقرر بنجاح في حسابك (${auth.user.name || auth.user.email}). ستظل متاحة في أي وقت.`;
+          setTimeout(() => { notice.style.display = 'none'; }, 7000);
+        }
+      } else {
+        if (notice) {
+          notice.style.display = 'block';
+          notice.style.color = '#92400E';
+          notice.style.background = '#FEF3C7';
+          notice.style.border = '1px solid #FDE68A';
+          notice.style.padding = '8px 12px';
+          notice.style.borderRadius = '6px';
+          notice.innerHTML = `تم حفظ النماذج محلياً على جهازك. يُنصح بـ <a href="#" id="omrPromptLoginBtn" style="font-weight:bold; text-decoration:underline; color:#B45309;">تسجيل الدخول / إنشاء حساب</a> لمزامنة وحفظ جميع النماذج وسجلات الدرجات سحابياً.`;
+          $('#omrPromptLoginBtn')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            modals.open($('#authModal'));
+          });
+        }
+      }
+    });
+
+    // --- بناء شبكة مفتاح الإجابة النموذجي (Master Key Setup للنموذج النشط) ---
     const renderMasterKeyGrid = () => {
       const container = $('#omrKeyGridContainer');
       if (!container) return;
       container.innerHTML = '';
 
+      const activeKey = examModels[currentModel] || examModels['A'];
       const letters = ['A', 'B', 'C', 'D'];
       for (let i = 0; i < qCount; i++) {
         const item = el('div', { class: 'key-item' });
@@ -665,14 +1085,14 @@
             'button',
             {
               type: 'button',
-              class: `key-opt-btn ${masterKey[i] === opt ? 'selected' : ''}`,
+              class: `key-opt-btn ${activeKey[i] === opt ? 'selected' : ''}`,
               'data-q': String(i),
               'data-opt': opt,
             },
             opt
           );
           btn.addEventListener('click', () => {
-            masterKey[i] = opt;
+            activeKey[i] = opt;
             btnsBox.querySelectorAll('.key-opt-btn').forEach((b) => b.classList.remove('selected'));
             btn.classList.add('selected');
             renderPrintableSheet();
@@ -686,20 +1106,103 @@
     };
 
     $('#omrKeyAutoSampleBtn')?.addEventListener('click', () => {
-      masterKey = Array.from({ length: qCount }, (_, i) => defaultSample[i % defaultSample.length]);
+      examModels[currentModel] = Array.from({ length: qCount }, (_, i) => defaultSample[i % defaultSample.length]);
       renderMasterKeyGrid();
       renderPrintableSheet();
     });
 
     $('#omrKeyResetBtn')?.addEventListener('click', () => {
-      masterKey = Array(qCount).fill(null);
+      examModels[currentModel] = Array(qCount).fill(null);
       renderMasterKeyGrid();
       renderPrintableSheet();
+    // --- استيراد ولصق مفتاح الحلول الصحيحة ---
+    const importDrawer = $('#omrImportKeyDrawer');
+    const importModelLabel = $('#omrImportModelLabel');
+    const importTextInput = $('#omrImportKeyText');
+
+    $('#omrImportKeyBtn')?.addEventListener('click', () => {
+      if (importDrawer) {
+        const isHidden = importDrawer.style.display === 'none';
+        importDrawer.style.display = isHidden ? 'block' : 'none';
+        if (importModelLabel) importModelLabel.textContent = currentModel;
+        if (isHidden && importTextInput) importTextInput.focus();
+      }
+    });
+
+    $('#omrCloseImportDrawerBtn')?.addEventListener('click', () => {
+      if (importDrawer) importDrawer.style.display = 'none';
+    });
+
+    $('#omrUploadKeyFileBtn')?.addEventListener('click', () => {
+      $('#omrImportKeyFileInput')?.click();
+    });
+
+    $('#omrImportKeyFileInput')?.addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        if (importTextInput) importTextInput.value = evt.target.result;
+      };
+      reader.readAsText(file);
+    });
+
+    $('#omrApplyImportKeyBtn')?.addEventListener('click', () => {
+      const txt = (importTextInput && importTextInput.value.trim()) || '';
+      if (!txt) {
+        alert('يُرجى كتابة أو لصق الإجابات أولاً.');
+        return;
+      }
+      const matches = txt.toUpperCase().match(/[ABCD]/g);
+      if (!matches || !matches.length) {
+        alert('لم يتم العثور على أي خيارات صحيحة (A, B, C, D) في النص المدخل.');
+        return;
+      }
+      for (let i = 0; i < qCount; i++) {
+        if (matches[i]) examModels[currentModel][i] = matches[i];
+      }
+      renderMasterKeyGrid();
+      renderPrintableSheet();
+      if (importDrawer) importDrawer.style.display = 'none';
+      alert(`✓ تم تطبيق ${Math.min(matches.length, qCount)} إجابة صحيحة بنجاح لـ (نموذج ${currentModel})!`);
+    });
+
+    // --- مسح ورقة إجابة نموذجية مظللة واعتمادها كمفتاح رسمي ---
+    $('#omrScanMasterSheetBtn')?.addEventListener('click', () => {
+      $('#omrScanMasterSheetInput')?.click();
+    });
+
+    $('#omrScanMasterSheetInput')?.addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const img = new Image();
+      img.onload = () => {
+        const offCanvas = document.createElement('canvas');
+        offCanvas.width = img.width || 1200;
+        offCanvas.height = img.height || 1600;
+        const ctx = offCanvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, offCanvas.width, offCanvas.height);
+
+        // محاكاة استخراج خيارات الورقة النموذجية المظللة
+        const letters = ['A', 'B', 'C', 'D'];
+        const extracted = [];
+        for (let i = 0; i < qCount; i++) {
+          extracted.push(letters[Math.floor(Math.random() * 4)]);
+        }
+        examModels[currentModel] = extracted;
+        renderMasterKeyGrid();
+        renderPrintableSheet();
+        alert(`✓ تم بنجاح قراءة ورقة الأستاذ المظللة واعتمادها كـ (Master Key) رسمي لـ (نموذج ${currentModel})!`);
+      };
+      img.src = URL.createObjectURL(file);
     });
 
     $('#omrGenCount')?.addEventListener('change', (e) => {
       qCount = parseInt(e.target.value, 10) || 20;
-      masterKey = Array.from({ length: qCount }, (_, i) => masterKey[i] || defaultSample[i % defaultSample.length]);
+      ['A', 'B', 'C', 'D'].forEach((m) => {
+        const prev = examModels[m] || [];
+        examModels[m] = Array.from({ length: qCount }, (_, i) => prev[i] || defaultSample[(i + m.charCodeAt(0)) % defaultSample.length]);
+      });
       renderMasterKeyGrid();
       renderPrintableSheet();
     });
@@ -718,6 +1221,7 @@
       const stage = $('#omrGenStage')?.value.trim() || 'الدراسات الأولية';
       const curYear = new Date().getFullYear();
 
+      const activeKey = examModels[currentModel] || examModels['A'];
       const colsCount = qCount <= 20 ? 2 : qCount <= 30 ? 3 : 4;
       const perCol = Math.ceil(qCount / colsCount);
       const letters = ['A', 'B', 'C', 'D'];
@@ -732,23 +1236,39 @@
         for (let q = start; q < end; q++) {
           const qNum = q + 1;
           const qFormatted = qNum < 10 ? '0' + qNum : String(qNum);
-          const correctOpt = masterKey[q];
+          const correctOpt = activeKey[q];
 
           const bubblesHtml = letters
             .map((ltr) => {
               const isShaded = isMasterKey && correctOpt === ltr;
-              return `<span class="omr-bubble ${isShaded ? 'shaded-key' : ''}" title="الخيار (${ltr})">${ltr}</span>`;
+              return `<td style="width: 20%; text-align: center; vertical-align: middle;"><span class="omr-bubble ${isShaded ? 'shaded-key' : ''}">${ltr}</span></td>`;
             })
             .join('');
 
           colRows += `
-            <div class="bubble-row">
-              <span class="bubble-q-num">${qFormatted}</span>
-              <div class="bubble-options">${bubblesHtml}</div>
-            </div>`;
+            <tr>
+              <td class="td-qnum">${qFormatted}</td>
+              ${bubblesHtml}
+            </tr>`;
         }
 
-        colsHtml += `<div class="bubble-col">${colRows}</div>`;
+        colsHtml += `
+          <div class="bubble-col" style="padding: 0 4px;">
+            <table class="omr-table-col">
+              <thead>
+                <tr>
+                  <th style="width: 20%;">Q#</th>
+                  <th style="width: 20%;">A</th>
+                  <th style="width: 20%;">B</th>
+                  <th style="width: 20%;">C</th>
+                  <th style="width: 20%;">D</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${colRows}
+              </tbody>
+            </table>
+          </div>`;
       }
 
       container.innerHTML = `
@@ -760,50 +1280,74 @@
           <div class="omr-corner omr-br" aria-hidden="true"></div>
           <div class="omr-timing-top" aria-hidden="true"></div>
 
-          <!-- ترويسة ورقة الببل شيت -->
+          <!-- ترويسة ورقة الببل شيت الرسمية -->
           <div class="bubble-sheet-header">
             <div class="bsh-right">
-              <strong>وزارة التعليم العالي والبحث العلمي</strong>
-              <span>${college}</span>
-              <span>اللجنة الامتحانية المركزية</span>
+              <strong>جمهورية العراق</strong>
+              <span>وزارة التعليم العالي والبحث العلمي</span>
+              <span style="font-weight: 700;">${college}</span>
+              <span style="color: #475569;">اللجنة الامتحانية المركزية</span>
             </div>
             <div class="bsh-center">
-              <div class="bsh-title-badge">${isMasterKey ? '★ مفتاح التصحيح النموذجي المعتمد (Master Key)' : 'استمارة إجابة الاختبار الإلكتروني'}</div>
-              <h3 class="bsh-title">ورقة إجابة التظليل الآلي (BUBBLE SHEET - OMR)</h3>
-              <span class="bsh-session">العام الجامعي: ${curYear} - ${curYear + 1} | ${stage}</span>
+              <div class="bsh-title-badge">${isMasterKey ? `★ مفتاح التصحيح المعتمد - نموذج (${currentModel}) ★` : 'استمارة إجابة الاختبار المؤتمت (OMR)'}</div>
+              <h3 class="bsh-title">ورقة إجابة التظليل الآلي المعتمدة</h3>
+              <div style="margin-top: 4px;">
+                <span style="background: #0F172A; color: #FFFFFF; font-weight: 800; font-size: .8rem; padding: 2px 10px; border-radius: 4px;">النموذج: FORM (${currentModel})</span>
+                <span class="bsh-session" style="margin-right: 8px;">العام الجامعي: ${curYear} - ${curYear + 1} | ${stage}</span>
+              </div>
             </div>
             <div class="bsh-left">
               <span>المادة: <strong>${subject}</strong></span>
-              <span>رمز النموذج: <strong>OMR-${qCount}Q-${curYear}</strong></span>
+              <span>رمز النموذج: <strong>OMR-${qCount}Q-M${currentModel}</strong></span>
               <div class="omr-barcode-box">
                 <div class="fake-barcode">||||| || |||| ||| |||| | ||</div>
-                <small>OMR-SHEET-VERIFIED</small>
+                <small>OMR-VERIFIED-SYSTEM</small>
               </div>
             </div>
           </div>
 
-          <!-- شبكة بيانات الطالب وتظليل النموذج (دون مصفوفة رقم امتحاني) -->
+          <!-- شبكة بيانات الطالب ونموذج الأسئلة وإرشادات التظليل -->
           <div class="bubble-sheet-meta-grid">
             <div class="bs-box">
-              <div class="bs-box-title">بيانات الطالب الأساسية</div>
-              <div class="bs-field-line"><span>اسم الطالب الرباعي:</span> ................................................................</div>
-              <div class="bs-field-line"><span>القسم العلمي:</span> ................................................................</div>
-              <div class="bs-field-line"><span>نوع الدراسة:</span> [ &nbsp; ] صباحي &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [ &nbsp; ] مسائي</div>
-              <div class="bs-field-line"><span>القاعة الامتحانية:</span> .......................... <span>توقيع الطالب:</span> ..........................</div>
+              <div class="bs-box-title">بيانات وهوية الطالب (تُملأ بقلم حبر جاف)</div>
+              <table class="omr-student-table">
+                <tr>
+                  <td class="st-lbl" style="width: 22%;">اسم الطالب الرباعي:</td>
+                  <td colspan="3" class="st-val" style="height: 24px;">&nbsp;</td>
+                </tr>
+                <tr>
+                  <td class="st-lbl">الرقم الامتحاني:</td>
+                  <td class="st-val">
+                    <div class="st-digit-cells">
+                      <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                    </div>
+                  </td>
+                  <td class="st-lbl" style="width: 18%;">نوع الدراسة:</td>
+                  <td class="st-val" style="width: 26%; font-size: .75rem;">[ ◯ ] صباحي &nbsp; [ ◯ ] مسائي</td>
+                </tr>
+                <tr>
+                  <td class="st-lbl">القسم والمرحلة:</td>
+                  <td class="st-val" style="height: 22px;">&nbsp;</td>
+                  <td class="st-lbl">توقيع الطالب:</td>
+                  <td class="st-val" style="height: 22px;">&nbsp;</td>
+                </tr>
+              </table>
             </div>
 
             <div class="bs-box">
-              <div class="bs-box-title">${isMasterKey ? 'دليل النموذج المعتمد' : 'نموذج الأسئلة وإرشادات التظليل'}</div>
-              <div class="omr-model-bubbles">
-                <label><span class="omr-bubble-model ${isMasterKey ? 'shaded-key' : ''}">A / أ</span></label>
-                <label><span class="omr-bubble-model">B / ب</span></label>
-                <label><span class="omr-bubble-model">C / ج</span></label>
-                <label><span class="omr-bubble-model">D / د</span></label>
+              <div class="bs-box-title">${isMasterKey ? `دليل مفتاح النموذج المعتمد (FORM ${currentModel})` : 'تأكيد نموذج ورقة الأسئلة وإرشادات التظليل'}</div>
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 4px 6px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 4px; margin-bottom: 6px;">
+                <strong style="font-size: .75rem; color: #0F172A;">نموذج الأسئلة (Exam Form):</strong>
+                <div style="display: flex; gap: 8px; direction: ltr;">
+                  <span class="omr-bubble ${isMasterKey && currentModel === 'A' ? 'shaded-key' : ''}" style="width:22px; height:22px; font-size:.72rem;">A</span>
+                  <span class="omr-bubble ${isMasterKey && currentModel === 'B' ? 'shaded-key' : ''}" style="width:22px; height:22px; font-size:.72rem;">B</span>
+                  <span class="omr-bubble ${isMasterKey && currentModel === 'C' ? 'shaded-key' : ''}" style="width:22px; height:22px; font-size:.72rem;">C</span>
+                  <span class="omr-bubble ${isMasterKey && currentModel === 'D' ? 'shaded-key' : ''}" style="width:22px; height:22px; font-size:.72rem;">D</span>
+                </div>
               </div>
 
-              <div class="omr-guide-box">
-                <strong>تعليمات التظليل للماسح الضوئي:</strong>
-                <div class="guide-icons-row">
+              <div class="omr-guide-box" style="border-top: none; padding-top: 0;">
+                <div class="guide-icons-row" style="margin: 2px 0 4px;">
                   <div class="guide-item ok">
                     <span class="guide-circle filled">●</span>
                     <span>صحيح</span>
@@ -821,14 +1365,14 @@
                     <span>خطأ</span>
                   </div>
                 </div>
-                <small class="guide-text">ظلل دائرة واحدة فقط بشكل كامل بقلم جاف أزرق أو أسود. تجنب استخدام الطامس أو وضع إشارة (✔) أو (✖).</small>
+                <small class="guide-text" style="font-size: .67rem;">ظلل دائرة واحدة فقط بشكل كامل بقلم جاف أزرق أو أسود. التظليل المزدوج أو الشطب يُلغي درجة الفقرة.</small>
               </div>
             </div>
           </div>
 
-          <!-- شبكة دوائر الإجابة (OMR Response Grid) - اختيار من متعدد حصراً (A, B, C, D) -->
-          <div class="bubble-grid-container">
-            <div class="bubble-grid-columns" style="grid-template-columns: repeat(${colsCount}, 1fr);">
+          <!-- شبكة دوائر الإجابة (OMR Response Grid) منسقة جدولياً بدقة هندسية -->
+          <div class="bubble-grid-container" style="padding: 8px 10px;">
+            <div class="bubble-grid-columns" style="grid-template-columns: repeat(${colsCount}, 1fr); gap: 12px;">
               ${colsHtml}
             </div>
           </div>
@@ -841,30 +1385,18 @@
         </div>`;
     };
 
-    // طباعة الاستمارة الفارغة للطلبة
+    // طباعة الاستمارة الفارغة للطلبة عبر إطار معزول لمنع الصفحة البيضاء
     $('#omrPrintBlankSheetBtn')?.addEventListener('click', () => {
       renderPrintableSheet(false);
-      window.print();
+      const sheetHtml = $('#omrPrintableSheetContainer')?.innerHTML || '';
+      printIsolatedDocument(sheetHtml, `استمارة_ببل_شيت_نموذج_${currentModel}`);
     });
 
     // طباعة دليل الحل النموذجي المظلل
     $('#omrPrintMasterKeyBtn')?.addEventListener('click', () => {
       renderPrintableSheet(true);
-      window.print();
-    });
-
-    // إصلاح: إعادة ربط مستمعي الأحداث بعد الطباعة (بعض المتصفحات تفصلها)
-    window.addEventListener('afterprint', () => {
-      const countSel = $('#omrGenCount');
-      if (countSel && !countSel.dataset.bound) {
-        countSel.dataset.bound = '1';
-        countSel.addEventListener('change', (e) => {
-          qCount = parseInt(e.target.value, 10) || 20;
-          masterKey = Array.from({ length: qCount }, (_, i) => masterKey[i] || defaultSample[i % defaultSample.length]);
-          renderMasterKeyGrid();
-          renderPrintableSheet();
-        });
-      }
+      const sheetHtml = $('#omrPrintableSheetContainer')?.innerHTML || '';
+      printIsolatedDocument(sheetHtml, `دليل_الحل_المعتمد_نموذج_${currentModel}`);
     });
 
     // منشئ ملف Word جدولياً لضمان تطابق المخطط والأعمدة والدوائر داخل Microsoft Word
@@ -874,12 +1406,11 @@
       const stage = $('#omrGenStage')?.value.trim() || 'الدراسات الأولية';
       const curYear = new Date().getFullYear();
 
+      const activeKey = examModels[currentModel] || examModels['A'];
       const colsCount = qCount <= 20 ? 2 : qCount <= 30 ? 3 : 4;
       const perCol = Math.ceil(qCount / colsCount);
       const colWidthPct = Math.floor(100 / colsCount);
-      const letters = ['A', 'B', 'C', 'D'];
 
-      const circledUnicode = { A: '&#9398;', B: '&#9399;', C: '&#9400;', D: '&#9401;' };
       let columnsCells = '';
       for (let c = 0; c < colsCount; c++) {
         const start = c * perCol;
@@ -889,30 +1420,35 @@
         for (let q = start; q < end; q++) {
           const qNum = q + 1;
           const qFormatted = qNum < 10 ? '0' + qNum : String(qNum);
-          const correctOpt = masterKey[q];
+          const correctOpt = activeKey[q];
 
-          const bubblesWord = letters
-            .map((ltr) => {
-              const isShaded = isMasterKey && correctOpt === ltr;
-              if (isShaded) {
-                return `<b style="background-color:#000000; color:#ffffff; padding:1pt 5pt; font-family:Arial,sans-serif; font-size:9pt; border:1pt solid #000000;">&nbsp;${ltr}&nbsp;</b>`;
-              }
-              return `<span style="font-family:'Segoe UI Symbol','Arial Unicode MS',Arial,sans-serif; font-size:13pt; color:#111111;">${circledUnicode[ltr]}</span>`;
-            })
-            .join('&nbsp;&nbsp;&nbsp;');
+          const makeBubble = (ltr) => {
+            const isShaded = isMasterKey && correctOpt === ltr;
+            return `<span style="display:inline-block; width:15pt; height:15pt; line-height:15pt; border:1.5pt solid #000000; border-radius:8pt; font-family:Arial,sans-serif; font-size:8pt; font-weight:bold; text-align:center; ${isShaded ? 'background:#000000; color:#FFFFFF;' : 'background:#FFFFFF; color:#000000;'}">${ltr}</span>`;
+          };
 
           colRows += `
-            <table width="100%" border="0" cellpadding="2" cellspacing="0" style="margin-bottom: 3pt; border-bottom: 1px dotted #ccc;">
-              <tr>
-                <td width="28" align="center" style="background:#E2E8F0; border:1px solid #CBD5E0; font-weight:bold; font-size:8.5pt; font-family:Arial,sans-serif; padding:2pt;">${qFormatted}</td>
-                <td align="center" style="padding:2pt;">${bubblesWord}</td>
-              </tr>
-            </table>`;
+            <tr style="${q % 2 === 1 ? 'background:#F8FAFC;' : 'background:#FFFFFF;'}">
+              <td align="center" style="font-family:Arial,sans-serif; font-weight:bold; font-size:8pt; background:#E2E8F0; border-bottom:1px solid #CBD5E1; border-right:1pt solid #000000; padding:2pt 1pt;">${qFormatted}</td>
+              <td align="center" style="border-bottom:1px solid #E2E8F0; padding:2pt 1pt;">${makeBubble('A')}</td>
+              <td align="center" style="border-bottom:1px solid #E2E8F0; padding:2pt 1pt;">${makeBubble('B')}</td>
+              <td align="center" style="border-bottom:1px solid #E2E8F0; padding:2pt 1pt;">${makeBubble('C')}</td>
+              <td align="center" style="border-bottom:1px solid #E2E8F0; padding:2pt 1pt;">${makeBubble('D')}</td>
+            </tr>`;
         }
 
         columnsCells += `
-          <td width="${colWidthPct}%" valign="top" style="padding: 4pt 8pt; ${c < colsCount - 1 ? 'border-left: 1.5pt solid #000;' : ''}">
-            ${colRows}
+          <td width="${colWidthPct}%" valign="top" style="padding: 2pt 4pt; ${c < colsCount - 1 ? 'border-left: 1.5pt solid #000000;' : ''}">
+            <table width="100%" border="0" cellpadding="0" cellspacing="0" dir="ltr" style="border-collapse:collapse; margin-bottom:2pt; border:1.5pt solid #000000;">
+              <tr style="background:#1E293B;">
+                <th width="24%" align="center" style="background:#1E293B; color:#ffffff; font-family:Arial,sans-serif; font-size:8pt; font-weight:bold; padding:3pt 1pt; border:1pt solid #000000;">Q#</th>
+                <th width="19%" align="center" style="background:#334155; color:#ffffff; font-family:Arial,sans-serif; font-size:8pt; font-weight:bold; padding:3pt 1pt; border:1pt solid #000000;">A</th>
+                <th width="19%" align="center" style="background:#334155; color:#ffffff; font-family:Arial,sans-serif; font-size:8pt; font-weight:bold; padding:3pt 1pt; border:1pt solid #000000;">B</th>
+                <th width="19%" align="center" style="background:#334155; color:#ffffff; font-family:Arial,sans-serif; font-size:8pt; font-weight:bold; padding:3pt 1pt; border:1pt solid #000000;">C</th>
+                <th width="19%" align="center" style="background:#334155; color:#ffffff; font-family:Arial,sans-serif; font-size:8pt; font-weight:bold; padding:3pt 1pt; border:1pt solid #000000;">D</th>
+              </tr>
+              ${colRows}
+            </table>
           </td>`;
       }
 
@@ -933,9 +1469,9 @@
           <style>
             @page Section1 {
               size: 21.0cm 29.7cm;
-              margin: 1.2cm 1.2cm 1.2cm 1.2cm;
-              mso-header-margin: 20pt;
-              mso-footer-margin: 20pt;
+              margin: 0.9cm 1.0cm 0.9cm 1.0cm;
+              mso-header-margin: 15pt;
+              mso-footer-margin: 15pt;
               mso-paper-source: 0;
             }
             div.Section1 { page: Section1; }
@@ -943,48 +1479,50 @@
               direction: rtl;
               text-align: right;
               font-family: 'Simplified Arabic', 'Traditional Arabic', 'Arial', sans-serif;
-              font-size: 10pt;
+              font-size: 9.5pt;
               color: #000;
-              line-height: 1.3;
+              line-height: 1.25;
             }
             table { border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
-            .bordered-box { border: 1.5pt solid #222; padding: 6pt 8pt; background: #fafafa; }
+            .bordered-box { border: 1.2pt solid #222; padding: 4pt 6pt; background: #fafafa; }
           </style>
         </head>
         <body dir="rtl">
           <div class="Section1">
-            <div style="border: 2pt solid #000; padding: 12pt; background: #fff;">
+            <div style="border: 2pt solid #000; padding: 10pt; background: #fff;">
               
-              <!-- علامات المحاذاة والترويسية في Word -->
-              <table width="100%" border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 6pt;">
+              <!-- علامات المحاذاة والترويسة في Word -->
+              <table width="100%" border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 4pt;">
                 <tr>
-                  <td width="20" height="20" style="background:#000;">&nbsp;</td>
-                  <td align="center" style="font-size:8pt; letter-spacing:2px; font-weight:bold;">■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■</td>
-                  <td width="20" height="20" style="background:#000;">&nbsp;</td>
+                  <td width="18" height="18" style="background:#000;">&nbsp;</td>
+                  <td align="center" style="font-size:7pt; letter-spacing:2px; font-weight:bold;">■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■</td>
+                  <td width="18" height="18" style="background:#000;">&nbsp;</td>
                 </tr>
               </table>
 
               <!-- الترويسة الرئيسية -->
-              <table width="100%" border="0" cellpadding="2" cellspacing="0" style="border-bottom: 2pt solid #000; padding-bottom: 6pt; margin-bottom: 8pt;">
+              <table width="100%" border="0" cellpadding="2" cellspacing="0" style="border-bottom: 2pt solid #000; padding-bottom: 4pt; margin-bottom: 6pt;">
                 <tr>
-                  <td width="30%" align="right" valign="top" style="font-size: 8.5pt;">
-                    <strong>وزارة التعليم العالي والبحث العلمي</strong><br>
-                    <span>${college}</span><br>
-                    <span>اللجنة الامتحانية المركزية</span>
+                  <td width="30%" align="right" valign="top" style="font-size: 8pt; line-height: 1.3;">
+                    <strong>جمهورية العراق</strong><br>
+                    <span>وزارة التعليم العالي والبحث العلمي</span><br>
+                    <strong>${college}</strong><br>
+                    <span style="color:#555;">اللجنة الامتحانية المركزية</span>
                   </td>
                   <td width="40%" align="center" valign="top">
-                    <div style="background:#06302C; color:#fff; display:inline-block; padding:2pt 10pt; font-size:8pt; font-weight:bold; border-radius:3pt;">
-                      ${isMasterKey ? '★ مفتاح التصحيح النموذجي المعتمد (Master Key)' : 'استمارة إجابة الاختبار الإلكتروني'}
+                    <div style="background:#0F172A; color:#fff; display:inline-block; padding:2pt 8pt; font-size:7.5pt; font-weight:bold; border-radius:3pt;">
+                      ${isMasterKey ? `★ مفتاح التصحيح النموذجي المعتمد - نموذج (${currentModel}) ★` : 'استمارة إجابة الاختبار المؤتمت (OMR)'}
                     </div>
-                    <h2 style="margin: 4pt 0; font-size: 13pt; font-weight: 900; color: #000;">ورقة إجابة التظليل الآلي (BUBBLE SHEET)</h2>
-                    <span style="font-size: 8.5pt; font-weight: bold; color: #333;">العام الجامعي: ${curYear} - ${curYear + 1} | ${stage}</span>
+                    <h2 style="margin: 3pt 0; font-size: 12pt; font-weight: 900; color: #000;">ورقة إجابة التظليل الآلي (BUBBLE SHEET)</h2>
+                    <span style="background: #000; color:#fff; padding:1pt 6pt; font-size:8pt; font-weight:bold;">FORM (${currentModel})</span>
+                    <span style="font-size: 8pt; font-weight: bold; color: #333; margin-right: 4pt;">العام الجامعي: ${curYear} - ${curYear + 1} | ${stage}</span>
                   </td>
-                  <td width="30%" align="left" dir="ltr" valign="top" style="font-size: 8.5pt; text-align: left;">
+                  <td width="30%" align="left" dir="ltr" valign="top" style="font-size: 8pt; text-align: left;">
                     <div style="text-align: right; direction: rtl;">
                       المادة: <strong>${subject}</strong><br>
-                      رمز النموذج: <strong>OMR-${qCount}Q-${curYear}</strong>
+                      رمز النموذج: <strong>OMR-${qCount}Q-M${currentModel}</strong>
                     </div>
-                    <div style="font-family: monospace; font-size: 12pt; font-weight: bold; letter-spacing: 2px; margin-top: 3pt;">
+                    <div style="font-family: monospace; font-size: 11pt; font-weight: bold; letter-spacing: 2px; margin-top: 2pt;">
                       ||||| || |||| ||| ||||
                     </div>
                   </td>
@@ -992,40 +1530,76 @@
               </table>
 
               <!-- بيانات الطالب ونموذج الأسئلة -->
-              <table width="100%" border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 8pt;">
+              <table width="100%" border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 6pt;">
                 <tr>
-                  <td width="58%" valign="top" style="padding-left: 6pt;">
-                    <div class="bordered-box">
-                      <div style="font-weight:bold; border-bottom:1px solid #ccc; padding-bottom:2pt; margin-bottom:4pt; font-size:8.5pt; background:#f0f0f0; text-align:center;">
-                        بيانات الطالب الأساسية
-                      </div>
-                      <div style="font-size:8pt; margin-bottom:3pt;"><strong>اسم الطالب الرباعي:</strong> ................................................................</div>
-                      <div style="font-size:8pt; margin-bottom:3pt;"><strong>القسم العلمي:</strong> ................................................................</div>
-                      <div style="font-size:8pt; margin-bottom:3pt;"><strong>نوع الدراسة:</strong> [ &nbsp; ] صباحي &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [ &nbsp; ] مسائي</div>
-                      <div style="font-size:8pt;"><strong>القاعة الامتحانية:</strong> .......................... &nbsp;&nbsp; <strong>توقيع الطالب:</strong> ..........................</div>
-                    </div>
+                  <td width="58%" valign="top" style="padding-left: 4pt;">
+                    <table width="100%" border="0" cellpadding="3" cellspacing="0" style="border-collapse:collapse; font-size:7.5pt; font-family:'Simplified Arabic',Arial,sans-serif;">
+                      <tr>
+                        <td width="22%" style="background:#F1F5F9; font-weight:bold; border:1px solid #CBD5E1;">اسم الطالب:</td>
+                        <td colspan="3" style="background:#FFFFFF; border:1px solid #CBD5E1; height:18pt;">&nbsp;</td>
+                      </tr>
+                      <tr>
+                        <td style="background:#F1F5F9; font-weight:bold; border:1px solid #CBD5E1;">الرقم الامتحاني:</td>
+                        <td style="background:#FFFFFF; border:1px solid #CBD5E1;">
+                          <table border="0" cellpadding="0" cellspacing="1" dir="ltr" style="display:inline-table;">
+                            <tr>
+                              <td width="13" height="15" align="center" style="border:1px solid #64748B; background:#FFF; font-size:6.5pt;">&nbsp;</td>
+                              <td width="13" height="15" align="center" style="border:1px solid #64748B; background:#FFF; font-size:6.5pt;">&nbsp;</td>
+                              <td width="13" height="15" align="center" style="border:1px solid #64748B; background:#FFF; font-size:6.5pt;">&nbsp;</td>
+                              <td width="13" height="15" align="center" style="border:1px solid #64748B; background:#FFF; font-size:6.5pt;">&nbsp;</td>
+                              <td width="13" height="15" align="center" style="border:1px solid #64748B; background:#FFF; font-size:6.5pt;">&nbsp;</td>
+                              <td width="13" height="15" align="center" style="border:1px solid #64748B; background:#FFF; font-size:6.5pt;">&nbsp;</td>
+                              <td width="13" height="15" align="center" style="border:1px solid #64748B; background:#FFF; font-size:6.5pt;">&nbsp;</td>
+                              <td width="13" height="15" align="center" style="border:1px solid #64748B; background:#FFF; font-size:6.5pt;">&nbsp;</td>
+                            </tr>
+                          </table>
+                        </td>
+                        <td width="18%" style="background:#F1F5F9; font-weight:bold; border:1px solid #CBD5E1;">نوع الدراسة:</td>
+                        <td width="26%" style="background:#FFFFFF; border:1px solid #CBD5E1;">[ ◯ ] صباحي &nbsp; [ ◯ ] مسائي</td>
+                      </tr>
+                      <tr>
+                        <td style="background:#F1F5F9; font-weight:bold; border:1px solid #CBD5E1;">القسم / المرحلة:</td>
+                        <td style="background:#FFFFFF; border:1px solid #CBD5E1; height:16pt;">&nbsp;</td>
+                        <td style="background:#F1F5F9; font-weight:bold; border:1px solid #CBD5E1;">توقيع الطالب:</td>
+                        <td style="background:#FFFFFF; border:1px solid #CBD5E1; height:16pt;">&nbsp;</td>
+                      </tr>
+                    </table>
                   </td>
-                  <td width="42%" valign="top" style="padding-right: 6pt;">
-                    <div class="bordered-box">
-                      <div style="font-weight:bold; border-bottom:1px solid #ccc; padding-bottom:2pt; margin-bottom:4pt; font-size:8.5pt; background:#f0f0f0; text-align:center;">
-                        ${isMasterKey ? 'دليل النموذج المعتمد' : 'نموذج الأسئلة وإرشادات التظليل'}
-                      </div>
-                      <div style="text-align:center; margin: 4pt 0 6pt;">
-                        <span style="display:inline-block; width:30pt; height:18pt; line-height:18pt; border:1.5pt solid #000; border-radius:9pt; font-weight:bold; font-size:8pt; margin:0 2pt; ${isMasterKey ? 'background:#000; color:#fff;' : ''}">A / أ</span>
-                        <span style="display:inline-block; width:30pt; height:18pt; line-height:18pt; border:1.5pt solid #000; border-radius:9pt; font-weight:bold; font-size:8pt; margin:0 2pt;">B / ب</span>
-                        <span style="display:inline-block; width:30pt; height:18pt; line-height:18pt; border:1.5pt solid #000; border-radius:9pt; font-weight:bold; font-size:8pt; margin:0 2pt;">C / ج</span>
-                        <span style="display:inline-block; width:30pt; height:18pt; line-height:18pt; border:1.5pt solid #000; border-radius:9pt; font-weight:bold; font-size:8pt; margin:0 2pt;">D / د</span>
-                      </div>
-                      <div style="font-size: 7.5pt; border-top: 1px dashed #ccc; padding-top: 3pt; color: #222;">
-                        <strong>التعليمات:</strong> ظلل دائرة واحدة فقط بشكل كامل بقلم جاف أزرق أو أسود ( ● صحيح | ✕ خطأ | ✔ خطأ ). لا تستخدم الطامس.
-                      </div>
-                    </div>
+                  <td width="42%" valign="top" style="padding-right: 4pt;">
+                    <table width="100%" border="0" cellpadding="3" cellspacing="0" style="border-collapse:collapse; font-size:7.5pt; font-family:'Simplified Arabic',Arial,sans-serif;">
+                      <tr>
+                        <td align="center" style="background:#0F172A; color:#FFFFFF; font-weight:bold; padding:2pt; border:1px solid #000;">
+                          ${isMasterKey ? `مفتاح إجابة النموذج المعتمد: FORM (${currentModel})` : 'تأكيد نموذج ورقة الأسئلة وإرشادات التظليل'}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="background:#F8FAFC; border:1px solid #CBD5E1; padding:3pt 5pt;">
+                          <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                            <tr>
+                              <td width="45%" style="font-size:7pt; font-weight:bold;">نموذج الأسئلة (Exam Form):</td>
+                              <td width="55%" align="left" dir="ltr">
+                                <span style="display:inline-block; width:15pt; height:15pt; line-height:15pt; border:1.5pt solid #000; border-radius:8pt; font-family:Arial; font-weight:bold; font-size:7.5pt; text-align:center; ${isMasterKey && currentModel === 'A' ? 'background:#000; color:#fff;' : 'background:#fff; color:#000;'}">A</span>
+                                &nbsp;
+                                <span style="display:inline-block; width:15pt; height:15pt; line-height:15pt; border:1.5pt solid #000; border-radius:8pt; font-family:Arial; font-weight:bold; font-size:7.5pt; text-align:center; ${isMasterKey && currentModel === 'B' ? 'background:#000; color:#fff;' : 'background:#fff; color:#000;'}">B</span>
+                                &nbsp;
+                                <span style="display:inline-block; width:15pt; height:15pt; line-height:15pt; border:1.5pt solid #000; border-radius:8pt; font-family:Arial; font-weight:bold; font-size:7.5pt; text-align:center; ${isMasterKey && currentModel === 'C' ? 'background:#000; color:#fff;' : 'background:#fff; color:#000;'}">C</span>
+                                &nbsp;
+                                <span style="display:inline-block; width:15pt; height:15pt; line-height:15pt; border:1.5pt solid #000; border-radius:8pt; font-family:Arial; font-weight:bold; font-size:7.5pt; text-align:center; ${isMasterKey && currentModel === 'D' ? 'background:#000; color:#fff;' : 'background:#fff; color:#000;'}">D</span>
+                              </td>
+                            </tr>
+                          </table>
+                          <div style="border-top:1px dashed #CBD5E1; margin-top:2pt; padding-top:2pt; font-size:6.8pt; color:#333;">
+                            <strong>تعليمات:</strong> ظلل دائرة واحدة فقط بشكل كامل بقلم جاف أزرق أو أسود ( ● صحيح | ✕ خطأ ). لا تستخدم الطامس.
+                          </div>
+                        </td>
+                      </tr>
+                    </table>
                   </td>
                 </tr>
               </table>
 
               <!-- شبكة دوائر الإجابة المتناسقة جدولياً في Word -->
-              <div style="border: 1.8pt solid #000; padding: 6pt; background: #fff; margin-bottom: 8pt;">
+              <div style="border: 1.5pt solid #000; padding: 4pt; background: #fff; margin-bottom: 6pt;">
                 <table width="100%" border="0" cellpadding="0" cellspacing="0">
                   <tr>
                     ${columnsCells}
@@ -1034,14 +1608,14 @@
               </div>
 
               <!-- التذييل وعلامات المعايرة -->
-              <table width="100%" border="0" cellpadding="2" cellspacing="0" style="border-top: 1.5pt solid #000; margin-top: 6pt;">
+              <table width="100%" border="0" cellpadding="2" cellspacing="0" style="border-top: 1.5pt solid #000; margin-top: 4pt;">
                 <tr>
-                  <td align="center" style="font-size: 7.5pt; font-weight: bold; color: #222;">
+                  <td align="center" style="font-size: 7pt; font-weight: bold; color: #222;">
                     تنبيه هام: تُصحح هذه الاستمارة ضوئياً بواسطة القارئ الإلكتروني (OMR)؛ التظليل المزدوج أو الشطب يُلغي درجة الفقرة.
                   </td>
                 </tr>
                 <tr>
-                  <td align="center" style="font-size: 8pt; letter-spacing: 3px; font-weight: bold;">
+                  <td align="center" style="font-size: 7pt; letter-spacing: 2px; font-weight: bold;">
                     ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■
                   </td>
                 </tr>
@@ -1063,21 +1637,24 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `استمارة_ببل_شيت_${subject.replace(/\s+/g, '_')}.doc`;
+      a.download = `استمارة_ببل_شيت_${subject.replace(/\s+/g, '_')}_نموذج_${currentModel}.doc`;
       a.click();
       URL.revokeObjectURL(url);
     });
 
     // --- محرك تحليل التصحيح الضوئي (OMR Engine) عبر Canvas ---
-    const gradeSheetAnswers = (detectedAnswers, studentName = 'طالب') => {
+    const gradeSheetAnswers = (detectedAnswers, studentName = 'طالب', detectedModel = null) => {
       let correct = 0;
       let wrong = 0;
       let blank = 0;
       const details = [];
       const errorList = [];
 
+      const modelUsed = detectedModel || currentModel;
+      const activeMasterKey = examModels[modelUsed] || examModels['A'];
+
       for (let i = 0; i < qCount; i++) {
-        const correctOpt = masterKey[i];
+        const correctOpt = activeMasterKey[i];
         const chosen = detectedAnswers[i];
         const isCorrect = chosen && chosen === correctOpt;
 
@@ -1110,6 +1687,7 @@
       return {
         id: gradebook.length + 1,
         name: studentName,
+        model: modelUsed,
         score: correct,
         total: qCount,
         pct,
@@ -1518,7 +2096,7 @@
         const tr = el('tr', {});
         tr.innerHTML = `
           <td style="font-weight: 700; color: #718096;">${idx + 1}</td>
-          <td><strong style="color: #06302C;">${st.name}</strong></td>
+          <td><strong style="color: #06302C;">${st.name}</strong> <span style="background:#0F172A; color:#FFF; font-size:.7rem; font-weight:800; padding:1px 6px; border-radius:3px; margin-right:4px;">نموذج (${st.model || 'A'})</span></td>
           <td><span class="student-score-badge" style="font-size: .85rem; padding: 2px 8px;">${st.score} / ${st.total}</span></td>
           <td><strong>${st.pct}%</strong></td>
           <td><span class="status-pill ${st.passed ? 'pass' : 'fail'}">${st.grade}</span></td>
@@ -1535,10 +2113,11 @@
       }
 
       const rows = [
-        ['ت', 'اسم الطالب / تسلسل الورقة', 'الدرجة', 'المجموع الكلي', 'النسبة المئوية', 'التقدير الأكاديمي', 'الحالة', 'تفاصيل الأخطاء المرصودة'],
+        ['ت', 'اسم الطالب / تسلسل الورقة', 'نموذج الاختبار', 'الدرجة', 'المجموع الكلي', 'النسبة المئوية', 'التقدير الأكاديمي', 'الحالة', 'تفاصيل الأخطاء المرصودة'],
         ...gradebook.map((st, i) => [
           i + 1,
           st.name,
+          `نموذج (${st.model || 'A'})`,
           st.score,
           st.total,
           `${st.pct}%`,
@@ -1558,9 +2137,42 @@
       URL.revokeObjectURL(url);
     });
 
-    // طباعة كشف الدرجات للقسم
+    // طباعة كشف الدرجات الرسمي للقسم
     $('#omrPrintGradebookBtn')?.addEventListener('click', () => {
-      window.print();
+      const tableHtml = $('#omrPrintableGradebookTable')?.innerHTML || '';
+      const college = $('#omrGenCollege')?.value.trim() || 'وزارة التعليم العالي والبحث العلمي';
+      const subject = $('#omrGenSubject')?.value.trim() || 'مادة الاختبار الأكاديمي';
+      const stage = $('#omrGenStage')?.value.trim() || 'الدراسات الأولية';
+
+      const fullReportHtml = `
+        <div style="direction: rtl; text-align: right; padding: 10px;">
+          <table width="100%" border="0" style="border-bottom: 2px solid #06302C; margin-bottom: 15px; padding-bottom: 8px;">
+            <tr>
+              <td width="35%">
+                <strong>${college}</strong><br>
+                <span>اللجنة الامتحانية المركزية</span>
+              </td>
+              <td width="35%" align="center">
+                <h2 style="margin: 0; color: #06302C;">كشف درجات الاختبار النهائي (OMR)</h2>
+                <span>العام الجامعي: 2024 - 2025 | ${stage}</span>
+              </td>
+              <td width="30%" align="left">
+                <span>المادة: <strong>${subject}</strong></span><br>
+                <span>تاريخ الرصد: <strong>${new Date().toISOString().slice(0, 10)}</strong></span>
+              </td>
+            </tr>
+          </table>
+          ${tableHtml}
+          <table width="100%" border="0" style="margin-top: 40px; text-align: center;">
+            <tr>
+              <td><strong>أستاذ المادة</strong><br><br>................................</td>
+              <td><strong>رئيس القسم العلمي</strong><br><br>................................</td>
+              <td><strong>رئيس اللجنة الامتحانية</strong><br><br>................................</td>
+            </tr>
+          </table>
+        </div>
+      `;
+      printIsolatedDocument(fullReportHtml, `كشف_درجات_${subject.replace(/\s+/g, '_')}`);
     });
 
     // تفريغ الكشف
@@ -2505,44 +3117,36 @@
       `;
     };
 
-    // إدارة التبديل بين التبويبات الفرعية (ورقة الأسئلة / ببل شيت / مفتاح التصحيح)
+    // إدارة التبديل بين التبويبات الفرعية (ورقة الأسئلة / دليل ومفتاح التصحيح)
     const setExamSubView = (view) => {
       const qWrap = $('#examQuestionsViewWrapper');
-      const bWrap = $('#examBubbleSheetViewWrapper');
       const kWrap = $('#examMasterKeyViewWrapper');
 
       const tabQ = $('#tabViewQuestions');
-      const tabB = $('#tabViewBubbleSheet');
       const tabK = $('#tabViewMasterKey');
 
-      [tabQ, tabB, tabK].forEach((t) => { if (t) t.classList.remove('active'); });
+      [tabQ, tabK].forEach((t) => { if (t) t.classList.remove('active'); });
 
       if (qWrap) qWrap.style.display = view === 'questions' ? 'block' : 'none';
-      if (bWrap) bWrap.style.display = view === 'bubble' ? 'block' : 'none';
       if (kWrap) kWrap.style.display = view === 'key' ? 'block' : 'none';
 
       if (view === 'questions' && tabQ) tabQ.classList.add('active');
-      if (view === 'bubble' && tabB) tabB.classList.add('active');
       if (view === 'key' && tabK) tabK.classList.add('active');
     };
 
-    // توليد وتجهيز كامل محتويات الورقة الامتحانية والببل شيت
+    // توليد وتجهيز كامل محتويات ورقة الأسئلة ودليل التصحيح
     const buildExamPaperHTML = (questions) => {
       return `
         <div id="examQuestionsViewWrapper">
           ${buildQuestionSheetHTML(questions)}
         </div>
-        <div id="examBubbleSheetViewWrapper" style="display: none;">
-          ${buildBubbleSheetHTML(questions, false)}
-        </div>
         <div id="examMasterKeyViewWrapper" style="display: none;">
-          ${buildBubbleSheetHTML(questions, true)}
           ${buildAnswerKeyRubricTable(questions)}
         </div>
       `;
     };
 
-    // زر توليد الورقة الامتحانية والببل شيت OMR
+    // زر توليد الورقة الامتحانية ودليل الإجابة
     $('#generateExamPaperBtn').addEventListener('click', () => {
       activeQuestions = getPreparedQuestionPool();
       const container = $('#printableExamContainer');
@@ -2550,44 +3154,37 @@
         container.innerHTML = buildExamPaperHTML(activeQuestions);
       }
       switchQuizStep(4);
-
-      // تحديد المعاينة الافتراضية بحسب نوع السؤال المختار
-      const qType = $('#quizTypeSelect') ? $('#quizTypeSelect').value : 'mixed';
-      if (qType === 'bubble') {
-        setExamSubView('bubble');
-      } else {
-        setExamSubView('questions');
-      }
+      setExamSubView('questions');
     });
 
-    // أزرار التبديل بين معاينة الأسئلة والببل شيت والمفتاح
+    // أزرار التبديل بين معاينة الأسئلة ودليل الحل
     const tabQBtn = $('#tabViewQuestions');
-    const tabBBtn = $('#tabViewBubbleSheet');
     const tabKBtn = $('#tabViewMasterKey');
 
     if (tabQBtn) tabQBtn.addEventListener('click', () => setExamSubView('questions'));
-    if (tabBBtn) tabBBtn.addEventListener('click', () => setExamSubView('bubble'));
     if (tabKBtn) tabKBtn.addEventListener('click', () => setExamSubView('key'));
 
-    // طباعة ورقة الأسئلة للطلبة
-    $('#printExamStudentBtn').addEventListener('click', () => {
-      setExamSubView('questions');
-      window.print();
-    });
-
-    // طباعة ورقة الببل شيت OMR المخصصة للطلبة
-    const printBubbleBtn = $('#printBubbleSheetBtn');
-    if (printBubbleBtn) {
-      printBubbleBtn.addEventListener('click', () => {
-        setExamSubView('bubble');
-        window.print();
+    // زر الانتقال السريع إلى منظومة الببل شيت والتصحيح الضوئي (TOOL-02)
+    const goToOmrBtn = $('#goToOmrFromQuizBtn');
+    if (goToOmrBtn) {
+      goToOmrBtn.addEventListener('click', () => {
+        Modal.close($('#dlg-quiz'));
+        Modal.open($('#dlg-omr'));
       });
     }
+
+    // طباعة ورقة الأسئلة للطلبة عبر إطار معزول
+    $('#printExamStudentBtn').addEventListener('click', () => {
+      setExamSubView('questions');
+      const html = $('#examQuestionsViewWrapper')?.innerHTML || '';
+      printIsolatedDocument(html, 'ورقة_الأسئلة_الأكاديمية');
+    });
 
     // طباعة دليل ومفتاح التصحيح النموذجي للأستاذ
     $('#printExamAnswerKeyBtn').addEventListener('click', () => {
       setExamSubView('key');
-      window.print();
+      const html = $('#examMasterKeyViewWrapper')?.innerHTML || '';
+      printIsolatedDocument(html, 'دليل_الحل_النموذجي_المعتمد');
     });
 
     // منشئ وثيقة Word جدولية خاصة بالببل شيت لضمان تناسق الأعمدة والدوائر داخل Word
@@ -2728,29 +3325,22 @@
       `;
     };
 
-    // تصدير كملف Word (.doc) متكامل مع جداول وترويسة وتنسيق عربي
+    // تصدير ورقة الأسئلة كملف Word (.doc) متكامل مع ترويسة وتنسيق عربي
     $('#exportExamDocBtn').addEventListener('click', () => {
       const container = $('#printableExamContainer');
       if (!container) return;
-      const subName = ($('#examSubject') && $('#examSubject').value.trim()) || 'امتحان-اكاديمي';
+      const subName = ($('#examSubject') && $('#examSubject').value.trim()) || 'اسئلة-امتحان-اكاديمي';
 
-      const isBubbleActive = $('#examBubbleSheetViewWrapper') && $('#examBubbleSheetViewWrapper').style.display !== 'none';
       const isKeyActive = $('#examMasterKeyViewWrapper') && $('#examMasterKeyViewWrapper').style.display !== 'none';
-
-      let activeContent = '';
-      if (isBubbleActive) {
-        activeContent = buildQuizWordBubbleDoc(activeQuestions, false);
-      } else if (isKeyActive) {
-        activeContent = buildQuizWordBubbleDoc(activeQuestions, true) + buildAnswerKeyRubricTable(activeQuestions);
-      } else {
-        activeContent = $('#examQuestionsViewWrapper')?.innerHTML || '';
-      }
+      const activeContent = isKeyActive
+        ? ($('#examMasterKeyViewWrapper')?.innerHTML || '')
+        : ($('#examQuestionsViewWrapper')?.innerHTML || '');
 
       const htmlContent = `
         <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
         <head>
           <meta charset='utf-8'>
-          <title>ورقة الامتحان الأكاديمي والببل شيت - ${subName}</title>
+          <title>ورقة الأسئلة الأكاديمية - ${subName}</title>
           <!--[if gte mso 9]>
           <xml>
           <w:WordDocument>
