@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>دليل المنح الدراسية — مُنجز أكاديمي</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="index.html" class="brand">مُنجز أكاديمي</a>
+    <nav class="main-nav">
+      <a href="index.html">الرئيسية</a>
+      <a href="articles.html">قلم حر</a>
+      <a href="opportunities.html">فرص وظيفية</a>
+    </nav>
+  </div>
+</header>
+<main>
+<section class="section" id="schol-hero">
+  <div class="container">
+    <header class="section-head">
+      <h2>دليل المنح الدراسية</h2>
+      <p>أهم المنح الدولية المتاحة للطلبة العراقيين — التفاصيل، الشروط، والروابط الرسمية.</p>
+    </header>
+    <div class="schol-filters">
+      <input type="search" id="scholSearch" placeholder="ابحث عن منحة أو دولة…">
+      <select id="scholLevel"><option value="">كل المراحل</option><option>بكالوريوس</option><option>ماجستير</option><option>دكتوراه</option></select>
+    </div>
+    <div class="schol-grid" id="scholGrid"><p class="muted" style="text-align:center">جارٍ التحميل…</p></div>
+  </div>
+</section>
+</main>
+<script>
+(function(){
+  function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  var grid=document.getElementById('scholGrid'), data=[];
+  function render(){
+    var q=(document.getElementById('scholSearch').value||'').trim();
+    var lvl=document.getElementById('scholLevel').value;
+    grid.innerHTML='';
+    var list=data.filter(function(s){
+      var okL=!lvl||(s.level||'').indexOf(lvl)>-1;
+      var okQ=!q||(s.name+s.country).indexOf(q)>-1;
+      return okL&&okQ;
+    });
+    if(!list.length){grid.innerHTML='<p class="muted" style="text-align:center">لا توجد نتائج.</p>';return;}
+    list.forEach(function(s){
+      var c=document.createElement('div');c.className='schol-card';
+      c.innerHTML='<h3>'+esc(s.name)+'</h3><div class="schol-country">'+esc(s.country)+'</div>'+
+        '<dl><div><dt>المرحلة</dt><dd>'+esc(s.level)+'</dd></div>'+
+        '<div><dt>التمويل</dt><dd>'+esc(s.funding)+'</dd></div>'+
+        '<div><dt>الموعد</dt><dd>'+esc(s.deadline)+'</dd></div>'+
+        '<div><dt>الشروط</dt><dd>'+esc(s.requirements)+'</dd></div></dl>'+
+        (s.link?'<a class="btn btn-primary btn-sm" href="'+esc(s.link)+'" target="_blank" rel="noopener">الموقع الرسمي ←</a>':'');
+      grid.appendChild(c);
+    });
+  }
+  fetch('scholarships.json',{cache:'no-cache'}).then(function(r){return r.json();}).then(function(d){data=d||[];render();})
+    .catch(function(){grid.innerHTML='<p class="muted">تعذر التحميل.</p>';});
+  document.getElementById('scholSearch').addEventListener('input',render);
+  document.getElementById('scholLevel').addEventListener('change',render);
+})();
+</script>
+</body>
+</html>
