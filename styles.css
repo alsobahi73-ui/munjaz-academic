@@ -2758,50 +2758,74 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
   border-radius: 2px;
   color: #06302C;
 }
-.bs-field-line {
-  margin-bottom: 5px;
-  line-height: 1.6;
-  font-size: .78rem;
-}
-.bs-field-line span {
-  font-weight: 700;
-}
-
-/* مصفوفة تظليل الرقم الامتحاني (Seat ID Matrix) */
-.id-matrix-instruction {
-  font-size: .7rem;
-  color: #555;
-  margin-bottom: 4px;
-  text-align: center;
-}
-.omr-matrix-table {
+/* تصميم صندوق بيانات الطالب المطور بخانات واضحة */
+.omr-student-table {
   width: 100%;
   border-collapse: collapse;
-  text-align: center;
+  font-size: .76rem;
+  margin-top: 2px;
 }
-.omr-matrix-table th {
-  border: 1px solid #444;
-  padding: 2px;
+.omr-student-table td {
+  border: 1px solid #CBD5E1;
+  padding: 4px 6px;
+  vertical-align: middle;
+}
+.omr-student-table .st-lbl {
+  background: #F1F5F9;
+  font-weight: 800;
+  color: #0F172A;
   font-size: .72rem;
-  background: #f7faf9;
-  height: 20px;
+  text-align: right;
+  white-space: nowrap;
 }
-.omr-matrix-table td {
-  border: 1px solid #e2e8f0;
-  padding: 2px 0;
+.omr-student-table .st-val {
+  background: #FFFFFF;
 }
-.omr-mini-bubble {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  border: 1.2px solid #333;
-  font-size: .65rem;
-  font-weight: 700;
-  color: #222;
-  background: #fff;
+.st-digit-cells {
+  display: flex;
+  gap: 3px;
+  direction: ltr;
+}
+.st-digit-cells span {
+  display: inline-block;
+  width: 15px;
+  height: 18px;
+  border: 1px solid #94A3B8;
+  background: #FFF;
+  border-radius: 2px;
+}
+
+/* أعمدة شبكة الخيارات والأسئلة الحديثة المنسقة هندسياً */
+.omr-table-col {
+  width: 100%;
+  border-collapse: collapse;
+  direction: ltr; /* لضمان ترتيب Q# ثم A ثم B ثم C ثم D */
+}
+.omr-table-col th {
+  background: #1E293B;
+  color: #FFFFFF;
+  font-size: .72rem;
+  font-weight: 800;
+  padding: 4px 2px;
+  text-align: center;
+  border: 1px solid #0F172A;
+}
+.omr-table-col td {
+  padding: 3px 2px;
+  text-align: center;
+  border-bottom: 1px solid #E2E8F0;
+  vertical-align: middle;
+}
+.omr-table-col tr:nth-child(even) td {
+  background: #F8FAFC;
+}
+.omr-table-col .td-qnum {
+  background: #E2E8F0 !important;
+  font-weight: 800;
+  font-size: .75rem;
+  color: #0F172A;
+  border-inline-end: 1.5px solid #CBD5E1;
+  min-width: 28px;
 }
 
 /* دوائر نموذج الأسئلة والإرشادات */

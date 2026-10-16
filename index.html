@@ -869,6 +869,33 @@
                   </label>
                 </div>
 
+                <!-- شريط اختيار وإدارة نماذج الأسئلة المتعددة وحفظها بالمنصة -->
+                <div class="omr-models-panel" style="margin-top: 1.2rem; padding: 12px 14px; background: #F8FAFC; border: 1.5px solid #E2E8F0; border-radius: 8px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .8rem;">
+                    <div>
+                      <strong style="color: #06302C; display: block; font-size: .88rem; margin-bottom: 2px;">📁 نماذج الأسئلة المتعددة (Exam Forms):</strong>
+                      <small style="color: #64748B;">اختر النموذج لضبط مفتاح إجابته وطباعة استمارته المخصصة لمنع الغش بين الطلبة.</small>
+                    </div>
+                    <div style="display: flex; gap: .5rem; align-items: center; flex-wrap: wrap;">
+                      <div class="omr-model-pill-tabs" id="omrModelTabs" style="display: flex; gap: 4px; background: #E2E8F0; padding: 3px; border-radius: 6px;">
+                        <button type="button" class="btn btn-sm btn-teal active" data-omr-model="A">نموذج (A)</button>
+                        <button type="button" class="btn btn-sm btn-outline" data-omr-model="B" style="background:#fff;">نموذج (B)</button>
+                        <button type="button" class="btn btn-sm btn-outline" data-omr-model="C" style="background:#fff;">نموذج (C)</button>
+                        <button type="button" class="btn btn-sm btn-outline" data-omr-model="D" style="background:#fff;">نموذج (D)</button>
+                      </div>
+                      <button type="button" class="btn btn-outline btn-sm btn-svg-inline" id="omrShuffleModelKeyBtn" title="توليد ترتيب خيارات عشوائي لهذا النموذج لمنع الغش">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="14" height="14"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+                        <span>خلط عشوائي</span>
+                      </button>
+                      <button type="button" class="btn btn-outline btn-sm btn-svg-inline" id="omrSaveExamCloudBtn" style="border-color: #0d9488; color: #0d9488; font-weight: bold;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="14" height="14"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                        <span>💾 حفظ النماذج بالحساب</span>
+                      </button>
+                    </div>
+                  </div>
+                  <div id="omrCloudSavedNotice" style="margin-top: .6rem; font-size: .8rem; color: #0d9488; display: none;"></div>
+                </div>
+
                 <!-- شبكة ضبط مفتاح الإجابة النموذجي (Master Key Setup) -->
                 <div class="omr-key-box" style="margin-top: 1.2rem;">
                   <div class="omr-key-header">
