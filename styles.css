@@ -910,30 +910,38 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
   box-shadow: 0 6px 20px rgba(185,122,18,.3);
 }
 
-/* ===== Unified Trio Cards & Icons (Equal Size + Auto 3D Flip) ===== */
+/* ===== Unified Trio Cards & Icons (Soft Identity Gradient + Equal Size + Auto 3D Flip) ===== */
+.trio-wrap .trio-col,
+.trio-wrap .trio-col.section-tint {
+  background: transparent !important;
+}
+.trio-wrap .trio-col::before {
+  display: none !important;
+}
 .trio-wrap .section-head,
 .trio-wrap .trio-col:nth-child(2) .section-head {
   text-align: center;
-  min-height: 92px;
+  height: 108px;
+  min-height: 108px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   margin: 0 0 1.25rem !important;
-  padding: 0 0 .85rem !important;
+  padding: 0 .5rem .85rem !important;
   background: transparent;
   border-radius: 0;
-  border-bottom: 2px solid #e8f0ee;
+  border-bottom: 2px solid rgba(14, 107, 102, .16);
   box-sizing: border-box;
 }
 .trio-wrap .section-head h2 {
   font-size: 1.15rem; font-weight: 800; color: #0E6B66;
-  margin: 0 0 .5rem; display: flex; align-items: center; justify-content: center; gap: .6rem;
+  margin: 0 0 .45rem; display: flex; align-items: center; justify-content: center; gap: .6rem;
 }
 .trio-wrap .section-head h2::before,
 .trio-wrap .section-head h2::after {
   content: ""; width: 8px; height: 8px; background: #B97A12; transform: rotate(45deg); flex-shrink: 0;
 }
-.trio-wrap .section-head p { font-size: .88rem; color: #666; margin: 0; line-height: 1.6; }
+.trio-wrap .section-head p { font-size: .88rem; color: #4A6663; margin: 0; line-height: 1.55; }
 
 .trio-wrap .featured-wrap {
   margin: 0 !important;
@@ -945,14 +953,16 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
 }
 .trio-wrap .portal-card,
 .trio-wrap .featured-card {
+  position: relative;
+  overflow: hidden;
   flex: 1;
   width: 100%;
   max-width: 100%;
-  min-height: 420px;
+  min-height: 425px;
   height: 100%;
   margin: 0 !important;
-  padding: 2rem 1.5rem !important;
-  border-radius: 20px;
+  padding: 2.15rem 1.6rem 1.85rem !important;
+  border-radius: 22px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -960,12 +970,86 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
   align-items: center;
   text-align: center;
   perspective: 900px;
+  /* Soft Visual Identity Gradient replacing plain white */
+  background:
+    radial-gradient(circle at 50% 0%, rgba(14, 107, 102, .15) 0%, rgba(185, 122, 18, .09) 48%, transparent 75%),
+    linear-gradient(165deg, #E3F2F0 0%, #F2F9F8 46%, #FAF1DF 100%) !important;
+  border: 2px solid rgba(14, 107, 102, .45);
+  box-shadow: 0 12px 32px rgba(10, 79, 75, .12), inset 0 1px 0 rgba(255, 255, 255, .85);
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
 }
+.trio-wrap .featured-card {
+  border-color: rgba(185, 122, 18, .65);
+}
+/* Inner golden hairline frame on all 3 cards */
+.trio-wrap .portal-card::before,
+.trio-wrap .featured-card::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border: 1px solid rgba(185, 122, 18, .30);
+  border-radius: 15px;
+  opacity: 1;
+  pointer-events: none;
+  z-index: 0;
+}
+/* Top decorative identity bar on all 3 cards */
+.trio-wrap .portal-card::after,
+.trio-wrap .featured-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  inset-inline: 22%;
+  height: 4px;
+  border-radius: 0 0 6px 6px;
+  background: linear-gradient(90deg, #0E6B66, #B97A12, #0E6B66);
+  pointer-events: none;
+  z-index: 1;
+}
+.trio-wrap .portal-card:hover,
+.trio-wrap .featured-card:hover {
+  transform: translateY(-5px);
+  border-color: #B97A12;
+  box-shadow: 0 18px 40px rgba(10, 79, 75, .20), inset 0 1px 0 #fff;
+}
+.trio-wrap .portal-card > *,
+.trio-wrap .featured-card > * {
+  position: relative;
+  z-index: 1;
+}
+.trio-wrap .portal-card h3,
+.trio-wrap .featured-name {
+  color: #06302C;
+  font-size: 1.18rem;
+  font-weight: 800;
+  margin: .2rem 0 .45rem;
+}
+.trio-wrap .portal-card p {
+  color: #35524F;
+  font-size: .92rem;
+  line-height: 1.75;
+  margin-bottom: 1.1rem;
+}
+/* Styled Visual-Identity Pill Buttons at bottom of all 3 cards */
 .trio-wrap .portal-card .btn-lg,
-.trio-wrap .featured-card .btn-lg {
-  font-size: 1rem;
-  padding: .75rem 1.75rem;
+.trio-wrap .featured-card .btn-lg,
+.trio-wrap .btn-primary {
+  font-size: .95rem;
+  font-weight: 700;
+  padding: .68rem 1.65rem;
   margin-top: auto;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #0B4F4B 0%, #0E6B66 100%);
+  color: #fff !important;
+  border: 1.5px solid #E9C16C;
+  box-shadow: 0 6px 18px rgba(11, 79, 75, .22);
+  transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+}
+.trio-wrap .portal-card:hover .btn-lg,
+.trio-wrap .featured-card .btn-lg:hover {
+  background: linear-gradient(135deg, #06302C 0%, #0B4F4B 100%);
+  border-color: #B97A12;
+  box-shadow: 0 8px 22px rgba(185, 122, 18, .28);
 }
 .trio-wrap .portal-icon,
 .trio-wrap .portal-icon.tools-theme,
@@ -981,8 +1065,9 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
   display: grid !important;
   place-items: center;
   border-radius: 20px;
-  background: linear-gradient(135deg, var(--teal-dark), var(--teal));
-  border: none;
+  background: linear-gradient(135deg, #06302C 0%, #0E6B66 100%);
+  border: 2px solid #E9C16C;
+  box-shadow: 0 0 0 6px rgba(14, 107, 102, .10), 0 8px 20px rgba(6, 48, 44, .22);
   margin: 0 auto 1rem !important;
 }
 .trio-wrap .portal-icon.tools-theme::after { display: none; }
@@ -990,19 +1075,30 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid #B97A12;
-  box-shadow: 0 6px 18px rgba(185,122,18,.28);
+  box-shadow: 0 0 0 6px rgba(185, 122, 18, .14), 0 8px 20px rgba(185, 122, 18, .28);
 }
 .trio-wrap .featured-photo-wrap {
   position: relative;
   display: inline-block;
   width: 76px;
   height: 76px;
-  margin: 0 auto .85rem !important;
+  margin: 0 auto 1rem !important;
 }
 .trio-wrap .researcher-badge {
-  font-size: .65rem;
-  padding: .15rem .7rem;
-  bottom: -6px;
+  position: absolute;
+  bottom: -9px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  font-size: .66rem;
+  font-weight: 800;
+  line-height: 1.2;
+  padding: .16rem .72rem;
+  color: #fff;
+  background: linear-gradient(135deg, #B97A12, #8a5a00);
+  border: 2px solid #fff;
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .22);
 }
 .featured-card-body {
   width: 100%;
@@ -1028,6 +1124,7 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
   100% { transform: rotateY(0deg) scale(1); opacity: 1; }
 }
 .trio-wrap .featured-thesis {
+  color: #35524F;
   font-size: .88rem;
   line-height: 1.65;
   display: -webkit-box;
@@ -1049,7 +1146,8 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
 }
 @media (max-width: 900px) {
   .trio-wrap { grid-template-columns: 1fr; max-width: 480px; }
-  .trio-wrap .section-head { min-height: auto; }
+  .trio-wrap .section-head,
+  .trio-wrap .trio-col:nth-child(2) .section-head { height: auto; min-height: auto; }
   .trio-wrap .portal-card, .trio-wrap .featured-card { min-height: 360px; }
 }
 
