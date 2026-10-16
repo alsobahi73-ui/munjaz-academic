@@ -865,6 +865,7 @@
       const colWidthPct = Math.floor(100 / colsCount);
       const letters = ['A', 'B', 'C', 'D'];
 
+      const circledUnicode = { A: '&#9398;', B: '&#9399;', C: '&#9400;', D: '&#9401;' };
       let columnsCells = '';
       for (let c = 0; c < colsCount; c++) {
         const start = c * perCol;
@@ -879,21 +880,24 @@
           const bubblesWord = letters
             .map((ltr) => {
               const isShaded = isMasterKey && correctOpt === ltr;
-              return `<span style="display:inline-block; width:19pt; height:19pt; line-height:19pt; text-align:center; border:1.5pt solid #000; border-radius:10pt; font-family:Arial,sans-serif; font-size:9pt; font-weight:bold; margin:0 2pt; ${isShaded ? 'background-color:#000; color:#fff;' : 'background-color:#fff; color:#000;'}">${ltr}</span>`;
+              if (isShaded) {
+                return `<b style="background-color:#000000; color:#ffffff; padding:1pt 5pt; font-family:Arial,sans-serif; font-size:9pt; border:1pt solid #000000;">&nbsp;${ltr}&nbsp;</b>`;
+              }
+              return `<span style="font-family:'Segoe UI Symbol','Arial Unicode MS',Arial,sans-serif; font-size:13pt; color:#111111;">${circledUnicode[ltr]}</span>`;
             })
-            .join('');
+            .join('&nbsp;&nbsp;&nbsp;');
 
           colRows += `
-            <table width="100%" border="0" cellpadding="2" cellspacing="0" style="margin-bottom: 3pt; border-bottom: 1px solid #e0e0e0;">
+            <table width="100%" border="0" cellpadding="2" cellspacing="0" style="margin-bottom: 3pt; border-bottom: 1px dotted #ccc;">
               <tr>
-                <td width="28" align="center" style="background:#E2E8F0; border:1px solid #CBD5E0; font-weight:bold; font-size:9pt; font-family:Arial,sans-serif; padding:2pt;">${qFormatted}</td>
+                <td width="28" align="center" style="background:#E2E8F0; border:1px solid #CBD5E0; font-weight:bold; font-size:8.5pt; font-family:Arial,sans-serif; padding:2pt;">${qFormatted}</td>
                 <td align="center" style="padding:2pt;">${bubblesWord}</td>
               </tr>
             </table>`;
         }
 
         columnsCells += `
-          <td width="${colWidthPct}%" valign="top" style="padding: 4pt 8pt; ${c < colsCount - 1 ? 'border-left: 1.5pt dashed #aaa;' : ''}">
+          <td width="${colWidthPct}%" valign="top" style="padding: 4pt 8pt; ${c < colsCount - 1 ? 'border-left: 1.5pt solid #000;' : ''}">
             ${colRows}
           </td>`;
       }
@@ -2585,6 +2589,7 @@
       const colWidthPct = Math.floor(100 / colsCount);
       const letters = ['A', 'B', 'C', 'D'];
 
+      const circledUnicode = { A: '&#9398;', B: '&#9399;', C: '&#9400;', D: '&#9401;' };
       let columnsCells = '';
       for (let c = 0; c < colsCount; c++) {
         const start = c * perCol;
@@ -2599,21 +2604,24 @@
           const bubblesWord = letters
             .map((ltr, optIdx) => {
               const isShaded = isMasterKey && correctOptIdx === optIdx;
-              return `<span style="display:inline-block; width:19pt; height:19pt; line-height:19pt; text-align:center; border:1.5pt solid #000; border-radius:10pt; font-family:Arial,sans-serif; font-size:9pt; font-weight:bold; margin:0 2pt; ${isShaded ? 'background-color:#000; color:#fff;' : 'background-color:#fff; color:#000;'}">${ltr}</span>`;
+              if (isShaded) {
+                return `<b style="background-color:#000000; color:#ffffff; padding:1pt 5pt; font-family:Arial,sans-serif; font-size:9pt; border:1pt solid #000000;">&nbsp;${ltr}&nbsp;</b>`;
+              }
+              return `<span style="font-family:'Segoe UI Symbol','Arial Unicode MS',Arial,sans-serif; font-size:13pt; color:#111111;">${circledUnicode[ltr]}</span>`;
             })
-            .join('');
+            .join('&nbsp;&nbsp;&nbsp;');
 
           colRows += `
-            <table width="100%" border="0" cellpadding="2" cellspacing="0" style="margin-bottom: 3pt; border-bottom: 1px solid #e0e0e0;">
+            <table width="100%" border="0" cellpadding="2" cellspacing="0" style="margin-bottom: 3pt; border-bottom: 1px dotted #ccc;">
               <tr>
-                <td width="28" align="center" style="background:#E2E8F0; border:1px solid #CBD5E0; font-weight:bold; font-size:9pt; font-family:Arial,sans-serif; padding:2pt;">${qFormatted}</td>
+                <td width="28" align="center" style="background:#E2E8F0; border:1px solid #CBD5E0; font-weight:bold; font-size:8.5pt; font-family:Arial,sans-serif; padding:2pt;">${qFormatted}</td>
                 <td align="center" style="padding:2pt;">${bubblesWord}</td>
               </tr>
             </table>`;
         }
 
         columnsCells += `
-          <td width="${colWidthPct}%" valign="top" style="padding: 4pt 8pt; ${c < colsCount - 1 ? 'border-left: 1.5pt dashed #aaa;' : ''}">
+          <td width="${colWidthPct}%" valign="top" style="padding: 4pt 8pt; ${c < colsCount - 1 ? 'border-left: 1.5pt solid #000;' : ''}">
             ${colRows}
           </td>`;
       }
