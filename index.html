@@ -442,8 +442,8 @@
               </svg>
             </span>
             <span class="tool-code">TOOL-02</span>
-            <strong>منظومة الببل شيت والتصحيح (OMR)</strong>
-            <small>توليد وطباعة A4 • كاميرا الموبايل • سكنر الدفعة</small>
+            <strong>التصحيح الإلكتروني واستمارات الببل شيت (OMR)</strong>
+            <small>كاميرا الموبايل • سكنر السحب الآلي • استمارة A4 وكشف الدرجات</small>
           </button>
 
           <button type="button" class="tool-tile" data-open-tool="sample" data-tool-audience="grad researcher faculty" aria-haspopup="dialog">
@@ -482,8 +482,8 @@
               <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#E9C16C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
             </span>
             <span class="tool-code">TOOL-06</span>
-            <strong>الاختبارات والتصحيح الذكي</strong>
-            <small>توليد أسئلة MCQ وصح/خطأ • تصحيح حتمي</small>
+            <strong>توليد الأسئلة والاختبارات الإلكترونية</strong>
+            <small>استخراج الأسئلة من الملفات • بنك الأسئلة • اختبار تفاعلي أونلاين</small>
           </button>
 
           <button type="button" class="tool-tile" data-open-tool="promotion" data-tool-audience="faculty researcher" aria-haspopup="dialog">
@@ -1161,8 +1161,8 @@
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
                 </div>
                 <div>
-                  <h3 id="ttl-quiz">منظومة الاختبارات الذكية واستخراج الأسئلة من الملفات</h3>
-                  <span class="badge-tag">للطلبة والأساتذة: استخراج فوري & ورقة امتحانية رسمية للطباعة</span>
+                  <h3 id="ttl-quiz">توليد الأسئلة والاختبارات الإلكترونية</h3>
+                  <span class="badge-tag">استخراج من الملفات & اختبار تفاعلي فوري & ورقة أسئلة أكاديمية</span>
                 </div>
               </header>
 
@@ -1172,7 +1172,7 @@
                   <span>👨‍🎓 وضع الطالب: حل الاختبار إلكترونياً والتصحيح الفوري</span>
                 </button>
                 <button type="button" class="quiz-role-btn" id="quizRoleTeacherBtn">
-                  <span>👨‍🏫 وضع الأستاذ: توليد ورقة امتحانية رسمية للطباعة والتصدير</span>
+                  <span>👨‍🏫 وضع الأستاذ: توليد ورقة الأسئلة الأكاديمية ودليل الإجابة</span>
                 </button>
               </div>
 
@@ -1180,8 +1180,8 @@
               <div class="quiz-steps-nav">
                 <span class="q-step active" id="qStep1Tab">1. رفع الملف وتوليد الأسئلة</span>
                 <span class="q-step" id="qStep2Tab">2. حل الاختبار إلكترونياً</span>
-                <span class="q-step" id="qStep3Tab">3. تقرير التصحيح الحتمي</span>
-                <span class="q-step" id="qStep4Tab" hidden>4. نموذج ورقة الامتحان والطباعة</span>
+                <span class="q-step" id="qStep3Tab">3. تقرير النتيجة والتصحيح</span>
+                <span class="q-step" id="qStep4Tab" hidden>4. ورقة الأسئلة ودليل الإجابة</span>
               </div>
 
               <!-- المرحلة 1: الإعداد ورفع الملف -->
@@ -1245,15 +1245,14 @@
                       <option value="mixed" selected>مختلط (اختيار من متعدد + صح/خطأ)</option>
                       <option value="mcq">اختيار من متعدد (MCQ) فقط</option>
                       <option value="tf">صح أو خطأ فقط</option>
-                      <option value="bubble">نظام الببل شيت (Bubble Sheet OMR) - اختيار من متعدد حصراً</option>
                     </select>
                   </label>
                 </div>
 
-                <!-- حقول إضافية خاصة بالأستاذ لترويسة الامتحان -->
+                <!-- حقول إضافية خاصة بالأستاذ لترويسة ورقة الأسئلة -->
                 <div id="quizTeacherFields" class="keywords-box" style="margin-top: 1rem;" hidden>
                   <div class="keywords-box-head">
-                    <strong style="color: #06302C;">بيانات ورقة الامتحان الرسمية (للترويسة والطباعة والببل شيت):</strong>
+                    <strong style="color: #06302C;">بيانات ورقة الأسئلة الرسمية (للترويسة والطباعة):</strong>
                   </div>
                   <div class="form-grid" style="margin-top: .6rem;">
                     <label class="field">
@@ -1282,7 +1281,7 @@
                   </button>
                   <button type="button" class="btn btn-outline btn-svg-inline" id="generateExamPaperBtn">
                     <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="16" height="16"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-                    <span>توليد ورقة الامتحان والببل شيت OMR</span>
+                    <span>توليد ورقة الأسئلة الأكاديمية ودليل الإجابة</span>
                   </button>
                 </div>
               </div>
@@ -1336,18 +1335,18 @@
                 </div>
               </div>
 
-              <!-- المرحلة 4: ورقة الامتحان الرسمية والببل شيت (للأستاذ) -->
+              <!-- المرحلة 4: ورقة الأسئلة الرسمية ودليل الإجابة (للأستاذ) -->
               <div id="quizExamPaperView" hidden>
-                <!-- تبويب معاينة المخرجات: ورقة الأسئلة، ورقة الببل شيت، مفتاح التصحيح -->
-                <div class="exam-view-tabs no-print" style="margin-bottom: 1rem; display: flex; gap: .5rem; flex-wrap: wrap;">
+                <!-- تبويب معاينة المخرجات: ورقة الأسئلة، دليل ومفتاح التصحيح -->
+                <div class="exam-view-tabs no-print" style="margin-bottom: 1rem; display: flex; gap: .5rem; flex-wrap: wrap; align-items: center;">
                   <button type="button" class="btn btn-outline btn-sm active" id="tabViewQuestions">
                     <span>📑 ورقة الأسئلة الأكاديمية</span>
                   </button>
-                  <button type="button" class="btn btn-outline btn-sm" id="tabViewBubbleSheet">
-                    <span>📝 ورقة إجابة ببل شيت (OMR)</span>
-                  </button>
                   <button type="button" class="btn btn-outline btn-sm" id="tabViewMasterKey">
-                    <span>🔑 دليل ومفتاح التصحيح المعتمد</span>
+                    <span>🔑 دليل ومفتاح التصحيح النموذجي</span>
+                  </button>
+                  <button type="button" class="btn btn-outline btn-sm btn-svg-inline" id="goToOmrFromQuizBtn" style="margin-right: auto; border-color: #0d9488; color: #0d9488; font-weight: bold;">
+                    <span>الانتقال لمنظومة الببل شيت والتصحيح الضوئي (OMR) ➔</span>
                   </button>
                 </div>
 
@@ -1355,11 +1354,7 @@
                   <div style="display: flex; gap: .6rem; flex-wrap: wrap;">
                     <button type="button" class="btn btn-teal btn-sm btn-svg-inline" id="printExamStudentBtn">
                       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="15" height="15"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-                      <span>🖨️ طباعة ورقة الأسئلة للطلبة</span>
-                    </button>
-                    <button type="button" class="btn btn-teal btn-sm btn-svg-inline" id="printBubbleSheetBtn">
-                      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="15" height="15"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="4.93" y1="4.93" x2="9.17" y2="9.17"/><line x1="14.83" y1="14.83" x2="19.07" y2="19.07"/><line x1="14.83" y1="9.17" x2="19.07" y2="4.93"/><line x1="4.93" y1="19.07" x2="9.17" y2="14.83"/></svg>
-                      <span>🖨️ طباعة ورقة الببل شيت (OMR)</span>
+                      <span>🖨️ طباعة ورقة الأسئلة</span>
                     </button>
                     <button type="button" class="btn btn-outline btn-sm btn-svg-inline" id="printExamAnswerKeyBtn">
                       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="15" height="15"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>

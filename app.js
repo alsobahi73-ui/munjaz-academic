@@ -2852,44 +2852,36 @@
       `;
     };
 
-    // إدارة التبديل بين التبويبات الفرعية (ورقة الأسئلة / ببل شيت / مفتاح التصحيح)
+    // إدارة التبديل بين التبويبات الفرعية (ورقة الأسئلة / دليل ومفتاح التصحيح)
     const setExamSubView = (view) => {
       const qWrap = $('#examQuestionsViewWrapper');
-      const bWrap = $('#examBubbleSheetViewWrapper');
       const kWrap = $('#examMasterKeyViewWrapper');
 
       const tabQ = $('#tabViewQuestions');
-      const tabB = $('#tabViewBubbleSheet');
       const tabK = $('#tabViewMasterKey');
 
-      [tabQ, tabB, tabK].forEach((t) => { if (t) t.classList.remove('active'); });
+      [tabQ, tabK].forEach((t) => { if (t) t.classList.remove('active'); });
 
       if (qWrap) qWrap.style.display = view === 'questions' ? 'block' : 'none';
-      if (bWrap) bWrap.style.display = view === 'bubble' ? 'block' : 'none';
       if (kWrap) kWrap.style.display = view === 'key' ? 'block' : 'none';
 
       if (view === 'questions' && tabQ) tabQ.classList.add('active');
-      if (view === 'bubble' && tabB) tabB.classList.add('active');
       if (view === 'key' && tabK) tabK.classList.add('active');
     };
 
-    // توليد وتجهيز كامل محتويات الورقة الامتحانية والببل شيت
+    // توليد وتجهيز كامل محتويات ورقة الأسئلة ودليل التصحيح
     const buildExamPaperHTML = (questions) => {
       return `
         <div id="examQuestionsViewWrapper">
           ${buildQuestionSheetHTML(questions)}
         </div>
-        <div id="examBubbleSheetViewWrapper" style="display: none;">
-          ${buildBubbleSheetHTML(questions, false)}
-        </div>
         <div id="examMasterKeyViewWrapper" style="display: none;">
-          ${buildBubbleSheetHTML(questions, true)}
           ${buildAnswerKeyRubricTable(questions)}
         </div>
       `;
     };
 
-    // زر توليد الورقة الامتحانية والببل شيت OMR
+    // زر توليد الورقة الامتحانية ودليل الإجابة
     $('#generateExamPaperBtn').addEventListener('click', () => {
       activeQuestions = getPreparedQuestionPool();
       const container = $('#printableExamContainer');
@@ -2897,46 +2889,36 @@
         container.innerHTML = buildExamPaperHTML(activeQuestions);
       }
       switchQuizStep(4);
-
-      // تحديد المعاينة الافتراضية بحسب نوع السؤال المختار
-      const qType = $('#quizTypeSelect') ? $('#quizTypeSelect').value : 'mixed';
-      if (qType === 'bubble') {
-        setExamSubView('bubble');
-      } else {
-        setExamSubView('questions');
-      }
+      setExamSubView('questions');
     });
 
-    // أزرار التبديل بين معاينة الأسئلة والببل شيت والمفتاح
+    // أزرار التبديل بين معاينة الأسئلة ودليل الحل
     const tabQBtn = $('#tabViewQuestions');
-    const tabBBtn = $('#tabViewBubbleSheet');
     const tabKBtn = $('#tabViewMasterKey');
 
     if (tabQBtn) tabQBtn.addEventListener('click', () => setExamSubView('questions'));
-    if (tabBBtn) tabBBtn.addEventListener('click', () => setExamSubView('bubble'));
     if (tabKBtn) tabKBtn.addEventListener('click', () => setExamSubView('key'));
+
+    // زر الانتقال السريع إلى منظومة الببل شيت والتصحيح الضوئي (TOOL-02)
+    const goToOmrBtn = $('#goToOmrFromQuizBtn');
+    if (goToOmrBtn) {
+      goToOmrBtn.addEventListener('click', () => {
+        Modal.close($('#dlg-quiz'));
+        Modal.open($('#dlg-omr'));
+      });
+    }
 
     // طباعة ورقة الأسئلة للطلبة عبر إطار معزول
     $('#printExamStudentBtn').addEventListener('click', () => {
       setExamSubView('questions');
       const html = $('#examQuestionsViewWrapper')?.innerHTML || '';
-      printIsolatedDocument(html, 'ورقة_الامتحان_للطلبة');
+      printIsolatedDocument(html, 'ورقة_الأسئلة_الأكاديمية');
     });
-
-    // طباعة ورقة الببل شيت OMR المخصصة للطلبة
-    const printBubbleBtn = $('#printBubbleSheetBtn');
-    if (printBubbleBtn) {
-      printBubbleBtn.addEventListener('click', () => {
-        setExamSubView('bubble');
-        const html = $('#examBubbleSheetViewWrapper')?.innerHTML || '';
-        printIsolatedDocument(html, 'استمارة_الببل_شيت_A4');
-      });
-    }
 
     // طباعة دليل ومفتاح التصحيح النموذجي للأستاذ
     $('#printExamAnswerKeyBtn').addEventListener('click', () => {
       setExamSubView('key');
-      const html = ($('#examMasterKeyViewWrapper')?.innerHTML || '') + ($('#examAnswerKeyRubricWrap')?.innerHTML || '');
+      const html = $('#examMasterKeyViewWrapper')?.innerHTML || '';
       printIsolatedDocument(html, 'دليل_الحل_النموذجي_المعتمد');
     });
 
@@ -3078,29 +3060,22 @@
       `;
     };
 
-    // تصدير كملف Word (.doc) متكامل مع جداول وترويسة وتنسيق عربي
+    // تصدير ورقة الأسئلة كملف Word (.doc) متكامل مع ترويسة وتنسيق عربي
     $('#exportExamDocBtn').addEventListener('click', () => {
       const container = $('#printableExamContainer');
       if (!container) return;
-      const subName = ($('#examSubject') && $('#examSubject').value.trim()) || 'امتحان-اكاديمي';
+      const subName = ($('#examSubject') && $('#examSubject').value.trim()) || 'اسئلة-امتحان-اكاديمي';
 
-      const isBubbleActive = $('#examBubbleSheetViewWrapper') && $('#examBubbleSheetViewWrapper').style.display !== 'none';
       const isKeyActive = $('#examMasterKeyViewWrapper') && $('#examMasterKeyViewWrapper').style.display !== 'none';
-
-      let activeContent = '';
-      if (isBubbleActive) {
-        activeContent = buildQuizWordBubbleDoc(activeQuestions, false);
-      } else if (isKeyActive) {
-        activeContent = buildQuizWordBubbleDoc(activeQuestions, true) + buildAnswerKeyRubricTable(activeQuestions);
-      } else {
-        activeContent = $('#examQuestionsViewWrapper')?.innerHTML || '';
-      }
+      const activeContent = isKeyActive
+        ? ($('#examMasterKeyViewWrapper')?.innerHTML || '')
+        : ($('#examQuestionsViewWrapper')?.innerHTML || '');
 
       const htmlContent = `
         <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
         <head>
           <meta charset='utf-8'>
-          <title>ورقة الامتحان الأكاديمي والببل شيت - ${subName}</title>
+          <title>ورقة الأسئلة الأكاديمية - ${subName}</title>
           <!--[if gte mso 9]>
           <xml>
           <w:WordDocument>
