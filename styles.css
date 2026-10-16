@@ -1064,3 +1064,22 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
   #faq .faq-item:nth-child(5) { max-width: 100%; }
 }
 
+/* ===== Qalam Hur (Free Pen) ===== */
+.qalam-grid { display: grid; grid-template-columns: 320px 1fr; gap: 2rem; align-items: start; max-width: 1080px; margin: 0 auto; }
+.qalam-invite { text-align: center; }
+.qalam-latest { display: grid; gap: 1rem; }
+.qalam-card { background: #fff; border: 1px solid #e0e8e6; border-radius: 14px; padding: 1.25rem 1.4rem; }
+.qalam-card h4 { margin: .5rem 0; font-size: 1.05rem; }
+.qalam-card h4 a { color: #06302C; text-decoration: none; }
+.qalam-card h4 a:hover { color: #0E6B66; }
+.qalam-excerpt { color: #666; font-size: .92rem; line-height: 1.8; margin: .5rem 0; }
+.qalam-meta { display: flex; gap: 1rem; font-size: .82rem; color: #0E6B66; font-weight: 700; }
+.qalam-cat { display: inline-block; background: #FFF3D6; color: #8a5a00; font-size: .78rem; font-weight: 700; padding: .2rem .8rem; border-radius: 999px; }
+.qalam-cats { display: flex; gap: .75rem; justify-content: center; flex-wrap: wrap; margin-top: 1rem; }
+.qalam-empty { text-align: center; padding: 2rem; background: #f8faf9; border-radius: 14px; }
+.qalam-articles { display: grid; gap: 1.5rem; max-width: 800px; margin: 0 auto; }
+.qalam-full { background: #fff; border: 1px solid #e0e8e6; border-radius: 16px; padding: 2rem; }
+.qalam-full h3 { color: #06302C; font-size: 1.3rem; margin: .75rem 0; }
+.qalam-full .qalam-meta { margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 1px solid #eee; }
+.qalam-body { line-height: 2; color: #444; }
+@media (max-width: 800px) { .qalam-grid { grid-template-columns: 1fr; } }
