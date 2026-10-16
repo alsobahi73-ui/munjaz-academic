@@ -3300,6 +3300,28 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
     background: #fff !important;
     color: #000 !important;
   }
+  dialog[open] {
+    display: block !important;
+    position: static !important;
+    visibility: visible !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  dialog[open] .modal-box {
+    max-height: none !important;
+    overflow: visible !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    visibility: visible !important;
+  }
+  dialog:not([open]) {
+    display: none !important;
+  }
   body * {
     visibility: hidden;
   }
@@ -3307,12 +3329,10 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
   .exam-paper-container *,
   #omrPrintableGradebookTable,
   #omrPrintableGradebookTable * {
-    visibility: visible;
+    visibility: visible !important;
   }
   .exam-paper-container {
-    position: absolute;
-    inset-inline-start: 0;
-    top: 0;
+    position: static !important;
     width: 100% !important;
     max-width: 100% !important;
     border: none !important;

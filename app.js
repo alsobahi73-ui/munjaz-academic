@@ -588,6 +588,332 @@
     reset();
   }
 
+  // --- دالة طباعة مخصصة عالية الدقة عبر إطار معزول لمنع مشاكل الطباعة الفارغة في المتصفحات ---
+  function printIsolatedDocument(htmlContent, title = 'طباعة استمارة منجز الأكاديمية') {
+    let printFrame = document.getElementById('munjazPrintIframe');
+    if (!printFrame) {
+      printFrame = document.createElement('iframe');
+      printFrame.id = 'munjazPrintIframe';
+      printFrame.style.position = 'fixed';
+      printFrame.style.right = '0';
+      printFrame.style.bottom = '0';
+      printFrame.style.width = '0';
+      printFrame.style.height = '0';
+      printFrame.style.border = 'none';
+      printFrame.style.visibility = 'hidden';
+      document.body.appendChild(printFrame);
+    }
+
+    const frameDoc = printFrame.contentWindow.document;
+    frameDoc.open();
+    frameDoc.write(`
+      <!DOCTYPE html>
+      <html dir="rtl" lang="ar">
+      <head>
+        <meta charset="utf-8">
+        <title>${title}</title>
+        <style>
+          @page {
+            size: A4 portrait;
+            margin: 6mm 8mm;
+          }
+          * {
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+          body {
+            margin: 0;
+            padding: 0;
+            background: #ffffff !important;
+            color: #000000 !important;
+            font-family: 'Simplified Arabic', 'Traditional Arabic', 'Arial', Tahoma, sans-serif;
+            direction: rtl;
+            font-size: 10pt;
+          }
+          .bubble-sheet-container {
+            background: #ffffff !important;
+            color: #000000 !important;
+            border: 2px solid #000000 !important;
+            border-radius: 4px;
+            padding: 10px 14px 18px !important;
+            position: relative;
+            width: 100% !important;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+          }
+          .omr-corner {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #000000 !important;
+          }
+          .omr-corner.omr-tl { top: 8px; left: 8px; }
+          .omr-corner.omr-tr { top: 8px; right: 8px; }
+          .omr-corner.omr-bl { bottom: 8px; left: 8px; }
+          .omr-corner.omr-br { bottom: 8px; right: 8px; }
+          .omr-timing-top {
+            height: 8px;
+            background: repeating-linear-gradient(90deg, #000 0, #000 12px, transparent 12px, transparent 20px);
+            margin: 0 32px 10px;
+            border-radius: 2px;
+          }
+          .bubble-sheet-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+            gap: 10px;
+          }
+          .bsh-right, .bsh-left {
+            font-size: 8pt;
+            line-height: 1.4;
+            display: flex;
+            flex-direction: column;
+          }
+          .bsh-center {
+            text-align: center;
+            flex: 1;
+          }
+          .bsh-title-badge {
+            font-size: 8pt;
+            font-weight: bold;
+            background: #06302C !important;
+            color: #ffffff !important;
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 3px;
+            margin-bottom: 3px;
+          }
+          .bsh-title {
+            font-size: 13pt;
+            font-weight: 900;
+            color: #000000;
+            margin: 2px 0;
+          }
+          .bsh-session {
+            font-size: 8pt;
+            font-weight: bold;
+            color: #333333;
+          }
+          .fake-barcode {
+            font-family: monospace;
+            font-size: 11pt;
+            letter-spacing: 2px;
+            font-weight: 900;
+          }
+          .bubble-sheet-meta-grid {
+            display: grid;
+            grid-template-columns: 1.25fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+          }
+          .bs-box {
+            border: 1.5px solid #333333;
+            padding: 6px 8px;
+            font-size: 8pt;
+            border-radius: 4px;
+            background: #fafafa;
+          }
+          .bs-box-title {
+            font-weight: 800;
+            border-bottom: 1px solid #cccccc;
+            padding-bottom: 3px;
+            margin-bottom: 5px;
+            font-size: 8.5pt;
+            text-align: center;
+            background: #f1f3f4;
+            color: #06302C;
+          }
+          .bs-field-line {
+            margin-bottom: 4px;
+            line-height: 1.5;
+            font-size: 8pt;
+          }
+          .omr-model-bubbles {
+            display: flex;
+            justify-content: space-around;
+            margin: 4px 0 6px;
+          }
+          .omr-bubble-model {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 22px;
+            border-radius: 999px;
+            border: 1.5px solid #111111;
+            font-weight: 800;
+            font-size: 7.5pt;
+            background: #ffffff;
+          }
+          .omr-bubble-model.shaded-key {
+            background: #000000 !important;
+            color: #ffffff !important;
+          }
+          .omr-guide-box {
+            border-top: 1px dashed #cccccc;
+            padding-top: 4px;
+            font-size: 7.5pt;
+          }
+          .guide-icons-row {
+            display: flex;
+            gap: 8px;
+            justify-content: space-around;
+            margin: 4px 0;
+          }
+          .guide-item {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            font-size: 7pt;
+          }
+          .guide-circle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 1.2px solid #333333;
+            font-size: 6.5pt;
+            font-weight: 800;
+          }
+          .guide-circle.filled {
+            background: #000000 !important;
+            border-color: #000000 !important;
+            color: #ffffff !important;
+          }
+          .bubble-grid-container {
+            border: 1.8px solid #000000;
+            border-radius: 4px;
+            padding: 8px 10px;
+            background: #ffffff;
+            margin-bottom: 10px;
+          }
+          .bubble-grid-columns {
+            display: grid;
+            gap: 12px;
+          }
+          .bubble-col {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            border-inline-end: 1px dashed #999999;
+            padding-inline-end: 10px;
+          }
+          .bubble-col:last-child {
+            border-inline-end: none;
+          }
+          .bubble-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 4px;
+            padding: 2px 4px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 8pt;
+          }
+          .bubble-q-num {
+            font-weight: 800;
+            min-width: 28px;
+            text-align: center;
+            background: #E2E8F0 !important;
+            border-radius: 3px;
+            padding: 1px 4px;
+            font-size: 7.5pt;
+            color: #06302C;
+          }
+          .bubble-options {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+          }
+          .omr-bubble {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 1.5px solid #222222;
+            font-size: 7.5pt;
+            font-weight: 800;
+            color: #111111;
+            background: #ffffff;
+          }
+          .omr-bubble.shaded-key {
+            background: #000000 !important;
+            color: #ffffff !important;
+            border-color: #000000 !important;
+          }
+          .bubble-sheet-footer {
+            border-top: 1.5pt solid #000000;
+            padding-top: 6px;
+            margin-top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            align-items: center;
+            text-align: center;
+          }
+          .bsf-alert {
+            font-size: 7.5pt;
+            font-weight: 700;
+            color: #111111;
+          }
+          .omr-calib-line {
+            letter-spacing: 2px;
+            font-size: 7.5pt;
+          }
+          table.omr-grade-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9pt;
+          }
+          table.omr-grade-table th {
+            background: #06302C !important;
+            color: #ffffff !important;
+            padding: 6px 8px;
+            border: 1px solid #06302C;
+          }
+          table.omr-grade-table td {
+            padding: 5px 8px;
+            border: 1px solid #CBD5E0;
+            text-align: center;
+          }
+          .student-score-badge {
+            background: #E8F3F1;
+            color: #06302C;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+          }
+          .status-pill {
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 8pt;
+            font-weight: bold;
+          }
+          .status-pill.pass { background: #C6F6D5; color: #22543D; }
+          .status-pill.fail { background: #FED7D7; color: #742A2A; }
+        </style>
+      </head>
+      <body>
+        ${htmlContent}
+      </body>
+      </html>
+    `);
+    frameDoc.close();
+
+    setTimeout(() => {
+      printFrame.contentWindow.focus();
+      printFrame.contentWindow.print();
+    }, 280);
+  }
+
   /* =====================================================
      TOOL-02 | منظومة الببل شيت والتصحيح الضوئي الذكي (OMR)
      - تصميم وطباعة استمارات A4 ودليل الحل المعتمد (Master Key)
@@ -841,16 +1167,18 @@
         </div>`;
     };
 
-    // طباعة الاستمارة الفارغة للطلبة
+    // طباعة الاستمارة الفارغة للطلبة عبر إطار معزول لمنع الصفحة البيضاء
     $('#omrPrintBlankSheetBtn')?.addEventListener('click', () => {
       renderPrintableSheet(false);
-      window.print();
+      const sheetHtml = $('#omrPrintableSheetContainer')?.innerHTML || '';
+      printIsolatedDocument(sheetHtml, 'استمارة_إجابة_الببل_شيت_A4');
     });
 
     // طباعة دليل الحل النموذجي المظلل
     $('#omrPrintMasterKeyBtn')?.addEventListener('click', () => {
       renderPrintableSheet(true);
-      window.print();
+      const sheetHtml = $('#omrPrintableSheetContainer')?.innerHTML || '';
+      printIsolatedDocument(sheetHtml, 'دليل_الحل_النموذجي_المعتمد');
     });
 
     // منشئ ملف Word جدولياً لضمان تطابق المخطط والأعمدة والدوائر داخل Microsoft Word
@@ -1544,9 +1872,42 @@
       URL.revokeObjectURL(url);
     });
 
-    // طباعة كشف الدرجات للقسم
+    // طباعة كشف الدرجات الرسمي للقسم
     $('#omrPrintGradebookBtn')?.addEventListener('click', () => {
-      window.print();
+      const tableHtml = $('#omrPrintableGradebookTable')?.innerHTML || '';
+      const college = $('#omrGenCollege')?.value.trim() || 'وزارة التعليم العالي والبحث العلمي';
+      const subject = $('#omrGenSubject')?.value.trim() || 'مادة الاختبار الأكاديمي';
+      const stage = $('#omrGenStage')?.value.trim() || 'الدراسات الأولية';
+
+      const fullReportHtml = `
+        <div style="direction: rtl; text-align: right; padding: 10px;">
+          <table width="100%" border="0" style="border-bottom: 2px solid #06302C; margin-bottom: 15px; padding-bottom: 8px;">
+            <tr>
+              <td width="35%">
+                <strong>${college}</strong><br>
+                <span>اللجنة الامتحانية المركزية</span>
+              </td>
+              <td width="35%" align="center">
+                <h2 style="margin: 0; color: #06302C;">كشف درجات الاختبار النهائي (OMR)</h2>
+                <span>العام الجامعي: 2024 - 2025 | ${stage}</span>
+              </td>
+              <td width="30%" align="left">
+                <span>المادة: <strong>${subject}</strong></span><br>
+                <span>تاريخ الرصد: <strong>${new Date().toISOString().slice(0, 10)}</strong></span>
+              </td>
+            </tr>
+          </table>
+          ${tableHtml}
+          <table width="100%" border="0" style="margin-top: 40px; text-align: center;">
+            <tr>
+              <td><strong>أستاذ المادة</strong><br><br>................................</td>
+              <td><strong>رئيس القسم العلمي</strong><br><br>................................</td>
+              <td><strong>رئيس اللجنة الامتحانية</strong><br><br>................................</td>
+            </tr>
+          </table>
+        </div>
+      `;
+      printIsolatedDocument(fullReportHtml, `كشف_درجات_${subject.replace(/\s+/g, '_')}`);
     });
 
     // تفريغ الكشف
@@ -2555,10 +2916,11 @@
     if (tabBBtn) tabBBtn.addEventListener('click', () => setExamSubView('bubble'));
     if (tabKBtn) tabKBtn.addEventListener('click', () => setExamSubView('key'));
 
-    // طباعة ورقة الأسئلة للطلبة
+    // طباعة ورقة الأسئلة للطلبة عبر إطار معزول
     $('#printExamStudentBtn').addEventListener('click', () => {
       setExamSubView('questions');
-      window.print();
+      const html = $('#examQuestionsViewWrapper')?.innerHTML || '';
+      printIsolatedDocument(html, 'ورقة_الامتحان_للطلبة');
     });
 
     // طباعة ورقة الببل شيت OMR المخصصة للطلبة
@@ -2566,14 +2928,16 @@
     if (printBubbleBtn) {
       printBubbleBtn.addEventListener('click', () => {
         setExamSubView('bubble');
-        window.print();
+        const html = $('#examBubbleSheetViewWrapper')?.innerHTML || '';
+        printIsolatedDocument(html, 'استمارة_الببل_شيت_A4');
       });
     }
 
     // طباعة دليل ومفتاح التصحيح النموذجي للأستاذ
     $('#printExamAnswerKeyBtn').addEventListener('click', () => {
       setExamSubView('key');
-      window.print();
+      const html = ($('#examMasterKeyViewWrapper')?.innerHTML || '') + ($('#examAnswerKeyRubricWrap')?.innerHTML || '');
+      printIsolatedDocument(html, 'دليل_الحل_النموذجي_المعتمد');
     });
 
     // منشئ وثيقة Word جدولية خاصة بالببل شيت لضمان تناسق الأعمدة والدوائر داخل Word
