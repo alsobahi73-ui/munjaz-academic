@@ -41,6 +41,7 @@
         <a href="defenses.html">المناقشات</a>
         <a href="jobs.html">الباحثون عن التعيين</a>
         <a href="opportunities.html">فرص وظيفية</a>
+        <a href="articles.html">قلم حر</a>
         <button type="button" class="btn btn-teal btn-sm" data-open-charter>ميثاق النزاهة</button>
         <button type="button" class="btn btn-light-outline btn-sm" id="authBtn" data-open-auth aria-haspopup="dialog">👤 <span id="authBtnText">تسجيل / دخول</span></button>
       </nav>
@@ -281,6 +282,27 @@
       </div>
     </section>
     </div>
+
+    <!-- ============ Free Pen (Qalam Hur) ============ -->
+    <section class="section" id="qalam-hur" aria-labelledby="qalamTitle">
+      <div class="container">
+        <header class="section-head">
+          <h2 id="qalamTitle">قلم حر</h2>
+          <p>مساحة مفتوحة لأقلام الطلبة والباحثين والأساتذة — مقالات وآراء وتجارب أكاديمية.</p>
+        </header>
+        <div class="qalam-grid">
+          <div class="portal-card qalam-invite">
+            <div class="portal-icon tools-theme"><svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#E9C16C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg></div>
+            <h3>عندك فكرة تستحق النشر؟</h3>
+            <p>اكتب مقالك وأرسله — نراجعه وننشره باسمك.</p>
+            <a class="btn btn-primary btn-lg" href="articles.html">انشر مقالك ←</a>
+          </div>
+          <div class="qalam-latest" id="qalamLatest">
+            <p class="muted" style="text-align:center">جارٍ التحميل…</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- ============ Academic services ============ -->
     <section class="section" id="services" aria-labelledby="servicesTitle">
@@ -1188,5 +1210,35 @@
   </script>
 
 <!-- rebuild trigger -->
+<script>
+(function () {
+  var wrap = document.getElementById('qalamLatest');
+  if (!wrap) return;
+  function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  fetch('articles.json', { cache: 'no-cache' })
+    .then(function(r){return r.json();})
+    .then(function(articles){
+      if(!articles||!articles.length){
+        wrap.innerHTML = '<div class="qalam-empty"><p>كن أول من ينشر في «قلم حر».</p><a class="btn btn-ghost" href="articles.html">اكتب أول مقال ←</a></div>';
+        return;
+      }
+      wrap.innerHTML = '';
+      articles.slice(0, 3).forEach(function(a){
+        var card = document.createElement('article');
+        card.className = 'qalam-card';
+        card.innerHTML = '<span class="qalam-cat">' + esc(a.category||'') + '</span>' +
+          '<h4><a href="articles.html#' + esc(a.id||'') + '">' + esc(a.title) + '</a></h4>' +
+          '<p class="qalam-excerpt">' + esc((a.excerpt||a.body||'').substring(0,140)) + '…</p>' +
+          '<div class="qalam-meta"><span>' + esc(a.author||'') + '</span><span>' + esc(a.role||'') + '</span></div>';
+        wrap.appendChild(card);
+      });
+      var more = document.createElement('p');
+      more.style.textAlign = 'center'; more.style.marginTop = '1rem';
+      more.innerHTML = '<a class="btn btn-ghost" href="articles.html">جميع المقالات ←</a>';
+      wrap.appendChild(more);
+    })
+    .catch(function(){ wrap.innerHTML = '<p class="muted" style="text-align:center">تعذر التحميل.</p>'; });
+})();
+</script>
 </body>
 </html>
