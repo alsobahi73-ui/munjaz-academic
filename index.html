@@ -1336,19 +1336,27 @@
   <dialog class="modal modal-sm" id="authModal" aria-labelledby="authTitle">
     <div class="modal-box">
       <button type="button" class="modal-close" data-close-modal aria-label="إغلاق">✕</button>
-      <h2 id="authTitle">👤 حسابك (اختياري)</h2>
-      <p class="modal-lead">التسجيل <strong>اختياري تماماً</strong>. جميع الخدمات والأدوات متاحة لك بدون حساب.</p>
+      <header class="tool-head" style="margin-bottom: .8rem;">
+        <div class="tool-head-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div>
+          <h3 id="authTitle" style="font-size: 1.15rem;">حسابك الأكاديمي (اختياري)</h3>
+          <span class="badge-tag">سحابة Google Firebase المشفرة</span>
+        </div>
+      </header>
+      <p class="modal-lead" style="font-size: .86rem; margin-bottom: 1rem;">التسجيل <strong>اختياري تماماً</strong>. جميع الخدمات والأدوات متاحة لك بدون حساب، والتسجيل يفيدك في حفظ ملفك ومتابعة طلباتك.</p>
 
       <!-- زائر -->
       <div id="authGuest">
         <div class="auth-tabs" id="authTabs">
-          <button type="button" data-mode="signup" aria-pressed="true">إنشاء حساب</button>
+          <button type="button" data-mode="signup" aria-pressed="true">إنشاء حساب جديد</button>
           <button type="button" data-mode="login" aria-pressed="false">تسجيل الدخول</button>
         </div>
         <form id="authForm" novalidate>
           <label class="field" id="fName">
-            <span>الاسم</span>
-            <input type="text" id="authName" autocomplete="name" maxlength="60" placeholder="الاسم الذي يظهر لك">
+            <span>الاسم الكامل</span>
+            <input type="text" id="authName" autocomplete="name" maxlength="60" placeholder="مثال: د. علي الربيعي">
           </label>
           <label class="field">
             <span>البريد الإلكتروني</span>
@@ -1356,29 +1364,31 @@
           </label>
           <label class="field" id="fPass">
             <span>كلمة المرور (8 أحرف على الأقل)</span>
-            <input type="password" id="authPass" autocomplete="new-password" dir="ltr" minlength="8">
+            <input type="password" id="authPass" autocomplete="new-password" dir="ltr" minlength="8" placeholder="••••••••">
           </label>
           <label class="field" id="fAud">
-            <span>فئتك (اختياري)</span>
+            <span>فئتك الأكاديمية (اختياري لتخصيص الأدوات)</span>
             <select id="authAud">
-              <option value="">— لم أحدد —</option>
+              <option value="">— اختر فئتك الأكاديمية —</option>
               <option value="undergrad">طالب دراسات أولية</option>
               <option value="grad">طالب دراسات عليا</option>
-              <option value="researcher">باحث</option>
-              <option value="faculty">تدريسي</option>
+              <option value="researcher">باحث علمي</option>
+              <option value="faculty">أستاذ / تدريسي جامعي</option>
             </select>
           </label>
           <p class="form-msg" id="authMsg" role="alert"></p>
           <button type="submit" class="btn btn-teal btn-block" id="authSubmit">إنشاء الحساب</button>
-          <button type="button" class="link-btn" id="authForgot" hidden>نسيت كلمة المرور؟</button>
+          <button type="button" class="link-btn" id="authForgot" hidden style="margin-top: .6rem;">نسيت كلمة المرور؟</button>
         </form>
-        <p class="auth-note" id="authModeNote"></p>
+        <p class="auth-note" id="authModeNote" style="margin-top: .9rem;"></p>
       </div>
 
       <!-- مستخدم مسجّل -->
       <div id="authUser" hidden>
         <div class="account-card">
-          <span class="account-avatar" aria-hidden="true">👤</span>
+          <span class="account-avatar" aria-hidden="true" style="display: grid; place-items: center;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </span>
           <div>
             <strong id="accName"></strong>
             <small id="accEmail"></small>
@@ -1386,9 +1396,9 @@
           </div>
         </div>
         <p class="form-msg ok" id="accMsg" role="status"></p>
-        <div class="modal-actions">
-          <button type="button" class="btn btn-outline" id="authLogout">تسجيل الخروج</button>
-          <button type="button" class="btn btn-teal" data-close-modal>متابعة</button>
+        <div class="modal-actions" style="margin-top: 1rem;">
+          <button type="button" class="btn btn-outline btn-sm" id="authLogout">تسجيل الخروج</button>
+          <button type="button" class="btn btn-teal btn-sm" data-close-modal>متابعة التصفح</button>
         </div>
       </div>
     </div>
