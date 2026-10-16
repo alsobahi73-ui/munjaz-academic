@@ -708,7 +708,7 @@
       $(sel)?.addEventListener('input', () => renderPrintableSheet());
     });
 
-    // --- توليد ورقة الببل شيت A4 المجهزة للطباعة ---
+    // --- توليد ورقة الببل شيت A4 المجهزة للمعاينة والطباعة الرسمية ---
     const renderPrintableSheet = (isMasterKey = false) => {
       const container = $('#omrPrintableSheetContainer');
       if (!container) return;
@@ -716,11 +716,13 @@
       const college = $('#omrGenCollege')?.value.trim() || 'وزارة التعليم العالي والبحث العلمي - الكلية الجامعية';
       const subject = $('#omrGenSubject')?.value.trim() || 'مادة الاختبار الأكاديمي';
       const stage = $('#omrGenStage')?.value.trim() || 'الدراسات الأولية';
+      const curYear = new Date().getFullYear();
 
       const colsCount = qCount <= 20 ? 2 : qCount <= 30 ? 3 : 4;
       const perCol = Math.ceil(qCount / colsCount);
+      const letters = ['A', 'B', 'C', 'D'];
 
-      let gridHtml = '';
+      let colsHtml = '';
       for (let c = 0; c < colsCount; c++) {
         const start = c * perCol;
         const end = Math.min(start + perCol, qCount);
@@ -729,86 +731,112 @@
         let colRows = '';
         for (let q = start; q < end; q++) {
           const qNum = q + 1;
+          const qFormatted = qNum < 10 ? '0' + qNum : String(qNum);
           const correctOpt = masterKey[q];
-          const bubbles = ['A', 'B', 'C', 'D']
+
+          const bubblesHtml = letters
             .map((ltr) => {
-              const isFilled = isMasterKey && correctOpt === ltr;
-              return `<span class="omr-bubble ${isFilled ? 'filled' : ''}">${ltr}</span>`;
+              const isShaded = isMasterKey && correctOpt === ltr;
+              return `<span class="omr-bubble ${isShaded ? 'shaded-key' : ''}" title="الخيار (${ltr})">${ltr}</span>`;
             })
             .join('');
 
           colRows += `
-            <div class="omr-sheet-row">
-              <span class="omr-sheet-qnum">${qNum}.</span>
-              <div class="omr-sheet-bubbles">${bubbles}</div>
+            <div class="bubble-row">
+              <span class="bubble-q-num">${qFormatted}</span>
+              <div class="bubble-options">${bubblesHtml}</div>
             </div>`;
         }
 
-        gridHtml += `<div class="omr-sheet-col">${colRows}</div>`;
+        colsHtml += `<div class="bubble-col">${colRows}</div>`;
       }
 
       container.innerHTML = `
-        <div class="omr-printable-sheet ${isMasterKey ? 'master-key-view' : ''}">
-          <!-- علامات المحاذاة الضوئية في الزوايا الأربع (Fiducial Markers) -->
-          <span class="omr-corner-marker top-right" aria-hidden="true"></span>
-          <span class="omr-corner-marker top-left" aria-hidden="true"></span>
-          <span class="omr-corner-marker bottom-right" aria-hidden="true"></span>
-          <span class="omr-corner-marker bottom-left" aria-hidden="true"></span>
+        <div class="bubble-sheet-container ${isMasterKey ? 'master-key-mode' : ''}">
+          <!-- علامات المحاذاة الضوئية للماسح الإلكتروني OMR -->
+          <div class="omr-corner omr-tl" aria-hidden="true"></div>
+          <div class="omr-corner omr-tr" aria-hidden="true"></div>
+          <div class="omr-corner omr-bl" aria-hidden="true"></div>
+          <div class="omr-corner omr-br" aria-hidden="true"></div>
+          <div class="omr-timing-top" aria-hidden="true"></div>
 
-          <!-- ترويسة الورقة الرسمية -->
-          <div class="omr-sheet-header">
-            <div class="header-main-text">
-              <h3>${college}</h3>
-              <div class="header-sub">
-                <span>المادة: <strong>${subject}</strong></span>
-                <span>المرحلة: <strong>${stage}</strong></span>
-                <span>العام الأكاديمي: <strong>2024 - 2025</strong></span>
+          <!-- ترويسة ورقة الببل شيت -->
+          <div class="bubble-sheet-header">
+            <div class="bsh-right">
+              <strong>وزارة التعليم العالي والبحث العلمي</strong>
+              <span>${college}</span>
+              <span>اللجنة الامتحانية المركزية</span>
+            </div>
+            <div class="bsh-center">
+              <div class="bsh-title-badge">${isMasterKey ? '★ مفتاح التصحيح النموذجي المعتمد (Master Key)' : 'استمارة إجابة الاختبار الإلكتروني'}</div>
+              <h3 class="bsh-title">ورقة إجابة التظليل الآلي (BUBBLE SHEET - OMR)</h3>
+              <span class="bsh-session">العام الجامعي: ${curYear} - ${curYear + 1} | ${stage}</span>
+            </div>
+            <div class="bsh-left">
+              <span>المادة: <strong>${subject}</strong></span>
+              <span>رمز النموذج: <strong>OMR-${qCount}Q-${curYear}</strong></span>
+              <div class="omr-barcode-box">
+                <div class="fake-barcode">||||| || |||| ||| |||| | ||</div>
+                <small>OMR-SHEET-VERIFIED</small>
               </div>
             </div>
-            <div class="omr-sheet-title-badge">
-              ${isMasterKey ? '★ دليل الحل النموذجي المعتمد (Master Key)' : 'استمارة إجابة الاختبار الموضوعي (Bubble Sheet)'}
+          </div>
+
+          <!-- شبكة بيانات الطالب وتظليل النموذج (دون مصفوفة رقم امتحاني) -->
+          <div class="bubble-sheet-meta-grid">
+            <div class="bs-box">
+              <div class="bs-box-title">بيانات الطالب الأساسية</div>
+              <div class="bs-field-line"><span>اسم الطالب الرباعي:</span> ................................................................</div>
+              <div class="bs-field-line"><span>القسم العلمي:</span> ................................................................</div>
+              <div class="bs-field-line"><span>نوع الدراسة:</span> [ &nbsp; ] صباحي &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [ &nbsp; ] مسائي</div>
+              <div class="bs-field-line"><span>القاعة الامتحانية:</span> .......................... <span>توقيع الطالب:</span> ..........................</div>
+            </div>
+
+            <div class="bs-box">
+              <div class="bs-box-title">${isMasterKey ? 'دليل النموذج المعتمد' : 'نموذج الأسئلة وإرشادات التظليل'}</div>
+              <div class="omr-model-bubbles">
+                <label><span class="omr-bubble-model ${isMasterKey ? 'shaded-key' : ''}">A / أ</span></label>
+                <label><span class="omr-bubble-model">B / ب</span></label>
+                <label><span class="omr-bubble-model">C / ج</span></label>
+                <label><span class="omr-bubble-model">D / د</span></label>
+              </div>
+
+              <div class="omr-guide-box">
+                <strong>تعليمات التظليل للماسح الضوئي:</strong>
+                <div class="guide-icons-row">
+                  <div class="guide-item ok">
+                    <span class="guide-circle filled">●</span>
+                    <span>صحيح</span>
+                  </div>
+                  <div class="guide-item bad">
+                    <span class="guide-circle">✓</span>
+                    <span>خطأ</span>
+                  </div>
+                  <div class="guide-item bad">
+                    <span class="guide-circle">✕</span>
+                    <span>خطأ</span>
+                  </div>
+                  <div class="guide-item bad">
+                    <span class="guide-circle">·</span>
+                    <span>خطأ</span>
+                  </div>
+                </div>
+                <small class="guide-text">ظلل دائرة واحدة فقط بشكل كامل بقلم جاف أزرق أو أسود. تجنب استخدام الطامس أو وضع إشارة (✔) أو (✖).</small>
+              </div>
             </div>
           </div>
 
-          ${
-            !isMasterKey
-              ? `
-          <!-- بيانات الطالب (اسم، قسم، دراسة، قاعة وتوقيع فقط دون مصفوفة رقم امتحاني) -->
-          <div class="omr-student-info-box">
-            <table class="omr-info-table">
-              <tr>
-                <td style="width: 55%;"><strong>اسم الطالب الرباعي:</strong> ................................................................</td>
-                <td style="width: 45%;"><strong>القسم العلمي:</strong> ................................................</td>
-              </tr>
-              <tr>
-                <td><strong>الدراسة:</strong> &nbsp; [ &nbsp; ] صباحي &nbsp;&nbsp;&nbsp; [ &nbsp; ] مسائي</td>
-                <td><strong>القاعة / المجموعة:</strong> ................ &nbsp;&nbsp;&nbsp; <strong>توقيع الطالب:</strong> ................</td>
-              </tr>
-            </table>
+          <!-- شبكة دوائر الإجابة (OMR Response Grid) - اختيار من متعدد حصراً (A, B, C, D) -->
+          <div class="bubble-grid-container">
+            <div class="bubble-grid-columns" style="grid-template-columns: repeat(${colsCount}, 1fr);">
+              ${colsHtml}
+            </div>
           </div>
 
-          <!-- إرشادات التظليل المعتمدة -->
-          <div class="omr-instructions-bar">
-            <strong>تعليمات هامة:</strong> ظلل دائرة واحدة فقط بشكل كامل بقلم جاف أزرق أو أسود ( <span class="omr-bubble filled" style="width:14px;height:14px;font-size:9px;">●</span> ). تجنب استخدام الطامس الأبيض أو وضع علامة (✔) أو (✖).
-          </div>
-          `
-              : `
-          <div class="omr-instructions-bar" style="background: #EBF8FF; border-color: #3182CE; color: #2B6CB0;">
-            <strong>دليل التصحيح:</strong> تم تظليل الإجابات النموذجية الصحيحة باللون الأسود لاعتمادها في المطابقة والتصحيح الضوئي.
-          </div>
-          `
-          }
-
-          <!-- شبكة دوائر الإجابة (OMR Grid) -->
-          <div class="omr-sheet-grid-wrapper" style="grid-template-columns: repeat(${colsCount}, 1fr);">
-            ${gridHtml}
-          </div>
-
-          <!-- تذييل الاستمارة -->
-          <div class="omr-sheet-footer">
-            <span>منصة مُنجَز الأكاديمية - منظومة التصحيح الضوئي المعتمدة</span>
-            <span>عدد الأسئلة: ${qCount} سؤالاً (اختيار من متعدد)</span>
-            <span>كود النموذج: OMR-${qCount}Q-2024</span>
+          <!-- تذييل الببل شيت وعلامات المعايرة -->
+          <div class="bubble-sheet-footer">
+            <div class="bsf-alert">تنبيه هام: تُصحح هذه الاستمارة ضوئياً بواسطة القارئ الإلكتروني (OMR)؛ التظليل المزدوج أو الشطب يُلغي درجة الفقرة.</div>
+            <div class="omr-calib-line">■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■</div>
           </div>
         </div>`;
     };
@@ -825,33 +853,195 @@
       window.print();
     });
 
-    // تصدير كملف Word (.doc)
-    $('#omrExportDocBtn')?.addEventListener('click', () => {
-      renderPrintableSheet(false);
-      const sheetHtml = $('#omrPrintableSheetContainer')?.innerHTML || '';
-      const subject = $('#omrGenSubject')?.value.trim() || 'ببل-شيت';
+    // منشئ ملف Word جدولياً لضمان تطابق المخطط والأعمدة والدوائر داخل Microsoft Word
+    const buildWordBubbleSheetDoc = (isMasterKey = false) => {
+      const college = $('#omrGenCollege')?.value.trim() || 'وزارة التعليم العالي والبحث العلمي - الكلية الجامعية';
+      const subject = $('#omrGenSubject')?.value.trim() || 'مادة الاختبار الأكاديمي';
+      const stage = $('#omrGenStage')?.value.trim() || 'الدراسات الأولية';
+      const curYear = new Date().getFullYear();
 
-      const docContent = `
+      const colsCount = qCount <= 20 ? 2 : qCount <= 30 ? 3 : 4;
+      const perCol = Math.ceil(qCount / colsCount);
+      const colWidthPct = Math.floor(100 / colsCount);
+      const letters = ['A', 'B', 'C', 'D'];
+
+      let columnsCells = '';
+      for (let c = 0; c < colsCount; c++) {
+        const start = c * perCol;
+        const end = Math.min(start + perCol, qCount);
+
+        let colRows = '';
+        for (let q = start; q < end; q++) {
+          const qNum = q + 1;
+          const qFormatted = qNum < 10 ? '0' + qNum : String(qNum);
+          const correctOpt = masterKey[q];
+
+          const bubblesWord = letters
+            .map((ltr) => {
+              const isShaded = isMasterKey && correctOpt === ltr;
+              return `<span style="display:inline-block; width:19pt; height:19pt; line-height:19pt; text-align:center; border:1.5pt solid #000; border-radius:10pt; font-family:Arial,sans-serif; font-size:9pt; font-weight:bold; margin:0 2pt; ${isShaded ? 'background-color:#000; color:#fff;' : 'background-color:#fff; color:#000;'}">${ltr}</span>`;
+            })
+            .join('');
+
+          colRows += `
+            <table width="100%" border="0" cellpadding="2" cellspacing="0" style="margin-bottom: 3pt; border-bottom: 1px solid #e0e0e0;">
+              <tr>
+                <td width="28" align="center" style="background:#E2E8F0; border:1px solid #CBD5E0; font-weight:bold; font-size:9pt; font-family:Arial,sans-serif; padding:2pt;">${qFormatted}</td>
+                <td align="center" style="padding:2pt;">${bubblesWord}</td>
+              </tr>
+            </table>`;
+        }
+
+        columnsCells += `
+          <td width="${colWidthPct}%" valign="top" style="padding: 4pt 8pt; ${c < colsCount - 1 ? 'border-left: 1.5pt dashed #aaa;' : ''}">
+            ${colRows}
+          </td>`;
+      }
+
+      return `
         <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
         <head>
           <meta charset='utf-8'>
-          <title>استمارة ببل شيت - ${subject}</title>
+          <title>ورقة ببل شيت - ${subject}</title>
+          <!--[if gte mso 9]>
+          <xml>
+          <w:WordDocument>
+            <w:View>Print</w:View>
+            <w:Zoom>100</w:Zoom>
+            <w:DoNotOptimizeForBrowser/>
+          </w:WordDocument>
+          </xml>
+          <![endif]-->
           <style>
-            @page { size: 21.0cm 29.7cm; margin: 1.5cm; }
-            body { direction: rtl; text-align: right; font-family: 'Arial', sans-serif; font-size: 11pt; color: #111; }
-            table { width: 100%; border-collapse: collapse; margin-bottom: 12pt; }
-            td { padding: 4pt 6pt; }
-            .omr-bubble { display: inline-block; width: 18px; height: 18px; line-height: 18px; border: 1.5px solid #222; border-radius: 50%; text-align: center; font-size: 9pt; font-weight: bold; margin: 0 2px; }
-            .omr-bubble.filled { background-color: #000; color: #fff; }
-            .omr-sheet-row { margin-bottom: 4pt; }
+            @page Section1 {
+              size: 21.0cm 29.7cm;
+              margin: 1.2cm 1.2cm 1.2cm 1.2cm;
+              mso-header-margin: 20pt;
+              mso-footer-margin: 20pt;
+              mso-paper-source: 0;
+            }
+            div.Section1 { page: Section1; }
+            body {
+              direction: rtl;
+              text-align: right;
+              font-family: 'Simplified Arabic', 'Traditional Arabic', 'Arial', sans-serif;
+              font-size: 10pt;
+              color: #000;
+              line-height: 1.3;
+            }
+            table { border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+            .bordered-box { border: 1.5pt solid #222; padding: 6pt 8pt; background: #fafafa; }
           </style>
         </head>
-        <body>
-          ${sheetHtml}
-        </body>
-        </html>`;
+        <body dir="rtl">
+          <div class="Section1">
+            <div style="border: 2pt solid #000; padding: 12pt; background: #fff;">
+              
+              <!-- علامات المحاذاة والترويسية في Word -->
+              <table width="100%" border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 6pt;">
+                <tr>
+                  <td width="20" height="20" style="background:#000;">&nbsp;</td>
+                  <td align="center" style="font-size:8pt; letter-spacing:2px; font-weight:bold;">■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■</td>
+                  <td width="20" height="20" style="background:#000;">&nbsp;</td>
+                </tr>
+              </table>
 
-      const blob = new Blob(['\ufeff', docContent], { type: 'application/msword;charset=utf-8' });
+              <!-- الترويسة الرئيسية -->
+              <table width="100%" border="0" cellpadding="2" cellspacing="0" style="border-bottom: 2pt solid #000; padding-bottom: 6pt; margin-bottom: 8pt;">
+                <tr>
+                  <td width="30%" align="right" valign="top" style="font-size: 8.5pt;">
+                    <strong>وزارة التعليم العالي والبحث العلمي</strong><br>
+                    <span>${college}</span><br>
+                    <span>اللجنة الامتحانية المركزية</span>
+                  </td>
+                  <td width="40%" align="center" valign="top">
+                    <div style="background:#06302C; color:#fff; display:inline-block; padding:2pt 10pt; font-size:8pt; font-weight:bold; border-radius:3pt;">
+                      ${isMasterKey ? '★ مفتاح التصحيح النموذجي المعتمد (Master Key)' : 'استمارة إجابة الاختبار الإلكتروني'}
+                    </div>
+                    <h2 style="margin: 4pt 0; font-size: 13pt; font-weight: 900; color: #000;">ورقة إجابة التظليل الآلي (BUBBLE SHEET)</h2>
+                    <span style="font-size: 8.5pt; font-weight: bold; color: #333;">العام الجامعي: ${curYear} - ${curYear + 1} | ${stage}</span>
+                  </td>
+                  <td width="30%" align="left" dir="ltr" valign="top" style="font-size: 8.5pt; text-align: left;">
+                    <div style="text-align: right; direction: rtl;">
+                      المادة: <strong>${subject}</strong><br>
+                      رمز النموذج: <strong>OMR-${qCount}Q-${curYear}</strong>
+                    </div>
+                    <div style="font-family: monospace; font-size: 12pt; font-weight: bold; letter-spacing: 2px; margin-top: 3pt;">
+                      ||||| || |||| ||| ||||
+                    </div>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- بيانات الطالب ونموذج الأسئلة -->
+              <table width="100%" border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 8pt;">
+                <tr>
+                  <td width="58%" valign="top" style="padding-left: 6pt;">
+                    <div class="bordered-box">
+                      <div style="font-weight:bold; border-bottom:1px solid #ccc; padding-bottom:2pt; margin-bottom:4pt; font-size:8.5pt; background:#f0f0f0; text-align:center;">
+                        بيانات الطالب الأساسية
+                      </div>
+                      <div style="font-size:8pt; margin-bottom:3pt;"><strong>اسم الطالب الرباعي:</strong> ................................................................</div>
+                      <div style="font-size:8pt; margin-bottom:3pt;"><strong>القسم العلمي:</strong> ................................................................</div>
+                      <div style="font-size:8pt; margin-bottom:3pt;"><strong>نوع الدراسة:</strong> [ &nbsp; ] صباحي &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [ &nbsp; ] مسائي</div>
+                      <div style="font-size:8pt;"><strong>القاعة الامتحانية:</strong> .......................... &nbsp;&nbsp; <strong>توقيع الطالب:</strong> ..........................</div>
+                    </div>
+                  </td>
+                  <td width="42%" valign="top" style="padding-right: 6pt;">
+                    <div class="bordered-box">
+                      <div style="font-weight:bold; border-bottom:1px solid #ccc; padding-bottom:2pt; margin-bottom:4pt; font-size:8.5pt; background:#f0f0f0; text-align:center;">
+                        ${isMasterKey ? 'دليل النموذج المعتمد' : 'نموذج الأسئلة وإرشادات التظليل'}
+                      </div>
+                      <div style="text-align:center; margin: 4pt 0 6pt;">
+                        <span style="display:inline-block; width:30pt; height:18pt; line-height:18pt; border:1.5pt solid #000; border-radius:9pt; font-weight:bold; font-size:8pt; margin:0 2pt; ${isMasterKey ? 'background:#000; color:#fff;' : ''}">A / أ</span>
+                        <span style="display:inline-block; width:30pt; height:18pt; line-height:18pt; border:1.5pt solid #000; border-radius:9pt; font-weight:bold; font-size:8pt; margin:0 2pt;">B / ب</span>
+                        <span style="display:inline-block; width:30pt; height:18pt; line-height:18pt; border:1.5pt solid #000; border-radius:9pt; font-weight:bold; font-size:8pt; margin:0 2pt;">C / ج</span>
+                        <span style="display:inline-block; width:30pt; height:18pt; line-height:18pt; border:1.5pt solid #000; border-radius:9pt; font-weight:bold; font-size:8pt; margin:0 2pt;">D / د</span>
+                      </div>
+                      <div style="font-size: 7.5pt; border-top: 1px dashed #ccc; padding-top: 3pt; color: #222;">
+                        <strong>التعليمات:</strong> ظلل دائرة واحدة فقط بشكل كامل بقلم جاف أزرق أو أسود ( ● صحيح | ✕ خطأ | ✔ خطأ ). لا تستخدم الطامس.
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- شبكة دوائر الإجابة المتناسقة جدولياً في Word -->
+              <div style="border: 1.8pt solid #000; padding: 6pt; background: #fff; margin-bottom: 8pt;">
+                <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                  <tr>
+                    ${columnsCells}
+                  </tr>
+                </table>
+              </div>
+
+              <!-- التذييل وعلامات المعايرة -->
+              <table width="100%" border="0" cellpadding="2" cellspacing="0" style="border-top: 1.5pt solid #000; margin-top: 6pt;">
+                <tr>
+                  <td align="center" style="font-size: 7.5pt; font-weight: bold; color: #222;">
+                    تنبيه هام: تُصحح هذه الاستمارة ضوئياً بواسطة القارئ الإلكتروني (OMR)؛ التظليل المزدوج أو الشطب يُلغي درجة الفقرة.
+                  </td>
+                </tr>
+                <tr>
+                  <td align="center" style="font-size: 8pt; letter-spacing: 3px; font-weight: bold;">
+                    ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■
+                  </td>
+                </tr>
+              </table>
+
+            </div>
+          </div>
+        </body>
+        </html>
+      `;
+    };
+
+    // تصدير كملف Word (.doc) متوافق جدولياً مع Microsoft Word
+    $('#omrExportDocBtn')?.addEventListener('click', () => {
+      const subject = $('#omrGenSubject')?.value.trim() || 'ببل-شيت';
+      const docHtml = buildWordBubbleSheetDoc(false);
+
+      const blob = new Blob(['\ufeff', docHtml], { type: 'application/msword;charset=utf-8' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -2382,32 +2572,178 @@
       window.print();
     });
 
+    // منشئ وثيقة Word جدولية خاصة بالببل شيت لضمان تناسق الأعمدة والدوائر داخل Word
+    const buildQuizWordBubbleDoc = (questions, isMasterKey = false) => {
+      const college = $('#examCollege')?.value.trim() || 'وزارة التعليم العالي والبحث العلمي - الكلية الجامعية';
+      const subject = $('#examSubject')?.value.trim() || 'مادة الاختبار الأكاديمي';
+      const stage = $('#examStage')?.value.trim() || 'الدراسات الأولية';
+      const curYear = new Date().getFullYear();
+
+      const qTotal = questions.length;
+      const colsCount = qTotal <= 20 ? 2 : qTotal <= 30 ? 3 : 4;
+      const perCol = Math.ceil(qTotal / colsCount);
+      const colWidthPct = Math.floor(100 / colsCount);
+      const letters = ['A', 'B', 'C', 'D'];
+
+      let columnsCells = '';
+      for (let c = 0; c < colsCount; c++) {
+        const start = c * perCol;
+        const end = Math.min(start + perCol, qTotal);
+
+        let colRows = '';
+        for (let q = start; q < end; q++) {
+          const qNum = q + 1;
+          const qFormatted = qNum < 10 ? '0' + qNum : String(qNum);
+          const correctOptIdx = questions[q].a;
+
+          const bubblesWord = letters
+            .map((ltr, optIdx) => {
+              const isShaded = isMasterKey && correctOptIdx === optIdx;
+              return `<span style="display:inline-block; width:19pt; height:19pt; line-height:19pt; text-align:center; border:1.5pt solid #000; border-radius:10pt; font-family:Arial,sans-serif; font-size:9pt; font-weight:bold; margin:0 2pt; ${isShaded ? 'background-color:#000; color:#fff;' : 'background-color:#fff; color:#000;'}">${ltr}</span>`;
+            })
+            .join('');
+
+          colRows += `
+            <table width="100%" border="0" cellpadding="2" cellspacing="0" style="margin-bottom: 3pt; border-bottom: 1px solid #e0e0e0;">
+              <tr>
+                <td width="28" align="center" style="background:#E2E8F0; border:1px solid #CBD5E0; font-weight:bold; font-size:9pt; font-family:Arial,sans-serif; padding:2pt;">${qFormatted}</td>
+                <td align="center" style="padding:2pt;">${bubblesWord}</td>
+              </tr>
+            </table>`;
+        }
+
+        columnsCells += `
+          <td width="${colWidthPct}%" valign="top" style="padding: 4pt 8pt; ${c < colsCount - 1 ? 'border-left: 1.5pt dashed #aaa;' : ''}">
+            ${colRows}
+          </td>`;
+      }
+
+      return `
+        <div style="border: 2pt solid #000; padding: 12pt; background: #fff;">
+          <table width="100%" border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 6pt;">
+            <tr>
+              <td width="20" height="20" style="background:#000;">&nbsp;</td>
+              <td align="center" style="font-size:8pt; letter-spacing:2px; font-weight:bold;">■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■</td>
+              <td width="20" height="20" style="background:#000;">&nbsp;</td>
+            </tr>
+          </table>
+          <table width="100%" border="0" cellpadding="2" cellspacing="0" style="border-bottom: 2pt solid #000; padding-bottom: 6pt; margin-bottom: 8pt;">
+            <tr>
+              <td width="30%" align="right" valign="top" style="font-size: 8.5pt;">
+                <strong>وزارة التعليم العالي والبحث العلمي</strong><br>
+                <span>${college}</span><br>
+                <span>اللجنة الامتحانية المركزية</span>
+              </td>
+              <td width="40%" align="center" valign="top">
+                <div style="background:#06302C; color:#fff; display:inline-block; padding:2pt 10pt; font-size:8pt; font-weight:bold; border-radius:3pt;">
+                  ${isMasterKey ? '★ مفتاح التصحيح النموذجي المعتمد (Master Key)' : 'استمارة إجابة الاختبار الإلكتروني'}
+                </div>
+                <h2 style="margin: 4pt 0; font-size: 13pt; font-weight: 900; color: #000;">ورقة إجابة التظليل الآلي (BUBBLE SHEET)</h2>
+                <span style="font-size: 8.5pt; font-weight: bold; color: #333;">العام الجامعي: ${curYear} - ${curYear + 1} | ${stage}</span>
+              </td>
+              <td width="30%" align="left" dir="ltr" valign="top" style="font-size: 8.5pt; text-align: left;">
+                <div style="text-align: right; direction: rtl;">
+                  المادة: <strong>${subject}</strong><br>
+                  رمز النموذج: <strong>OMR-${qTotal}Q-${curYear}</strong>
+                </div>
+                <div style="font-family: monospace; font-size: 12pt; font-weight: bold; letter-spacing: 2px; margin-top: 3pt;">
+                  ||||| || |||| ||| ||||
+                </div>
+              </td>
+            </tr>
+          </table>
+          <table width="100%" border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 8pt;">
+            <tr>
+              <td width="58%" valign="top" style="padding-left: 6pt;">
+                <div class="student-box" style="margin:0; padding:6pt 8pt;">
+                  <div style="font-weight:bold; border-bottom:1px solid #ccc; padding-bottom:2pt; margin-bottom:4pt; font-size:8.5pt; background:#f0f0f0; text-align:center;">
+                    بيانات الطالب الأساسية
+                  </div>
+                  <div style="font-size:8pt; margin-bottom:3pt;"><strong>اسم الطالب الرباعي:</strong> ................................................................</div>
+                  <div style="font-size:8pt; margin-bottom:3pt;"><strong>القسم العلمي:</strong> ................................................................</div>
+                  <div style="font-size:8pt; margin-bottom:3pt;"><strong>نوع الدراسة:</strong> [ &nbsp; ] صباحي &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [ &nbsp; ] مسائي</div>
+                  <div style="font-size:8pt;"><strong>القاعة الامتحانية:</strong> .......................... &nbsp;&nbsp; <strong>توقيع الطالب:</strong> ..........................</div>
+                </div>
+              </td>
+              <td width="42%" valign="top" style="padding-right: 6pt;">
+                <div class="student-box" style="margin:0; padding:6pt 8pt;">
+                  <div style="font-weight:bold; border-bottom:1px solid #ccc; padding-bottom:2pt; margin-bottom:4pt; font-size:8.5pt; background:#f0f0f0; text-align:center;">
+                    ${isMasterKey ? 'دليل النموذج المعتمد' : 'نموذج الأسئلة وإرشادات التظليل'}
+                  </div>
+                  <div style="text-align:center; margin: 4pt 0 6pt;">
+                    <span style="display:inline-block; width:30pt; height:18pt; line-height:18pt; border:1.5pt solid #000; border-radius:9pt; font-weight:bold; font-size:8pt; margin:0 2pt; ${isMasterKey ? 'background:#000; color:#fff;' : ''}">A / أ</span>
+                    <span style="display:inline-block; width:30pt; height:18pt; line-height:18pt; border:1.5pt solid #000; border-radius:9pt; font-weight:bold; font-size:8pt; margin:0 2pt;">B / ب</span>
+                    <span style="display:inline-block; width:30pt; height:18pt; line-height:18pt; border:1.5pt solid #000; border-radius:9pt; font-weight:bold; font-size:8pt; margin:0 2pt;">C / ج</span>
+                    <span style="display:inline-block; width:30pt; height:18pt; line-height:18pt; border:1.5pt solid #000; border-radius:9pt; font-weight:bold; font-size:8pt; margin:0 2pt;">D / د</span>
+                  </div>
+                  <div style="font-size: 7.5pt; border-top: 1px dashed #ccc; padding-top: 3pt; color: #222;">
+                    <strong>التعليمات:</strong> ظلل دائرة واحدة فقط بشكل كامل بقلم جاف أزرق أو أسود ( ● صحيح | ✕ خطأ | ✔ خطأ ). لا تستخدم الطامس.
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </table>
+          <div style="border: 1.8pt solid #000; padding: 6pt; background: #fff; margin-bottom: 8pt;">
+            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+              <tr>
+                ${columnsCells}
+              </tr>
+            </table>
+          </div>
+          <table width="100%" border="0" cellpadding="2" cellspacing="0" style="border-top: 1.5pt solid #000; margin-top: 6pt;">
+            <tr>
+              <td align="center" style="font-size: 7.5pt; font-weight: bold; color: #222;">
+                تنبيه هام: تُصحح هذه الاستمارة ضوئياً بواسطة القارئ الإلكتروني (OMR)؛ التظليل المزدوج أو الشطب يُلغي درجة الفقرة.
+              </td>
+            </tr>
+            <tr>
+              <td align="center" style="font-size: 8pt; letter-spacing: 3px; font-weight: bold;">
+                ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■
+              </td>
+            </tr>
+          </table>
+        </div>
+      `;
+    };
+
     // تصدير كملف Word (.doc) متكامل مع جداول وترويسة وتنسيق عربي
     $('#exportExamDocBtn').addEventListener('click', () => {
       const container = $('#printableExamContainer');
       if (!container) return;
       const subName = ($('#examSubject') && $('#examSubject').value.trim()) || 'امتحان-اكاديمي';
 
-      // تصدير العنصر النشط حالياً
-      const activeContent = (
-        $('#examBubbleSheetViewWrapper') && $('#examBubbleSheetViewWrapper').style.display !== 'none'
-          ? $('#examBubbleSheetViewWrapper').innerHTML
-          : ($('#examMasterKeyViewWrapper') && $('#examMasterKeyViewWrapper').style.display !== 'none'
-              ? $('#examMasterKeyViewWrapper').innerHTML
-              : $('#examQuestionsViewWrapper').innerHTML)
-      );
+      const isBubbleActive = $('#examBubbleSheetViewWrapper') && $('#examBubbleSheetViewWrapper').style.display !== 'none';
+      const isKeyActive = $('#examMasterKeyViewWrapper') && $('#examMasterKeyViewWrapper').style.display !== 'none';
+
+      let activeContent = '';
+      if (isBubbleActive) {
+        activeContent = buildQuizWordBubbleDoc(activeQuestions, false);
+      } else if (isKeyActive) {
+        activeContent = buildQuizWordBubbleDoc(activeQuestions, true) + buildAnswerKeyRubricTable(activeQuestions);
+      } else {
+        activeContent = $('#examQuestionsViewWrapper')?.innerHTML || '';
+      }
 
       const htmlContent = `
         <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
         <head>
           <meta charset='utf-8'>
           <title>ورقة الامتحان الأكاديمي والببل شيت - ${subName}</title>
+          <!--[if gte mso 9]>
+          <xml>
+          <w:WordDocument>
+            <w:View>Print</w:View>
+            <w:Zoom>100</w:Zoom>
+            <w:DoNotOptimizeForBrowser/>
+          </w:WordDocument>
+          </xml>
+          <![endif]-->
           <style>
             @page Section1 {
               size: 21.0cm 29.7cm;
-              margin: 1.5cm 1.5cm 1.5cm 1.5cm;
-              mso-header-margin: 36.0pt;
-              mso-footer-margin: 36.0pt;
+              margin: 1.2cm 1.2cm 1.2cm 1.2cm;
+              mso-header-margin: 20pt;
+              mso-footer-margin: 20pt;
               mso-paper-source: 0;
             }
             div.Section1 { page: Section1; }
@@ -2415,19 +2751,17 @@
               direction: rtl;
               text-align: right;
               font-family: 'Simplified Arabic', 'Traditional Arabic', 'Arial', sans-serif;
-              font-size: 12pt;
-              line-height: 1.5;
+              font-size: 11pt;
+              line-height: 1.4;
               color: #000;
             }
-            table { width: 100%; border-collapse: collapse; margin-bottom: 10pt; }
-            th, td { border: 1px solid #333; padding: 5pt 7pt; font-size: 11pt; }
+            table { width: 100%; border-collapse: collapse; margin-bottom: 8pt; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+            th, td { border: 1px solid #333; padding: 4pt 6pt; font-size: 10pt; }
             th { background-color: #f2f2f2; font-weight: bold; text-align: center; }
             .header-table td { border: none; padding: 2pt 4pt; vertical-align: top; }
-            .student-box { border: 1.5px solid #333; padding: 8pt; margin: 10pt 0; background: #fafafa; }
-            .q-item { margin-bottom: 12pt; }
+            .student-box { border: 1.5pt solid #333; padding: 6pt; margin: 8pt 0; background: #fafafa; }
+            .q-item { margin-bottom: 10pt; }
             .q-num { font-weight: bold; }
-            .omr-bubble { border: 1px solid #000; padding: 2px 6px; border-radius: 50%; font-weight: bold; margin-left: 4px; }
-            .shaded-key { background-color: #000; color: #fff; }
           </style>
         </head>
         <body dir='rtl'>
