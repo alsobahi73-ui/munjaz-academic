@@ -970,16 +970,16 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
   align-items: center;
   text-align: center;
   perspective: 900px;
-  /* Soft Visual Identity Gradient replacing plain white */
+  /* Rich Visual Identity Gradient replacing dominant white */
   background:
-    radial-gradient(circle at 50% 0%, rgba(14, 107, 102, .15) 0%, rgba(185, 122, 18, .09) 48%, transparent 75%),
-    linear-gradient(165deg, #E3F2F0 0%, #F2F9F8 46%, #FAF1DF 100%) !important;
-  border: 2px solid rgba(14, 107, 102, .45);
-  box-shadow: 0 12px 32px rgba(10, 79, 75, .12), inset 0 1px 0 rgba(255, 255, 255, .85);
+    radial-gradient(circle at 50% -10%, rgba(185, 122, 18, .22) 0%, rgba(14, 107, 102, .20) 45%, transparent 74%),
+    linear-gradient(160deg, #BFE2DF 0%, #D6EDE9 48%, #EFE0BE 100%) !important;
+  border: 2px solid rgba(14, 107, 102, .55);
+  box-shadow: 0 12px 32px rgba(10, 79, 75, .15), inset 0 1px 0 rgba(255, 255, 255, .75);
   transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
 }
 .trio-wrap .featured-card {
-  border-color: rgba(185, 122, 18, .65);
+  border-color: rgba(185, 122, 18, .75);
 }
 /* Inner golden hairline frame on all 3 cards */
 .trio-wrap .portal-card::before,
@@ -987,7 +987,7 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
   content: "";
   position: absolute;
   inset: 8px;
-  border: 1px solid rgba(185, 122, 18, .30);
+  border: 1px solid rgba(185, 122, 18, .38);
   border-radius: 15px;
   opacity: 1;
   pointer-events: none;
@@ -1010,7 +1010,7 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
 .trio-wrap .featured-card:hover {
   transform: translateY(-5px);
   border-color: #B97A12;
-  box-shadow: 0 18px 40px rgba(10, 79, 75, .20), inset 0 1px 0 #fff;
+  box-shadow: 0 18px 40px rgba(10, 79, 75, .24), inset 0 1px 0 rgba(255, 255, 255, .9);
 }
 .trio-wrap .portal-card > *,
 .trio-wrap .featured-card > * {
@@ -1025,7 +1025,7 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
   margin: .2rem 0 .45rem;
 }
 .trio-wrap .portal-card p {
-  color: #35524F;
+  color: #264441;
   font-size: .92rem;
   line-height: 1.75;
   margin-bottom: 1.1rem;
@@ -1064,10 +1064,10 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
 .trio-wrap .portal-icon.tools-theme {
   display: grid !important;
   place-items: center;
-  border-radius: 20px;
-  background: linear-gradient(135deg, #06302C 0%, #0E6B66 100%);
+  border-radius: 22px;
+  background: linear-gradient(135deg, #06302C 0%, #0E6B66 58%, #B97A12 135%);
   border: 2px solid #E9C16C;
-  box-shadow: 0 0 0 6px rgba(14, 107, 102, .10), 0 8px 20px rgba(6, 48, 44, .22);
+  box-shadow: 0 0 0 6px rgba(185, 122, 18, .18), 0 10px 22px rgba(6, 48, 44, .24), inset 0 1px 2px rgba(255, 255, 255, .3);
   margin: 0 auto 1rem !important;
 }
 .trio-wrap .portal-icon.tools-theme::after { display: none; }
@@ -1531,4 +1531,137 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
 .schol-card dt { color: #0E6B66; font-weight: 700; }
 .schol-card dd { margin: 0; color: #555; line-height: 1.7; }
 @media (max-width: 750px) { .schol-grid { grid-template-columns: 1fr; } .schol-filters { flex-direction: column; } }
+
+/* ===== Academic Services (#services) & Homepage Cards: Rich Visual Identity Touch ===== */
+#services .cat-grid {
+  max-width: 1280px;
+  padding: 0 1.5rem;
+  gap: 1.85rem;
+  align-items: stretch;
+}
+#services .cat-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 315px;
+  padding: 2.2rem 1.65rem 1.85rem !important;
+  border-radius: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  /* Rich Emerald-Teal & Warm-Amber Identity Gradient replacing dominant white */
+  background:
+    radial-gradient(circle at 50% -10%, rgba(185, 122, 18, .24) 0%, rgba(14, 107, 102, .20) 45%, transparent 74%),
+    linear-gradient(160deg, #BFE2DF 0%, #D6EDE9 48%, #EFE0BE 100%) !important;
+  border: 2px solid rgba(14, 107, 102, .55) !important;
+  box-shadow: 0 12px 32px rgba(10, 79, 75, .15), inset 0 1px 0 rgba(255, 255, 255, .75);
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+#services .cat-card:first-child {
+  border-color: rgba(185, 122, 18, .75) !important;
+}
+/* Inner golden hairline frame on all 3 Academic Services cards */
+#services .cat-card::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border: 1px solid rgba(185, 122, 18, .38);
+  border-radius: 15px;
+  pointer-events: none;
+  z-index: 0;
+}
+/* Top decorative identity crown bar */
+#services .cat-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  inset-inline: 22%;
+  height: 4px;
+  border-radius: 0 0 6px 6px;
+  background: linear-gradient(90deg, #0E6B66, #B97A12, #0E6B66);
+  pointer-events: none;
+  z-index: 1;
+}
+#services .cat-card:hover {
+  transform: translateY(-5px);
+  border-color: #B97A12 !important;
+  box-shadow: 0 18px 40px rgba(10, 79, 75, .24), inset 0 1px 0 rgba(255, 255, 255, .9);
+}
+#services .cat-card > * {
+  position: relative;
+  z-index: 1;
+}
+/* Upgraded 76x76 Emerald-to-Gold Medallion Icons for Academic Services */
+#services .cat-card .cat-icon,
+#services .cat-card .cat-icon.tools-style {
+  width: 76px !important;
+  height: 76px !important;
+  min-width: 76px !important;
+  min-height: 76px !important;
+  display: grid !important;
+  place-items: center;
+  border-radius: 22px;
+  background: linear-gradient(135deg, #06302C 0%, #0E6B66 58%, #B97A12 135%) !important;
+  border: 2px solid #E9C16C !important;
+  box-shadow: 0 0 0 6px rgba(185, 122, 18, .18), 0 10px 22px rgba(6, 48, 44, .24), inset 0 1px 2px rgba(255, 255, 255, .3) !important;
+  margin: 0 auto 1.1rem !important;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+#services .cat-card:hover .cat-icon {
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 0 0 0 7px rgba(185, 122, 18, .25), 0 12px 26px rgba(6, 48, 44, .30) !important;
+}
+#services .cat-card strong {
+  color: #06302C;
+  font-size: 1.16rem;
+  font-weight: 800;
+  margin: .15rem 0 .45rem;
+}
+#services .cat-card small {
+  color: #264441;
+  font-size: .92rem;
+  line-height: 1.75;
+  margin-bottom: 1.1rem;
+}
+/* Pill Button for "4 خدمات ←" / "5 خدمات ←" / "6 خدمات ←" */
+#services .cat-card .cat-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .93rem;
+  font-weight: 700;
+  padding: .62rem 1.55rem;
+  margin-top: auto;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #0B4F4B 0%, #0E6B66 100%);
+  color: #fff !important;
+  border: 1.5px solid #E9C16C;
+  box-shadow: 0 6px 18px rgba(11, 79, 75, .22);
+  transition: background .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+#services .cat-card:hover .cat-count {
+  background: linear-gradient(135deg, #06302C 0%, #0B4F4B 100%);
+  border-color: #B97A12;
+  box-shadow: 0 8px 22px rgba(185, 122, 18, .28);
+}
+
+/* Harmonized visual-identity touch for Free Tools tiles (#tools .tool-tile) */
+#tools .tool-tile {
+  background:
+    radial-gradient(circle at 50% -15%, rgba(185, 122, 18, .18) 0%, rgba(14, 107, 102, .16) 48%, transparent 75%),
+    linear-gradient(160deg, #C7E6E3 0%, #DDF0ED 50%, #F2E3C4 100%) !important;
+  border: 1.5px solid rgba(14, 107, 102, .45) !important;
+  box-shadow: 0 8px 24px rgba(10, 79, 75, .12), inset 0 1px 0 rgba(255, 255, 255, .75);
+}
+#tools .tool-tile:hover {
+  border-color: #B97A12 !important;
+  box-shadow: 0 14px 32px rgba(10, 79, 75, .20);
+}
+#tools .tool-tile .tile-icon {
+  background: linear-gradient(135deg, #06302C 0%, #0E6B66 58%, #B97A12 135%) !important;
+  border: 2px solid #E9C16C !important;
+  box-shadow: 0 0 0 4px rgba(185, 122, 18, .16), 0 6px 16px rgba(6, 48, 44, .22) !important;
+}
+
 
