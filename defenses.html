@@ -191,8 +191,9 @@
 
     // Auto defenses from news.json
     fetch('news.json', { cache: 'no-cache' })
-      .then(function (r) { return r.json(); })
+      .then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
       .then(function (items) {
+        if (!Array.isArray(items)) throw new Error('invalid_feed');
         var grid = document.getElementById('autoGrid');
         grid.innerHTML = '';
         var found = 0;
@@ -209,11 +210,11 @@
 
     // Manual defenses
     fetch('defenses-manual.json', { cache: 'no-cache' })
-      .then(function (r) { return r.json(); })
+      .then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
       .then(function (items) {
         var grid = document.getElementById('manualGrid');
         grid.innerHTML = '';
-        if (!items.length) { grid.innerHTML = '<p>لا توجد إعلانات مضافة بعد — كن أول من يضيف مناقشة.</p>'; return; }
+        if (!Array.isArray(items) || !items.length) { grid.innerHTML = '<p>لا توجد إعلانات مضافة بعد — كن أول من يضيف مناقشة.</p>'; return; }
         items.forEach(function (it) { grid.appendChild(card(it, it.image)); });
       })
       .catch(function () {
@@ -222,9 +223,9 @@
 
     // Featured researchers carousel
     fetch('featured-researchers.json', { cache: 'no-cache' })
-      .then(function (r) { return r.json(); })
+      .then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
       .then(function (people) {
-        people = people.filter(function (p) { return p && p.name; });
+        people = (Array.isArray(people) ? people : []).filter(function (p) { return p && p.name; });
         if (!people.length) return;
         document.getElementById('featuredWrap').hidden = false;
         var card = document.getElementById('featuredCard');
@@ -242,7 +243,7 @@
               card.appendChild(img);
             } else {
               var ph = document.createElement('div');
-              ph.className = 'featured-photo placeholder'; ph.textContent = '🎓';
+              ph.className = 'featured-photo placeholder'; ph.textContent = (p.name || 'ب').trim().charAt(0);
               card.appendChild(ph);
             }
             var name = document.createElement('h3'); name.className = 'featured-name'; name.textContent = p.name;
@@ -273,34 +274,62 @@
       })
       .catch(function () {});
 
+    function uuid() {
+      if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0;
+        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+      });
+    }
+
+    function sendDefense(serviceId, name, details) {
+      return fetch('https://munjaz-academic.alsobahi73.workers.dev/api/academic-requests', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          requestId: uuid(),
+          service: serviceId,
+          name: name,
+          phone: '',
+          details: details,
+          consent: true
+        })
+      });
+    }
+
     // Submit form -> Telegram via worker
     document.getElementById('defenseForm').addEventListener('submit', function (e) {
       e.preventDefault();
-      var data = {
-        requestId: 'defense-' + Date.now(),
-        service: 'defense-announcement',
-        details: 'إعلان مناقشة جديد:\n' +
-          'الطالب: ' + document.getElementById('fName').value + '\n' +
-          'الشهادة: ' + document.getElementById('fDegree').value + '\n' +
-          'الجامعة: ' + document.getElementById('fUniv').value + '\n' +
-          'القسم: ' + (document.getElementById('fDept').value || '—') + '\n' +
-          'العنوان: ' + document.getElementById('fTitle').value + '\n' +
-          'التاريخ: ' + (document.getElementById('fDate').value || '—') + '\n' +
-          'الصورة: ' + (document.getElementById('fImage').value || '—') + '\n' +
-          'ملاحظات: ' + (document.getElementById('fNotes').value || '—'),
-        consent: true
-      };
-      fetch('https://munjaz-academic.alsobahi73.workers.dev/api/academic-requests', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      }).then(function () {
-        document.getElementById('formSuccess').style.display = 'block';
-        document.getElementById('defenseForm').reset();
-      }).catch(function () {
-        document.getElementById('formSuccess').textContent = 'حدث خطأ — حاول مرة أخرى.';
-        document.getElementById('formSuccess').style.display = 'block';
-      });
+      var nameVal = document.getElementById('fName').value.trim();
+      var details = 'إعلان مناقشة جديد:\n' +
+        'الطالب: ' + nameVal + '\n' +
+        'الشهادة: ' + document.getElementById('fDegree').value + '\n' +
+        'الجامعة: ' + document.getElementById('fUniv').value.trim() + '\n' +
+        'القسم: ' + (document.getElementById('fDept').value.trim() || '—') + '\n' +
+        'العنوان: ' + document.getElementById('fTitle').value.trim() + '\n' +
+        'التاريخ: ' + (document.getElementById('fDate').value || '—') + '\n' +
+        'الصورة: ' + (document.getElementById('fImage').value.trim() || '—') + '\n' +
+        'ملاحظات: ' + (document.getElementById('fNotes').value.trim() || '—');
+      var msgEl = document.getElementById('formSuccess');
+      msgEl.style.display = 'none';
+      sendDefense('defense-announcement', nameVal, details)
+        .then(function (r) {
+          if (r.status === 400) return sendDefense('theses-support', nameVal, details);
+          return r;
+        })
+        .then(function (r) {
+          if (!r.ok) throw new Error('http ' + r.status);
+          return r.json();
+        })
+        .then(function () {
+          msgEl.textContent = 'تم استلام إعلان المناقشة بنجاح وسيتم نشره بعد المراجعة.';
+          msgEl.style.display = 'block';
+          document.getElementById('defenseForm').reset();
+        })
+        .catch(function () {
+          msgEl.textContent = 'حدث خطأ أثناء الإرسال — حاول مرة أخرى لاحقاً.';
+          msgEl.style.display = 'block';
+        });
     });
   })();
   </script>

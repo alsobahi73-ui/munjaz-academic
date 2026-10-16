@@ -22,8 +22,12 @@ export function corsDiagnostics(receivedOrigin, siteOrigin) {
 // A handler factory makes provider calls testable without sending real messages.
 export function createRequestHandler({ catalog, token, chatId, siteOrigin, fetchImpl = fetch, now = Date.now }) {
   siteOrigin = normalizeOrigin(siteOrigin);
-  const services = new Map(catalog.flatMap(group => group.services.map(service =>
-    [service.id, { ...service, category: group.title }])));
+  const services = new Map([
+    ...catalog.flatMap(group => group.services.map(service =>
+      [service.id, { ...service, category: group.title }])),
+    ['defense-announcement', { id: 'defense-announcement', title: 'إضافة إعلان مناقشة', category: 'المناقشات العلمية' }],
+    ['job-seeker', { id: 'job-seeker', title: 'تسجيل باحث عن عمل', category: 'بوابة الباحثين عن التعيين' }],
+  ]);
   const requests = new Map();
   const rates = new Map();
   const ttl = 24 * 60 * 60 * 1000;

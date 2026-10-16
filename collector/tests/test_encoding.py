@@ -35,7 +35,7 @@ class NewsEncodingTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             report = collect(copy.deepcopy(CONFIG), Path(directory), FakeClient({SOURCE['url']: rss}), NOW)
             self.assertEqual(report['new_items'], 1)
-            items = json.loads((Path(directory) / 'news_queue.json').read_text())
+            items = json.loads((Path(directory) / 'news_queue.json').read_text(encoding='utf-8'))
             self.assertEqual(items[0]['title'], 'إعلان نتائج القبول')
 
     def test_english_headline_is_preserved(self):

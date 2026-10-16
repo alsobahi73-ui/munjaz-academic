@@ -910,30 +910,148 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
   box-shadow: 0 6px 20px rgba(185,122,18,.3);
 }
 
-/* ===== Defenses icon equal to neighbors (64px) ===== */
-.trio-wrap .featured-photo { width: 64px !important; height: 64px !important; border-width: 3px; }
-.trio-wrap .featured-photo.avatar-initials { font-size: 1.3rem; }
-.trio-wrap .featured-photo-wrap { margin-bottom: .75rem; }
-.trio-wrap .researcher-badge { font-size: .65rem; padding: .15rem .7rem; bottom: -6px; }
-.trio-wrap .featured-card { min-height: 280px; justify-content: center; }
-
-/* ===== Trio headers: refined arrangement ===== */
-.trio-wrap .section-head { text-align: center; margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 2px solid #e8f0ee; }
-.trio-wrap .section-head h2 { font-size: 1.15rem; font-weight: 800; color: #06302C; margin: 0 0 .5rem; display: flex; align-items: center; justify-content: center; gap: .6rem; }
-.trio-wrap .section-head h2::before, .trio-wrap .section-head h2::after { content: ""; width: 8px; height: 8px; background: #B97A12; transform: rotate(45deg); flex-shrink: 0; }
+/* ===== Unified Trio Cards & Icons (Equal Size + Auto 3D Flip) ===== */
+.trio-wrap .section-head,
+.trio-wrap .trio-col:nth-child(2) .section-head {
+  text-align: center;
+  min-height: 92px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin: 0 0 1.25rem !important;
+  padding: 0 0 .85rem !important;
+  background: transparent;
+  border-radius: 0;
+  border-bottom: 2px solid #e8f0ee;
+  box-sizing: border-box;
+}
+.trio-wrap .section-head h2 {
+  font-size: 1.15rem; font-weight: 800; color: #0E6B66;
+  margin: 0 0 .5rem; display: flex; align-items: center; justify-content: center; gap: .6rem;
+}
+.trio-wrap .section-head h2::before,
+.trio-wrap .section-head h2::after {
+  content: ""; width: 8px; height: 8px; background: #B97A12; transform: rotate(45deg); flex-shrink: 0;
+}
 .trio-wrap .section-head p { font-size: .88rem; color: #666; margin: 0; line-height: 1.6; }
 
-/* ===== Trio headers: strong brand identity ===== */
-.trio-wrap .section-head h2 { color: #0E6B66; }
-.trio-wrap .trio-col:nth-child(2) .section-head { background: linear-gradient(180deg, rgba(14,107,102,.06), transparent); border-radius: 12px; padding: 1rem; margin: -1rem -1rem 1.25rem; }
-
-/* ===== Portal icons: free-tools theme ===== */
-.portal-icon.tools-theme {
-  width: 72px; height: 72px; display: grid; place-items: center;
-  border-radius: 20px; background: linear-gradient(135deg, var(--teal-dark), var(--teal));
-  border: none; margin: 0 auto 1rem;
+.trio-wrap .featured-wrap {
+  margin: 0 !important;
+  max-width: 100% !important;
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
-.portal-icon.tools-theme::after { display: none; }
+.trio-wrap .portal-card,
+.trio-wrap .featured-card {
+  flex: 1;
+  width: 100%;
+  max-width: 100%;
+  min-height: 420px;
+  height: 100%;
+  margin: 0 !important;
+  padding: 2rem 1.5rem !important;
+  border-radius: 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  perspective: 900px;
+}
+.trio-wrap .portal-card .btn-lg,
+.trio-wrap .featured-card .btn-lg {
+  font-size: 1rem;
+  padding: .75rem 1.75rem;
+  margin-top: auto;
+}
+.trio-wrap .portal-icon,
+.trio-wrap .portal-icon.tools-theme,
+.trio-wrap .featured-photo {
+  width: 76px !important;
+  height: 76px !important;
+  min-width: 76px !important;
+  min-height: 76px !important;
+  box-sizing: border-box;
+}
+.trio-wrap .portal-icon,
+.trio-wrap .portal-icon.tools-theme {
+  display: grid !important;
+  place-items: center;
+  border-radius: 20px;
+  background: linear-gradient(135deg, var(--teal-dark), var(--teal));
+  border: none;
+  margin: 0 auto 1rem !important;
+}
+.trio-wrap .portal-icon.tools-theme::after { display: none; }
+.trio-wrap .featured-photo {
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #B97A12;
+  box-shadow: 0 6px 18px rgba(185,122,18,.28);
+}
+.trio-wrap .featured-photo-wrap {
+  position: relative;
+  display: inline-block;
+  width: 76px;
+  height: 76px;
+  margin: 0 auto .85rem !important;
+}
+.trio-wrap .researcher-badge {
+  font-size: .65rem;
+  padding: .15rem .7rem;
+  bottom: -6px;
+}
+.featured-card-body {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: .45rem;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  transition: transform .32s cubic-bezier(.4,0,.2,1), opacity .28s ease;
+}
+.featured-card-body.flip-out {
+  transform: rotateY(88deg) scale(.96);
+  opacity: 0;
+}
+.featured-card-body.flip-in {
+  animation: researcherFlipIn .36s cubic-bezier(.2,.8,.2,1) forwards;
+}
+@keyframes researcherFlipIn {
+  0% { transform: rotateY(-88deg) scale(.96); opacity: 0; }
+  100% { transform: rotateY(0deg) scale(1); opacity: 1; }
+}
+.trio-wrap .featured-thesis {
+  font-size: .88rem;
+  line-height: 1.65;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-top: .25rem;
+}
+.featured-card-footer {
+  width: 100%;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .85rem;
+}
+.trio-wrap .featured-dots {
+  margin-top: 0;
+}
+@media (max-width: 900px) {
+  .trio-wrap { grid-template-columns: 1fr; max-width: 480px; }
+  .trio-wrap .section-head { min-height: auto; }
+  .trio-wrap .portal-card, .trio-wrap .featured-card { min-height: 360px; }
+}
 
 /* ===== FAQ compact 2-column ===== */
 #faq .faq-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: .8rem; max-width: 900px; margin: 0 auto; }
@@ -945,3 +1063,4 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
   #faq .faq-list { grid-template-columns: 1fr; }
   #faq .faq-item:nth-child(5) { max-width: 100%; }
 }
+

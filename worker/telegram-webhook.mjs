@@ -40,13 +40,14 @@ export function createTelegramWebhook({ token, adminChatId, webhookSecret, fetch
       if (text === '/start') {
         await sendMessage(chatId, WELCOME);
       } else if (text) {
+        const esc = s => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
         const from = msg.from || {};
-        const name = [from.first_name, from.last_name].filter(Boolean).join(' ') || 'مستخدم';
-        const username = from.username ? `@${from.username}` : 'بدون معرف';
+        const name = esc([from.first_name, from.last_name].filter(Boolean).join(' ') || 'مستخدم');
+        const username = esc(from.username ? `@${from.username}` : 'بدون معرف');
         await api('sendMessage', {
           chat_id: adminChatId,
           parse_mode: 'HTML',
-          text: `📩 رسالة جديدة من ${name} (${username})\n🆔 <code>${from.id ?? ''}</code>\n\n${text}`,
+          text: `📩 رسالة جديدة من ${name} (${username})\n🆔 <code>${esc(from.id ?? '')}</code>\n\n${esc(text)}`,
         });
         await sendMessage(chatId, 'تم استلام رسالتك ✅\nسيرد عليك فريق مُنجز أكاديمي قريبًا.');
       }

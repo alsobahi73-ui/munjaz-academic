@@ -31,8 +31,30 @@
     return true;
   }
 
+  function resolveCategory(item) {
+    if (item && CATEGORIES.indexOf(item.category) !== -1) return item.category;
+    var text = ((item && item.title) || '') + ' ' + ((item && item.summary) || '');
+    var src = (item && item.source) || '';
+    if (/(منح|منحة|بعثات|بعثة|زمالة|زمالات|ابتعاث)/.test(text)) return 'المنح والبعثات';
+    if (/(قبول|تقديم|تسجيل|بوابة القبول|قنوات القبول|الموازي|المسائي)/.test(text)) return 'القبول والتسجيل';
+    if (/(دراسات عليا|ماجستير|دكتوراه|أطروحة|رسالة ماجستير|مناقشة)/.test(text)) return 'الدراسات العليا';
+    if (/(امتحان|امتحانات|نتائج|التقويم الجامعي|الفصل الدراسي)/.test(text)) return 'الامتحانات والنتائج';
+    if (/(تصنيف|اعتماد|تايمز|شنغهاي|سكوبس|scopus|qs|webometrics|كلاريفيت)/i.test(text)) return 'التصنيفات والاعتماد';
+    if (src.indexOf('وزارة التعليم') !== -1 && src.indexOf('أخبار الجامعات') === -1) return 'أخبار الوزارة';
+    return 'أخبار الجامعات';
+  }
+
   function timeOf(item) {
-    var t = Date.parse(item.date);
+    var raw = String((item && item.date) || '').trim();
+    if (!raw) return 0;
+    var dmy = /^(\d{1,2})[-/](\d{1,2})[-/](\d{4})(?:\s*-\s*(\d{1,2}):(\d{2}))?$/.exec(raw);
+    if (dmy) {
+      var first = parseInt(dmy[1], 10), second = parseInt(dmy[2], 10), yr = parseInt(dmy[3], 10);
+      var day = first, mon = second;
+      if (second > 12 && first <= 12) { mon = first; day = second; }
+      return Date.UTC(yr, mon - 1, day, parseInt(dmy[4] || '0', 10), parseInt(dmy[5] || '0', 10));
+    }
+    var t = Date.parse(raw);
     return isNaN(t) ? 0 : t;
   }
 
@@ -56,8 +78,8 @@
     meta.appendChild(el('span', null, 'المصدر: ' + item.source.trim()));
     if (item.date) meta.appendChild(el('span', null, item.date));
     art.appendChild(meta);
-    if (item.category && CATEGORIES.indexOf(item.category) !== -1) {
-      art.appendChild(el('span', 'news-chip', item.category));
+    if (item._cat && CATEGORIES.indexOf(item._cat) !== -1) {
+      art.appendChild(el('span', 'news-chip', item._cat));
     }
     return art;
   }
@@ -65,7 +87,7 @@
   function renderGrid(filter) {
     gridEl.replaceChildren();
     var items = ALL.filter(function (it) {
-      return !filter || filter === 'الكل' || it.category === filter;
+      return !filter || filter === 'الكل' || it._cat === filter;
     }).slice(0, 6);
     if (!items.length) {
       gridEl.appendChild(el('p', 'news-empty', 'لا أخبار في هذه الفئة حاليًا.'));
@@ -94,7 +116,7 @@
   function renderFeatured(items) {
     var pick = null;
     for (var i = 0; i < items.length; i++) {
-      if (items[i].category === 'أخبار الوزارة') { pick = items[i]; break; }
+      if (items[i]._cat === 'أخبار الوزارة') { pick = items[i]; break; }
     }
     if (!pick) pick = items[0];
     featuredEl.replaceChildren();
@@ -110,7 +132,10 @@
     return r.json();
   }).then(function (data) {
     if (!Array.isArray(data)) throw new Error('invalid_feed');
-    var items = data.filter(valid).sort(function (a, b) { return timeOf(b) - timeOf(a); });
+    var items = data.filter(valid).map(function (it) {
+      it._cat = resolveCategory(it);
+      return it;
+    }).sort(function (a, b) { return timeOf(b) - timeOf(a); });
     if (!items.length) return; /* يبقى القسم مخفيًا — لا أخبار = لا قسم */
     var feat = renderFeatured(items);
     ALL = items.filter(function (it) { return it !== feat; });

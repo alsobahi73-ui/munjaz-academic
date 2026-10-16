@@ -31,11 +31,12 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          for file in news_queue.json seen.json collector_state.json collector_report.json runs.log; do
-            if [ -f "$file" ]; then git add -f -- "$file"; fi
+          for file in news_queue.json seen.json collector_state.json collector_report.json; do
+            if [ -f "$file" ]; then git add -- "$file"; fi
           done
           if ! git diff --cached --quiet; then
             git commit -m 'chore: update collector state'
+            git pull --rebase -X ours origin main || true
             git push origin HEAD:main
           fi
       - name: Preserve actual collector outcome

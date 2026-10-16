@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>بوابة الباحثين عن التعيين — مُنجز أكاديمي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -12,7 +15,9 @@
     <a href="index.html" class="brand">مُنجز أكاديمي</a>
     <nav class="main-nav">
       <a href="index.html">الرئيسية</a>
-      <a href="defenses.html">🎓 المناقشات</a>
+      <a href="news.html">أرشيف الأخبار</a>
+      <a href="defenses.html">المناقشات</a>
+      <a href="opportunities.html">فرص وظيفية</a>
     </nav>
   </div>
 </header>
@@ -20,10 +25,9 @@
 <section class="section" id="jobs-page">
   <div class="container">
     <header class="section-head">
-      <h2>💼 بوابة الباحثين عن التعيين</h2>
+      <h2>بوابة الباحثين عن التعيين</h2>
       <p>سجّل معلوماتك الأساسية لنرشحك للفرص الأكاديمية المناسبة لتخصصك.</p>
     </header>
-    </div>
     <form class="job-form" id="jobSeekerForm" novalidate>
       <div class="form-grid">
         <label>الاسم الكامل *
@@ -95,23 +99,52 @@
   if (!form) return;
   var status = document.getElementById('jobFormStatus');
   var WORKER = 'https://munjaz-academic.alsobahi73.workers.dev';
+  function uuid() {
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      var r = Math.random() * 16 | 0;
+      return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+  }
+  function sendPayload(serviceId, raw) {
+    var details = [
+      'تسجيل باحث عن تعيين:',
+      'الاسم: ' + (raw.name || '—'),
+      'العمر: ' + (raw.age || '—') + (raw.gender ? ' | الجنس: ' + raw.gender : ''),
+      'الشهادة: ' + (raw.degree || '—') + ' — التخصص: ' + (raw.specialization || '—'),
+      'الجامعة: ' + (raw.university || '—') + (raw.graduation_year ? ' (' + raw.graduation_year + ')' : ''),
+      'المحافظة: ' + (raw.governorate || '—'),
+      'البريد: ' + (raw.email || '—') + ' | سنوات الخبرة: ' + (raw.experience || '0'),
+      raw.bio ? 'نبذة: ' + raw.bio : ''
+    ].filter(Boolean).join('\n');
+    return fetch(WORKER + '/api/academic-requests', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        requestId: uuid(),
+        service: serviceId,
+        name: raw.name || '',
+        phone: raw.phone || '',
+        details: details,
+        consent: true
+      })
+    });
+  }
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     if (!form.checkValidity()) { form.reportValidity(); return; }
     status.className = 'form-status'; status.textContent = 'جارٍ الإرسال…';
-    var data = {};
-    new FormData(form).forEach(function (v, k) { data[k] = String(v).trim(); });
-    data.kind = 'job-seeker';
-    fetch(WORKER + '/api/academic-requests', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+    var raw = {};
+    new FormData(form).forEach(function (v, k) { raw[k] = String(v).trim(); });
+    sendPayload('job-seeker', raw).then(function (r) {
+      if (r.status === 400) return sendPayload('cv', raw);
+      return r;
     }).then(function (r) {
       if (!r.ok) throw new Error('http ' + r.status);
       return r.json();
     }).then(function () {
       status.className = 'form-status ok';
-      status.textContent = 'تم استلام بياناتك بنجاح ✅ سنتواصل معك عند توفر فرصة مناسبة.';
+      status.textContent = 'تم استلام بياناتك بنجاح. سنتواصل معك عند توفر فرصة مناسبة.';
       form.reset();
     }).catch(function () {
       status.className = 'form-status err';

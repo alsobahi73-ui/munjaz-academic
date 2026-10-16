@@ -17,10 +17,18 @@ const handle = createRequestHandler({
 // Serve only public application files. Source, secrets, Git metadata and environment files are inaccessible.
 const publicFiles = new Map([
   ['/news.json', ['news.json', 'application/json']],
+  ['/defenses-manual.json', ['defenses-manual.json', 'application/json']],
+  ['/featured-researchers.json', ['featured-researchers.json', 'application/json']],
+  ['/job-listings.json', ['job-listings.json', 'application/json']],
   ['/scripts/news-feed.js', ['scripts/news-feed.js', 'text/javascript']],
   ['/scripts/news-section.js', ['scripts/news-section.js', 'text/javascript']],
   ['/scripts/news-archive.js', ['scripts/news-archive.js', 'text/javascript']],
   ['/news.html', ['news.html', 'text/html']],
+  ['/defenses.html', ['defenses.html', 'text/html']],
+  ['/jobs.html', ['jobs.html', 'text/html']],
+  ['/job-seekers.html', ['job-seekers.html', 'text/html']],
+  ['/opportunities.html', ['opportunities.html', 'text/html']],
+  ['/munjaz-promotion-calculator.html', ['munjaz-promotion-calculator.html', 'text/html']],
   ['/', ['index.html', 'text/html']], ['/index.html', ['index.html', 'text/html']],
   ['/services.html', ['services.html', 'text/html']], ['/styles.css', ['styles.css', 'text/css']],
   ['/app.js', ['app.js', 'text/javascript']], ['/academic-services.css', ['academic-services.css', 'text/css']],
@@ -74,5 +82,5 @@ const server = createServer(async (req, res) => {
   } catch { res.writeHead(500); res.end('Internal server error'); }
 });
 server.listen(Number(process.env.PORT || 3000), process.env.BIND_ADDRESS || '127.0.0.1', () => {
-  console.log('Munjiz Academic server is ready.');
+  console.log('Munjaz Academic server is ready.');
 });
