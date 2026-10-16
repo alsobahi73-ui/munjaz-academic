@@ -1,0 +1,102 @@
+[
+  {
+    "id": "chevening",
+    "name": "منحة تشيفننغ البريطانية",
+    "country": "بريطانيا",
+    "level": "ماجستير",
+    "funding": "ممولة بالكامل (رسوم + معيشة + سفر)",
+    "deadline": "نوفمبر سنويًا",
+    "requirements": "بكالوريوس بتقدير جيد، سنتان خبرة عمل، قبول جامعي",
+    "link": "https://www.chevening.org"
+  },
+  {
+    "id": "fulbright",
+    "name": "منحة فولبرايت الأمريكية",
+    "country": "أمريكا",
+    "level": "ماجستير ودكتوراه",
+    "funding": "ممولة بالكامل",
+    "deadline": "فبراير سنويًا (للعراقيين)",
+    "requirements": "بكالوريوس، TOEFL، GRE لبعض التخصصات",
+    "link": "https://iraq.usembassy.gov"
+  },
+  {
+    "id": "daad",
+    "name": "منح DAAD الألمانية",
+    "country": "ألمانيا",
+    "level": "ماجستير ودكتوراه",
+    "funding": "ممولة بالكامل + راتب شهري",
+    "deadline": "أكتوبر سنويًا",
+    "requirements": "بكالوريوس، لغة ألمانية أو إنجليزية حسب البرنامج",
+    "link": "https://www.daad.de"
+  },
+  {
+    "id": "turkiye",
+    "name": "المنح التركية",
+    "country": "تركيا",
+    "level": "بكالوريوس وماجستير ودكتوراه",
+    "funding": "ممولة بالكامل + سكن + راتب",
+    "deadline": "فبراير سنويًا",
+    "requirements": "معدل 70%+ للبكالوريوس، 75%+ للعليا",
+    "link": "https://www.turkiyeburslari.gov.tr"
+  },
+  {
+    "id": "hungary",
+    "name": "منحة الحكومة الهنغارية",
+    "country": "هنغاريا",
+    "level": "بكالوريوس وماجستير ودكتوراه",
+    "funding": "رسوم + سكن + راتب شهري",
+    "deadline": "يناير سنويًا",
+    "requirements": "عبر وزارة التعليم العالي العراقية",
+    "link": "https://stipendiumhungaricum.hu"
+  },
+  {
+    "id": "china",
+    "name": "منحة الحكومة الصينية CSC",
+    "country": "الصين",
+    "level": "ماجستير ودكتوراه",
+    "funding": "ممولة بالكامل",
+    "deadline": "أبريل سنويًا",
+    "requirements": "عبر السفارة الصينية أو الجامعات مباشرة",
+    "link": "http://www.campuschina.org"
+  },
+  {
+    "id": "australia",
+    "name": "منح أستراليا Australia Awards",
+    "country": "أستراليا",
+    "level": "ماجستير",
+    "funding": "ممولة بالكامل",
+    "deadline": "أبريل سنويًا",
+    "requirements": "خبرة عمل، IELTS 6.5",
+    "link": "https://australiaawardsdfat.gov.au"
+  },
+  {
+    "id": "mohesr",
+    "name": "بعثات وزارة التعليم العالي",
+    "country": "متنوعة",
+    "level": "ماجستير ودكتوراه",
+    "funding": "حسب برنامج الابتعاث",
+    "deadline": "تُعلن دوريًا",
+    "requirements": "عبر دائرة البعثات — الشروط تُنشر مع كل إعلان",
+    "link": "https://mohesr.gov.iq"
+  },
+  {
+    "id": "erasmus",
+    "name": "إيراسموس+ الأوروبية",
+    "country": "أوروبا",
+    "level": "ماجستير مشترك",
+    "funding": "ممولة بالكامل + راتب شهري",
+    "deadline": "يناير سنويًا",
+    "requirements": "بكالوريوس، لغة إنجليزية، قبول في برنامج مشترك",
+    "link": "https://erasmus-plus.ec.europa.eu"
+  },
+  {
+    "id": "japan",
+    "name": "منحة الحكومة اليابانية MEXT",
+    "country": "اليابان",
+    "level": "بكالوريوس وماجستير ودكتوراه",
+    "funding": "ممولة بالكامل + راتب",
+    "deadline": "مايو سنويًا",
+    "requirements": "عبر السفارة اليابانية في بغداد",
+    "link": "https://www.iq.emb-japan.go.jp"
+  }
+]
