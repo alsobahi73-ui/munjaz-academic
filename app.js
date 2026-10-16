@@ -193,14 +193,38 @@
       const t = store.get(LS.target, '');
       if (t) $('#promoTarget').value = t;
 
+      // أزرار المراتب الأكاديمية المستهدفة
+      const rankBtns = $$('.promo-rank-btn');
+      const syncRankBtns = (targetVal) => {
+        rankBtns.forEach((btn) => {
+          btn.classList.toggle('active', btn.dataset.target === String(targetVal));
+        });
+      };
+      if (t) syncRankBtns(t);
+
+      rankBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const tgt = btn.dataset.target;
+          $('#promoTarget').value = tgt;
+          store.set(LS.target, tgt);
+          syncRankBtns(tgt);
+          this.render();
+        });
+      });
+
       $('#promoForm').addEventListener('submit', (e) => { e.preventDefault(); this.add(); });
       $('#promoBody').addEventListener('click', (e) => {
         const b = e.target.closest('.row-del');
         if (b) this.remove(b.dataset.id);
       });
-      $('#promoTarget').addEventListener('input', () => { store.set(LS.target, $('#promoTarget').value); this.render(); });
+      $('#promoTarget').addEventListener('input', () => {
+        const val = $('#promoTarget').value;
+        store.set(LS.target, val);
+        syncRankBtns(val);
+        this.render();
+      });
       $('#promoClear').addEventListener('click', () => {
-        if (this.items.length && confirm('هل تريد مسح جميع البنود؟')) { this.items = []; this.save(); this.render(); }
+        if (this.items.length && confirm('هل تريد مسح جميع البنود المدخلة في الكشف؟')) { this.items = []; this.save(); this.render(); }
       });
       $('#promoCsv').addEventListener('click', () => this.csv());
       $('#promoPrint').addEventListener('click', () => window.print());
@@ -232,7 +256,7 @@
       const body = $('#promoBody');
       body.replaceChildren();
       this.items.forEach((x, i) => {
-        const del = el('button', { type: 'button', class: 'row-del', 'data-id': x.id, 'aria-label': `حذف البند ${i + 1}`, text: '🗑️' });
+        const del = el('button', { type: 'button', class: 'row-del', 'data-id': x.id, 'aria-label': `حذف البند ${i + 1}`, text: '✕' });
         body.append(el('tr', {},
           el('td', { text: String(i + 1) }),
           el('td', { text: x.type }),
@@ -257,26 +281,25 @@
         bar.firstElementChild.style.width = pct + '%';
         bar.setAttribute('aria-valuenow', String(Math.round(pct)));
         txt.textContent = total >= target
-          ? `أحسنت! بلغت ${fmt(total)} نقطة وتجاوزت المطلوب (${fmt(target)}) بـ ${fmt(total - target)}.`
-          : `أنجزت ${fmt(pct)}% — المتبقي ${fmt(target - total)} نقطة من ${fmt(target)}.`;
+          ? `✓ مؤهل أكاديمياً: بلغت ${fmt(total)} نقطة وتجاوزت الحد الأدنى للترقية (${fmt(target)}) بفارق +${fmt(total - target)} نقطة.`
+          : `قيد الإنجاز (${fmt(pct)}%): مجموعك الحالي ${fmt(total)} نقطة، والمتبقي للوصول للحد الأدنى ${fmt(target - total)} نقطة من أصل ${fmt(target)}.`;
       } else {
         bar.firstElementChild.style.width = '0';
         bar.setAttribute('aria-valuenow', '0');
-        txt.textContent = 'أدخل النقاط المطلوبة لعرض نسبة الإنجاز.';
+        txt.textContent = 'أدخل النقاط المطلوبة أو حدد المرتبة أعلاه لعرض نسبة الإنجاز والجاهزية.';
       }
     },
     csv() {
       if (!this.items.length) return this.msg('لا توجد بنود للتصدير.');
       this.msg('');
       const esc = (v) => `"${String(v).replace(/"/g, '""')}"`;
-      // حماية من حقن الصيغ في Excel
       const safe = (v) => (/^[=+\-@\t\r]/.test(String(v)) ? "'" + v : v);
       const rows = [['#', 'البند', 'الوصف', 'النقاط', 'العدد', 'المجموع']];
       this.items.forEach((x, i) => rows.push([i + 1, safe(x.type), safe(x.title), x.points, x.count, x.points * x.count]));
-      rows.push(['', '', '', '', 'المجموع التراكمي', this.total()]);
+      rows.push(['', '', '', '', 'المجموع التراكمي للنقاط', this.total()]);
       const csv = '\uFEFF' + rows.map((r) => r.map(esc).join(',')).join('\r\n');
       const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
-      const a = el('a', { href: url, download: 'promotion-points.csv' });
+      const a = el('a', { href: url, download: 'promotion-points-munjaz.csv' });
       document.body.append(a);
       a.click();
       a.remove();
@@ -285,34 +308,80 @@
   };
 
   /* =====================================================
-     عداد الكلمات
+     عداد ومحلل النصوص والرسائل الأكاديمية
      ===================================================== */
   function initWordCounter() {
     const ta = $('#wcText');
     const limitEl = $('#wcLimit');
     const wordRe = /[\p{L}\p{N}]+(?:['’\-][\p{L}\p{N}]+)*/gu;
+    const stopWords = new Set([
+      'في', 'من', 'على', 'إلى', 'عن', 'مع', 'هذا', 'هذه', 'التي', 'الذي', 'الذين', 'اللواتي', 'أن', 'إن', 'كان', 'كانت',
+      'يكون', 'تكون', 'هو', 'هي', 'هم', 'هن', 'ما', 'لا', 'لم', 'لن', 'أو', 'ثم', 'قد', 'بين', 'حيث', 'كل', 'ذلك', 'تلك',
+      'تم', 'تمت', 'كما', 'أيضا', 'أيضاً', 'فإن', 'وقد', 'ومن', 'وفي', 'وعلى', 'وإلى', 'وهو', 'وهي', 'هناك', 'خلال', 'بعد',
+      'قبل', 'عند', 'نحو', 'حول', 'غير', 'سوف', 'إذ', 'إذا', 'إلا', 'لدى', 'حتى', 'معظم', 'بعض', 'أحد', 'إحدى', 'the', 'of',
+      'and', 'to', 'in', 'a', 'is', 'that', 'for', 'it', 'as', 'was', 'with', 'on', 'by', 'at', 'an', 'be', 'this'
+    ]);
 
     const update = () => {
       const text = ta.value;
-      const words = (text.match(wordRe) || []).length;
+      const matches = text.match(wordRe) || [];
+      const words = matches.length;
       const chars = [...text].length;
       const noSpace = [...text.replace(/\s/g, '')].length;
-      const sentences = text.split(/[.!?؟…]+/).filter((s) => /[\p{L}\p{N}]/u.test(s)).length;
-      const paras = text.split(/\n+/).filter((p) => p.trim()).length;
-      const mins = words / 180; // متوسط قراءة النص العربي
+      const sentences = text.split(/[.!?؟…\n]+/).filter((s) => /[\p{L}\p{N}]/u.test(s)).length;
+      const mins = words / 180; // قراءة صامتة
+      const speechMins = words / 130; // إلقاء ومناقشة
+      const pages = words > 0 ? (words / 250).toFixed(1) : '0';
+      const avgSent = sentences > 0 ? (words / sentences).toFixed(1) : '0';
+
       $('#wcWords').textContent = fmt(words);
+      const pagesEl = $('#wcPages');
+      if (pagesEl) pagesEl.textContent = pages;
       $('#wcChars').textContent = fmt(chars);
       $('#wcNoSpace').textContent = fmt(noSpace);
       $('#wcSentences').textContent = fmt(sentences);
-      $('#wcParas').textContent = fmt(paras);
+      const avgSentEl = $('#wcAvgWordPerSent');
+      if (avgSentEl) avgSentEl.textContent = `${avgSent} ك/جملة`;
       $('#wcTime').textContent = words === 0 ? '0 د' : mins < 1 ? 'أقل من دقيقة' : `${Math.ceil(mins)} د`;
+      const speechEl = $('#wcSpeechTime');
+      if (speechEl) speechEl.textContent = words === 0 ? '0 د' : speechMins < 1 ? 'أقل من دقيقة' : `${Math.ceil(speechMins)} د`;
+
+      // الكلمات الأكثر تكراراً
+      const kwBox = $('#wcKeywordsList');
+      if (kwBox) {
+        if (words < 5) {
+          kwBox.innerHTML = '<span style="font-size: .8rem; color: #888;">ابدأ بكتابة نص ليتم حصر الكلمات المفتاحية تلقائياً...</span>';
+        } else {
+          const freq = {};
+          matches.forEach((w) => {
+            const clean = w.toLowerCase().replace(/^[ووبفلك]+(?=[\u0621-\u064A]{3,})/u, '');
+            const target = clean.length >= 3 ? clean : w.toLowerCase();
+            if (target.length >= 3 && !stopWords.has(target)) {
+              freq[target] = (freq[target] || 0) + 1;
+            }
+          });
+          const sorted = Object.entries(freq).sort((a, b) => b[1] - a[1]).slice(0, 7);
+          if (sorted.length === 0) {
+            kwBox.innerHTML = '<span style="font-size: .8rem; color: #888;">لم يتم العثور على كلمات مكررة ملحوظة.</span>';
+          } else {
+            kwBox.replaceChildren();
+            sorted.forEach(([word, count]) => {
+              const chip = el('span', { class: 'kw-chip' },
+                el('span', { text: word }),
+                el('strong', { text: String(count) })
+              );
+              kwBox.append(chip);
+            });
+          }
+        }
+      }
 
       const lim = parseInt(limitEl.value, 10);
       const msg = $('#wcLimitMsg');
       if (lim > 0) {
         const diff = lim - words;
         msg.className = 'limit-msg ' + (diff >= 0 ? 'ok' : 'over');
-        msg.textContent = diff >= 0 ? `متبقٍ ${fmt(diff)} كلمة من ${fmt(lim)}.` : `تجاوزت الحد بـ ${fmt(-diff)} كلمة.`;
+        msg.textContent = diff >= 0 ? `متبقٍ ${fmt(diff)} كلمة من الحد الأقصى (${fmt(lim)}).` : `تجاوزت الحد المسموح به بـ ${fmt(-diff)} كلمة.`;
       } else {
         msg.className = 'limit-msg';
         msg.textContent = '';
@@ -324,12 +393,13 @@
   }
 
   /* =====================================================
-     حجم العينة (كوكران)
+     حجم العينة (معادلة كوكران وتوليد منهجية الأطروحة)
      ===================================================== */
   function initSampleSize() {
     const ids = ['ssPop', 'ssConf', 'ssMargin', 'ssP', 'ssResp'];
     const out = $('#ssResult');
     const det = $('#ssDetail');
+    const quoteEl = $('#ssQuoteText');
 
     const calc = () => {
       const N = parseFloat($('#ssPop').value);
@@ -341,12 +411,15 @@
       if (!(e > 0 && e < 0.5) || !(p > 0 && p < 1) || !(resp > 0 && resp <= 1)) {
         out.textContent = '—';
         det.textContent = 'تحقق من القيم المدخلة (هامش الخطأ 0.5–50، النسبة 1–99، الاستجابة 1–100).';
+        if (quoteEl) quoteEl.textContent = 'يرجى إدخال قيم صالحة لتوليد الفقرة المنهجية المعتمدة.';
         return;
       }
       const n0 = (z * z * p * (1 - p)) / (e * e);
       let n = n0;
+      let isFinitePop = false;
       let note = `العينة قبل التصحيح: ${Math.ceil(n0)}`;
       if (Number.isFinite(N) && N > 0) {
+        isFinitePop = true;
         n = n0 / (1 + (n0 - 1) / N);
         n = Math.min(n, N);
         note = `بعد تصحيح المجتمع المحدود (N = ${fmt(N)}) — قبل التصحيح: ${Math.ceil(n0)}`;
@@ -358,9 +431,35 @@
         const inv = Math.ceil(n / resp);
         det.textContent += ` — للحصول عليها يلزم توزيع ≈ ${fmt(inv)} استمارة.`;
       }
+
+      // توليد صيغة الفصل الثالث الأكاديمية
+      if (quoteEl) {
+        const confPct = z === 1.645 ? '90%' : z === 2.576 ? '99%' : '95%';
+        const marginPct = (e * 100).toFixed(1).replace(/\.0$/, '') + '%';
+        const popPhrase = isFinitePop
+          ? `نظراً لمعرفة حجم المجتمع الإحصائي الكلي البالغ (N = ${fmt(N)}) مفردة، تم تطبيق معادلة تصحيح المجتمع المحدود (Finite Population Correction)،`
+          : `نظراً لاتساع مجتمع الدراسة وعدم حصره بدقة (Infinite Population)،`;
+        const respPhrase = resp < 1
+          ? `، ولتعويض معدل عدم الاستجابة المتوقع (${Math.round(resp * 100)}%) استوجب توزيع (${fmt(Math.ceil(n / resp))}) استبانة لضمان استرداد الحد الأدنى المطلوب`
+          : '';
+
+        quoteEl.textContent = `«تم تحديد حجم العينة الممثلة للدراسة الحالية وفقاً لمعادلة كوكران (Cochran, 1977) عند مستوى ثقة قدره (${confPct}؛ Z = ${z}) وهامش خطأ مسموح به (e = ±${marginPct}) وبافتراض نسبة التباين القصوى (P = 0.50) لضمان أقصى درجات التمثيل والحياد الإحصائي. و${popPhrase} استقر الحد الأدنى العلمي لحجم العينة المعتمدة عند (n = ${n}) مستجيباً/مفردة${respPhrase}، بما يحقق الكفاية الإحصائية المعتمدة أكاديمياً لتعميم النتائج.»`;
+      }
     };
     ids.forEach((id) => $('#' + id).addEventListener('input', calc));
     calc();
+
+    const copyBtn = $('#ssCopyQuoteBtn');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', () => {
+        if (quoteEl && quoteEl.textContent) {
+          navigator.clipboard.writeText(quoteEl.textContent.trim());
+          const orig = copyBtn.innerHTML;
+          copyBtn.innerHTML = '<span>تم نسخ الفقرة للأطروحة بنجاح ✓</span>';
+          setTimeout(() => { copyBtn.innerHTML = orig; }, 2000);
+        }
+      });
+    }
   }
 
   /* =====================================================
@@ -487,10 +586,10 @@
   }
 
   /* =====================================================
-     TOOL-02 | منشئ وموثّق المراجع العلمية (DOI / APA 7 / IEEE)
+     TOOL-02 | منشئ وموثّق المراجع العلمية (DOI / APA 7 / IEEE / MLA 9 / BibTeX)
      ===================================================== */
   function initReferences() {
-    let currentStyle = 'apa'; // 'apa' | 'ieee'
+    let currentStyle = 'apa'; // 'apa' | 'ieee' | 'mla' | 'bibtex'
     const savedList = [];
 
     const getRefData = () => ({
@@ -509,6 +608,7 @@
       const parts = d.authors.split(/[;؛]/).map((a) => a.trim()).filter(Boolean);
       const first = parts[0].split(/[,،]/)[0].trim() || parts[0];
       if (currentStyle === 'ieee') return '[1]';
+      if (currentStyle === 'mla') return parts.length > 2 ? `(${first} et al.)` : `(${first})`;
       if (parts.length === 1) return `(${first}، ${d.year || 'د.ت'})`;
       if (parts.length === 2) {
         const second = parts[1].split(/[,،]/)[0].trim() || parts[1];
@@ -517,142 +617,215 @@
       return `(${first} وآخرون، ${d.year || 'د.ت'})`;
     };
 
-    const formatRefList = (d) => {
-      if (!d.authors && !d.title) return 'أدخل بيانات المرجع أو اجلبها عبر DOI لعرض التوثيق.';
+    const formatRefListHtml = (d) => {
+      if (!d.authors && !d.title) return 'أدخل بيانات المرجع أو اجلبها عبر DOI لعرض التوثيق الأكاديمي المعتمد.';
       const a = d.authors || 'اسم المؤلف';
       const y = d.year ? `(${d.year})` : '(د.ت)';
       const t = d.title || 'عنوان البحث';
-      const j = d.journal ? d.journal : '';
-      const v = d.volume ? `${d.volume}` : '';
+      const jHtml = d.journal ? `<i>${d.journal}</i>` : '';
+      const v = d.volume ? d.volume : '';
       const i = d.issue ? `(${d.issue})` : '';
       const p = d.pages ? `, ${d.pages}` : '';
-      const u = d.url ? ` ${d.url}` : '';
+      const u = d.url ? ` <span dir="ltr">${d.url}</span>` : '';
 
       if (currentStyle === 'apa') {
-        const volPart = (v || i) ? `, ${v}${i}` : '';
-        return `${a} ${y}. ${t}. ${j}${volPart}${p}.${u}`;
+        const volHtml = v ? `, <i>${v}</i>${i}` : (i ? `, ${i}` : '');
+        return `${a} ${y}. ${t}. ${jHtml}${volHtml}${p}.${u}`;
+      }
+      if (currentStyle === 'mla') {
+        const volMla = v ? `, vol. ${v}` : '';
+        const issMla = i ? `, no. ${d.issue}` : '';
+        const yrMla = d.year ? `, ${d.year}` : '';
+        const ppMla = d.pages ? `, pp. ${d.pages}` : '';
+        return `${a}. "${t}." ${jHtml}${volMla}${issMla}${yrMla}${ppMla}.${u}`;
       }
       // IEEE
       const volIeee = v ? `vol. ${v}, ` : '';
       const issIeee = i ? `no. ${d.issue}, ` : '';
       const ppIeee = d.pages ? `pp. ${d.pages}, ` : '';
       const yrIeee = d.year ? `${d.year}.` : '';
-      return `[1] ${a}, "${t}," ${j}, ${volIeee}${issIeee}${ppIeee}${yrIeee}${u}`;
+      return `[1] ${a}, "${t}," ${jHtml}, ${volIeee}${issIeee}${ppIeee}${yrIeee}${u}`;
+    };
+
+    const formatBibtex = (d) => {
+      if (!d.authors && !d.title) return '% أدخل بيانات المرجع أو اجلبها عبر DOI لتوليد كود BibTeX للنشر.';
+      const parts = d.authors.split(/[;؛]/).map((a) => a.trim()).filter(Boolean);
+      const firstAuthor = parts[0] ? parts[0].split(/[,،]/)[0].trim().replace(/\s+/g, '') : 'ref';
+      const yr = d.year || '2024';
+      const citeKey = `${firstAuthor.toLowerCase()}${yr}`;
+      const authorsBib = parts.join(' and ') || 'Unknown';
+      const doi = d.url ? d.url.replace(/^(https?:\/\/)?(dx\.)?doi\.org\//i, '') : '';
+      return `@article{${citeKey},
+  author  = {${authorsBib}},
+  title   = {{${d.title || 'Untitled Article'}}},
+  journal = {${d.journal || 'Journal Name'}},
+  year    = {${yr}},
+  volume  = {${d.volume || ''}},
+  number  = {${d.issue || ''}},
+  pages   = {${d.pages || ''}},
+  doi     = {${doi}},
+  url     = {${d.url || ''}}
+}`;
     };
 
     const updatePreviews = () => {
       const data = getRefData();
-      $('#previewInText').textContent = formatInText(data);
-      $('#previewRefList').textContent = formatRefList(data);
+      const inTextEl = $('#previewInText');
+      const refListEl = $('#previewRefList');
+      const bibtexEl = $('#previewBibtex');
+
+      if (inTextEl) inTextEl.textContent = formatInText(data);
+      if (refListEl) refListEl.innerHTML = formatRefListHtml(data);
+      if (bibtexEl) bibtexEl.textContent = formatBibtex(data);
     };
 
     // DOI Fetching via Crossref REST API
-    $('#refDoiBtn').addEventListener('click', async () => {
-      const input = $('#refDoiInput').value.trim();
-      const msg = $('#refDoiMsg');
-      if (!input) {
-        msg.textContent = 'يرجى إدخال معرّف DOI صالح.';
-        msg.className = 'form-msg';
-        return;
-      }
-      const cleanDoi = input.replace(/^(https?:\/\/)?(dx\.)?doi\.org\//i, '').replace(/^doi:/i, '').trim();
-      msg.textContent = 'جاري الاتصال بقاعدة Crossref وجلب البيانات...';
-      msg.className = 'form-msg ok';
-      $('#refDoiBtn').disabled = true;
-
-      try {
-        const res = await fetch(`https://api.crossref.org/works/${encodeURIComponent(cleanDoi)}`, {
-          headers: { Accept: 'application/json' },
-        });
-        if (!res.ok) throw new Error('لم يتم العثور على المعرف في Crossref.');
-        const json = await res.json();
-        const item = json.message || {};
-
-        // Extract title
-        $('#refTitle').value = (item.title && item.title[0]) || '';
-        // Extract authors
-        if (item.author && Array.isArray(item.author)) {
-          $('#refAuthors').value = item.author.map((x) => `${x.family || ''}, ${x.given ? x.given[0] + '.' : ''}`).filter(Boolean).join('; ');
+    const doiBtn = $('#refDoiBtn');
+    if (doiBtn) {
+      doiBtn.addEventListener('click', async () => {
+        const input = $('#refDoiInput').value.trim();
+        const msg = $('#refDoiMsg');
+        if (!input) {
+          msg.textContent = 'يرجى إدخال معرّف DOI صالح.';
+          msg.className = 'form-msg';
+          return;
         }
-        // Extract Journal
-        $('#refJournal').value = (item['container-title'] && item['container-title'][0]) || item.publisher || '';
-        // Extract Year
-        const dateParts = item['published-print']?.['date-parts'] || item['published-online']?.['date-parts'] || item.created?.['date-parts'];
-        $('#refYear').value = (dateParts && dateParts[0] && dateParts[0][0]) || '';
-        // Volume, Issue, Page, URL
-        $('#refVol').value = item.volume || '';
-        $('#refIssue').value = item.issue || '';
-        $('#refPages').value = item.page || '';
-        $('#refUrl').value = item.URL || `https://doi.org/${cleanDoi}`;
-
-        msg.textContent = 'تم جلب وتوثيق البيانات بنجاح من Crossref ✓';
+        const cleanDoi = input.replace(/^(https?:\/\/)?(dx\.)?doi\.org\//i, '').replace(/^doi:/i, '').trim();
+        msg.textContent = 'جاري الاتصال بقاعدة Crossref وجلب البيانات الرسمية...';
         msg.className = 'form-msg ok';
-        updatePreviews();
-      } catch (err) {
-        msg.textContent = `تعذّر الجلب الآلي (${err.message || 'خطأ في الاتصال'}). يُمكنك إدخال البيانات يدوياً.`;
-        msg.className = 'form-msg';
-      } finally {
-        $('#refDoiBtn').disabled = false;
+        doiBtn.disabled = true;
+
+        try {
+          const res = await fetch(`https://api.crossref.org/works/${encodeURIComponent(cleanDoi)}`, {
+            headers: { Accept: 'application/json' },
+          });
+          if (!res.ok) throw new Error('لم يتم العثور على المعرف في Crossref.');
+          const json = await res.json();
+          const item = json.message || {};
+
+          $('#refTitle').value = (item.title && item.title[0]) || '';
+          if (item.author && Array.isArray(item.author)) {
+            $('#refAuthors').value = item.author.map((x) => `${x.family || ''}, ${x.given ? x.given[0] + '.' : ''}`).filter(Boolean).join('; ');
+          }
+          $('#refJournal').value = (item['container-title'] && item['container-title'][0]) || item.publisher || '';
+          const dateParts = item['published-print']?.['date-parts'] || item['published-online']?.['date-parts'] || item.created?.['date-parts'];
+          $('#refYear').value = (dateParts && dateParts[0] && dateParts[0][0]) || '';
+          $('#refVol').value = item.volume || '';
+          $('#refIssue').value = item.issue || '';
+          $('#refPages').value = item.page || '';
+          $('#refUrl').value = item.URL || `https://doi.org/${cleanDoi}`;
+
+          msg.textContent = 'تم جلب وتوثيق البيانات بنجاح من Crossref ✓';
+          msg.className = 'form-msg ok';
+          updatePreviews();
+        } catch (err) {
+          msg.textContent = `تعذّر الجلب الآلي (${err.message || 'خطأ في الاتصال'}). يُمكنك إدخال البيانات يدوياً.`;
+          msg.className = 'form-msg';
+        } finally {
+          doiBtn.disabled = false;
+        }
+      });
+    }
+
+    // Style Switcher Tabs (APA 7, IEEE, MLA 9, BibTeX)
+    const setStyle = (style) => {
+      currentStyle = style;
+      $$('.citation-tab-btn').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.style === style);
+      });
+      const stdBox = $('#citationStandardBox');
+      const bibBox = $('#citationBibtexBox');
+      if (style === 'bibtex') {
+        if (stdBox) stdBox.hidden = true;
+        if (bibBox) bibBox.hidden = false;
+      } else {
+        if (stdBox) stdBox.hidden = false;
+        if (bibBox) bibBox.hidden = true;
       }
-    });
-
-    // Style Switcher
-    $('#styleApaBtn').addEventListener('click', () => {
-      currentStyle = 'apa';
-      $('#styleApaBtn').className = 'btn btn-sm btn-teal';
-      $('#styleIeeeBtn').className = 'btn btn-sm btn-outline';
       updatePreviews();
-    });
-    $('#styleIeeeBtn').addEventListener('click', () => {
-      currentStyle = 'ieee';
-      $('#styleIeeeBtn').className = 'btn btn-sm btn-teal';
-      $('#styleApaBtn').className = 'btn btn-sm btn-outline';
-      updatePreviews();
-    });
-
-    $('#refForm').addEventListener('input', updatePreviews);
-
-    // Copying buttons
-    const flashBtn = (btn, original) => {
-      btn.textContent = 'تم النسخ ✓';
-      setTimeout(() => { btn.textContent = original; }, 1800);
     };
 
-    $('#copyInTextBtn').addEventListener('click', () => {
-      navigator.clipboard.writeText($('#previewInText').textContent);
-      flashBtn($('#copyInTextBtn'), '📋 نسخ الاستشهاد');
+    $$('.citation-tab-btn').forEach((btn) => {
+      btn.addEventListener('click', () => setStyle(btn.dataset.style));
     });
 
-    $('#copyRefBtn').addEventListener('click', () => {
-      navigator.clipboard.writeText($('#previewRefList').textContent);
-      flashBtn($('#copyRefBtn'), '📋 نسخ المرجع');
-    });
+    const refForm = $('#refForm');
+    if (refForm) refForm.addEventListener('input', updatePreviews);
+
+    // Copying buttons
+    const flashBtn = (btn, text = 'تم النسخ ✓') => {
+      const orig = btn.innerHTML;
+      btn.innerHTML = `<span>${text}</span>`;
+      setTimeout(() => { btn.innerHTML = orig; }, 1800);
+    };
+
+    const copyInText = $('#copyInTextBtn');
+    if (copyInText) {
+      copyInText.addEventListener('click', () => {
+        navigator.clipboard.writeText($('#previewInText').textContent.trim());
+        flashBtn(copyInText, 'تم نسخ الاستشهاد ✓');
+      });
+    }
+
+    const copyRef = $('#copyRefBtn');
+    if (copyRef) {
+      copyRef.addEventListener('click', () => {
+        const refEl = $('#previewRefList');
+        navigator.clipboard.writeText(refEl.textContent.trim());
+        flashBtn(copyRef, 'تم نسخ المرجع ✓');
+      });
+    }
+
+    const copyBibtex = $('#copyBibtexBtn');
+    if (copyBibtex) {
+      copyBibtex.addEventListener('click', () => {
+        const bibEl = $('#previewBibtex');
+        navigator.clipboard.writeText(bibEl.textContent.trim());
+        flashBtn(copyBibtex, 'تم نسخ كود BibTeX ✓');
+      });
+    }
 
     // Add to saved list
-    $('#addRefToList').addEventListener('click', () => {
-      const refText = $('#previewRefList').textContent;
-      if (refText && !refText.startsWith('أدخل')) {
-        savedList.push(refText);
-        $('#savedRefsWrapper').hidden = false;
-        $('#copyAllRefsBtn').hidden = false;
-        $('#savedRefsCount').textContent = String(savedList.length);
-        const li = el('li', { text: refText });
-        $('#savedRefsList').append(li);
-        flashBtn($('#addRefToList'), '➕ إضافة إلى قائمة مراجعي');
-      }
-    });
+    const addToList = $('#addRefToList');
+    if (addToList) {
+      addToList.addEventListener('click', () => {
+        const refHtml = $('#previewRefList').innerHTML;
+        const refText = $('#previewRefList').textContent;
+        if (refText && !refText.startsWith('أدخل')) {
+          savedList.push(refHtml);
+          $('#savedRefsWrapper').hidden = false;
+          $('#copyAllRefsBtn').hidden = false;
+          $('#savedRefsCount').textContent = String(savedList.length);
+          const li = el('li', {});
+          li.innerHTML = refHtml;
+          $('#savedRefsList').append(li);
+          flashBtn(addToList, 'تمت الإضافة للقائمة ✓');
+        }
+      });
+    }
 
-    $('#copyAllRefsBtn').addEventListener('click', () => {
-      navigator.clipboard.writeText(savedList.map((r, i) => `${i + 1}. ${r}`).join('\n\n'));
-      flashBtn($('#copyAllRefsBtn'), '📋 نسخ القائمة كاملة');
-    });
+    const copyAllRefs = $('#copyAllRefsBtn');
+    if (copyAllRefs) {
+      copyAllRefs.addEventListener('click', () => {
+        const cleanTexts = savedList.map((r, i) => {
+          const tmp = document.createElement('div');
+          tmp.innerHTML = r;
+          return `${i + 1}. ${tmp.textContent.trim()}`;
+        });
+        navigator.clipboard.writeText(cleanTexts.join('\n\n'));
+        flashBtn(copyAllRefs, 'تم نسخ كافة المراجع ✓');
+      });
+    }
 
-    $('#clearRefsBtn').addEventListener('click', () => {
-      $('#refForm').reset();
-      $('#refDoiInput').value = '';
-      $('#refDoiMsg').textContent = '';
-      updatePreviews();
-    });
+    const clearRefs = $('#clearRefsBtn');
+    if (clearRefs) {
+      clearRefs.addEventListener('click', () => {
+        if (refForm) refForm.reset();
+        $('#refDoiInput').value = '';
+        $('#refDoiMsg').textContent = '';
+        updatePreviews();
+      });
+    }
 
     updatePreviews();
   }

@@ -244,13 +244,153 @@ textarea { resize: vertical; min-height: 130px; }
 .telegram-float { position: fixed; bottom: 1.2rem; inset-inline-start: 1.2rem; z-index: 90; width: 58px; height: 58px; border-radius: 50%; background: #229ED9; color: #fff; display: grid; place-items: center; box-shadow: 0 8px 22px rgba(0, 0, 0, .3); transition: transform .2s; }
 .telegram-float:hover { transform: scale(1.08); }
 
-/* ===== Modal ===== */
-.modal { border: 0; padding: 0; background: transparent; width: min(760px, 100% - 1.5rem); max-height: 92vh; margin: auto; overflow: visible; }
-.modal::backdrop { background: rgba(7, 47, 44, .72); backdrop-filter: blur(3px); }
-.modal[open] .modal-box { animation: pop .3s ease both; }
-.modal-box { position: relative; background: #fff; border-radius: 18px; padding: 2rem; max-height: 92vh; overflow-y: auto; border-top: 6px solid var(--gold); box-shadow: var(--shadow-lg); }
-.modal-close { position: absolute; top: .8rem; inset-inline-start: .8rem; border: 0; background: var(--teal-light); color: var(--teal-dark); width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 1rem; }
-.modal-close:hover { background: var(--teal); color: #fff; }
+/* ===== Upgraded Professional Tool Modals ===== */
+.modal {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  width: min(800px, 100% - 1.5rem);
+  max-height: 92vh;
+  margin: auto;
+  overflow: visible;
+}
+.modal::backdrop {
+  background: rgba(6, 48, 44, .75);
+  backdrop-filter: blur(4px);
+}
+.modal[open] .modal-box {
+  animation: pop .3s cubic-bezier(.2,.8,.2,1) both;
+}
+.modal-box {
+  position: relative;
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 2.2rem 2rem;
+  max-height: 90vh;
+  overflow-y: auto;
+  border: 1.5px solid rgba(185, 122, 18, .3);
+  box-shadow: 0 25px 60px rgba(6, 48, 44, .28), 0 0 0 1px rgba(255, 255, 255, .8) inset;
+}
+.modal-box::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  inset-inline: 18%;
+  height: 4px;
+  border-radius: 0 0 6px 6px;
+  background: linear-gradient(90deg, #0E6B66, #B97A12, #0E6B66);
+  pointer-events: none;
+}
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  inset-inline-start: 1rem;
+  border: 1px solid rgba(14, 107, 102, .2);
+  background: #F0F7F6;
+  color: #06302C;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: .95rem;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  transition: all .2s ease;
+  z-index: 10;
+}
+.modal-close:hover {
+  background: #0E6B66;
+  color: #fff;
+  border-color: #0E6B66;
+  transform: rotate(90deg);
+}
+
+/* Tool Header */
+.tool-head {
+  display: flex;
+  align-items: center;
+  gap: .85rem;
+  margin-bottom: 1.1rem;
+  padding-bottom: .85rem;
+  border-bottom: 1px solid rgba(14, 107, 102, .12);
+}
+.tool-head-icon {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #06302C 0%, #0E6B66 100%);
+  border: 1.5px solid #E9C16C;
+  box-shadow: 0 4px 12px rgba(6, 48, 44, .18);
+  display: grid;
+  place-items: center;
+  color: #E9C16C;
+}
+.tool-head h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #06302C;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  flex-wrap: wrap;
+}
+.tool-head .badge-tag {
+  font-size: .75rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #0E6B66, #0B4F4B);
+  color: #fff;
+  padding: .2rem .75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(233, 193, 108, .4);
+}
+
+/* Upgraded Result Box */
+.result-box {
+  background: linear-gradient(135deg, #06302C 0%, #0B4F4B 55%, #0E6B66 100%);
+  color: #fff;
+  border-radius: 16px;
+  padding: 1.35rem 1.25rem;
+  text-align: center;
+  margin-top: 1.25rem;
+  border: 1.5px solid #E9C16C;
+  box-shadow: 0 10px 24px rgba(6, 48, 44, .22), inset 0 1px 0 rgba(255, 255, 255, .2);
+  position: relative;
+  overflow: hidden;
+}
+.result-box::before {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border: 1px solid rgba(233, 193, 108, .25);
+  border-radius: 11px;
+  pointer-events: none;
+}
+.result-box span {
+  display: block;
+  font-size: .95rem;
+  font-weight: 600;
+  color: #D6EDE9;
+  margin-bottom: .35rem;
+}
+.result-box strong {
+  display: block;
+  font-size: 2.5rem;
+  line-height: 1.2;
+  color: #F2CC85;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  margin-bottom: .3rem;
+}
+.result-box small {
+  display: block;
+  color: #E6F3F1;
+  font-size: .88rem;
+  line-height: 1.5;
+}
+
 .modal h2 { margin-inline-start: 2.5rem; }
 .modal-lead { color: var(--muted); }
 .charter-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
@@ -1979,6 +2119,266 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
   background: linear-gradient(160deg, #D2EAE7 0%, #E6F4F2 52%, #F4E6C9 100%) !important;
   border: 1.5px solid rgba(14, 107, 102, .42) !important;
 }
+
+/* ========================================================
+   الأدوات الأكاديمية المجانية - ترقية الهوية والوظائف المتقدمة
+   ======================================================== */
+
+/* Promotion Rank Selection Pills */
+.promo-ranks-wrap {
+  margin: 1rem 0 1.2rem;
+  background: rgba(14, 107, 102, .04);
+  border: 1px solid rgba(14, 107, 102, .15);
+  border-radius: 14px;
+  padding: .85rem 1rem;
+}
+.promo-ranks-label {
+  font-size: .88rem;
+  font-weight: 700;
+  color: #06302C;
+  margin-bottom: .6rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.promo-ranks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: .65rem;
+}
+.promo-rank-btn {
+  background: #ffffff;
+  border: 1.5px solid rgba(14, 107, 102, .22);
+  border-radius: 10px;
+  padding: .65rem .85rem;
+  text-align: right;
+  cursor: pointer;
+  transition: all .2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+}
+.promo-rank-btn:hover {
+  border-color: #B97A12;
+  background: #FAFCFB;
+  transform: translateY(-1px);
+}
+.promo-rank-btn.active {
+  background: linear-gradient(135deg, #06302C 0%, #0E6B66 100%);
+  border-color: #E9C16C;
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(14, 107, 102, .25);
+}
+.promo-rank-btn.active .rank-pts {
+  background: rgba(233, 193, 108, .2);
+  color: #F2CC85;
+  border-color: #E9C16C;
+}
+.promo-rank-title {
+  font-weight: 700;
+  font-size: .86rem;
+}
+.promo-rank-btn.active .promo-rank-title {
+  color: #ffffff;
+}
+.rank-pts {
+  align-self: flex-start;
+  font-size: .74rem;
+  font-weight: 700;
+  color: #0E6B66;
+  background: rgba(14, 107, 102, .08);
+  padding: .15rem .55rem;
+  border-radius: 999px;
+  border: 1px solid rgba(14, 107, 102, .18);
+}
+
+/* Word Counter: Advanced Academic Stats Grid */
+.word-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: .8rem;
+  margin: 1.2rem 0;
+}
+.word-stat-card {
+  background: #FAFCFB;
+  border: 1.5px solid rgba(14, 107, 102, .14);
+  border-radius: 12px;
+  padding: .9rem .75rem;
+  text-align: center;
+  transition: border-color .2s ease, transform .2s ease;
+}
+.word-stat-card:hover {
+  border-color: #B97A12;
+  transform: translateY(-2px);
+}
+.word-stat-card .stat-icon {
+  width: 24px;
+  height: 24px;
+  margin: 0 auto .35rem;
+  color: #0E6B66;
+  display: block;
+}
+.word-stat-card .stat-num {
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: #06302C;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+.word-stat-card .stat-title {
+  font-size: .78rem;
+  font-weight: 700;
+  color: #555;
+  margin-top: .2rem;
+}
+.word-stat-card .stat-sub {
+  font-size: .7rem;
+  color: #777;
+  margin-top: .1rem;
+}
+
+/* Keyword Density Analysis Box */
+.keywords-box {
+  background: #F4F9F8;
+  border: 1px dashed rgba(14, 107, 102, .25);
+  border-radius: 12px;
+  padding: .9rem 1rem;
+  margin-top: 1rem;
+}
+.keywords-box-head {
+  font-size: .84rem;
+  font-weight: 700;
+  color: #06302C;
+  margin-bottom: .6rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.keywords-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+.kw-chip {
+  background: #ffffff;
+  border: 1px solid rgba(14, 107, 102, .2);
+  border-radius: 999px;
+  padding: .2rem .7rem;
+  font-size: .78rem;
+  font-weight: 600;
+  color: #0B4F4B;
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+}
+.kw-chip strong {
+  background: #0E6B66;
+  color: #fff;
+  border-radius: 999px;
+  font-size: .7rem;
+  padding: 0 .4rem;
+  min-width: 18px;
+  text-align: center;
+}
+
+/* Sample Size: Ready Thesis Methodology Box */
+.academic-quote-box {
+  background: linear-gradient(135deg, rgba(242, 227, 196, .28) 0%, rgba(221, 240, 237, .38) 100%);
+  border: 1.5px solid rgba(185, 122, 18, .35);
+  border-radius: 14px;
+  padding: 1.15rem 1.25rem;
+  margin-top: 1.2rem;
+  position: relative;
+}
+.academic-quote-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: .75rem;
+  gap: .6rem;
+  flex-wrap: wrap;
+}
+.academic-quote-title {
+  font-size: .88rem;
+  font-weight: 800;
+  color: #06302C;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.academic-quote-text {
+  font-size: .88rem;
+  line-height: 1.8;
+  color: #1A302E;
+  background: #ffffff;
+  padding: 1rem 1.15rem;
+  border-radius: 10px;
+  border: 1px solid rgba(14, 107, 102, .18);
+  font-style: normal;
+  display: block;
+}
+
+/* References Styling & BibTeX */
+.citation-tabs {
+  display: flex;
+  gap: .4rem;
+  margin: 1rem 0;
+  flex-wrap: wrap;
+}
+.citation-tab-btn {
+  background: #FAFCFB;
+  border: 1.5px solid rgba(14, 107, 102, .2);
+  color: #06302C;
+  font-size: .82rem;
+  font-weight: 700;
+  padding: .4rem .95rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all .2s ease;
+}
+.citation-tab-btn:hover {
+  border-color: #B97A12;
+  color: #B97A12;
+}
+.citation-tab-btn.active {
+  background: linear-gradient(135deg, #06302C 0%, #0E6B66 100%);
+  border-color: #E9C16C;
+  color: #ffffff;
+  box-shadow: 0 3px 10px rgba(14, 107, 102, .2);
+}
+.cite-content i,
+.saved-refs-list i {
+  font-style: italic !important;
+  color: #0B4F4B;
+  font-weight: 600;
+}
+.bibtex-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: .82rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  direction: ltr;
+  text-align: left;
+  background: #06302C;
+  color: #D6EDE9;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #E9C16C;
+  overflow-x: auto;
+}
+
+/* Tool Action Buttons with SVG Icons */
+.btn-svg-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+}
+.btn-svg-inline svg {
+  width: 15px;
+  height: 15px;
+  stroke: currentColor;
+}
+
 
 
 

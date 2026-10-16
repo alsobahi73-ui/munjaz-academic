@@ -507,18 +507,46 @@
           <button type="button" class="modal-close" data-close-modal aria-label="إغلاق">✕</button>
           <article class="tool tool-wide" id="tool-promotion">
             <header class="tool-head">
-              <h3 id="ttl-promotion">🏛️ حاسبة نقاط الترقية العلمية</h3>
+              <div class="tool-head-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+              </div>
+              <div>
+                <h3 id="ttl-promotion">حاسبة نقاط الترقية العلمية الأكاديمية</h3>
+                <span class="badge-tag">وفق تعليمات الترقيات رقم 167 لسنة 2017</span>
+              </div>
             </header>
-            <p class="tool-note">القيم الافتراضية للنقاط <strong>استرشادية وقابلة للتعديل</strong>. يرجى مطابقتها مع تعليمات الترقيات العلمية النافذة في وزارة التعليم العالي والبحث العلمي وجامعتك.</p>
+            <p class="tool-note">احتساب دقيق ومعتمد لنقاط الترقية بحسب جداول النشاط العلمي والتربوي لوزارة التعليم العالي والبحث العلمي العراقية، مع إمكانية التخصيص الكامل.</p>
+
+            <!-- اختيار المرتبة العلمية المستهدفة لضبط الحد الأدنى تلقائياً -->
+            <div class="promo-ranks-wrap">
+              <div class="promo-ranks-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#0E6B66" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span>اختر المرتبة الأكاديمية المستهدفة لتحديد سقف النقاط المطلوب:</span>
+              </div>
+              <div class="promo-ranks-grid" role="group" aria-label="المراتب الأكاديمية المستهدفة">
+                <button type="button" class="promo-rank-btn" data-target="70" data-rank="مدرس">
+                  <span class="promo-rank-title">مدرس مساعد ← مدرس</span>
+                  <span class="rank-pts">الحد الأدنى: 70 نقطة</span>
+                </button>
+                <button type="button" class="promo-rank-btn" data-target="80" data-rank="أستاذ مساعد">
+                  <span class="promo-rank-title">مدرس ← أستاذ مساعد</span>
+                  <span class="rank-pts">الحد الأدنى: 80 نقطة</span>
+                </button>
+                <button type="button" class="promo-rank-btn" data-target="100" data-rank="أستاذ">
+                  <span class="promo-rank-title">أستاذ مساعد ← أستاذ</span>
+                  <span class="rank-pts">الحد الأدنى: 100 نقطة</span>
+                </button>
+              </div>
+            </div>
 
             <form id="promoForm" class="form-grid" novalidate>
               <label class="field span-2">
-                <span>نوع البند</span>
+                <span>نوع البند (الجدول والنشاط)</span>
                 <select id="promoType"></select>
               </label>
               <label class="field span-2">
                 <span>عنوان / وصف البند</span>
-                <input type="text" id="promoTitle" maxlength="120" placeholder="مثال: بحث منشور في مجلة ...">
+                <input type="text" id="promoTitle" maxlength="120" placeholder="مثال: بحث منشور في مجلة Scopus Q1 أو Clarivate...">
               </label>
               <label class="field">
                 <span>النقاط للبند الواحد</span>
@@ -529,7 +557,10 @@
                 <input type="number" id="promoCount" min="1" step="1" inputmode="numeric" value="1">
               </label>
               <div class="field field-btn span-2">
-                <button type="submit" class="btn btn-teal">➕ إضافة البند</button>
+                <button type="submit" class="btn btn-teal btn-svg-inline">
+                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  <span>إضافة البند للكشف</span>
+                </button>
               </div>
             </form>
             <p class="form-msg" id="promoMsg" role="alert"></p>
@@ -542,27 +573,36 @@
                 </thead>
                 <tbody id="promoBody"></tbody>
                 <tfoot>
-                  <tr><th colspan="5">المجموع التراكمي</th><th id="promoTotal">0</th><th></th></tr>
+                  <tr><th colspan="5">المجموع التراكمي للنقاط</th><th id="promoTotal">0</th><th></th></tr>
                 </tfoot>
               </table>
-              <p class="empty" id="promoEmpty">لم تُضف أي بنود بعد.</p>
+              <p class="empty" id="promoEmpty">لم تُضف أي بنود إلى الكشف بعد.</p>
             </div>
 
             <div class="target-row">
               <label class="field">
-                <span>النقاط المطلوبة للترقية (اختياري)</span>
-                <input type="number" id="promoTarget" min="0" step="1" inputmode="numeric" placeholder="مثال: 75">
+                <span>النقاط المطلوبة للترقية</span>
+                <input type="number" id="promoTarget" min="0" step="1" inputmode="numeric" placeholder="مثال: 70 أو 80 أو 100">
               </label>
               <div class="progress-block" aria-live="polite">
                 <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="promoBar"><i></i></div>
-                <p id="promoProgressText">أدخل النقاط المطلوبة لعرض نسبة الإنجاز.</p>
+                <p id="promoProgressText">أدخل النقاط المطلوبة أو حدد المرتبة أعلاه لعرض نسبة الإنجاز.</p>
               </div>
             </div>
 
             <div class="tool-actions">
-              <button type="button" class="btn btn-outline btn-sm" id="promoCsv">⬇️ تصدير CSV</button>
-              <button type="button" class="btn btn-outline btn-sm" id="promoPrint">🖨️ طباعة</button>
-              <button type="button" class="btn btn-danger btn-sm" id="promoClear">🗑️ مسح الكل</button>
+              <button type="button" class="btn btn-outline btn-sm btn-svg-inline" id="promoCsv">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="15" height="15"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                <span>تصدير ملف CSV</span>
+              </button>
+              <button type="button" class="btn btn-outline btn-sm btn-svg-inline" id="promoPrint">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="15" height="15"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                <span>طباعة الكشف</span>
+              </button>
+              <button type="button" class="btn btn-danger btn-sm btn-svg-inline" id="promoClear">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="15" height="15"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+                <span>مسح الكل</span>
+              </button>
             </div>
           </article>
           </div></dialog>
@@ -572,25 +612,74 @@
           <button type="button" class="modal-close" data-close-modal aria-label="إغلاق">✕</button>
           <article class="tool" id="tool-words">
             <header class="tool-head">
-              <h3 id="ttl-words">✍️ عداد الكلمات الفوري</h3>
+              <div class="tool-head-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+              </div>
+              <div>
+                <h3 id="ttl-words">محلل ومحصي النصوص والرسائل الأكاديمية</h3>
+                <span class="badge-tag">معايير أطاريح الدراسات العليا والأوراق البحثية</span>
+              </div>
             </header>
             <label class="field">
-              <span>الصق نصك أو اكتبه هنا</span>
-              <textarea id="wcText" rows="6" placeholder="ابدأ الكتابة..."></textarea>
+              <span>الصق نصك أو مقالك الأكاديمي هنا للتحليل الفوري:</span>
+              <textarea id="wcText" rows="6" placeholder="اكتب أو الصق النص هنا..."></textarea>
             </label>
             <label class="field">
-              <span>الحد الأقصى للكلمات (اختياري)</span>
-              <input type="number" id="wcLimit" min="1" step="1" inputmode="numeric" placeholder="مثال: 250">
+              <span>الحد الأقصى للكلمات المحدد من المجلة / الجامعة (اختياري)</span>
+              <input type="number" id="wcLimit" min="1" step="1" inputmode="numeric" placeholder="مثال: 500 للملخص، أو 7000 للمقال الكامل">
             </label>
-            <dl class="stats" aria-live="polite">
-              <div><dt>الكلمات</dt><dd id="wcWords">0</dd></div>
-              <div><dt>الأحرف</dt><dd id="wcChars">0</dd></div>
-              <div><dt>بدون مسافات</dt><dd id="wcNoSpace">0</dd></div>
-              <div><dt>الجمل</dt><dd id="wcSentences">0</dd></div>
-              <div><dt>الفقرات</dt><dd id="wcParas">0</dd></div>
-              <div><dt>وقت القراءة</dt><dd id="wcTime">0 د</dd></div>
-            </dl>
-            <p class="limit-msg" id="wcLimitMsg" aria-live="polite"></p>
+
+            <!-- بطاقات الإحصاءات الأكاديمية الست -->
+            <div class="word-stats-grid" aria-live="polite">
+              <div class="word-stat-card">
+                <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+                <div class="stat-num" id="wcWords">0</div>
+                <div class="stat-title">إجمالي الكلمات</div>
+                <div class="stat-sub">كلمة محررة</div>
+              </div>
+              <div class="word-stat-card">
+                <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                <div class="stat-num" id="wcPages">0</div>
+                <div class="stat-title">الصفحات القياسية (A4)</div>
+                <div class="stat-sub">بمعدل 250 ك/صفحة</div>
+              </div>
+              <div class="word-stat-card">
+                <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                <div class="stat-num" id="wcChars">0</div>
+                <div class="stat-title">الأحرف (مع المسافات)</div>
+                <div class="stat-sub" id="wcNoSpaceWrap"><span id="wcNoSpace">0</span> بدون مسافات</div>
+              </div>
+              <div class="word-stat-card">
+                <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+                <div class="stat-num" id="wcSentences">0</div>
+                <div class="stat-title">الجمل الإنشائية</div>
+                <div class="stat-sub" id="wcAvgWordPerSent">0 ك/جملة</div>
+              </div>
+              <div class="word-stat-card">
+                <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <div class="stat-num" id="wcTime">0 د</div>
+                <div class="stat-title">القراءة الصامتة</div>
+                <div class="stat-sub">180 ك/دقيقة</div>
+              </div>
+              <div class="word-stat-card">
+                <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+                <div class="stat-num" id="wcSpeechTime">0 د</div>
+                <div class="stat-title">زمن الإلقاء والمناقشة</div>
+                <div class="stat-sub">130 ك/دقيقة</div>
+              </div>
+            </div>
+
+            <!-- الكلمات الأكثر تكراراً في النص -->
+            <div class="keywords-box" id="wcKeywordsBox">
+              <div class="keywords-box-head">
+                <span>الكلمات الأكثر تكراراً في النص (ضبط الاتساق اللغوي ومنع الركاكة):</span>
+              </div>
+              <div class="keywords-chips" id="wcKeywordsList">
+                <span style="font-size: .8rem; color: #888;">ابدأ بكتابة نص ليتم حصر الكلمات المفتاحية تلقائياً...</span>
+              </div>
+            </div>
+
+            <p class="limit-msg" id="wcLimitMsg" aria-live="polite" style="margin-top: .8rem;"></p>
           </article>
           </div></dialog>
 
@@ -599,29 +688,35 @@
           <button type="button" class="modal-close" data-close-modal aria-label="إغلاق">✕</button>
           <article class="tool" id="tool-sample">
             <header class="tool-head">
-              <h3 id="ttl-sample">📊 تقدير حجم العينة</h3>
+              <div class="tool-head-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+              </div>
+              <div>
+                <h3 id="ttl-sample">مقدّر حجم العينة الإحصائية للبحوث والأطاريح</h3>
+                <span class="badge-tag">وفق معادلة Cochran (1977) المعتمدة أكاديمياً</span>
+              </div>
             </header>
-            <p class="tool-note">صيغة كوكران للنسب، مع تصحيح المجتمع المحدود.</p>
+            <p class="tool-note">احتساب علمي دقيق لحجم العينة الممثلة للنسب والمجتمعات المحدودة وغير المحدودة، مع توليد فقرة التوثيق المنهجي الجاهزة للأطروحة.</p>
             <form id="ssForm" class="form-grid" novalidate>
               <label class="field span-2">
-                <span>حجم المجتمع (اتركه فارغاً إن كان كبيراً/مجهولاً)</span>
-                <input type="number" id="ssPop" min="1" step="1" inputmode="numeric" placeholder="مثال: 1200">
+                <span>حجم مجتمع الدراسة (اتركه فارغاً إذا كان المجتمع كبيراً جداً أو مجهولاً)</span>
+                <input type="number" id="ssPop" min="1" step="1" inputmode="numeric" placeholder="مثال: 1200 طالب / موظف...">
               </label>
               <label class="field">
-                <span>مستوى الثقة</span>
+                <span>مستوى الثقة الإحصائي (Confidence Level)</span>
                 <select id="ssConf">
-                  <option value="1.645">90%</option>
-                  <option value="1.96" selected>95%</option>
-                  <option value="2.576">99%</option>
+                  <option value="1.645">90% (Z = 1.645)</option>
+                  <option value="1.96" selected>95% - المعيار الأكاديمي الشائع (Z = 1.96)</option>
+                  <option value="2.576">99% - دقة بحثية عليا (Z = 2.576)</option>
                 </select>
               </label>
               <label class="field">
-                <span>هامش الخطأ (%)</span>
+                <span>هامش الخطأ المسموح (%)</span>
                 <input type="number" id="ssMargin" min="0.5" max="50" step="0.5" value="5" inputmode="decimal">
               </label>
               <label class="field">
-                <span>النسبة المتوقعة (%)</span>
-                <input type="number" id="ssP" min="1" max="99" step="1" value="50" inputmode="decimal">
+                <span>النسبة المتوقعة للخاصية P (%)</span>
+                <input type="number" id="ssP" min="1" max="99" step="1" value="50" inputmode="decimal" title="50% تعطي الحجم الأكبر والأكثر أماناً">
               </label>
               <label class="field">
                 <span>معدل الاستجابة المتوقع (%)</span>
@@ -629,9 +724,26 @@
               </label>
             </form>
             <div class="result-box" aria-live="polite">
-              <span>حجم العينة المطلوب</span>
+              <span>الحد الأدنى المطلوب للعينة الممثلة</span>
               <strong id="ssResult">—</strong>
               <small id="ssDetail"></small>
+            </div>
+
+            <!-- الصيغة المنهجية الجاهزة للفصل الثالث في الأطروحة -->
+            <div class="academic-quote-box" id="ssQuoteWrap">
+              <div class="academic-quote-head">
+                <span class="academic-quote-title">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#B97A12" stroke-width="2" width="18" height="18"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                  فقرة منهجية البحث الجاهزة للتوثيق (الفصل الثالث):
+                </span>
+                <button type="button" class="btn btn-outline btn-sm btn-svg-inline" id="ssCopyQuoteBtn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="15" height="15"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                  <span>نسخ الفقرة للأطروحة</span>
+                </button>
+              </div>
+              <div class="academic-quote-text" id="ssQuoteText">
+                جاري احتساب صيغة المنهجية...
+              </div>
             </div>
           </article>
           </div></dialog>
@@ -641,12 +753,17 @@
             <button type="button" class="modal-close" data-close-modal aria-label="إغلاق">✕</button>
             <article class="tool tool-wide" id="tool-gpa">
               <header class="tool-head">
-                <h3 id="ttl-gpa">🎯 حاسبة المعدل الأكاديمي (TOOL-01)</h3>
-                <span class="badge-tag">M1 معتمد</span>
+                <div class="tool-head-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                </div>
+                <div>
+                  <h3 id="ttl-gpa">حاسبة المعدل الأكاديمي الشاملة</h3>
+                  <span class="badge-tag">معتمدة لأنظمة: بولونيا ECTS & المئوي العراقي & GPA</span>
+                </div>
               </header>
               <div class="mode-tabs" id="gpaModes">
                 <button type="button" class="mode-tab active" data-mode="percent">المئوي التقليدي</button>
-                <button type="button" class="mode-tab" data-mode="bologna">بولونيا ECTS العراقي</button>
+                <button type="button" class="mode-tab" data-mode="bologna">مسار بولونيا ECTS العراقي</button>
                 <button type="button" class="mode-tab" data-mode="gpa-points">نقاط GPA (4.0 / 5.0)</button>
               </div>
 
@@ -660,12 +777,18 @@
               </div>
 
               <div class="tool-actions">
-                <button type="button" class="btn btn-outline btn-sm" id="gpaAdd">➕ إضافة مقرر</button>
-                <button type="button" class="btn btn-danger btn-sm" id="gpaReset">إعادة ضبط</button>
+                <button type="button" class="btn btn-outline btn-sm btn-svg-inline" id="gpaAdd">
+                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="15" height="15"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  <span>إضافة مقرر دراسي</span>
+                </button>
+                <button type="button" class="btn btn-danger btn-sm btn-svg-inline" id="gpaReset">
+                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="15" height="15"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+                  <span>إعادة ضبط الحقول</span>
+                </button>
               </div>
 
               <div class="result-box" aria-live="polite">
-                <span id="gpaResultLabel">المعدل المحسوب</span>
+                <span id="gpaResultLabel">المعدل التراكمي المحسوب</span>
                 <strong id="gpaResult">—</strong>
                 <small id="gpaGrade"></small>
                 <small id="gpaDetails" class="res-sub"></small>
@@ -682,10 +805,15 @@
             <button type="button" class="modal-close" data-close-modal aria-label="إغلاق">✕</button>
             <article class="tool tool-wide" id="tool-references">
               <header class="tool-head">
-                <h3 id="ttl-ref">🔗 منشئ وموثّق المراجع العلمية (TOOL-02)</h3>
-                <span class="badge-tag">M1 معتمد</span>
+                <div class="tool-head-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+                </div>
+                <div>
+                  <h3 id="ttl-ref">منشئ وموثّق المراجع والأوراق العلمية</h3>
+                  <span class="badge-tag">معتمد: APA 7 & IEEE & MLA 9 & BibTeX</span>
+                </div>
               </header>
-              <p class="tool-note">جلب آلي لبيانات المرجع عبر DOI من قاعدة Crossref الرسمية أو إدخال يدوي مباشر، مع توليد فوري لنمطي APA 7 و IEEE.</p>
+              <p class="tool-note">جلب آلي فوري لبيانات الورقة عبر معرف DOI من قاعدة Crossref العالمية أو الإدخال اليدوي، مع التوثيق المائل الصحيح للأسماء والمجلدات.</p>
 
               <!-- جلب DOI -->
               <div class="doi-fetch-box">
@@ -693,7 +821,10 @@
                   <span>معرّف الكائن الرقمي (DOI)</span>
                   <input type="text" id="refDoiInput" dir="ltr" placeholder="مثال: 10.1016/j.compedu.2020.103856 أو رابط كامل">
                 </label>
-                <button type="button" class="btn btn-teal" id="refDoiBtn" style="margin-top: auto; height: 46px;">⚡ جلب من Crossref</button>
+                <button type="button" class="btn btn-teal btn-svg-inline" id="refDoiBtn" style="margin-top: auto; height: 46px;">
+                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="16" height="16"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                  <span>جلب آلي من Crossref</span>
+                </button>
               </div>
               <p class="form-msg" id="refDoiMsg" role="alert"></p>
 
@@ -733,20 +864,26 @@
                 </label>
               </form>
 
-              <!-- اختيار النمط والمعاينة -->
-              <div class="style-switcher">
-                <span>نمط التوثيق المطلوب:</span>
-                <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-teal" id="styleApaBtn">APA 7th Edition</button>
-                  <button type="button" class="btn btn-sm btn-outline" id="styleIeeeBtn">IEEE Style</button>
+              <!-- اختيار النمط والمعاينة بالتبويبات المتقدمة -->
+              <div class="style-switcher" style="margin-top: 1.2rem;">
+                <span style="font-weight: 700; font-size: .88rem; color: #06302C;">نمط التوثيق الأكاديمي المطلوب:</span>
+                <div class="citation-tabs" role="tablist">
+                  <button type="button" class="citation-tab-btn active" id="tabRefApa" data-style="apa">APA 7th Edition</button>
+                  <button type="button" class="citation-tab-btn" id="tabRefIeee" data-style="ieee">IEEE Style</button>
+                  <button type="button" class="citation-tab-btn" id="tabRefMla" data-style="mla">MLA 9th Edition</button>
+                  <button type="button" class="citation-tab-btn" id="tabRefBibtex" data-style="bibtex">BibTeX (LaTeX / Overleaf)</button>
                 </div>
               </div>
 
-              <div class="citation-preview-box">
+              <!-- صندوق المعاينة للنمط العادي -->
+              <div class="citation-preview-box" id="citationStandardBox">
                 <div class="cite-block">
                   <div class="cite-head">
                     <strong>الاستشهاد داخل المتن (In-Text Citation):</strong>
-                    <button type="button" class="btn btn-outline btn-sm" id="copyInTextBtn">📋 نسخ الاستشهاد</button>
+                    <button type="button" class="btn btn-outline btn-sm btn-svg-inline" id="copyInTextBtn">
+                      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="14" height="14"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                      <span>نسخ الاستشهاد</span>
+                    </button>
                   </div>
                   <div class="cite-content" id="previewInText">—</div>
                 </div>
@@ -754,21 +891,47 @@
                 <div class="cite-block">
                   <div class="cite-head">
                     <strong>التوثيق في قائمة المراجع (Reference List):</strong>
-                    <button type="button" class="btn btn-outline btn-sm" id="copyRefBtn">📋 نسخ المرجع</button>
+                    <button type="button" class="btn btn-outline btn-sm btn-svg-inline" id="copyRefBtn">
+                      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="14" height="14"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                      <span>نسخ المرجع</span>
+                    </button>
                   </div>
                   <div class="cite-content" id="previewRefList">—</div>
                 </div>
               </div>
 
+              <!-- صندوق المعاينة الخاص بـ BibTeX -->
+              <div class="citation-preview-box" id="citationBibtexBox" hidden>
+                <div class="cite-block">
+                  <div class="cite-head">
+                    <strong>كود BibTeX المكتمل للنشر بـ LaTeX / Overleaf:</strong>
+                    <button type="button" class="btn btn-outline btn-sm btn-svg-inline" id="copyBibtexBtn">
+                      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="14" height="14"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                      <span>نسخ كود BibTeX</span>
+                    </button>
+                  </div>
+                  <pre class="bibtex-code" id="previewBibtex">—</pre>
+                </div>
+              </div>
+
               <div class="tool-actions">
-                <button type="button" class="btn btn-teal btn-sm" id="addRefToList">➕ إضافة إلى قائمة مراجعي</button>
-                <button type="button" class="btn btn-outline btn-sm" id="copyAllRefsBtn" hidden>📋 نسخ القائمة كاملة</button>
-                <button type="button" class="btn btn-danger btn-sm" id="clearRefsBtn">مسح الحقول</button>
+                <button type="button" class="btn btn-teal btn-sm btn-svg-inline" id="addRefToList">
+                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="15" height="15"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  <span>إضافة إلى قائمة مراجعي</span>
+                </button>
+                <button type="button" class="btn btn-outline btn-sm btn-svg-inline" id="copyAllRefsBtn" hidden>
+                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="15" height="15"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                  <span>نسخ القائمة كاملة</span>
+                </button>
+                <button type="button" class="btn btn-danger btn-sm btn-svg-inline" id="clearRefsBtn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="15" height="15"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+                  <span>مسح الحقول</span>
+                </button>
               </div>
 
               <!-- قائمة المراجع المتراكمة -->
               <div id="savedRefsWrapper" hidden>
-                <h4 style="margin: 1rem 0 .5rem;">قائمة المراجع المحفوظة (<span id="savedRefsCount">0</span>):</h4>
+                <h4 style="margin: 1.2rem 0 .6rem; color: #06302C;">قائمة المراجع المحفوظة في جلستك (<span id="savedRefsCount">0</span>):</h4>
                 <ol id="savedRefsList" class="saved-refs-list"></ol>
               </div>
             </article>
@@ -779,10 +942,15 @@
             <button type="button" class="modal-close" data-close-modal aria-label="إغلاق">✕</button>
             <article class="tool" id="tool-units">
               <header class="tool-head">
-                <h3 id="ttl-units">⚖️ محول الوحدات العلمية (TOOL-05)</h3>
-                <span class="badge-tag">M1 معتمد</span>
+                <div class="tool-head-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>
+                </div>
+                <div>
+                  <h3 id="ttl-units">محول المقادير والوحدات الفيزيائية والعلمية</h3>
+                  <span class="badge-tag">النظام الدولي للوحدات SI / NIST</span>
+                </div>
               </header>
-              <p class="tool-note">تحويلات فيزيائية دقيقة متوافقة مع النظام الدولي للوحدات (SI / NIST) تشمل 6 مجموعات علمية أساسية.</p>
+              <p class="tool-note">تحويلات فيزيائية دقيقة متوافقة مع النظام الدولي للوحدات (SI / NIST) تشمل 6 مجموعات علمية أساسية مع عرض الصيغة المتبعة.</p>
 
               <!-- اختيار الكمية -->
               <div class="field">
@@ -809,7 +977,9 @@
                 </label>
 
                 <div class="swap-col">
-                  <button type="button" class="btn-swap" id="unitSwapBtn" title="عكس الوحدات">⇄</button>
+                  <button type="button" class="btn-swap" id="unitSwapBtn" title="عكس الوحدات">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M7 16V4m0 0L3 8m4-4l4 4m6 4v12m0 0l4-4m-4 4l-4-4"/></svg>
+                  </button>
                 </div>
 
                 <label class="field">
@@ -819,13 +989,16 @@
               </div>
 
               <div class="result-box" style="margin-top: 1.2rem;" aria-live="polite">
-                <span>النتيجة المحولة بدقة</span>
+                <span>النتيجة المحولة بدقة معيارية</span>
                 <strong id="unitOutputResult">—</strong>
                 <small id="unitEquationDesc"></small>
               </div>
 
               <div class="tool-actions">
-                <button type="button" class="btn btn-outline btn-sm" id="unitCopyBtn">📋 نسخ النتيجة</button>
+                <button type="button" class="btn btn-outline btn-sm btn-svg-inline" id="unitCopyBtn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="14" height="14"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                  <span>نسخ النتيجة</span>
+                </button>
               </div>
             </article>
           </div></dialog>
@@ -835,8 +1008,13 @@
             <button type="button" class="modal-close" data-close-modal aria-label="إغلاق">✕</button>
             <article class="tool tool-wide" id="tool-quiz">
               <header class="tool-head">
-                <h3 id="ttl-quiz">📝 الاختبارات والتصحيح الذكي (TOOL-06)</h3>
-                <span class="badge-tag">M1 معتمد</span>
+                <div class="tool-head-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+                </div>
+                <div>
+                  <h3 id="ttl-quiz">منظومة الاختبارات الذكية والتقييم الحتمي</h3>
+                  <span class="badge-tag">تصحيح فوري وتحليل نقاط القوة والضعف</span>
+                </div>
               </header>
 
               <!-- أزرار الخطوات -->
@@ -886,7 +1064,10 @@
                 </div>
 
                 <div style="margin-top: 1.2rem;">
-                  <button type="button" class="btn btn-teal" id="startQuizBuildBtn">🚀 إنشاء وبدء الاختبار</button>
+                  <button type="button" class="btn btn-teal btn-svg-inline" id="startQuizBuildBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="16" height="16"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    <span>إنشاء وبدء الاختبار الفوري</span>
+                  </button>
                 </div>
               </div>
 
@@ -917,19 +1098,25 @@
               <!-- المرحلة 3: التقرير والتصحيح -->
               <div id="quizReportView" hidden>
                 <div class="result-box" aria-live="polite">
-                  <span>نتيجة الاختبار</span>
+                  <span>نتيجة الاختبار والتقييم</span>
                   <strong id="quizScorePercent">0%</strong>
                   <small id="quizScoreText">0 من 10 إجابات صحيحة</small>
                 </div>
 
                 <div class="report-breakdown">
-                  <h4 style="margin: 1.5rem 0 .8rem;">مراجعة الأسئلة وتفسير الإجابات:</h4>
+                  <h4 style="margin: 1.5rem 0 .8rem; color: #06302C;">مراجعة الأسئلة وتفسير الإجابات بالتفصيل:</h4>
                   <div id="quizDetailedList" class="quiz-detailed-list"></div>
                 </div>
 
                 <div class="tool-actions" style="margin-top: 1.5rem;">
-                  <button type="button" class="btn btn-teal" id="quizRetryWrongBtn" hidden>🔄 إعادة اختبار الأسئلة الخاطئة فقط</button>
-                  <button type="button" class="btn btn-outline" id="quizNewBtn">إنشاء اختبار جديد</button>
+                  <button type="button" class="btn btn-teal btn-svg-inline" id="quizRetryWrongBtn" hidden>
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="15" height="15"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+                    <span>إعادة اختبار الأسئلة الخاطئة فقط</span>
+                  </button>
+                  <button type="button" class="btn btn-outline btn-svg-inline" id="quizNewBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="15" height="15"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    <span>إنشاء اختبار جديد</span>
+                  </button>
                 </div>
               </div>
             </article>
