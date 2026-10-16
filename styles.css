@@ -1064,28 +1064,339 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
   #faq .faq-item:nth-child(5) { max-width: 100%; }
 }
 
-/* ===== Qalam Hur: animated full-width banner ===== */
-.qalam-banner { position: relative; overflow: hidden; background: linear-gradient(135deg, #06302C 0%, #0E6B66 60%, #0a544f 100%); padding: 3rem 0 2.5rem; margin: 2rem 0; }
-.qalam-banner-bg { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
-.qalam-float { position: absolute; font-size: 3rem; opacity: .08; color: #fff; animation: qalamFloat 12s ease-in-out infinite; }
-.qf1 { top: 15%; right: 8%; animation-delay: 0s; }
-.qf2 { top: 60%; right: 20%; animation-delay: 3s; font-size: 2.2rem; }
-.qf3 { top: 25%; left: 12%; animation-delay: 6s; }
-.qf4 { top: 65%; left: 25%; animation-delay: 9s; font-size: 2.5rem; }
-@keyframes qalamFloat { 0%,100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-18px) rotate(5deg); } }
-.qalam-banner-inner { position: relative; display: flex; align-items: center; gap: 1.75rem; max-width: 1080px; }
-.qalam-banner-icon { width: 88px; height: 88px; flex-shrink: 0; display: grid; place-items: center; border-radius: 24px; background: rgba(255,255,255,.1); border: 2px solid #E9C16C; box-shadow: 0 8px 24px rgba(0,0,0,.25); }
-.qalam-banner-text { flex: 1; }
-.qalam-banner-text h2 { color: #fff; font-size: 1.9rem; margin: 0 0 .4rem; font-weight: 800; }
-.qalam-banner-text p { color: rgba(255,255,255,.85); margin: 0; font-size: 1.02rem; }
-.qalam-banner-actions { display: flex; gap: .8rem; flex-shrink: 0; }
-.btn-gold { background: linear-gradient(135deg, #B97A12, #d99a2b); color: #fff; border: none; }
-.btn-gold:hover { filter: brightness(1.1); }
-.btn-outline-light { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,.5); }
-.btn-outline-light:hover { border-color: #fff; }
-.qalam-latest-strip { position: relative; max-width: 1080px; margin: 1.5rem auto 0; padding: 0 1.5rem; display: flex; gap: 1rem; overflow-x: auto; }
-.qalam-latest-strip .qalam-card { flex: 0 0 280px; background: rgba(255,255,255,.97); }
-.qalam-latest-strip .qalam-empty { color: rgba(255,255,255,.8); }
+/* ===== Qalam Hur: Unified Full-Width Animated Symbolic Banner Card ===== */
+.qalam-section {
+  max-width: 1280px;
+  margin: .25rem auto 1.5rem;
+  padding: 0 1.5rem;
+}
+.qalam-banner-card {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  border-radius: 22px;
+  background: linear-gradient(125deg, #06302C 0%, #0B4F4B 48%, #0E6B66 100%);
+  border: 2px solid #B97A12;
+  box-shadow: 0 12px 34px rgba(6, 48, 44, .18);
+  padding: 1.55rem 2.2rem;
+  cursor: pointer;
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.qalam-banner-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 42px rgba(6, 48, 44, .26);
+  border-color: #E9C16C;
+}
+/* Inner gold geometric frame matching .featured-card::before */
+.qalam-banner-card::before {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border: 1px solid rgba(233, 193, 108, .32);
+  border-radius: 16px;
+  pointer-events: none;
+  z-index: 1;
+}
+/* Subtle animated golden shimmer across the banner */
+.qalam-banner-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 38%;
+  background: linear-gradient(90deg, transparent, rgba(233, 193, 108, .09), transparent);
+  transform: skewX(-20deg);
+  animation: qalamShimmer 7s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes qalamShimmer {
+  0% { right: -45%; }
+  60%, 100% { right: 115%; }
+}
+
+/* Symbolic Animated SVG Backdrop */
+.qalam-symbolic-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+.qalam-wave-path {
+  stroke-dasharray: 900;
+  stroke-dashoffset: 0;
+  animation: qalamWaveFlow 9s ease-in-out infinite alternate;
+}
+.qalam-wave-2 {
+  stroke-dasharray: 8 10;
+  animation: qalamDashMove 14s linear infinite;
+}
+@keyframes qalamWaveFlow {
+  0% { transform: translateY(0); opacity: .75; }
+  100% { transform: translateY(-6px); opacity: 1; }
+}
+@keyframes qalamDashMove {
+  0% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -180; }
+}
+.qalam-manuscript {
+  animation: qalamBookFloat 6s ease-in-out infinite;
+}
+@keyframes qalamBookFloat {
+  0%, 100% { transform: translate(250px, 22px); }
+  50% { transform: translate(250px, 16px); }
+}
+.qalam-write-line {
+  stroke-dasharray: 60;
+  stroke-dashoffset: 60;
+  animation: qalamLineWrite 4.8s ease-in-out infinite;
+}
+.qw-1 { animation-delay: 0s; }
+.qw-2 { animation-delay: .5s; }
+.qw-3 { animation-delay: 1s; }
+.qw-4 { animation-delay: 1.5s; }
+.qw-5 { animation-delay: 2s; }
+.qw-6 { animation-delay: 2.5s; }
+@keyframes qalamLineWrite {
+  0% { stroke-dashoffset: 60; opacity: .2; }
+  35%, 75% { stroke-dashoffset: 0; opacity: .85; }
+  100% { stroke-dashoffset: 60; opacity: .2; }
+}
+.qalam-diamond {
+  animation: qalamDiamondPulse 4s ease-in-out infinite;
+}
+.qd-2 { animation-delay: 1.3s; }
+.qd-3 { animation-delay: 2.6s; }
+@keyframes qalamDiamondPulse {
+  0%, 100% { opacity: .18; }
+  50% { opacity: .55; }
+}
+
+/* Inner Horizontal Layout */
+.qalam-banner-inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.65rem;
+}
+
+/* Unified 76x76 Emblem Icon matching Trio Icons */
+.qalam-emblem-wrap {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.qalam-banner-icon {
+  width: 76px;
+  height: 76px;
+  min-width: 76px;
+  min-height: 76px;
+  display: grid;
+  place-items: center;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, .13), rgba(185, 122, 18, .18));
+  border: 2px solid #E9C16C;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, .24);
+  position: relative;
+}
+.qalam-banner-icon::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border: 1px dashed rgba(233, 193, 108, .55);
+  border-radius: 24px;
+  pointer-events: none;
+}
+.qalam-nib-pen {
+  transform-origin: 14px 22px;
+  animation: qalamNibWrite 3.2s ease-in-out infinite;
+}
+.qalam-nib-ink {
+  stroke-dasharray: 24;
+  stroke-dashoffset: 24;
+  animation: qalamNibInk 3.2s ease-in-out infinite;
+}
+@keyframes qalamNibWrite {
+  0%, 100% { transform: rotate(0deg) translate(0, 0); }
+  35% { transform: rotate(-7deg) translate(-2px, -1px); }
+  70% { transform: rotate(5deg) translate(2px, 0); }
+}
+@keyframes qalamNibInk {
+  0% { stroke-dashoffset: 24; opacity: .3; }
+  50%, 80% { stroke-dashoffset: 0; opacity: 1; }
+  100% { stroke-dashoffset: 24; opacity: .3; }
+}
+.qalam-emblem-badge {
+  margin-top: -8px;
+  position: relative;
+  z-index: 2;
+  background: linear-gradient(135deg, #B97A12, #8a5a00);
+  color: #fff;
+  font-size: .66rem;
+  font-weight: 800;
+  padding: .14rem .7rem;
+  border-radius: 999px;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .22);
+  white-space: nowrap;
+}
+
+/* Center Text & Live Symbolic Bar */
+.qalam-banner-text {
+  flex: 1;
+  min-width: 0;
+}
+.qalam-title-row {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  flex-wrap: wrap;
+  margin-bottom: .3rem;
+}
+.qalam-banner-text h2 {
+  color: #fff;
+  font-size: 1.55rem;
+  margin: 0;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+}
+.qalam-banner-text h2::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background: #E9C16C;
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+.qalam-subtitle-pill {
+  font-size: .76rem;
+  font-weight: 700;
+  color: #F2CC85;
+  background: rgba(233, 193, 108, .15);
+  border: 1px solid rgba(233, 193, 108, .38);
+  padding: .15rem .75rem;
+  border-radius: 999px;
+}
+.qalam-desc {
+  color: rgba(255, 255, 255, .9);
+  margin: 0 0 .7rem;
+  font-size: .94rem;
+  line-height: 1.65;
+}
+.qalam-live-bar {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  flex-wrap: wrap;
+  background: rgba(6, 48, 44, .48);
+  border: 1px solid rgba(233, 193, 108, .28);
+  border-radius: 12px;
+  padding: .42rem .75rem;
+}
+.qalam-pillars {
+  display: flex;
+  gap: .35rem;
+  flex-wrap: wrap;
+}
+.qalam-pillar {
+  background: rgba(255, 255, 255, .08);
+  color: rgba(255, 255, 255, .82);
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: 999px;
+  padding: .15rem .68rem;
+  font-size: .75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .22s ease;
+}
+.qalam-pillar:hover {
+  background: rgba(233, 193, 108, .22);
+  color: #fff;
+}
+.qalam-pillar.active {
+  background: linear-gradient(135deg, #B97A12, #d99a2b);
+  color: #fff;
+  border-color: #E9C16C;
+  box-shadow: 0 2px 8px rgba(185, 122, 18, .35);
+}
+.qalam-rotator {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  flex: 1;
+  min-width: 200px;
+}
+.qalam-rotator-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #E9C16C;
+  box-shadow: 0 0 0 3px rgba(233, 193, 108, .25);
+  flex-shrink: 0;
+  animation: pulse-green 2s infinite ease-in-out;
+}
+.qalam-rotator-text {
+  color: #F6E9CF;
+  font-size: .84rem;
+  font-weight: 500;
+  line-height: 1.45;
+  transition: opacity .22s ease, transform .22s ease;
+}
+.qalam-rotator-text.qalam-fade-out {
+  opacity: 0;
+  transform: translateY(4px);
+}
+.qalam-rotator-link {
+  color: #F6E9CF;
+  text-decoration: none;
+  font-weight: 700;
+}
+.qalam-rotator-link:hover {
+  text-decoration: underline;
+  color: #fff;
+}
+
+/* Action Buttons on Left */
+.qalam-banner-actions {
+  display: flex;
+  flex-direction: column;
+  gap: .55rem;
+  flex-shrink: 0;
+}
+.qalam-banner-card .qalam-banner-actions .btn {
+  pointer-events: auto;
+  white-space: nowrap;
+}
+.btn-gold {
+  background: linear-gradient(135deg, #B97A12, #d99a2b);
+  color: #fff;
+  border: 1px solid #E9C16C;
+  box-shadow: 0 4px 14px rgba(185, 122, 18, .35);
+}
+.btn-gold:hover {
+  filter: brightness(1.08);
+  color: #fff;
+}
+.btn-outline-light {
+  background: rgba(255, 255, 255, .07);
+  color: #fff;
+  border: 1.5px solid rgba(233, 193, 108, .55);
+  font-size: .88rem;
+  padding: .5rem 1.2rem;
+}
+.btn-outline-light:hover {
+  background: rgba(255, 255, 255, .16);
+  border-color: #fff;
+  color: #fff;
+}
+
 /* Keep article page styles */
 .qalam-cats { display: flex; gap: .75rem; justify-content: center; flex-wrap: wrap; margin-top: 1rem; }
 .qalam-cat { display: inline-block; background: #FFF3D6; color: #8a5a00; font-size: .78rem; font-weight: 700; padding: .2rem .8rem; border-radius: 999px; }
@@ -1098,7 +1409,13 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
 .qalam-card h4 a { color: #06302C; text-decoration: none; }
 .qalam-excerpt { color: #666; font-size: .9rem; line-height: 1.8; margin: .5rem 0; }
 .qalam-meta { display: flex; gap: 1rem; font-size: .8rem; color: #0E6B66; font-weight: 700; }
-@media (max-width: 800px) {
-  .qalam-banner-inner { flex-direction: column; text-align: center; }
-  .qalam-banner-actions { flex-direction: column; width: 100%; max-width: 320px; }
+@media (max-width: 900px) {
+  .qalam-section { max-width: 480px; }
+  .qalam-banner-card { padding: 1.5rem 1.25rem; }
+  .qalam-banner-inner { flex-direction: column; text-align: center; gap: 1.1rem; }
+  .qalam-title-row { justify-content: center; }
+  .qalam-live-bar { justify-content: center; text-align: center; }
+  .qalam-pillars { justify-content: center; }
+  .qalam-rotator { justify-content: center; }
+  .qalam-banner-actions { flex-direction: row; width: 100%; justify-content: center; flex-wrap: wrap; }
 }

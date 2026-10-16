@@ -28,6 +28,8 @@ const publicFiles = new Map([
   ['/jobs.html', ['jobs.html', 'text/html']],
   ['/job-seekers.html', ['job-seekers.html', 'text/html']],
   ['/opportunities.html', ['opportunities.html', 'text/html']],
+  ['/articles.html', ['articles.html', 'text/html']],
+  ['/articles.json', ['articles.json', 'application/json']],
   ['/munjaz-promotion-calculator.html', ['munjaz-promotion-calculator.html', 'text/html']],
   ['/', ['index.html', 'text/html']], ['/index.html', ['index.html', 'text/html']],
   ['/services.html', ['services.html', 'text/html']], ['/styles.css', ['styles.css', 'text/css']],
