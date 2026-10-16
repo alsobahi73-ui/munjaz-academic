@@ -1064,22 +1064,41 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
   #faq .faq-item:nth-child(5) { max-width: 100%; }
 }
 
-/* ===== Qalam Hur (Free Pen) ===== */
-.qalam-grid { display: grid; grid-template-columns: 320px 1fr; gap: 2rem; align-items: start; max-width: 1080px; margin: 0 auto; }
-.qalam-invite { text-align: center; }
-.qalam-latest { display: grid; gap: 1rem; }
-.qalam-card { background: #fff; border: 1px solid #e0e8e6; border-radius: 14px; padding: 1.25rem 1.4rem; }
-.qalam-card h4 { margin: .5rem 0; font-size: 1.05rem; }
-.qalam-card h4 a { color: #06302C; text-decoration: none; }
-.qalam-card h4 a:hover { color: #0E6B66; }
-.qalam-excerpt { color: #666; font-size: .92rem; line-height: 1.8; margin: .5rem 0; }
-.qalam-meta { display: flex; gap: 1rem; font-size: .82rem; color: #0E6B66; font-weight: 700; }
-.qalam-cat { display: inline-block; background: #FFF3D6; color: #8a5a00; font-size: .78rem; font-weight: 700; padding: .2rem .8rem; border-radius: 999px; }
+/* ===== Qalam Hur: animated full-width banner ===== */
+.qalam-banner { position: relative; overflow: hidden; background: linear-gradient(135deg, #06302C 0%, #0E6B66 60%, #0a544f 100%); padding: 3rem 0 2.5rem; margin: 2rem 0; }
+.qalam-banner-bg { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.qalam-float { position: absolute; font-size: 3rem; opacity: .08; color: #fff; animation: qalamFloat 12s ease-in-out infinite; }
+.qf1 { top: 15%; right: 8%; animation-delay: 0s; }
+.qf2 { top: 60%; right: 20%; animation-delay: 3s; font-size: 2.2rem; }
+.qf3 { top: 25%; left: 12%; animation-delay: 6s; }
+.qf4 { top: 65%; left: 25%; animation-delay: 9s; font-size: 2.5rem; }
+@keyframes qalamFloat { 0%,100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-18px) rotate(5deg); } }
+.qalam-banner-inner { position: relative; display: flex; align-items: center; gap: 1.75rem; max-width: 1080px; }
+.qalam-banner-icon { width: 88px; height: 88px; flex-shrink: 0; display: grid; place-items: center; border-radius: 24px; background: rgba(255,255,255,.1); border: 2px solid #E9C16C; box-shadow: 0 8px 24px rgba(0,0,0,.25); }
+.qalam-banner-text { flex: 1; }
+.qalam-banner-text h2 { color: #fff; font-size: 1.9rem; margin: 0 0 .4rem; font-weight: 800; }
+.qalam-banner-text p { color: rgba(255,255,255,.85); margin: 0; font-size: 1.02rem; }
+.qalam-banner-actions { display: flex; gap: .8rem; flex-shrink: 0; }
+.btn-gold { background: linear-gradient(135deg, #B97A12, #d99a2b); color: #fff; border: none; }
+.btn-gold:hover { filter: brightness(1.1); }
+.btn-outline-light { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,.5); }
+.btn-outline-light:hover { border-color: #fff; }
+.qalam-latest-strip { position: relative; max-width: 1080px; margin: 1.5rem auto 0; padding: 0 1.5rem; display: flex; gap: 1rem; overflow-x: auto; }
+.qalam-latest-strip .qalam-card { flex: 0 0 280px; background: rgba(255,255,255,.97); }
+.qalam-latest-strip .qalam-empty { color: rgba(255,255,255,.8); }
+/* Keep article page styles */
 .qalam-cats { display: flex; gap: .75rem; justify-content: center; flex-wrap: wrap; margin-top: 1rem; }
-.qalam-empty { text-align: center; padding: 2rem; background: #f8faf9; border-radius: 14px; }
+.qalam-cat { display: inline-block; background: #FFF3D6; color: #8a5a00; font-size: .78rem; font-weight: 700; padding: .2rem .8rem; border-radius: 999px; }
 .qalam-articles { display: grid; gap: 1.5rem; max-width: 800px; margin: 0 auto; }
 .qalam-full { background: #fff; border: 1px solid #e0e8e6; border-radius: 16px; padding: 2rem; }
 .qalam-full h3 { color: #06302C; font-size: 1.3rem; margin: .75rem 0; }
-.qalam-full .qalam-meta { margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 1px solid #eee; }
+.qalam-full .qalam-meta { margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 1px solid #eee; display: flex; gap: 1rem; font-size: .82rem; color: #0E6B66; font-weight: 700; }
 .qalam-body { line-height: 2; color: #444; }
-@media (max-width: 800px) { .qalam-grid { grid-template-columns: 1fr; } }
+.qalam-card h4 { margin: .5rem 0; font-size: 1.02rem; }
+.qalam-card h4 a { color: #06302C; text-decoration: none; }
+.qalam-excerpt { color: #666; font-size: .9rem; line-height: 1.8; margin: .5rem 0; }
+.qalam-meta { display: flex; gap: 1rem; font-size: .8rem; color: #0E6B66; font-weight: 700; }
+@media (max-width: 800px) {
+  .qalam-banner-inner { flex-direction: column; text-align: center; }
+  .qalam-banner-actions { flex-direction: column; width: 100%; max-width: 320px; }
+}
