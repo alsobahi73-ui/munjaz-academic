@@ -2971,16 +2971,339 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
   max-width: 100%;
 }
 
-/* أنماط الطباعة المخصصة لورقة الامتحان والببل شيت */
+/* -----------------------------------------------------
+   منظومة الببل شيت والتصحيح الضوئي الذكي (OMR Tool)
+   ----------------------------------------------------- */
+.omr-main-tabs {
+  display: flex;
+  gap: .5rem;
+  background: #E8F3F1;
+  border-radius: 8px;
+  padding: .35rem;
+  margin: 1rem 0 1.4rem;
+  flex-wrap: wrap;
+}
+.omr-main-tab {
+  flex: 1;
+  min-width: 220px;
+  padding: .65rem .9rem;
+  border: none;
+  background: transparent;
+  color: #06302C;
+  font-weight: 700;
+  font-size: .88rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all .2s ease;
+  text-align: center;
+}
+.omr-main-tab.active {
+  background: #06302C;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(6, 48, 44, .25);
+}
+
+/* شبكة ضبط مفتاح الإجابة (Master Key Grid) */
+.omr-key-box {
+  background: #F8FBFA;
+  border: 1.5px solid #0E6B66;
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+}
+.omr-key-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #CBD5E0;
+  padding-bottom: .6rem;
+  margin-bottom: .8rem;
+  flex-wrap: wrap;
+  gap: .6rem;
+}
+.omr-key-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: .6rem;
+  max-height: 260px;
+  overflow-y: auto;
+  padding: 4px;
+}
+.omr-key-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border: 1px solid #CBD5E0;
+  border-radius: 6px;
+  padding: .35rem .6rem;
+}
+.omr-key-item strong {
+  font-size: .78rem;
+  color: #06302C;
+}
+.omr-key-btns {
+  display: flex;
+  gap: 3px;
+}
+.key-opt-btn {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.2px solid #718096;
+  background: #fff;
+  font-size: .68rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: all .15s ease;
+}
+.key-opt-btn.active {
+  background: #06302C;
+  color: #fff;
+  border-color: #06302C;
+  box-shadow: 0 0 0 2px #E9C16C;
+}
+
+/* واجهة كاميرا الموبايل التفاعلية */
+.omr-camera-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  margin-top: .8rem;
+}
+.omr-viewport-box {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  aspect-ratio: 4 / 3;
+  background: #0a0a0a;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, .25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.omr-viewport-box video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.omr-cam-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.omr-target-frame {
+  width: 80%;
+  height: 75%;
+  border: 2px dashed rgba(233, 193, 108, .8);
+  border-radius: 8px;
+  position: relative;
+}
+.omr-target-frame .corner {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-color: #E9C16C;
+  border-style: solid;
+}
+.omr-target-frame .corner.tl { top: -2px; left: -2px; border-width: 3px 0 0 3px; }
+.omr-target-frame .corner.tr { top: -2px; right: -2px; border-width: 3px 3px 0 0; }
+.omr-target-frame .corner.bl { bottom: -2px; left: -2px; border-width: 0 0 3px 3px; }
+.omr-target-frame .corner.br { bottom: -2px; right: -2px; border-width: 0 3px 3px 0; }
+
+.scan-line {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #E9C16C, #25D366, transparent);
+  animation: scanAnim 2.5s ease-in-out infinite;
+}
+@keyframes scanAnim {
+  0% { top: 0%; opacity: .4; }
+  50% { top: 96%; opacity: 1; }
+  100% { top: 0%; opacity: .4; }
+}
+.omr-cam-hint {
+  margin-top: .6rem;
+  background: rgba(0, 0, 0, .65);
+  color: #fff;
+  padding: .3rem .8rem;
+  border-radius: 999px;
+  font-size: .75rem;
+  font-weight: 700;
+}
+.omr-cam-controls {
+  display: flex;
+  gap: .8rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* كرت نتيجة الورقة الفردية */
+.omr-single-result-card {
+  width: 100%;
+  max-width: 580px;
+  background: #fff;
+  border: 1.5px solid #0E6B66;
+  border-radius: 10px;
+  padding: 1.2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, .08);
+}
+.student-score-badge {
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: #06302C;
+}
+.student-pct-badge {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #1E8E4E;
+  background: #E6F4F1;
+  padding: .2rem .6rem;
+  border-radius: 6px;
+}
+.student-name-field {
+  flex: 1;
+  min-width: 200px;
+}
+.student-name-field input {
+  width: 100%;
+  padding: .35rem .6rem;
+  border: 1px solid #CBD5E0;
+  border-radius: 6px;
+  font-size: .88rem;
+}
+.result-breakdown-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin: 1rem 0;
+  max-height: 140px;
+  overflow-y: auto;
+  padding: 4px;
+  background: #F8FBFA;
+  border-radius: 6px;
+}
+.res-q-chip {
+  padding: .2rem .5rem;
+  border-radius: 4px;
+  font-size: .75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: .3rem;
+}
+.res-q-chip.correct {
+  background: #E6F4F1;
+  color: #0E6B66;
+  border: 1px solid #A8D5C8;
+}
+.res-q-chip.incorrect {
+  background: #FDE8E8;
+  color: #9B1C1C;
+  border: 1px solid #F8B4B4;
+}
+.result-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: .6rem;
+  margin-top: .8rem;
+  border-top: 1px solid #E2E8F0;
+  padding-top: .8rem;
+}
+
+/* رفع حزمة السكنر (Batch Scanner Upload) */
+.omr-batch-upload-box {
+  background: #F8FBFA;
+  border: 2px dashed #0E6B66;
+  border-radius: 10px;
+  padding: 2.2rem 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all .2s ease;
+}
+.omr-batch-upload-box:hover, .omr-batch-upload-box.dragover {
+  background: #E8F3F1;
+  border-color: #06302C;
+}
+
+/* كروت الإحصاءات الذكية */
+.omr-stats-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+.omr-stat-box {
+  background: #F8FBFA;
+  border: 1.5px solid #0E6B66;
+  border-radius: 8px;
+  padding: .9rem 1rem;
+  text-align: center;
+}
+.omr-stat-box .stat-title {
+  display: block;
+  font-size: .8rem;
+  color: #4A5568;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+.omr-stat-box .stat-val {
+  display: block;
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: #06302C;
+  margin-bottom: 2px;
+}
+.omr-stat-box small {
+  font-size: .75rem;
+  color: #718096;
+}
+
+/* جدول كشف الدرجات للدفعة */
+.omr-grade-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.omr-grade-table th {
+  background: #06302C;
+  color: #fff;
+  padding: .6rem .8rem;
+  font-size: .85rem;
+  text-align: center;
+}
+.omr-grade-table td {
+  padding: .5rem .8rem;
+  font-size: .85rem;
+  border-bottom: 1px solid #E2E8F0;
+  text-align: center;
+}
+.omr-grade-table tr:nth-child(even) {
+  background: #F8FBFA;
+}
+
+/* أنماط الطباعة المخصصة لورقة الامتحان والببل شيت وكشف الدرجات */
 @media print {
   body * {
     visibility: hidden;
   }
   .exam-paper-container,
-  .exam-paper-container * {
+  .exam-paper-container *,
+  #omrPrintableGradebookTable,
+  #omrPrintableGradebookTable * {
     visibility: visible;
   }
-  .exam-paper-container {
+  .exam-paper-container,
+  #omrPrintableGradebookTable {
     position: absolute;
     inset-inline-start: 0;
     top: 0;
@@ -2997,7 +3320,9 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
   .quiz-steps-nav,
   .quiz-upload-zone,
   .quiz-role-tabs,
-  .exam-view-tabs {
+  .exam-view-tabs,
+  .omr-main-tabs,
+  .omr-cam-controls {
     display: none !important;
   }
 }

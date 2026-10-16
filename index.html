@@ -430,14 +430,20 @@
             <small>مئوي تقليدي • نقاط GPA • بولونيا ECTS</small>
           </button>
 
-          <button type="button" class="tool-tile" data-open-tool="references" data-tool-audience="undergrad grad researcher faculty" aria-haspopup="dialog">
+          <button type="button" class="tool-tile" data-open-tool="omr" data-tool-audience="faculty researcher grad undergrad" aria-haspopup="dialog">
             <span class="badge-rec" hidden>موصى بها لك</span>
             <span class="tile-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#E9C16C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+              <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#E9C16C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <circle cx="8" cy="8" r="1.5" fill="#E9C16C"/>
+                <circle cx="16" cy="8" r="1.5" fill="#E9C16C"/>
+                <circle cx="8" cy="16" r="1.5" fill="#E9C16C"/>
+                <polyline points="13 16 15 18 19 14"/>
+              </svg>
             </span>
             <span class="tool-code">TOOL-02</span>
-            <strong>منشئ وموثّق المراجع</strong>
-            <small>جلب DOI من Crossref • APA 7 • IEEE</small>
+            <strong>منظومة الببل شيت والتصحيح (OMR)</strong>
+            <small>توليد وطباعة A4 • كاميرا الموبايل • سكنر الدفعة</small>
           </button>
 
           <button type="button" class="tool-tile" data-open-tool="sample" data-tool-audience="grad researcher faculty" aria-haspopup="dialog">
@@ -800,139 +806,282 @@
             </article>
           </div></dialog>
 
-          <!-- ==================== TOOL-02: منشئ وموثّق المراجع ==================== -->
-          <dialog class="modal modal-lg" id="dlg-references" aria-labelledby="ttl-ref"><div class="modal-box">
+          <!-- ==================== TOOL-02: منظومة الببل شيت والتصحيح الضوئي الذكي (OMR) ==================== -->
+          <dialog class="modal modal-lg" id="dlg-omr" aria-labelledby="ttl-omr"><div class="modal-box">
             <button type="button" class="modal-close" data-close-modal aria-label="إغلاق">✕</button>
-            <article class="tool tool-wide" id="tool-references">
+            <article class="tool tool-wide" id="tool-omr">
               <header class="tool-head">
                 <div class="tool-head-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <circle cx="8" cy="8" r="1.5"/>
+                    <circle cx="16" cy="8" r="1.5"/>
+                    <circle cx="8" cy="16" r="1.5"/>
+                    <polyline points="13 16 15 18 19 14"/>
+                  </svg>
                 </div>
                 <div>
-                  <h3 id="ttl-ref">منشئ وموثّق المراجع والأوراق العلمية</h3>
-                  <span class="badge-tag">معتمد: APA 7 & IEEE & MLA 9 & BibTeX</span>
+                  <h3 id="ttl-omr">منظومة الببل شيت والتصحيح الضوئي الذكي (OMR)</h3>
+                  <span class="badge-tag">توليد وطباعة A4 & مساران للتصحيح: كاميرا الموبايل وسكنر الدفعة</span>
                 </div>
               </header>
-              <p class="tool-note">جلب آلي فوري لبيانات الورقة عبر معرف DOI من قاعدة Crossref العالمية أو الإدخال اليدوي، مع التوثيق المائل الصحيح للأسماء والمجلدات.</p>
 
-              <!-- جلب DOI -->
-              <div class="doi-fetch-box">
-                <label class="field" style="flex: 1;">
-                  <span>معرّف الكائن الرقمي (DOI)</span>
-                  <input type="text" id="refDoiInput" dir="ltr" placeholder="مثال: 10.1016/j.compedu.2020.103856 أو رابط كامل">
-                </label>
-                <button type="button" class="btn btn-teal btn-svg-inline" id="refDoiBtn" style="margin-top: auto; height: 46px;">
-                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="16" height="16"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                  <span>جلب آلي من Crossref</span>
+              <!-- التبويبات الرئيسية الثلاثة -->
+              <div class="omr-main-tabs" role="tablist">
+                <button type="button" class="omr-main-tab active" id="omrTabGenBtn">
+                  <span>🖨️ 1. توليد وطباعة استمارة الببل شيت ومفتاح الحل (A4)</span>
+                </button>
+                <button type="button" class="omr-main-tab" id="omrTabCamBtn">
+                  <span>📱 2. التصحيح الفوري بكاميرا الموبايل</span>
+                </button>
+                <button type="button" class="omr-main-tab" id="omrTabScanBtn">
+                  <span>🖨️ 3. تصحيح حزمة الماسح الضوئي (PDF / صور متعددة)</span>
                 </button>
               </div>
-              <p class="form-msg" id="refDoiMsg" role="alert"></p>
 
-              <!-- حقول المرجع -->
-              <form id="refForm" class="form-grid" novalidate style="margin-top: 1rem;">
-                <label class="field span-2">
-                  <span>المؤلفون (مثال: الشمري، أحمد؛ الزبيدي، سارة أو Smith, J.)</span>
-                  <input type="text" id="refAuthors" placeholder="اسم العائلة، الحرف الأول">
-                </label>
-                <label class="field span-2">
-                  <span>عنوان البحث / المقال</span>
-                  <input type="text" id="refTitle" placeholder="عنوان الورقة العلمية">
-                </label>
-                <label class="field span-2">
-                  <span>اسم المجلة / المؤتمر / الناشر</span>
-                  <input type="text" id="refJournal" placeholder="اسم الدورية العلمية">
-                </label>
-                <label class="field">
-                  <span>سنة النشر</span>
-                  <input type="number" id="refYear" min="1900" max="2099" placeholder="2024">
-                </label>
-                <label class="field">
-                  <span>المجلد (Volume)</span>
-                  <input type="text" id="refVol" placeholder="15">
-                </label>
-                <label class="field">
-                  <span>العدد (Issue)</span>
-                  <input type="text" id="refIssue" placeholder="2">
-                </label>
-                <label class="field">
-                  <span>الصفحات (Pages)</span>
-                  <input type="text" id="refPages" placeholder="120-135">
-                </label>
-                <label class="field span-2">
-                  <span>الرابط / DOI URL</span>
-                  <input type="url" id="refUrl" dir="ltr" placeholder="https://doi.org/10.xxxx/...">
-                </label>
-              </form>
+              <!-- =================== المسار 1: توليد الاستمارة والمفتاح =================== -->
+              <div id="omrViewGenerate" class="omr-view-panel">
+                <p class="tool-note">حدد بيانات الاختبار والمقرر ثم اضبط مفتاح الإجابة النموذجي لتوليد وطباعة استمارة الببل شيت الرسمية للطلبة فوراً.</p>
 
-              <!-- اختيار النمط والمعاينة بالتبويبات المتقدمة -->
-              <div class="style-switcher" style="margin-top: 1.2rem;">
-                <span style="font-weight: 700; font-size: .88rem; color: #06302C;">نمط التوثيق الأكاديمي المطلوب:</span>
-                <div class="citation-tabs" role="tablist">
-                  <button type="button" class="citation-tab-btn active" id="tabRefApa" data-style="apa">APA 7th Edition</button>
-                  <button type="button" class="citation-tab-btn" id="tabRefIeee" data-style="ieee">IEEE Style</button>
-                  <button type="button" class="citation-tab-btn" id="tabRefMla" data-style="mla">MLA 9th Edition</button>
-                  <button type="button" class="citation-tab-btn" id="tabRefBibtex" data-style="bibtex">BibTeX (LaTeX / Overleaf)</button>
+                <div class="form-grid">
+                  <label class="field">
+                    <span>اسم الجامعة / الكلية / القسم</span>
+                    <input type="text" id="omrGenCollege" value="وزارة التعليم العالي والبحث العلمي - الكلية الأكاديمية">
+                  </label>
+                  <label class="field">
+                    <span>المادة الدراسية</span>
+                    <input type="text" id="omrGenSubject" placeholder="مثال: الإحصاء التطبيقي / مناهج البحث">
+                  </label>
+                  <label class="field">
+                    <span>المرحلة والدور</span>
+                    <input type="text" id="omrGenStage" value="الدراسات الجامعية الأولية - الدور الأول">
+                  </label>
+                  <label class="field">
+                    <span>عدد أسئلة الاختيار من متعدد</span>
+                    <select id="omrGenCount">
+                      <option value="10">10 أسئلة (كويز سريع)</option>
+                      <option value="15">15 سؤالاً</option>
+                      <option value="20" selected>20 سؤالاً (امتحان فصلي)</option>
+                      <option value="30">30 سؤالاً</option>
+                      <option value="40">40 سؤالاً</option>
+                      <option value="50">50 سؤالاً (امتحان شامل / نهائي)</option>
+                    </select>
+                  </label>
                 </div>
-              </div>
 
-              <!-- صندوق المعاينة للنمط العادي -->
-              <div class="citation-preview-box" id="citationStandardBox">
-                <div class="cite-block">
-                  <div class="cite-head">
-                    <strong>الاستشهاد داخل المتن (In-Text Citation):</strong>
-                    <button type="button" class="btn btn-outline btn-sm btn-svg-inline" id="copyInTextBtn">
-                      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="14" height="14"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-                      <span>نسخ الاستشهاد</span>
+                <!-- شبكة ضبط مفتاح الإجابة النموذجي (Master Key Setup) -->
+                <div class="omr-key-box" style="margin-top: 1.2rem;">
+                  <div class="omr-key-header">
+                    <div>
+                      <strong style="color: #06302C;">🔑 ضبط مفتاح الإجابة النموذجي المعتمد (Master Key):</strong>
+                      <small style="display: block; color: #4A5568;">انقر على الحرف الصحيح (A, B, C, D) لكل سؤال، وسيُعتمد فوراً في التصحيح التلقائي.</small>
+                    </div>
+                    <div style="display: flex; gap: .5rem; flex-wrap: wrap;">
+                      <button type="button" class="btn btn-outline btn-sm" id="omrKeyAutoSampleBtn">تعبئة نموذج تجريبي</button>
+                      <button type="button" class="btn btn-outline btn-sm" id="omrKeyResetBtn">تفريغ المفتاح</button>
+                    </div>
+                  </div>
+                  <div id="omrKeyGridContainer" class="omr-key-grid"></div>
+                </div>
+
+                <!-- أزرار الإجراءات للطباعة والتصدير والتحويل -->
+                <div class="tool-actions" style="margin-top: 1.4rem; justify-content: space-between; flex-wrap: wrap;">
+                  <div style="display: flex; gap: .6rem; flex-wrap: wrap;">
+                    <button type="button" class="btn btn-teal btn-svg-inline" id="omrPrintBlankSheetBtn">
+                      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="16" height="16"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                      <span>🖨️ طباعة استمارة الببل شيت للطلبة (A4)</span>
+                    </button>
+                    <button type="button" class="btn btn-outline btn-svg-inline" id="omrPrintMasterKeyBtn">
+                      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="16" height="16"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+                      <span>طباعة دليل الحل النموذجي المظلل</span>
+                    </button>
+                    <button type="button" class="btn btn-outline btn-svg-inline" id="omrExportDocBtn">
+                      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="16" height="16"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                      <span>⬇️ تصدير كملف Word (.doc)</span>
                     </button>
                   </div>
-                  <div class="cite-content" id="previewInText">—</div>
-                </div>
-
-                <div class="cite-block">
-                  <div class="cite-head">
-                    <strong>التوثيق في قائمة المراجع (Reference List):</strong>
-                    <button type="button" class="btn btn-outline btn-sm btn-svg-inline" id="copyRefBtn">
-                      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="14" height="14"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-                      <span>نسخ المرجع</span>
+                  <div style="display: flex; gap: .6rem; flex-wrap: wrap;">
+                    <button type="button" class="btn btn-teal btn-svg-inline" id="omrGoToCamBtn">
+                      <span>📱 تصحيح عبر الموبايل ➔</span>
+                    </button>
+                    <button type="button" class="btn btn-outline btn-svg-inline" id="omrGoToScanBtn">
+                      <span>🖨️ تصحيح حزمة السكنر ➔</span>
                     </button>
                   </div>
-                  <div class="cite-content" id="previewRefList">—</div>
                 </div>
+
+                <!-- معاينة ورقة الببل شيت A4 المجهزة للطباعة -->
+                <div class="exam-paper-container" id="omrPrintableSheetContainer" style="margin-top: 1.5rem;"></div>
               </div>
 
-              <!-- صندوق المعاينة الخاص بـ BibTeX -->
-              <div class="citation-preview-box" id="citationBibtexBox" hidden>
-                <div class="cite-block">
-                  <div class="cite-head">
-                    <strong>كود BibTeX المكتمل للنشر بـ LaTeX / Overleaf:</strong>
-                    <button type="button" class="btn btn-outline btn-sm btn-svg-inline" id="copyBibtexBtn">
-                      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="14" height="14"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-                      <span>نسخ كود BibTeX</span>
-                    </button>
+              <!-- =================== المسار 2: كاميرا الموبايل =================== -->
+              <div id="omrViewCamera" class="omr-view-panel" hidden>
+                <p class="tool-note">وجه كاميرا الهاتف الخلفية نحو ورقة إجابة الطالب وتأكد من محاذاة الورقة داخل الإطار ليتم رصد وتصحيح الإجابات فورياً.</p>
+
+                <div class="omr-camera-container">
+                  <!-- نافذة الكاميرا التفاعلية -->
+                  <div class="omr-viewport-box">
+                    <video id="omrLiveVideo" autoplay playsinline muted></video>
+                    <div class="omr-cam-overlay">
+                      <div class="omr-target-frame">
+                        <span class="corner tl"></span>
+                        <span class="corner tr"></span>
+                        <span class="corner bl"></span>
+                        <span class="corner br"></span>
+                        <div class="scan-line"></div>
+                      </div>
+                      <div class="omr-cam-hint">اضبط الورقة داخل الإطار وانقر «قراءة الورقة»</div>
+                    </div>
+                    <canvas id="omrCaptureCanvas" style="display: none;"></canvas>
                   </div>
-                  <pre class="bibtex-code" id="previewBibtex">—</pre>
+
+                  <!-- أزرار تحكم الكاميرا -->
+                  <div class="omr-cam-controls">
+                    <button type="button" class="btn btn-teal btn-svg-inline" id="omrStartCamBtn">
+                      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="16" height="16"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                      <span>تشغيل كاميرا الهاتف</span>
+                    </button>
+                    <button type="button" class="btn btn-teal btn-svg-inline" id="omrSnapBtn" disabled>
+                      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>
+                      <span>⚡ التقاط وتصحيح الورقة فوراً</span>
+                    </button>
+                    <label class="btn btn-outline btn-svg-inline" style="cursor: pointer; margin: 0;">
+                      <input type="file" id="omrCamUploadInput" accept="image/*" capture="environment" style="display: none;">
+                      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="16" height="16"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                      <span>التقاط صورة بالموبايل / رفع لقطة</span>
+                    </label>
+                  </div>
+
+                  <!-- كرت النتيجة اللحظية للورقة الممسوحة -->
+                  <div id="omrInstantResultCard" class="omr-single-result-card" hidden>
+                    <div class="result-header">
+                      <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+                        <span class="student-score-badge" id="omrSingleScore">0 / 20</span>
+                        <span class="student-pct-badge" id="omrSinglePct">0%</span>
+                        <span class="status-pill" id="omrSingleStatus">ناجح ✓</span>
+                      </div>
+                      <div class="student-name-field">
+                        <span>اسم الطالب / الورقة:</span>
+                        <input type="text" id="omrSingleStudentName" placeholder="اكتب اسم الطالب هنا...">
+                      </div>
+                    </div>
+
+                    <div class="result-breakdown-row" id="omrSingleBreakdown">
+                      <!-- تظهر الدوائر المحللة لكل سؤال: أخضر للصح، أحمر للخطأ -->
+                    </div>
+
+                    <div class="result-card-actions">
+                      <button type="button" class="btn btn-teal btn-sm" id="omrSaveSingleToBookBtn">
+                        <span>💾 حفظ ورصد في كشف الدرجات</span>
+                      </button>
+                      <button type="button" class="btn btn-outline btn-sm" id="omrNextSheetBtn">
+                        <span>الورقة التالية ➔</span>
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <div class="tool-actions">
-                <button type="button" class="btn btn-teal btn-sm btn-svg-inline" id="addRefToList">
-                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="15" height="15"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                  <span>إضافة إلى قائمة مراجعي</span>
-                </button>
-                <button type="button" class="btn btn-outline btn-sm btn-svg-inline" id="copyAllRefsBtn" hidden>
-                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="15" height="15"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-                  <span>نسخ القائمة كاملة</span>
-                </button>
-                <button type="button" class="btn btn-danger btn-sm btn-svg-inline" id="clearRefsBtn">
-                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="15" height="15"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
-                  <span>مسح الحقول</span>
-                </button>
-              </div>
+              <!-- =================== المسار 3: ماسح السكنر دفعة واحدة =================== -->
+              <div id="omrViewScanner" class="omr-view-panel" hidden>
+                <p class="tool-note">ارفع حزمة أوراق الامتحان الممسوحة بجهاز السكنر (ملف PDF واحد يحتوي على 50 أو 100 ورقة، أو مجموعة صور ممسوحة) لتصحيحها دفعة واحدة في ثوانٍ.</p>
 
-              <!-- قائمة المراجع المتراكمة -->
-              <div id="savedRefsWrapper" hidden>
-                <h4 style="margin: 1.2rem 0 .6rem; color: #06302C;">قائمة المراجع المحفوظة في جلستك (<span id="savedRefsCount">0</span>):</h4>
-                <ol id="savedRefsList" class="saved-refs-list"></ol>
+                <div class="omr-batch-upload-box" id="omrBatchDropZone">
+                  <input type="file" id="omrBatchFileInput" accept=".pdf,image/*" multiple style="display: none;">
+                  <div class="upload-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="32" height="32">
+                      <polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>
+                    </svg>
+                  </div>
+                  <div class="upload-text">
+                    <strong>اسحب وأفلت ملف PDF الممسوح بالسكنر أو صور أوراق الطلبة هنا</strong>
+                    <span>يدعم سكنر السحب الآلي (ADF) بملف PDF متعدد الصفحات أو صور JPG / PNG متعددة</span>
+                  </div>
+                  <button type="button" class="btn btn-outline btn-sm btn-svg-inline" id="omrBatchBrowseBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="14" height="14"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+                    <span>اختيار ملف PDF أو مجلد الصور الممسوحة</span>
+                  </button>
+                  <div id="omrBatchFileInfo" class="quiz-file-badge" hidden>
+                    <span id="omrBatchFileName">exam_batch.pdf</span>
+                    <span class="file-size" id="omrBatchFileSize">(4.2 م.ب)</span>
+                    <button type="button" id="omrBatchClearBtn">✕</button>
+                  </div>
+                </div>
+
+                <div style="margin-top: 1rem; display: flex; gap: .8rem; align-items: center; flex-wrap: wrap;">
+                  <button type="button" class="btn btn-teal btn-svg-inline" id="omrStartBatchBtn" disabled>
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="16" height="16"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    <span>⚡ بدء التصحيح الضوئي الشامل للدفعة</span>
+                  </button>
+                  <div id="omrBatchProgressWrap" style="flex: 1; min-width: 200px;" hidden>
+                    <div style="display: flex; justify-content: space-between; font-size: .8rem; font-weight: 700; margin-bottom: 3px;">
+                      <span id="omrBatchProgressText">جاري المعالجة والتصحيح...</span>
+                      <span id="omrBatchProgressPct">0%</span>
+                    </div>
+                    <div class="progress" style="height: 8px;">
+                      <i id="omrBatchProgressBar" style="width: 0%;"></i>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- كشف الدرجات والإحصائيات الشاملة -->
+                <div id="omrGradebookSection" style="margin-top: 1.8rem;" hidden>
+                  <!-- كروت الإحصاءات الذكية -->
+                  <div class="omr-stats-summary-grid">
+                    <div class="omr-stat-box">
+                      <span class="stat-title">إجمالي الأوراق</span>
+                      <strong class="stat-val" id="statTotalSheets">0</strong>
+                      <small>ورقة ممسوحة</small>
+                    </div>
+                    <div class="omr-stat-box">
+                      <span class="stat-title">نسبة النجاح العامة</span>
+                      <strong class="stat-val" id="statPassRate">0%</strong>
+                      <small id="statPassedCount">0 ناجح</small>
+                    </div>
+                    <div class="omr-stat-box">
+                      <span class="stat-title">المتوسط الحسابي</span>
+                      <strong class="stat-val" id="statAvgScore">0</strong>
+                      <small>من إجمالي الأسئلة</small>
+                    </div>
+                    <div class="omr-stat-box">
+                      <span class="stat-title">أعلى / أدنى درجة</span>
+                      <strong class="stat-val" id="statHighLow">0 / 0</strong>
+                      <small>مقياس الفروق الفردية</small>
+                    </div>
+                  </div>
+
+                  <!-- أزرار تصدير كشف الدرجات -->
+                  <div class="tool-actions no-print" style="margin: 1.2rem 0; justify-content: space-between;">
+                    <div style="display: flex; gap: .6rem; flex-wrap: wrap;">
+                      <button type="button" class="btn btn-teal btn-sm btn-svg-inline" id="omrExportCsvBtn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="15" height="15"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                        <span>⬇️ تصدير كشف الدرجات (Excel / CSV)</span>
+                      </button>
+                      <button type="button" class="btn btn-outline btn-sm btn-svg-inline" id="omrPrintGradebookBtn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="15" height="15"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                        <span>🖨️ طباعة كشف الدرجات الرسمي للقسم</span>
+                      </button>
+                    </div>
+                    <button type="button" class="btn btn-outline btn-sm" id="omrClearGradebookBtn">مسح الكشف الحالي</button>
+                  </div>
+
+                  <!-- جدول الدرجات الشامل -->
+                  <div class="table-wrap" id="omrPrintableGradebookTable">
+                    <table class="data-table omr-grade-table">
+                      <thead>
+                        <tr>
+                          <th style="width: 8%;">#</th>
+                          <th style="width: 28%;">اسم الطالب / تسلسل الورقة</th>
+                          <th style="width: 14%;">الدرجة</th>
+                          <th style="width: 14%;">النسبة المئوية</th>
+                          <th style="width: 16%;">التقدير الأكاديمي</th>
+                          <th style="width: 20%;">الأخطاء المرصودة</th>
+                        </tr>
+                      </thead>
+                      <tbody id="omrGradebookTbody"></tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
             </article>
           </div></dialog>
