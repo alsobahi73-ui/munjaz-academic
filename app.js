@@ -1417,10 +1417,28 @@
       let filtered = basePool.filter((item) => {
         const isTf = item.opts.length === 2;
         if (qType === 'tf') return isTf;
-        if (qType === 'mcq') return !isTf;
-        if (qType === 'bubble') return true; // الببل شيت يدعم الاختيارات وصح/خطأ
+        if (qType === 'mcq' || qType === 'bubble') return !isTf; // الببل شيت مخصص حصراً للاختيار من متعدد
         return true;
       });
+
+      // إذا كان المطلوب ببل شيت أو اختيار من متعدد ولم تتوفر أسئلة كافية، نكمّل من بنك أسئلة MCQ الجاهزة
+      if ((qType === 'bubble' || qType === 'mcq') && filtered.length < count) {
+        const allMcq = [].concat(
+          QUIZ_PRESETS['research-methods'],
+          QUIZ_PRESETS.statistics,
+          QUIZ_PRESETS.ethics,
+          QUIZ_PRESETS.bologna
+        ).filter((q) => q.opts.length > 2);
+        const existingTexts = new Set(filtered.map((q) => q.q));
+        for (const item of allMcq) {
+          if (!existingTexts.has(item.q)) {
+            filtered.push(item);
+            existingTexts.add(item.q);
+            if (filtered.length >= count) break;
+          }
+        }
+      }
+
       if (!filtered.length) filtered = basePool;
 
       return filtered.slice(0, count);
@@ -1561,7 +1579,7 @@
               <span>القسم / الشعبة: ................................................................</span>
             </div>
             <div class="student-info-col">
-              <span>الرقم الامتحاني / القاعة: .................................................</span>
+              <span>القاعة الامتحانية: .................................................</span>
               <span>توقيع الطالب: ................................................................</span>
             </div>
           </div>
@@ -1590,11 +1608,15 @@
       const stageVal = ($('#examStage') && $('#examStage').value.trim()) || 'الدراسات الجامعية الأولية - الدور الأول';
       const curYear = new Date().getFullYear();
 
+      // الببل شيت مخصص حصراً لأسئلة الاختيار من متعدد (MCQ) بأربعة خيارات (A, B, C, D)
+      const mcqQuestions = questions.filter((q) => q.opts.length > 2);
+      const targetQuestions = mcqQuestions.length ? mcqQuestions : questions;
+
       // تقسيم الأسئلة في أعمدة متناسقة (حتى 10 أو 15 سؤال في العمود)
-      const perCol = Math.ceil(questions.length / (questions.length > 15 ? 3 : 2)) || 10;
+      const perCol = Math.ceil(targetQuestions.length / (targetQuestions.length > 15 ? 3 : 2)) || 10;
       const columns = [];
-      for (let i = 0; i < questions.length; i += perCol) {
-        columns.push(questions.slice(i, i + perCol));
+      for (let i = 0; i < targetQuestions.length; i += perCol) {
+        columns.push(targetQuestions.slice(i, i + perCol));
       }
 
       return `
@@ -1628,45 +1650,18 @@
             </div>
           </div>
 
-          <!-- شبكة بيانات الطالب ومصفوفة التظليل والنموذج -->
+          <!-- شبكة بيانات الطالب وتظليل نموذج الأسئلة -->
           <div class="bubble-sheet-meta-grid">
-            <!-- 1. بيانات الطالب النصية -->
+            <!-- 1. بيانات الطالب الأساسية -->
             <div class="bs-box">
               <div class="bs-box-title">بيانات الطالب الأساسية</div>
-              <div class="bs-field-line"><span>اسم الطالب:</span> ............................................</div>
-              <div class="bs-field-line"><span>القسم / الشعبة:</span> ....................................</div>
-              <div class="bs-field-line"><span>نوع الدراسة:</span> [ &nbsp; ] صباحي &nbsp;&nbsp; [ &nbsp; ] مسائي</div>
-              <div class="bs-field-line"><span>القاعة:</span> ............... <span>التوقيع:</span> ................</div>
+              <div class="bs-field-line"><span>اسم الطالب الرباعي:</span> ................................................................</div>
+              <div class="bs-field-line"><span>القسم والشعبة:</span> ................................................................</div>
+              <div class="bs-field-line"><span>نوع الدراسة:</span> [ &nbsp; ] صباحي &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [ &nbsp; ] مسائي</div>
+              <div class="bs-field-line"><span>القاعة الامتحانية:</span> .......................... <span>توقيع الطالب:</span> ..........................</div>
             </div>
 
-            <!-- 2. مصفوفة تظليل الرقم الامتحاني (Seat ID Matrix) -->
-            <div class="bs-box">
-              <div class="bs-box-title">تظليل الرقم الامتحاني (Student ID)</div>
-              <div class="id-matrix-instruction">اكتب الرقم في الأعلى ثم ظلل الدائرة المقابلة:</div>
-              <table class="omr-matrix-table">
-                <thead>
-                  <tr>
-                    <th>[ &nbsp; ]</th>
-                    <th>[ &nbsp; ]</th>
-                    <th>[ &nbsp; ]</th>
-                    <th>[ &nbsp; ]</th>
-                    <th>[ &nbsp; ]</th>
-                    <th>[ &nbsp; ]</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => `
-                    <tr>
-                      ${[0, 1, 2, 3, 4, 5].map(() => `
-                        <td><span class="omr-mini-bubble">${num}</span></td>
-                      `).join('')}
-                    </tr>
-                  `).join('')}
-                </tbody>
-              </table>
-            </div>
-
-            <!-- 3. تظليل نموذج الأسئلة وإرشادات التظليل -->
+            <!-- 2. تظليل نموذج الأسئلة وإرشادات التظليل -->
             <div class="bs-box">
               <div class="bs-box-title">تظليل نموذج الأسئلة (Model)</div>
               <div class="omr-model-bubbles">
@@ -1701,28 +1696,22 @@
             </div>
           </div>
 
-          <!-- شبكة دوائر الإجابة (OMR Response Grid) -->
+          <!-- شبكة دوائر الإجابة (OMR Response Grid) - اختيار من متعدد حصراً (A, B, C, D) -->
           <div class="bubble-grid-container">
             <div class="bubble-grid-columns">
               ${columns.map((colGroup, colIdx) => `
                 <div class="bubble-col">
                   ${colGroup.map((item, rowIdx) => {
                     const qGlobalNum = colIdx * perCol + rowIdx + 1;
-                    const isTf = item.opts.length === 2;
                     return `
                       <div class="bubble-row">
                         <span class="bubble-q-num">${qGlobalNum < 10 ? '0' + qGlobalNum : qGlobalNum}</span>
                         <div class="bubble-options">
-                          ${isTf ? `
-                            <span class="omr-bubble tf ${isMasterKey && item.a === 0 ? 'shaded-key' : ''}">ص / T</span>
-                            <span class="omr-bubble tf ${isMasterKey && item.a === 1 ? 'shaded-key' : ''}">خ / F</span>
-                          ` : `
-                            ${item.opts.map((opt, optIdx) => `
-                              <span class="omr-bubble ${isMasterKey && item.a === optIdx ? 'shaded-key' : ''}" title="${opt}">
-                                ${englishOptionLetters[optIdx]}
-                              </span>
-                            `).join('')}
-                          `}
+                          ${englishOptionLetters.slice(0, 4).map((letter, optIdx) => `
+                            <span class="omr-bubble ${isMasterKey && item.a === optIdx ? 'shaded-key' : ''}" title="الخيار (${letter})">
+                              ${letter}
+                            </span>
+                          `).join('')}
                         </div>
                       </div>
                     `;
@@ -1734,8 +1723,8 @@
 
           <!-- تذييل الببل شيت وعلامات المعايرة -->
           <div class="bubble-sheet-footer">
-            <span>تنبيه هام: تُصحح هذه الاستمارة ضوئياً بواسطة الماسح الإلكتروني (OMR)؛ التظليل المزدوج يلغي درجة الفقرة تماماً.</span>
-            <span class="omr-calib-line">■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■</span>
+            <div class="bsf-alert">تنبيه هام: تُصحح هذه الاستمارة ضوئياً بواسطة القارئ الإلكتروني (OMR)؛ يرجى ملء دائرة واحدة فقط لكل فقرة والتظليل المزدوج يُلغي الدرجة.</div>
+            <div class="omr-calib-line">■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■</div>
           </div>
         </div>
       `;

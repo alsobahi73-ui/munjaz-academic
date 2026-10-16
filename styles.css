@@ -2643,7 +2643,7 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
   color: #111;
   border: 2px solid #222;
   border-radius: 6px;
-  padding: 1.6rem 2rem;
+  padding: 1.6rem 2rem 2.8rem;
   position: relative;
   font-family: 'Simplified Arabic', 'Traditional Arabic', 'Arial', sans-serif;
   margin-top: 1rem;
@@ -2729,11 +2729,11 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
   letter-spacing: 1px;
 }
 
-/* شبكة بيانات الطالب ومصفوفة التظليل */
+/* شبكة بيانات الطالب ونموذج الأسئلة */
 .bubble-sheet-meta-grid {
   display: grid;
-  grid-template-columns: 2fr 1.6fr 1.8fr;
-  gap: 12px;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 14px;
   margin-bottom: 14px;
 }
 @media (max-width: 860px) {
@@ -2937,12 +2937,6 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
   cursor: pointer;
   transition: all .15s ease;
 }
-.omr-bubble.tf {
-  width: 38px;
-  border-radius: 12px;
-  font-size: .68rem;
-}
-
 /* تظليل مفتاح الإجابة النموذجي للأستاذ (Master Key Shading) */
 .omr-bubble.shaded-key {
   background: #06302C !important;
@@ -2952,21 +2946,29 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
 }
 
 .bubble-sheet-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: .72rem;
-  font-weight: bold;
   border-top: 1.5px solid #000;
-  padding-top: 6px;
-  margin-top: 6px;
-  color: #333;
+  padding-top: 8px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: center;
+  text-align: center;
+}
+.bsf-alert {
+  font-size: .74rem;
+  font-weight: 700;
+  color: #111;
+  line-height: 1.4;
 }
 .omr-calib-line {
-  letter-spacing: 5px;
+  letter-spacing: 6px;
   font-size: .85rem;
   font-weight: 900;
   color: #000;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 100%;
 }
 
 /* أنماط الطباعة المخصصة لورقة الامتحان والببل شيت */
