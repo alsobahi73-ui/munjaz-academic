@@ -1418,6 +1418,7 @@
         const isTf = item.opts.length === 2;
         if (qType === 'tf') return isTf;
         if (qType === 'mcq') return !isTf;
+        if (qType === 'bubble') return true; // الببل شيت يدعم الاختيارات وصح/خطأ
         return true;
       });
       if (!filtered.length) filtered = basePool;
@@ -1458,18 +1459,19 @@
     });
 
     // ==========================================
-    // توليد ورقة الامتحان الرسمية المطبوعة (وضع الأستاذ)
+    // توليد ورقة الامتحان الرسمية واستمارة الببل شيت (OMR)
     // ==========================================
     const arabicOptionLetters = ['أ', 'ب', 'ج', 'د', 'هـ'];
+    const englishOptionLetters = ['A', 'B', 'C', 'D', 'E'];
 
-    const buildExamPaperHTML = (questions) => {
+    // 1. توليد ورقة الأسئلة التقليدية للطلبة
+    const buildQuestionSheetHTML = (questions) => {
       const collegeVal = ($('#examCollege') && $('#examCollege').value.trim()) || 'وزارة التعليم العالي والبحث العلمي - الكلية الأكاديمية';
       const subjectVal = ($('#examSubject') && $('#examSubject').value.trim()) || 'مقرر المنهج الدراسي العام';
       const stageVal = ($('#examStage') && $('#examStage').value.trim()) || 'الدراسات الجامعية الأولية - الدور الأول';
       const timeMarksVal = ($('#examTimeMarks') && $('#examTimeMarks').value.trim()) || 'الوقت: ساعتان | الدرجة الكلية: 100';
       const curYear = new Date().getFullYear();
 
-      // فصل الأسئلة إلى اختيار من متعدد وصح/خطأ إن وُجدت
       const mcqList = questions.filter((q) => q.opts.length > 2);
       const tfList = questions.filter((q) => q.opts.length === 2);
 
@@ -1529,9 +1531,220 @@
         qCounter++;
       }
 
-      // دليل الحل النموذجي للأستاذ
-      const answerKeyHtml = `
-        <div class="exam-answer-key-box" id="examAnswerKeyBox" style="display: none;">
+      return `
+        <div class="question-paper-sheet">
+          <!-- الترويسة الرسمية -->
+          <header class="exam-header">
+            <div class="exam-header-right">
+              <strong>جمهورية العراق</strong>
+              <span>${collegeVal}</span>
+              <span>العام الجامعي: ${curYear} - ${curYear + 1}</span>
+            </div>
+            <div class="exam-header-center">
+              <div class="exam-header-bismillah">بسم الله الرحمن الرحيم</div>
+              <div class="exam-header-emblem">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="44" height="44"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 000 20 14.5 14.5 0 000-20"/><path d="M2 12h20"/></svg>
+              </div>
+              <strong class="exam-paper-main-title">الامتحان الأكاديمي النهائي / الفصلي</strong>
+            </div>
+            <div class="exam-header-left">
+              <span>المادة: <strong>${subjectVal}</strong></span>
+              <span>المرحلة: <strong>${stageVal}</strong></span>
+              <span>${timeMarksVal}</span>
+            </div>
+          </header>
+
+          <!-- صندوق بيانات الطالب -->
+          <div class="exam-student-box">
+            <div class="student-info-col">
+              <span>اسم الطالب الرباعي: ................................................................</span>
+              <span>القسم / الشعبة: ................................................................</span>
+            </div>
+            <div class="student-info-col">
+              <span>الرقم الامتحاني / القاعة: .................................................</span>
+              <span>توقيع الطالب: ................................................................</span>
+            </div>
+          </div>
+
+          <!-- إرشادات وتعليمات الامتحان -->
+          <div class="exam-instructions-box">
+            <strong>تعليمات امتحانية هامة:</strong>
+            <span>(1) الإجابة بالقلم الجاف حصراً. (2) قراءة الأسئلة بدقة والتأكد من وضوح الاختيار. (3) يُمنع إدخال الهواتف الذكية إلى القاعة الامتحانية.</span>
+          </div>
+
+          <!-- متن الأسئلة -->
+          ${questionsHtml}
+
+          <!-- تذييل الورقة -->
+          <div class="exam-footer-note">
+            <span>« انتهت الأسئلة — مع أمنياتنا لجميع الطلبة بالتفوق والنجاح الباهر »</span>
+          </div>
+        </div>
+      `;
+    };
+
+    // 2. توليد استمارة إجابة التظليل الإلكتروني (ببل شيت - Bubble Sheet OMR)
+    const buildBubbleSheetHTML = (questions, isMasterKey = false) => {
+      const collegeVal = ($('#examCollege') && $('#examCollege').value.trim()) || 'وزارة التعليم العالي والبحث العلمي - الكلية الأكاديمية';
+      const subjectVal = ($('#examSubject') && $('#examSubject').value.trim()) || 'مقرر المنهج الدراسي العام';
+      const stageVal = ($('#examStage') && $('#examStage').value.trim()) || 'الدراسات الجامعية الأولية - الدور الأول';
+      const curYear = new Date().getFullYear();
+
+      // تقسيم الأسئلة في أعمدة متناسقة (حتى 10 أو 15 سؤال في العمود)
+      const perCol = Math.ceil(questions.length / (questions.length > 15 ? 3 : 2)) || 10;
+      const columns = [];
+      for (let i = 0; i < questions.length; i += perCol) {
+        columns.push(questions.slice(i, i + perCol));
+      }
+
+      return `
+        <div class="bubble-sheet-container ${isMasterKey ? 'master-key-mode' : ''}">
+          <!-- علامات المحاذاة الضوئية للماسح الإلكتروني OMR -->
+          <div class="omr-corner omr-tl"></div>
+          <div class="omr-corner omr-tr"></div>
+          <div class="omr-corner omr-bl"></div>
+          <div class="omr-corner omr-br"></div>
+          <div class="omr-timing-top"></div>
+
+          <!-- ترويسة الببل شيت -->
+          <div class="bubble-sheet-header">
+            <div class="bsh-right">
+              <strong>جمهورية العراق</strong>
+              <span>${collegeVal}</span>
+              <span>اللجنة الامتحانية المركزية</span>
+            </div>
+            <div class="bsh-center">
+              <div class="bsh-title-badge">${isMasterKey ? 'مفتاح التصحيح النموذجي (معتمد للتدريسي)' : 'استمارة إجابة الاختبار الإلكتروني'}</div>
+              <h3 class="bsh-title">ورقة إجابة التظليل الآلي (BUBBLE SHEET - OMR)</h3>
+              <span class="bsh-session">العام الجامعي: ${curYear} - ${curYear + 1} | ${stageVal}</span>
+            </div>
+            <div class="bsh-left">
+              <span>المادة: <strong>${subjectVal}</strong></span>
+              <span>رمز الاختبار: <strong>OMR-${Math.abs(curYear)}-M1</strong></span>
+              <div class="omr-barcode-box">
+                <div class="fake-barcode">||||| || |||| ||| |||| | ||</div>
+                <small>OMR-SHEET-VERIFIED</small>
+              </div>
+            </div>
+          </div>
+
+          <!-- شبكة بيانات الطالب ومصفوفة التظليل والنموذج -->
+          <div class="bubble-sheet-meta-grid">
+            <!-- 1. بيانات الطالب النصية -->
+            <div class="bs-box">
+              <div class="bs-box-title">بيانات الطالب الأساسية</div>
+              <div class="bs-field-line"><span>اسم الطالب:</span> ............................................</div>
+              <div class="bs-field-line"><span>القسم / الشعبة:</span> ....................................</div>
+              <div class="bs-field-line"><span>نوع الدراسة:</span> [ &nbsp; ] صباحي &nbsp;&nbsp; [ &nbsp; ] مسائي</div>
+              <div class="bs-field-line"><span>القاعة:</span> ............... <span>التوقيع:</span> ................</div>
+            </div>
+
+            <!-- 2. مصفوفة تظليل الرقم الامتحاني (Seat ID Matrix) -->
+            <div class="bs-box">
+              <div class="bs-box-title">تظليل الرقم الامتحاني (Student ID)</div>
+              <div class="id-matrix-instruction">اكتب الرقم في الأعلى ثم ظلل الدائرة المقابلة:</div>
+              <table class="omr-matrix-table">
+                <thead>
+                  <tr>
+                    <th>[ &nbsp; ]</th>
+                    <th>[ &nbsp; ]</th>
+                    <th>[ &nbsp; ]</th>
+                    <th>[ &nbsp; ]</th>
+                    <th>[ &nbsp; ]</th>
+                    <th>[ &nbsp; ]</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => `
+                    <tr>
+                      ${[0, 1, 2, 3, 4, 5].map(() => `
+                        <td><span class="omr-mini-bubble">${num}</span></td>
+                      `).join('')}
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+
+            <!-- 3. تظليل نموذج الأسئلة وإرشادات التظليل -->
+            <div class="bs-box">
+              <div class="bs-box-title">تظليل نموذج الأسئلة (Model)</div>
+              <div class="omr-model-bubbles">
+                <label><span class="omr-bubble-model ${isMasterKey ? 'shaded-key' : ''}">A / أ</span></label>
+                <label><span class="omr-bubble-model">B / ب</span></label>
+                <label><span class="omr-bubble-model">C / ج</span></label>
+                <label><span class="omr-bubble-model">D / د</span></label>
+              </div>
+
+              <div class="omr-guide-box">
+                <strong>تعليمات التظليل للماسح الضوئي:</strong>
+                <div class="guide-icons-row">
+                  <div class="guide-item ok">
+                    <span class="guide-circle filled">●</span>
+                    <span>صحيح</span>
+                  </div>
+                  <div class="guide-item bad">
+                    <span class="guide-circle">✓</span>
+                    <span>خطأ</span>
+                  </div>
+                  <div class="guide-item bad">
+                    <span class="guide-circle">✕</span>
+                    <span>خطأ</span>
+                  </div>
+                  <div class="guide-item bad">
+                    <span class="guide-circle">·</span>
+                    <span>خطأ</span>
+                  </div>
+                </div>
+                <small class="guide-text">ظلل الدائرة بالكامل بقلم رصاص أو جاف أسود/أزرق. لا تضع أي إشارة خارج الدوائر وتجنب ثني الاستمارة.</small>
+              </div>
+            </div>
+          </div>
+
+          <!-- شبكة دوائر الإجابة (OMR Response Grid) -->
+          <div class="bubble-grid-container">
+            <div class="bubble-grid-columns">
+              ${columns.map((colGroup, colIdx) => `
+                <div class="bubble-col">
+                  ${colGroup.map((item, rowIdx) => {
+                    const qGlobalNum = colIdx * perCol + rowIdx + 1;
+                    const isTf = item.opts.length === 2;
+                    return `
+                      <div class="bubble-row">
+                        <span class="bubble-q-num">${qGlobalNum < 10 ? '0' + qGlobalNum : qGlobalNum}</span>
+                        <div class="bubble-options">
+                          ${isTf ? `
+                            <span class="omr-bubble tf ${isMasterKey && item.a === 0 ? 'shaded-key' : ''}">ص / T</span>
+                            <span class="omr-bubble tf ${isMasterKey && item.a === 1 ? 'shaded-key' : ''}">خ / F</span>
+                          ` : `
+                            ${item.opts.map((opt, optIdx) => `
+                              <span class="omr-bubble ${isMasterKey && item.a === optIdx ? 'shaded-key' : ''}" title="${opt}">
+                                ${englishOptionLetters[optIdx]}
+                              </span>
+                            `).join('')}
+                          `}
+                        </div>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <!-- تذييل الببل شيت وعلامات المعايرة -->
+          <div class="bubble-sheet-footer">
+            <span>تنبيه هام: تُصحح هذه الاستمارة ضوئياً بواسطة الماسح الإلكتروني (OMR)؛ التظليل المزدوج يلغي درجة الفقرة تماماً.</span>
+            <span class="omr-calib-line">■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■</span>
+          </div>
+        </div>
+      `;
+    };
+
+    // 3. جدول مفتاح الحل المعتمد التفصيلي للأستاذ
+    const buildAnswerKeyRubricTable = (questions) => {
+      return `
+        <div class="exam-answer-key-box" style="margin-top: 1.5rem;">
           <div class="exam-key-head">
             <strong>📋 دليل الإجابة النموذجية ومفتاح التصحيح الرسمي (للأستاذ واللجنة الامتحانية)</strong>
             <span>سري ومعتمد للتدريسي فقط</span>
@@ -1539,8 +1752,8 @@
           <table class="exam-key-table">
             <thead>
               <tr>
-                <th style="width: 10%;">رقم</th>
-                <th style="width: 35%;">نص السؤال أو الفقرة</th>
+                <th style="width: 8%;">رقم</th>
+                <th style="width: 37%;">نص السؤال أو الفقرة</th>
                 <th style="width: 25%;">الإجابة الصحيحة المعتمدة</th>
                 <th style="width: 30%;">السند العلمي والتفسير</th>
               </tr>
@@ -1550,7 +1763,7 @@
                 <tr>
                   <td style="text-align: center; font-weight: bold;">${idx + 1}</td>
                   <td>${item.q}</td>
-                  <td style="color: #06302C; font-weight: 700;">${item.opts[item.a]}</td>
+                  <td style="color: #06302C; font-weight: 700;">${item.opts[item.a]} (${arabicOptionLetters[item.a] || ''})</td>
                   <td style="font-size: .85rem; color: #4A5568;">${item.exp}</td>
                 </tr>
               `).join('')}
@@ -1558,61 +1771,46 @@
           </table>
         </div>
       `;
+    };
 
+    // إدارة التبديل بين التبويبات الفرعية (ورقة الأسئلة / ببل شيت / مفتاح التصحيح)
+    const setExamSubView = (view) => {
+      const qWrap = $('#examQuestionsViewWrapper');
+      const bWrap = $('#examBubbleSheetViewWrapper');
+      const kWrap = $('#examMasterKeyViewWrapper');
+
+      const tabQ = $('#tabViewQuestions');
+      const tabB = $('#tabViewBubbleSheet');
+      const tabK = $('#tabViewMasterKey');
+
+      [tabQ, tabB, tabK].forEach((t) => { if (t) t.classList.remove('active'); });
+
+      if (qWrap) qWrap.style.display = view === 'questions' ? 'block' : 'none';
+      if (bWrap) bWrap.style.display = view === 'bubble' ? 'block' : 'none';
+      if (kWrap) kWrap.style.display = view === 'key' ? 'block' : 'none';
+
+      if (view === 'questions' && tabQ) tabQ.classList.add('active');
+      if (view === 'bubble' && tabB) tabB.classList.add('active');
+      if (view === 'key' && tabK) tabK.classList.add('active');
+    };
+
+    // توليد وتجهيز كامل محتويات الورقة الامتحانية والببل شيت
+    const buildExamPaperHTML = (questions) => {
       return `
-        <!-- الترويسة الرسمية للورقة الامتحانية -->
-        <header class="exam-header">
-          <div class="exam-header-right">
-            <strong>جمهورية العراق</strong>
-            <span>${collegeVal}</span>
-            <span>العام الجامعي: ${curYear} - ${curYear + 1}</span>
-          </div>
-          <div class="exam-header-center">
-            <div class="exam-header-bismillah">بسم الله الرحمن الرحيم</div>
-            <div class="exam-header-emblem">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="44" height="44"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 000 20 14.5 14.5 0 000-20"/><path d="M2 12h20"/></svg>
-            </div>
-            <strong class="exam-paper-main-title">الامتحان الأكاديمي النهائي / الفصلي</strong>
-          </div>
-          <div class="exam-header-left">
-            <span>المادة: <strong>${subjectVal}</strong></span>
-            <span>المرحلة: <strong>${stageVal}</strong></span>
-            <span>${timeMarksVal}</span>
-          </div>
-        </header>
-
-        <!-- صندوق بيانات الطالب -->
-        <div class="exam-student-box">
-          <div class="student-info-col">
-            <span>اسم الطالب الرباعي: ................................................................</span>
-            <span>القسم / الشعبة: ................................................................</span>
-          </div>
-          <div class="student-info-col">
-            <span>الرقم الامتحاني / القاعة: .................................................</span>
-            <span>توقيع الطالب: ................................................................</span>
-          </div>
+        <div id="examQuestionsViewWrapper">
+          ${buildQuestionSheetHTML(questions)}
         </div>
-
-        <!-- إرشادات وتعليمات الامتحان -->
-        <div class="exam-instructions-box">
-          <strong>تعليمات امتحانية هامة:</strong>
-          <span>(1) الإجابة بالقلم الجاف حصراً. (2) قراءة الأسئلة بدقة والتأكد من وضوح الاختيار. (3) يُمنع إدخال الهواتف الذكية إلى القاعة الامتحانية.</span>
+        <div id="examBubbleSheetViewWrapper" style="display: none;">
+          ${buildBubbleSheetHTML(questions, false)}
         </div>
-
-        <!-- متن الأسئلة -->
-        ${questionsHtml}
-
-        <!-- تذييل الورقة -->
-        <div class="exam-footer-note">
-          <span>« انتهت الأسئلة — مع أمنياتنا لجميع الطلبة بالتفوق والنجاح الباهر »</span>
+        <div id="examMasterKeyViewWrapper" style="display: none;">
+          ${buildBubbleSheetHTML(questions, true)}
+          ${buildAnswerKeyRubricTable(questions)}
         </div>
-
-        <!-- دليل الحل النموذجي للأستاذ -->
-        ${answerKeyHtml}
       `;
     };
 
-    // زر توليد الورقة الامتحانية الرسمية
+    // زر توليد الورقة الامتحانية والببل شيت OMR
     $('#generateExamPaperBtn').addEventListener('click', () => {
       activeQuestions = getPreparedQuestionPool();
       const container = $('#printableExamContainer');
@@ -1620,19 +1818,43 @@
         container.innerHTML = buildExamPaperHTML(activeQuestions);
       }
       switchQuizStep(4);
+
+      // تحديد المعاينة الافتراضية بحسب نوع السؤال المختار
+      const qType = $('#quizTypeSelect') ? $('#quizTypeSelect').value : 'mixed';
+      if (qType === 'bubble') {
+        setExamSubView('bubble');
+      } else {
+        setExamSubView('questions');
+      }
     });
 
-    // طباعة ورقة الأسئلة للطلبة (بدون دليل الإجابات)
+    // أزرار التبديل بين معاينة الأسئلة والببل شيت والمفتاح
+    const tabQBtn = $('#tabViewQuestions');
+    const tabBBtn = $('#tabViewBubbleSheet');
+    const tabKBtn = $('#tabViewMasterKey');
+
+    if (tabQBtn) tabQBtn.addEventListener('click', () => setExamSubView('questions'));
+    if (tabBBtn) tabBBtn.addEventListener('click', () => setExamSubView('bubble'));
+    if (tabKBtn) tabKBtn.addEventListener('click', () => setExamSubView('key'));
+
+    // طباعة ورقة الأسئلة للطلبة
     $('#printExamStudentBtn').addEventListener('click', () => {
-      const keyBox = $('#examAnswerKeyBox');
-      if (keyBox) keyBox.style.display = 'none';
+      setExamSubView('questions');
       window.print();
     });
 
-    // طباعة دليل الحل النموذجي للأستاذ
+    // طباعة ورقة الببل شيت OMR المخصصة للطلبة
+    const printBubbleBtn = $('#printBubbleSheetBtn');
+    if (printBubbleBtn) {
+      printBubbleBtn.addEventListener('click', () => {
+        setExamSubView('bubble');
+        window.print();
+      });
+    }
+
+    // طباعة دليل ومفتاح التصحيح النموذجي للأستاذ
     $('#printExamAnswerKeyBtn').addEventListener('click', () => {
-      const keyBox = $('#examAnswerKeyBox');
-      if (keyBox) keyBox.style.display = 'block';
+      setExamSubView('key');
       window.print();
     });
 
@@ -1642,15 +1864,24 @@
       if (!container) return;
       const subName = ($('#examSubject') && $('#examSubject').value.trim()) || 'امتحان-اكاديمي';
 
+      // تصدير العنصر النشط حالياً
+      const activeContent = (
+        $('#examBubbleSheetViewWrapper') && $('#examBubbleSheetViewWrapper').style.display !== 'none'
+          ? $('#examBubbleSheetViewWrapper').innerHTML
+          : ($('#examMasterKeyViewWrapper') && $('#examMasterKeyViewWrapper').style.display !== 'none'
+              ? $('#examMasterKeyViewWrapper').innerHTML
+              : $('#examQuestionsViewWrapper').innerHTML)
+      );
+
       const htmlContent = `
         <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
         <head>
           <meta charset='utf-8'>
-          <title>ورقة الامتحان الأكاديمي - ${subName}</title>
+          <title>ورقة الامتحان الأكاديمي والببل شيت - ${subName}</title>
           <style>
             @page Section1 {
               size: 21.0cm 29.7cm;
-              margin: 1.8cm 1.8cm 1.8cm 1.8cm;
+              margin: 1.5cm 1.5cm 1.5cm 1.5cm;
               mso-header-margin: 36.0pt;
               mso-footer-margin: 36.0pt;
               mso-paper-source: 0;
@@ -1660,24 +1891,24 @@
               direction: rtl;
               text-align: right;
               font-family: 'Simplified Arabic', 'Traditional Arabic', 'Arial', sans-serif;
-              font-size: 13pt;
+              font-size: 12pt;
               line-height: 1.5;
               color: #000;
             }
-            table { width: 100%; border-collapse: collapse; margin-bottom: 12pt; }
-            th, td { border: 1px solid #333; padding: 6pt 8pt; font-size: 11pt; }
+            table { width: 100%; border-collapse: collapse; margin-bottom: 10pt; }
+            th, td { border: 1px solid #333; padding: 5pt 7pt; font-size: 11pt; }
             th { background-color: #f2f2f2; font-weight: bold; text-align: center; }
             .header-table td { border: none; padding: 2pt 4pt; vertical-align: top; }
-            .student-box { border: 1px solid #444; padding: 8pt; margin: 10pt 0; background: #fafafa; }
+            .student-box { border: 1.5px solid #333; padding: 8pt; margin: 10pt 0; background: #fafafa; }
             .q-item { margin-bottom: 12pt; }
             .q-num { font-weight: bold; }
-            .opt-grid { margin-top: 4pt; margin-right: 18pt; }
-            .opt-cell { margin-bottom: 3pt; }
+            .omr-bubble { border: 1px solid #000; padding: 2px 6px; border-radius: 50%; font-weight: bold; margin-left: 4px; }
+            .shaded-key { background-color: #000; color: #fff; }
           </style>
         </head>
         <body dir='rtl'>
           <div class="Section1">
-            ${container.innerHTML}
+            ${activeContent}
           </div>
         </body>
         </html>
@@ -1689,7 +1920,7 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `الورقة-الامتحانية-${subName.replace(/\s+/g, '_')}.doc`;
+      a.download = `ورقة_امتحان_${subName.replace(/\s+/g, '_')}.doc`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);

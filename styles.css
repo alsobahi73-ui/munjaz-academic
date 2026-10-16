@@ -2577,28 +2577,399 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
   gap: .6rem;
   margin-inline-start: 1rem;
 }
-.exam-opt-box {
+.exam-opt-cell {
   font-size: .9rem;
   display: flex;
   align-items: center;
   gap: .5rem;
 }
-.exam-opt-box .opt-circle {
-  width: 18px;
-  height: 18px;
-  border: 1.5px solid #444;
-  border-radius: 50%;
-  display: inline-block;
+.exam-opt-letter {
+  font-weight: bold;
+  color: #06302C;
 }
 .exam-answer-key-box {
   background: #F4FAF8;
   border: 1.5px solid #0E6B66;
   border-radius: 8px;
-  padding: 1rem;
-  margin-top: 1rem;
+  padding: 1.2rem;
+  margin-top: 1.5rem;
+}
+.exam-key-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #0E6B66;
+  padding-bottom: .6rem;
+  margin-bottom: 1rem;
+  color: #06302C;
+}
+.exam-key-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .88rem;
+}
+.exam-key-table th, .exam-key-table td {
+  border: 1px solid #CBD5E0;
+  padding: .5rem .75rem;
+  text-align: start;
+}
+.exam-key-table th {
+  background: #E6F4F1;
+  color: #06302C;
+  font-weight: 800;
+}
+.exam-footer-note {
+  text-align: center;
+  font-weight: 700;
+  margin-top: 1.8rem;
+  padding-top: 1rem;
+  border-top: 1px dashed #CBD5E0;
+  color: #4A5568;
+  font-size: .9rem;
 }
 
-/* Print Stylesheet for Official University Exam Sheet */
+/* -----------------------------------------------------
+   نظام استمارة التظليل الإلكتروني (ببل شيت - Bubble Sheet OMR)
+   ----------------------------------------------------- */
+.exam-view-tabs .btn.active {
+  background: #0E6B66;
+  color: #fff;
+  border-color: #0E6B66;
+  font-weight: 800;
+}
+
+.bubble-sheet-container {
+  background: #fff;
+  color: #111;
+  border: 2px solid #222;
+  border-radius: 6px;
+  padding: 1.6rem 2rem;
+  position: relative;
+  font-family: 'Simplified Arabic', 'Traditional Arabic', 'Arial', sans-serif;
+  margin-top: 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, .06);
+}
+
+/* علامات المحاذاة الضوئية للماسح (OMR Registration Corner Marks) */
+.omr-corner {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  background: #000;
+}
+.omr-corner.omr-tl { top: 10px; inset-inline-start: 10px; }
+.omr-corner.omr-tr { top: 10px; inset-inline-end: 10px; }
+.omr-corner.omr-bl { bottom: 10px; inset-inline-start: 10px; }
+.omr-corner.omr-br { bottom: 10px; inset-inline-end: 10px; }
+
+.omr-timing-top {
+  height: 9px;
+  background: repeating-linear-gradient(90deg, #000 0, #000 12px, transparent 12px, transparent 20px);
+  margin: 0 35px 12px;
+  border-radius: 2px;
+}
+
+/* ترويسة ورقة الببل شيت */
+.bubble-sheet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #000;
+  padding-bottom: 10px;
+  margin-bottom: 14px;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.bsh-right, .bsh-left {
+  font-size: .82rem;
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+}
+.bsh-center {
+  text-align: center;
+  flex: 1;
+}
+.bsh-title-badge {
+  font-size: .74rem;
+  font-weight: 800;
+  background: #06302C;
+  color: #fff;
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+}
+.bsh-title {
+  font-size: 1.22rem;
+  font-weight: 900;
+  color: #000;
+  margin: 2px 0 4px;
+  letter-spacing: .5px;
+}
+.bsh-session {
+  font-size: .85rem;
+  font-weight: 700;
+  color: #333;
+}
+.omr-barcode-box {
+  margin-top: 4px;
+  text-align: center;
+}
+.fake-barcode {
+  font-family: monospace;
+  font-size: 1.2rem;
+  letter-spacing: 3px;
+  font-weight: 900;
+  line-height: 1;
+}
+.omr-barcode-box small {
+  font-size: .65rem;
+  color: #555;
+  letter-spacing: 1px;
+}
+
+/* شبكة بيانات الطالب ومصفوفة التظليل */
+.bubble-sheet-meta-grid {
+  display: grid;
+  grid-template-columns: 2fr 1.6fr 1.8fr;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+@media (max-width: 860px) {
+  .bubble-sheet-meta-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.bs-box {
+  border: 1.5px solid #333;
+  padding: 8px 10px;
+  font-size: .8rem;
+  border-radius: 4px;
+  background: #fdfdfd;
+}
+.bs-box-title {
+  font-weight: 800;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 4px;
+  margin-bottom: 6px;
+  font-size: .82rem;
+  text-align: center;
+  background: #f1f3f4;
+  border-radius: 2px;
+  color: #06302C;
+}
+.bs-field-line {
+  margin-bottom: 5px;
+  line-height: 1.6;
+  font-size: .78rem;
+}
+.bs-field-line span {
+  font-weight: 700;
+}
+
+/* مصفوفة تظليل الرقم الامتحاني (Seat ID Matrix) */
+.id-matrix-instruction {
+  font-size: .7rem;
+  color: #555;
+  margin-bottom: 4px;
+  text-align: center;
+}
+.omr-matrix-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+.omr-matrix-table th {
+  border: 1px solid #444;
+  padding: 2px;
+  font-size: .72rem;
+  background: #f7faf9;
+  height: 20px;
+}
+.omr-matrix-table td {
+  border: 1px solid #e2e8f0;
+  padding: 2px 0;
+}
+.omr-mini-bubble {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1.2px solid #333;
+  font-size: .65rem;
+  font-weight: 700;
+  color: #222;
+  background: #fff;
+}
+
+/* دوائر نموذج الأسئلة والإرشادات */
+.omr-model-bubbles {
+  display: flex;
+  justify-content: space-around;
+  margin: 6px 0 10px;
+}
+.omr-bubble-model {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 26px;
+  border-radius: 999px;
+  border: 1.5px solid #111;
+  font-weight: 800;
+  font-size: .76rem;
+  background: #fff;
+}
+.omr-guide-box {
+  border-top: 1px dashed #ccc;
+  padding-top: 6px;
+  font-size: .74rem;
+}
+.guide-icons-row {
+  display: flex;
+  gap: 8px;
+  justify-content: space-around;
+  margin: 6px 0;
+}
+.guide-item {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: .7rem;
+}
+.guide-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1.5px solid #333;
+  font-size: .65rem;
+  font-weight: 800;
+}
+.guide-circle.filled {
+  background: #000;
+  border-color: #000;
+}
+.guide-item.ok {
+  color: #1E8E4E;
+  font-weight: 800;
+}
+.guide-item.bad {
+  color: #c53030;
+  font-weight: 700;
+}
+.guide-text {
+  display: block;
+  font-size: .68rem;
+  color: #555;
+  line-height: 1.4;
+  margin-top: 4px;
+}
+
+/* شبكة دوائر التظليل للأسئلة (Response Bubbles Grid) */
+.bubble-grid-container {
+  border: 1.8px solid #000;
+  border-radius: 4px;
+  padding: 10px 14px;
+  background: #fff;
+  margin-bottom: 12px;
+}
+.bubble-grid-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 16px;
+}
+.bubble-col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border-inline-end: 1px dashed #bbb;
+  padding-inline-end: 12px;
+}
+.bubble-col:last-child {
+  border-inline-end: none;
+}
+.bubble-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 3px 6px;
+  border-radius: 3px;
+  font-size: .8rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+.bubble-row:nth-child(even) {
+  background: #F7FAF9;
+}
+.bubble-q-num {
+  font-weight: 800;
+  min-width: 32px;
+  text-align: center;
+  background: #E2E8F0;
+  border-radius: 3px;
+  padding: 1px 6px;
+  font-size: .75rem;
+  color: #06302C;
+}
+.bubble-options {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.omr-bubble {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1.6px solid #222;
+  font-size: .7rem;
+  font-weight: 800;
+  color: #111;
+  background: #fff;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+.omr-bubble.tf {
+  width: 38px;
+  border-radius: 12px;
+  font-size: .68rem;
+}
+
+/* تظليل مفتاح الإجابة النموذجي للأستاذ (Master Key Shading) */
+.omr-bubble.shaded-key {
+  background: #06302C !important;
+  color: #fff !important;
+  border-color: #06302C !important;
+  box-shadow: 0 0 0 2px #E9C16C;
+}
+
+.bubble-sheet-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: .72rem;
+  font-weight: bold;
+  border-top: 1.5px solid #000;
+  padding-top: 6px;
+  margin-top: 6px;
+  color: #333;
+}
+.omr-calib-line {
+  letter-spacing: 5px;
+  font-size: .85rem;
+  font-weight: 900;
+  color: #000;
+}
+
+/* أنماط الطباعة المخصصة لورقة الامتحان والببل شيت */
 @media print {
   body * {
     visibility: hidden;
@@ -2623,7 +2994,8 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
   .modal-close,
   .quiz-steps-nav,
   .quiz-upload-zone,
-  .quiz-role-tabs {
+  .quiz-role-tabs,
+  .exam-view-tabs {
     display: none !important;
   }
 }
