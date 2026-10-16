@@ -158,7 +158,7 @@
     function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
     var initials = (p.name || '?').trim().split(/\s+/).slice(0,2).map(function(w){return w[0];}).join('');
     body.innerHTML =
-      '<div class="modal-photo">' + (p.photo ? '<img src="' + esc(p.photo) + '" alt="' + esc(p.name) + '">' : '<div class="modal-avatar">' + esc(initials) + '</div>') + '</div>' +
+      '<div class="modal-photo">' + (p.photo ? '<img loading="lazy" decoding="async" src="' + esc(p.photo) + '" alt="' + esc(p.name) + '">' : '<div class="modal-avatar">' + esc(initials) + '</div>') + '</div>' +
       '<h3>' + esc(p.name) + '</h3>' +
       '<p class="modal-degree">' + esc(p.degree || '') + '</p>' +
       '<p class="modal-univ">' + esc(p.university || '') + (p.department ? ' — ' + esc(p.department) : '') + '</p>' +
@@ -1175,7 +1175,7 @@
         var idx = 0, timer = null, flipping = false;
         function buildContent(p, bg) {
           var src = p.photo ? esc(p.photo) : esc(p._fallbackUri);
-          var photoHtml = '<img class="featured-photo" src="' + src + '" alt="' + esc(p.name) + '" data-fallback="' + esc(p._fallbackUri) + '" onerror="if(this.src!==this.getAttribute(\'data-fallback\'))this.src=this.getAttribute(\'data-fallback\');">';
+          var photoHtml = '<img loading="lazy" decoding="async" class="featured-photo" src="' + src + '" alt="' + esc(p.name) + '" data-fallback="' + esc(p._fallbackUri) + '" onerror="if(this.src!==this.getAttribute(\'data-fallback\'))this.src=this.getAttribute(\'data-fallback\');">';
           return '<div class="featured-photo-wrap">' + photoHtml + '<span class="researcher-badge">باحث</span></div>' +
             '<h3 class="featured-name">' + esc(p.name) + '</h3>' +
             (p.degree ? '<span class="featured-degree">' + esc(p.degree) + '</span>' : '') +
