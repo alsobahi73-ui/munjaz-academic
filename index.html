@@ -1012,28 +1012,63 @@
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
                 </div>
                 <div>
-                  <h3 id="ttl-quiz">منظومة الاختبارات الذكية والتقييم الحتمي</h3>
-                  <span class="badge-tag">تصحيح فوري وتحليل نقاط القوة والضعف</span>
+                  <h3 id="ttl-quiz">منظومة الاختبارات الذكية واستخراج الأسئلة من الملفات</h3>
+                  <span class="badge-tag">للطلبة والأساتذة: استخراج فوري & ورقة امتحانية رسمية للطباعة</span>
                 </div>
               </header>
 
-              <!-- أزرار الخطوات -->
-              <div class="quiz-steps-nav">
-                <span class="q-step active" id="qStep1Tab">1. إعداد وتوليد الأسئلة</span>
-                <span class="q-step" id="qStep2Tab">2. حل الاختبار</span>
-                <span class="q-step" id="qStep3Tab">3. تقرير التصحيح الحتمي</span>
+              <!-- اختيار الوضع: طالب أم أستاذ -->
+              <div class="quiz-role-tabs" role="tablist">
+                <button type="button" class="quiz-role-btn active" id="quizRoleStudentBtn">
+                  <span>👨‍🎓 وضع الطالب: حل الاختبار إلكترونياً والتصحيح الفوري</span>
+                </button>
+                <button type="button" class="quiz-role-btn" id="quizRoleTeacherBtn">
+                  <span>👨‍🏫 وضع الأستاذ: توليد ورقة امتحانية رسمية للطباعة والتصدير</span>
+                </button>
               </div>
 
-              <!-- المرحلة 1: الإعداد -->
+              <!-- أزرار الخطوات -->
+              <div class="quiz-steps-nav">
+                <span class="q-step active" id="qStep1Tab">1. رفع الملف وتوليد الأسئلة</span>
+                <span class="q-step" id="qStep2Tab">2. حل الاختبار إلكترونياً</span>
+                <span class="q-step" id="qStep3Tab">3. تقرير التصحيح الحتمي</span>
+                <span class="q-step" id="qStep4Tab" hidden>4. نموذج ورقة الامتحان والطباعة</span>
+              </div>
+
+              <!-- المرحلة 1: الإعداد ورفع الملف -->
               <div id="quizSetupView">
-                <p class="tool-note">أنشئ اختباراً تدريبياً فورياً من موضوع محدد أو الصق نص محاضرتك؛ يتضمن خيارات متعددة وصح/خطأ مع تصحيح حتمي بمفتاح إجابة وتفسير لكل سؤال.</p>
+                <p class="tool-note">ارفع ملف المحاضرة (Word أو PDF أو TXT) أو اختر موضوعاً أكاديمياً جاهزاً لاستخراج بنك أسئلة دقيق ومتوازن.</p>
                 
+                <!-- منطقة رفع ملف المحاضرة المباشرة -->
+                <div class="quiz-upload-zone" id="quizDropZone">
+                  <input type="file" id="quizFileInput" accept=".txt,.md,.docx,.pdf" style="display: none;">
+                  <div class="upload-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="26" height="26">
+                      <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+                    </svg>
+                  </div>
+                  <div class="upload-text">
+                    <strong>اسحب وأفلت ملف المحاضرة هنا أو انقر للاختيار</strong>
+                    <span>يدعم ملفات Word (.docx) و PDF (.pdf) والملفات النصية (.txt, .md)</span>
+                  </div>
+                  <button type="button" class="btn btn-outline btn-sm btn-svg-inline" id="quizBrowseBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="14" height="14"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    <span>اختيار ملف من جهازك</span>
+                  </button>
+                  <div id="quizFileInfo" class="quiz-file-badge" hidden>
+                    <span id="quizFileName">lecture.docx</span>
+                    <span class="file-size" id="quizFileSize">(120 ك.ب)</span>
+                    <button type="button" id="quizClearFileBtn" title="إزالة الملف">✕</button>
+                  </div>
+                </div>
+                <p class="form-msg" id="quizFileMsg" role="alert" style="margin-top: -.5rem; margin-bottom: .8rem;"></p>
+
                 <div class="form-grid">
                   <label class="field span-2">
-                    <span>اختر موضوعاً أكاديمياً أو اكتب موضوعك</span>
+                    <span>اختر موضوعاً أكاديمياً جاهزاً (أو اعتمد على الملف المرفوع أعلاه)</span>
                     <select id="quizPresetSelect">
-                      <option value="custom">— سأكتب موضوعي / ألصق نصي —</option>
-                      <option value="research-methods" selected>مناهج البحث العلمي وتحديد المشكلة والفرضيات</option>
+                      <option value="custom" selected>— الاعتماد على الملف المرفوع / النص الملصق أدناه —</option>
+                      <option value="research-methods">مناهج البحث العلمي وتحديد المشكلة والفرضيات</option>
                       <option value="statistics">الإحصاء الأكاديمي واختبار الفرضيات (T-Test, ANOVA, Chi-Square)</option>
                       <option value="ethics">أخلاقيات النشر العلمي والنزاهة وتوثيق المراجع APA 7</option>
                       <option value="bologna">نظام مسار بولونيا العراقي ECTS والتقييم الأكاديمي</option>
@@ -1041,20 +1076,22 @@
                   </label>
 
                   <label class="field span-2">
-                    <span>موضوع مخصص أو نص المحاضرة (اختياري)</span>
-                    <textarea id="quizCustomText" rows="3" placeholder="اكتب أو الصق نص المحاضرة أو النقاط الأساسية لتوليد الأسئلة منها..."></textarea>
+                    <span>محتوى المحاضرة أو النص المستخرج من الملف:</span>
+                    <textarea id="quizCustomText" rows="4" placeholder="يظهر هنا النص المستخرج من ملفك المرفوع، أو يمكنك كتابة/لصق محتوى المحاضرة يدوياً..."></textarea>
                   </label>
 
                   <label class="field">
-                    <span>عدد الأسئلة</span>
+                    <span>عدد الأسئلة المطلوب استخراجها</span>
                     <select id="quizCountSelect">
-                      <option value="5">5 أسئلة</option>
-                      <option value="10" selected>10 أسئلة (معيار القبول M1)</option>
+                      <option value="5">5 أسئلة (كويز سريع)</option>
+                      <option value="10" selected>10 أسئلة (امتحان فصلي)</option>
+                      <option value="15">15 سؤالاً (شامل)</option>
+                      <option value="20">20 سؤالاً (امتحان نهائي)</option>
                     </select>
                   </label>
 
                   <label class="field">
-                    <span>نوع الأسئلة</span>
+                    <span>نوعية الأسئلة</span>
                     <select id="quizTypeSelect">
                       <option value="mixed" selected>مختلط (اختيار من متعدد + صح/خطأ)</option>
                       <option value="mcq">اختيار من متعدد (MCQ) فقط</option>
@@ -1063,15 +1100,44 @@
                   </label>
                 </div>
 
-                <div style="margin-top: 1.2rem;">
+                <!-- حقول إضافية خاصة بالأستاذ لترويسة الامتحان -->
+                <div id="quizTeacherFields" class="keywords-box" style="margin-top: 1rem;" hidden>
+                  <div class="keywords-box-head">
+                    <strong style="color: #06302C;">بيانات ورقة الامتحان الرسمية (للترويسة والطباعة):</strong>
+                  </div>
+                  <div class="form-grid" style="margin-top: .6rem;">
+                    <label class="field">
+                      <span>اسم الجامعة / الكلية / القسم</span>
+                      <input type="text" id="examCollege" value="وزارة التعليم العالي والبحث العلمي - كلية العلوم / الهندسة / الآداب">
+                    </label>
+                    <label class="field">
+                      <span>المادة الدراسية</span>
+                      <input type="text" id="examSubject" placeholder="مثال: مناهج البحث العلمي">
+                    </label>
+                    <label class="field">
+                      <span>المرحلة والدور</span>
+                      <input type="text" id="examStage" placeholder="مثال: المرحلة الثالثة - الدور الأول">
+                    </label>
+                    <label class="field">
+                      <span>الوقت والدرجة الكلية</span>
+                      <input type="text" id="examTimeMarks" placeholder="مثال: ساعتان | الدرجة الكلية: 50">
+                    </label>
+                  </div>
+                </div>
+
+                <div style="margin-top: 1.2rem; display: flex; gap: .8rem; flex-wrap: wrap;">
                   <button type="button" class="btn btn-teal btn-svg-inline" id="startQuizBuildBtn">
                     <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="16" height="16"><polygon points="5 3 19 12 5 21 5 3"/></svg>
                     <span>إنشاء وبدء الاختبار الفوري</span>
                   </button>
+                  <button type="button" class="btn btn-outline btn-svg-inline" id="generateExamPaperBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="16" height="16"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                    <span>توليد ورقة امتحانية رسمية للطباعة والتصدير</span>
+                  </button>
                 </div>
               </div>
 
-              <!-- المرحلة 2: حل الاختبار -->
+              <!-- المرحلة 2: حل الاختبار إلكترونياً -->
               <div id="quizPlayView" hidden>
                 <div class="quiz-play-header">
                   <div>
@@ -1080,7 +1146,7 @@
                       <i id="quizProgressBar" style="width: 10%;"></i>
                     </div>
                   </div>
-                  <button type="button" class="btn btn-outline btn-sm" id="cancelQuizBtn">إلغاء الاختبار</button>
+                  <button type="button" class="btn btn-outline btn-sm" id="cancelQuizBtn">إلغاء والعودة</button>
                 </div>
 
                 <div class="question-card" id="quizQuestionBox">
@@ -1117,6 +1183,34 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="15" height="15"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                     <span>إنشاء اختبار جديد</span>
                   </button>
+                </div>
+              </div>
+
+              <!-- المرحلة 4: ورقة الامتحان الرسمية المطبوعة (للأستاذ) -->
+              <div id="quizExamPaperView" hidden>
+                <div class="tool-actions no-print" style="margin-bottom: 1.2rem; justify-content: space-between;">
+                  <div style="display: flex; gap: .6rem; flex-wrap: wrap;">
+                    <button type="button" class="btn btn-teal btn-sm btn-svg-inline" id="printExamStudentBtn">
+                      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="15" height="15"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                      <span>🖨️ طباعة ورقة الأسئلة للطلبة (A4)</span>
+                    </button>
+                    <button type="button" class="btn btn-outline btn-sm btn-svg-inline" id="printExamAnswerKeyBtn">
+                      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="15" height="15"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+                      <span>طباعة دليل الحل النموذجي للأستاذ</span>
+                    </button>
+                    <button type="button" class="btn btn-outline btn-sm btn-svg-inline" id="exportExamDocBtn">
+                      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="15" height="15"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                      <span>⬇️ تصدير كملف Word (.doc)</span>
+                    </button>
+                  </div>
+                  <button type="button" class="btn btn-outline btn-sm" id="backToSetupFromExamBtn">
+                    <span>العودة للإعداد ←</span>
+                  </button>
+                </div>
+
+                <!-- وعاء ورقة الامتحان الرسمية المجهزة للطباعة -->
+                <div class="exam-paper-container" id="printableExamContainer">
+                  <!-- يُحقن محتوى ورقة الامتحان المنسقة هنا -->
                 </div>
               </div>
             </article>
@@ -1403,6 +1497,10 @@
       </div>
     </div>
   </dialog>
+
+  <!-- Document parsers for Quiz Generator (Word .docx & PDF) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
   <script src="academic-services-config.js"></script>
   <script src="app.js"></script>

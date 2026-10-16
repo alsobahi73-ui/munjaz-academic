@@ -951,6 +951,9 @@
   /* =====================================================
      TOOL-06 | نظام الاختبارات والتصحيح الذكي (M1)
      ===================================================== */
+  /* =====================================================
+     TOOL-06 | نظام الاختبارات والتصحيح الذكي وتوليد أوراق الامتحانات (M1)
+     ===================================================== */
   function initQuiz() {
     const QUIZ_PRESETS = {
       'research-methods': [
@@ -993,66 +996,335 @@
       ],
     };
 
+    // خوارزمية ذكية لاستخراج الأسئلة من النصوص الأكاديمية والملفات المرفوعة
     function buildCustomQuestions(rawText) {
       const sentences = rawText
         .split(/[.!؟\n؛]+/)
-        .map((s) => s.trim())
-        .filter((s) => s.length >= 20);
+        .map((s) => s.trim().replace(/^[-•*–\d.)\s]+/, ''))
+        .filter((s) => s.length >= 25 && s.length <= 260);
+
       if (!sentences.length) return [];
       const generated = [];
+
+      // استخراج بنك كلمات مميزة من النص لتوليد خيارات متعددة ذات صلة
+      const extractedKeywords = Array.from(new Set(
+        rawText
+          .replace(/[^\u0600-\u06FF\w\s]/g, ' ')
+          .split(/\s+/)
+          .filter((w) => w.length >= 5 && !/^(التي|الذي|الذين|اللتان|هذا|هذه|هؤلاء|ذلك|تلك|حيث|عندما|عندئذ|كذلك|إلى|على|في|من|عن|مع|أن|إن|كان|كانت|يكون)$/.test(w))
+      ));
+
       sentences.forEach((sent, idx) => {
-        const words = sent.split(/\s+/).filter((w) => w.length > 3);
-        generated.push({
-          q: `وفقاً لنص المحاضرة: «${sent}» — هذه العبارة تتفق مع ما ورد في النص.`,
-          opts: ['صح', 'خطأ'],
-          a: 0,
-          exp: 'العبارة مأخوذة مباشرة من النقاط الأساسية التي أدخلتها في نص المحاضرة.',
-        });
-        if (words.length >= 4) {
-          const targetWord = words[Math.min(2, words.length - 1)];
-          const blanked = sent.replace(targetWord, '______');
-          const distractors = ['العشوائية غير المنتظمة', 'المتغيرات الخارجية فقط', 'الفرضية البديلة المطلقة']
-            .filter((d) => d !== targetWord);
+        // نوع 1: صح / خطأ مع تنويع منطقي
+        const canInvert = /(يمكن|يجب|يشترط|دائماً|يُعد|تُعد|يعتمد|تعتمد|يؤدي|تؤدي)/.test(sent);
+        if (canInvert && idx % 2 === 1) {
+          const inverted = sent
+            .replace('يمكن', 'لا يمكن إطلاقاً')
+            .replace('يجب', 'لا يلزم ولا يجب')
+            .replace('يشترط', 'لا يُشترط')
+            .replace('دائماً', 'نادراً ما')
+            .replace('يُعد', 'لا يُعد بأي شكل')
+            .replace('تُعد', 'لا تُعد بأي شكل')
+            .replace('يعتمد', 'لا يعتمد إطلاقاً')
+            .replace('تعتمد', 'لا تعتمد إطلاقاً')
+            .replace('يؤدي', 'لا يؤدي أبداً')
+            .replace('تؤدي', 'لا تؤدي أبداً');
+
           generated.push({
-            q: `أكمل الفراغ وفقاً للنص المرفق: «${blanked}»`,
-            opts: [targetWord, ...distractors.slice(0, 3)],
+            q: `وفقاً للمحتوى الأكاديمي: «${inverted}»`,
+            opts: ['صح', 'خطأ'],
+            a: 1,
+            exp: `العبارة خاطئة لأن المحتوى يثبت عكس ذلك: «${sent}».`,
+            type: 'tf',
+          });
+        } else {
+          generated.push({
+            q: `وفقاً للمحتوى الأكاديمي: «${sent}» — هذه العبارة مطابقة وموثوقة.`,
+            opts: ['صح', 'خطأ'],
             a: 0,
-            exp: `الكلمة الصحيحة من النص الأصلي هي: «${targetWord}».`,
+            exp: 'العبارة صحيحة ومتطابقة تماماً مع النص الأصلي للمحاضرة.',
+            type: 'tf',
+          });
+        }
+
+        // نوع 2: اختيار من متعدد (MCQ) مع استبدال مصطلح جوهري
+        const words = sent.split(/\s+/).filter((w) => w.length >= 4);
+        if (words.length >= 5) {
+          // اختيار كلمة جوهرية ليست حرف جر
+          const candidateWords = words.filter((w) => !/^(على|إلى|منذ|حتى|خلال|تحت|فوق|بين|حول|جميع|بعض|تلك|هذا|هذه)$/.test(w));
+          const targetWord = candidateWords[Math.floor(candidateWords.length / 2)] || words[2];
+          const blanked = sent.replace(targetWord, ' ( ............ ) ');
+
+          // بناء خيارات متعددة ذكية ومشتتات مناسبة
+          const poolDistractors = extractedKeywords.filter((w) => w !== targetWord && Math.abs(w.length - targetWord.length) <= 4);
+          const fallbackDistractors = ['المتغيرات المستقلة', 'العينة الطبقية', 'الارتباط العكسي', 'التحليل التبايني', 'الاتساق الداخلي'];
+          const distractors = [...poolDistractors, ...fallbackDistractors].filter((d) => d !== targetWord).slice(0, 3);
+
+          const opts = [targetWord, ...distractors];
+          // خلط الخيارات للحصول على تنوع في الإجابة الصحيحة
+          const correctVal = targetWord;
+          const shuffledOpts = [...opts].sort(() => 0.5 - Math.random());
+          const correctIdx = shuffledOpts.indexOf(correctVal);
+
+          generated.push({
+            q: `أكمل الفراغ بالخيار العلمي الدقيق: «${blanked}»`,
+            opts: shuffledOpts,
+            a: correctIdx,
+            exp: `المصطلح العلمي الصحيح الوارد في المتن هو: «${targetWord}».`,
+            type: 'mcq',
           });
         }
       });
+
       return generated;
     }
 
     let activeQuestions = [];
     let currentIdx = 0;
     let userAnswers = {};
+    let isTeacherMode = false;
 
+    // عناصر التحكم في الواجهة
     const step1Tab = $('#qStep1Tab');
     const step2Tab = $('#qStep2Tab');
     const step3Tab = $('#qStep3Tab');
+    const step4Tab = $('#qStep4Tab');
+
     const setupView = $('#quizSetupView');
     const playView = $('#quizPlayView');
     const reportView = $('#quizReportView');
+    const examPaperView = $('#quizExamPaperView');
 
+    const studentBtn = $('#quizRoleStudentBtn');
+    const teacherBtn = $('#quizRoleTeacherBtn');
+    const teacherFields = $('#quizTeacherFields');
+
+    // التنقل بين الخطوات الأربع
     const switchQuizStep = (step) => {
-      [step1Tab, step2Tab, step3Tab].forEach((t) => t.classList.remove('active'));
+      [step1Tab, step2Tab, step3Tab, step4Tab].forEach((t) => {
+        if (t) t.classList.remove('active');
+      });
       setupView.hidden = true;
       playView.hidden = true;
       reportView.hidden = true;
+      if (examPaperView) examPaperView.hidden = true;
 
       if (step === 1) {
         step1Tab.classList.add('active');
         setupView.hidden = false;
+        if (step4Tab) step4Tab.hidden = true;
       } else if (step === 2) {
         step2Tab.classList.add('active');
         playView.hidden = false;
+        if (step4Tab) step4Tab.hidden = true;
       } else if (step === 3) {
         step3Tab.classList.add('active');
         reportView.hidden = false;
+        if (step4Tab) step4Tab.hidden = true;
+      } else if (step === 4) {
+        if (step4Tab) {
+          step4Tab.hidden = false;
+          step4Tab.classList.add('active');
+        }
+        if (examPaperView) examPaperView.hidden = false;
       }
     };
 
+    // تبديل الوضع: طالب أو أستاذ
+    if (studentBtn && teacherBtn) {
+      studentBtn.addEventListener('click', () => {
+        isTeacherMode = false;
+        studentBtn.classList.add('active');
+        teacherBtn.classList.remove('active');
+        if (teacherFields) teacherFields.hidden = true;
+      });
+
+      teacherBtn.addEventListener('click', () => {
+        isTeacherMode = true;
+        teacherBtn.classList.add('active');
+        studentBtn.classList.remove('active');
+        if (teacherFields) teacherFields.hidden = false;
+      });
+    }
+
+    // ==========================================
+    // معالجة رفع الملفات (DOCX, PDF, TXT)
+    // ==========================================
+    const dropZone = $('#quizDropZone');
+    const fileInput = $('#quizFileInput');
+    const browseBtn = $('#quizBrowseBtn');
+    const fileInfo = $('#quizFileInfo');
+    const fileNameEl = $('#quizFileName');
+    const fileSizeEl = $('#quizFileSize');
+    const clearFileBtn = $('#quizClearFileBtn');
+    const fileMsg = $('#quizFileMsg');
+
+    const formatFileSize = (bytes) => {
+      if (!bytes || bytes === 0) return '0 ك.ب';
+      const k = 1024;
+      const dm = 1;
+      const sizes = ['بايت', 'ك.ب', 'م.ب', 'ج.ب'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+    };
+
+    const clearUploadedFile = () => {
+      if (fileInput) fileInput.value = '';
+      if (fileInfo) fileInfo.hidden = true;
+      if (fileMsg) {
+        fileMsg.textContent = '';
+        fileMsg.className = 'form-msg';
+      }
+    };
+
+    const processExtractedText = (text, name) => {
+      const clean = (text || '').trim();
+      if (!clean || clean.length < 20) {
+        if (fileMsg) {
+          fileMsg.textContent = 'الملف يحتوي على نص قليل جداً أو صفحات مصورة تحتاج إلى تمييز بصري (OCR). يرجى التأكد من احتواء الملف على نصوص رقمية.';
+          fileMsg.className = 'form-msg err';
+        }
+        return;
+      }
+
+      const wordsCount = clean.split(/\s+/).length;
+      $('#quizCustomText').value = clean;
+      $('#quizPresetSelect').value = 'custom';
+
+      // اقتراح عنوان المادة تلقائياً من اسم الملف للأستاذ
+      const examSub = $('#examSubject');
+      if (examSub && (!examSub.value || examSub.value.trim() === '')) {
+        const rawName = name.replace(/\.[^/.]+$/, '').replace(/[-_]+/g, ' ').trim();
+        examSub.value = rawName;
+      }
+
+      if (fileMsg) {
+        fileMsg.textContent = `تم استخراج ${wordsCount} كلمة بنجاح من «${name}». يمكنك الآن توليد الأسئلة أو طباعة ورقة الامتحان.`;
+        fileMsg.className = 'form-msg ok';
+      }
+    };
+
+    const handleFileUpload = async (file) => {
+      if (!file) return;
+      const name = file.name;
+      const ext = name.slice(((name.lastIndexOf('.') - 1) >>> 0) + 2).toLowerCase();
+
+      if (fileNameEl) fileNameEl.textContent = name;
+      if (fileSizeEl) fileSizeEl.textContent = `(${formatFileSize(file.size)})`;
+      if (fileInfo) fileInfo.hidden = false;
+
+      if (fileMsg) {
+        fileMsg.textContent = 'جاري قراءة واستخراج النصوص من الملف مباشرة داخل المتصفح...';
+        fileMsg.className = 'form-msg';
+      }
+
+      // ملفات نصية TXT أو MD
+      if (ext === 'txt' || ext === 'md') {
+        const reader = new FileReader();
+        reader.onload = (e) => processExtractedText(e.target.result, name);
+        reader.onerror = () => {
+          if (fileMsg) {
+            fileMsg.textContent = 'تعذرت قراءة الملف النصي.';
+            fileMsg.className = 'form-msg err';
+          }
+        };
+        reader.readAsText(file, 'utf-8');
+        return;
+      }
+
+      // ملفات Word (.docx) عبر مكتبة Mammoth.js
+      if (ext === 'docx') {
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+          try {
+            if (window.mammoth && typeof window.mammoth.extractRawText === 'function') {
+              const res = await window.mammoth.extractRawText({ arrayBuffer: e.target.result });
+              processExtractedText(res.value, name);
+            } else {
+              throw new Error('مكتبة فك ملفات Word لم تكتمل في المتصفح.');
+            }
+          } catch (err) {
+            if (fileMsg) {
+              fileMsg.textContent = 'تعذر استخراج النص من ملف Word: ' + (err.message || '');
+              fileMsg.className = 'form-msg err';
+            }
+          }
+        };
+        reader.readAsArrayBuffer(file);
+        return;
+      }
+
+      // ملفات PDF عبر مكتبة PDF.js
+      if (ext === 'pdf') {
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+          try {
+            if (!window.pdfjsLib) throw new Error('مكتبة قراءة PDF لم تكتمل.');
+            window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+            const loadingTask = window.pdfjsLib.getDocument({ data: e.target.result });
+            const pdf = await loadingTask.promise;
+            let fullText = '';
+            for (let i = 1; i <= pdf.numPages; i++) {
+              const page = await pdf.getPage(i);
+              const content = await page.getTextContent();
+              const pageStrings = content.items.map((item) => item.str).join(' ');
+              fullText += pageStrings + '\n\n';
+            }
+            processExtractedText(fullText, name);
+          } catch (err) {
+            if (fileMsg) {
+              fileMsg.textContent = 'تعذر استخراج النص من ملف PDF (قد يكون مؤلفاً من صور ممسوحة أو مشفراً).';
+              fileMsg.className = 'form-msg err';
+            }
+          }
+        };
+        reader.readAsArrayBuffer(file);
+        return;
+      }
+
+      if (fileMsg) {
+        fileMsg.textContent = 'نوع الملف غير مدعوم، يرجى اختيار ملف Word (.docx) أو PDF أو ملف نصي.';
+        fileMsg.className = 'form-msg err';
+      }
+    };
+
+    if (browseBtn && fileInput) {
+      browseBtn.addEventListener('click', () => fileInput.click());
+    }
+    if (fileInput) {
+      fileInput.addEventListener('change', (e) => {
+        if (e.target.files && e.target.files[0]) handleFileUpload(e.target.files[0]);
+      });
+    }
+    if (clearFileBtn) {
+      clearFileBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        clearUploadedFile();
+      });
+    }
+    if (dropZone) {
+      dropZone.addEventListener('click', (e) => {
+        if (!e.target.closest('#quizClearFileBtn') && !e.target.closest('#quizBrowseBtn')) {
+          if (fileInput) fileInput.click();
+        }
+      });
+      dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('dragover');
+      });
+      dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+      dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+          handleFileUpload(e.dataTransfer.files[0]);
+        }
+      });
+    }
+
+    // ==========================================
+    // حل الاختبار الإلكتروني والتصحيح
+    // ==========================================
     const renderQuestion = () => {
       const item = activeQuestions[currentIdx];
       $('#quizCurrentProgress').textContent = `السؤال ${currentIdx + 1} من ${activeQuestions.length}`;
@@ -1113,16 +1385,16 @@
       $('#quizScorePercent').textContent = `${pct}%`;
       $('#quizScoreText').textContent = `حققت ${correctCount} من إجمالي ${total} إجابات صحيحة`;
 
-      // Show/hide retry wrong
       const hasErrors = correctCount < total;
       $('#quizRetryWrongBtn').hidden = !hasErrors;
 
       switchQuizStep(3);
     };
 
-    $('#startQuizBuildBtn').addEventListener('click', () => {
+    // استخراج وتصفية بنك الأسئلة المشترك
+    const getPreparedQuestionPool = () => {
       const preset = $('#quizPresetSelect').value;
-      const count = parseInt($('#quizCountSelect').value, 10) || 5;
+      const count = parseInt($('#quizCountSelect').value, 10) || 10;
       const qType = $('#quizTypeSelect') ? $('#quizTypeSelect').value : 'mixed';
       const customText = $('#quizCustomText') ? $('#quizCustomText').value.trim() : '';
 
@@ -1150,8 +1422,12 @@
       });
       if (!filtered.length) filtered = basePool;
 
-      // Pick questions
-      activeQuestions = filtered.slice(0, count);
+      return filtered.slice(0, count);
+    };
+
+    // زر بدء الاختبار الفوري (وضع الطالب)
+    $('#startQuizBuildBtn').addEventListener('click', () => {
+      activeQuestions = getPreparedQuestionPool();
       currentIdx = 0;
       userAnswers = {};
       switchQuizStep(2);
@@ -1179,6 +1455,250 @@
         switchQuizStep(2);
         renderQuestion();
       }
+    });
+
+    // ==========================================
+    // توليد ورقة الامتحان الرسمية المطبوعة (وضع الأستاذ)
+    // ==========================================
+    const arabicOptionLetters = ['أ', 'ب', 'ج', 'د', 'هـ'];
+
+    const buildExamPaperHTML = (questions) => {
+      const collegeVal = ($('#examCollege') && $('#examCollege').value.trim()) || 'وزارة التعليم العالي والبحث العلمي - الكلية الأكاديمية';
+      const subjectVal = ($('#examSubject') && $('#examSubject').value.trim()) || 'مقرر المنهج الدراسي العام';
+      const stageVal = ($('#examStage') && $('#examStage').value.trim()) || 'الدراسات الجامعية الأولية - الدور الأول';
+      const timeMarksVal = ($('#examTimeMarks') && $('#examTimeMarks').value.trim()) || 'الوقت: ساعتان | الدرجة الكلية: 100';
+      const curYear = new Date().getFullYear();
+
+      // فصل الأسئلة إلى اختيار من متعدد وصح/خطأ إن وُجدت
+      const mcqList = questions.filter((q) => q.opts.length > 2);
+      const tfList = questions.filter((q) => q.opts.length === 2);
+
+      let questionsHtml = '';
+      let qCounter = 1;
+
+      if (mcqList.length) {
+        questionsHtml += `
+          <div class="exam-section-block">
+            <div class="exam-section-title">
+              <strong>السؤال ${qCounter === 1 ? 'الأول' : 'التالي'}: اختر الإجابة الأصح من بين الخيارات المتاحة لكل فقرة:</strong>
+              <span>(${Math.round(100 * (mcqList.length / questions.length))} درجة)</span>
+            </div>
+            <div class="exam-questions-list">
+              ${mcqList.map((item, idx) => `
+                <div class="exam-question-item">
+                  <div class="exam-q-text">
+                    <span class="exam-q-num">${idx + 1}.</span>
+                    <span>${item.q}</span>
+                  </div>
+                  <div class="exam-options-grid">
+                    ${item.opts.map((opt, optIdx) => `
+                      <div class="exam-opt-cell">
+                        <span class="exam-opt-letter">(${arabicOptionLetters[optIdx] || optIdx + 1})</span>
+                        <span class="exam-opt-text">${opt}</span>
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+        qCounter++;
+      }
+
+      if (tfList.length) {
+        questionsHtml += `
+          <div class="exam-section-block" style="margin-top: 1.5rem;">
+            <div class="exam-section-title">
+              <strong>السؤال ${qCounter === 1 ? 'الأول' : 'الثاني'}: ضع علامة ( ✓ ) أمام العبارة الصحيحة وعلامة ( ✗ ) أمام العبارة الخاطئة:</strong>
+              <span>(${Math.round(100 * (tfList.length / questions.length))} درجة)</span>
+            </div>
+            <div class="exam-questions-list">
+              ${tfList.map((item, idx) => `
+                <div class="exam-question-item" style="display: flex; justify-content: space-between; align-items: baseline; gap: 1rem;">
+                  <div class="exam-q-text">
+                    <span class="exam-q-num">${idx + 1}.</span>
+                    <span>${item.q}</span>
+                  </div>
+                  <div class="exam-tf-box" style="border: 1px dashed #718096; width: 60px; height: 26px; border-radius: 4px; flex-shrink: 0; text-align: center; line-height: 26px; font-weight: bold; color: #718096;">[ &nbsp; &nbsp; ]</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+        qCounter++;
+      }
+
+      // دليل الحل النموذجي للأستاذ
+      const answerKeyHtml = `
+        <div class="exam-answer-key-box" id="examAnswerKeyBox" style="display: none;">
+          <div class="exam-key-head">
+            <strong>📋 دليل الإجابة النموذجية ومفتاح التصحيح الرسمي (للأستاذ واللجنة الامتحانية)</strong>
+            <span>سري ومعتمد للتدريسي فقط</span>
+          </div>
+          <table class="exam-key-table">
+            <thead>
+              <tr>
+                <th style="width: 10%;">رقم</th>
+                <th style="width: 35%;">نص السؤال أو الفقرة</th>
+                <th style="width: 25%;">الإجابة الصحيحة المعتمدة</th>
+                <th style="width: 30%;">السند العلمي والتفسير</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${questions.map((item, idx) => `
+                <tr>
+                  <td style="text-align: center; font-weight: bold;">${idx + 1}</td>
+                  <td>${item.q}</td>
+                  <td style="color: #06302C; font-weight: 700;">${item.opts[item.a]}</td>
+                  <td style="font-size: .85rem; color: #4A5568;">${item.exp}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+
+      return `
+        <!-- الترويسة الرسمية للورقة الامتحانية -->
+        <header class="exam-header">
+          <div class="exam-header-right">
+            <strong>جمهورية العراق</strong>
+            <span>${collegeVal}</span>
+            <span>العام الجامعي: ${curYear} - ${curYear + 1}</span>
+          </div>
+          <div class="exam-header-center">
+            <div class="exam-header-bismillah">بسم الله الرحمن الرحيم</div>
+            <div class="exam-header-emblem">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="44" height="44"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 000 20 14.5 14.5 0 000-20"/><path d="M2 12h20"/></svg>
+            </div>
+            <strong class="exam-paper-main-title">الامتحان الأكاديمي النهائي / الفصلي</strong>
+          </div>
+          <div class="exam-header-left">
+            <span>المادة: <strong>${subjectVal}</strong></span>
+            <span>المرحلة: <strong>${stageVal}</strong></span>
+            <span>${timeMarksVal}</span>
+          </div>
+        </header>
+
+        <!-- صندوق بيانات الطالب -->
+        <div class="exam-student-box">
+          <div class="student-info-col">
+            <span>اسم الطالب الرباعي: ................................................................</span>
+            <span>القسم / الشعبة: ................................................................</span>
+          </div>
+          <div class="student-info-col">
+            <span>الرقم الامتحاني / القاعة: .................................................</span>
+            <span>توقيع الطالب: ................................................................</span>
+          </div>
+        </div>
+
+        <!-- إرشادات وتعليمات الامتحان -->
+        <div class="exam-instructions-box">
+          <strong>تعليمات امتحانية هامة:</strong>
+          <span>(1) الإجابة بالقلم الجاف حصراً. (2) قراءة الأسئلة بدقة والتأكد من وضوح الاختيار. (3) يُمنع إدخال الهواتف الذكية إلى القاعة الامتحانية.</span>
+        </div>
+
+        <!-- متن الأسئلة -->
+        ${questionsHtml}
+
+        <!-- تذييل الورقة -->
+        <div class="exam-footer-note">
+          <span>« انتهت الأسئلة — مع أمنياتنا لجميع الطلبة بالتفوق والنجاح الباهر »</span>
+        </div>
+
+        <!-- دليل الحل النموذجي للأستاذ -->
+        ${answerKeyHtml}
+      `;
+    };
+
+    // زر توليد الورقة الامتحانية الرسمية
+    $('#generateExamPaperBtn').addEventListener('click', () => {
+      activeQuestions = getPreparedQuestionPool();
+      const container = $('#printableExamContainer');
+      if (container) {
+        container.innerHTML = buildExamPaperHTML(activeQuestions);
+      }
+      switchQuizStep(4);
+    });
+
+    // طباعة ورقة الأسئلة للطلبة (بدون دليل الإجابات)
+    $('#printExamStudentBtn').addEventListener('click', () => {
+      const keyBox = $('#examAnswerKeyBox');
+      if (keyBox) keyBox.style.display = 'none';
+      window.print();
+    });
+
+    // طباعة دليل الحل النموذجي للأستاذ
+    $('#printExamAnswerKeyBtn').addEventListener('click', () => {
+      const keyBox = $('#examAnswerKeyBox');
+      if (keyBox) keyBox.style.display = 'block';
+      window.print();
+    });
+
+    // تصدير كملف Word (.doc) متكامل مع جداول وترويسة وتنسيق عربي
+    $('#exportExamDocBtn').addEventListener('click', () => {
+      const container = $('#printableExamContainer');
+      if (!container) return;
+      const subName = ($('#examSubject') && $('#examSubject').value.trim()) || 'امتحان-اكاديمي';
+
+      const htmlContent = `
+        <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+        <head>
+          <meta charset='utf-8'>
+          <title>ورقة الامتحان الأكاديمي - ${subName}</title>
+          <style>
+            @page Section1 {
+              size: 21.0cm 29.7cm;
+              margin: 1.8cm 1.8cm 1.8cm 1.8cm;
+              mso-header-margin: 36.0pt;
+              mso-footer-margin: 36.0pt;
+              mso-paper-source: 0;
+            }
+            div.Section1 { page: Section1; }
+            body {
+              direction: rtl;
+              text-align: right;
+              font-family: 'Simplified Arabic', 'Traditional Arabic', 'Arial', sans-serif;
+              font-size: 13pt;
+              line-height: 1.5;
+              color: #000;
+            }
+            table { width: 100%; border-collapse: collapse; margin-bottom: 12pt; }
+            th, td { border: 1px solid #333; padding: 6pt 8pt; font-size: 11pt; }
+            th { background-color: #f2f2f2; font-weight: bold; text-align: center; }
+            .header-table td { border: none; padding: 2pt 4pt; vertical-align: top; }
+            .student-box { border: 1px solid #444; padding: 8pt; margin: 10pt 0; background: #fafafa; }
+            .q-item { margin-bottom: 12pt; }
+            .q-num { font-weight: bold; }
+            .opt-grid { margin-top: 4pt; margin-right: 18pt; }
+            .opt-cell { margin-bottom: 3pt; }
+          </style>
+        </head>
+        <body dir='rtl'>
+          <div class="Section1">
+            ${container.innerHTML}
+          </div>
+        </body>
+        </html>
+      `;
+
+      const blob = new Blob(['\ufeff' + htmlContent], {
+        type: 'application/msword;charset=utf-8',
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `الورقة-الامتحانية-${subName.replace(/\s+/g, '_')}.doc`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    // زر العودة إلى الإعداد من شاشة الامتحان
+    $('#backToSetupFromExamBtn').addEventListener('click', () => {
+      switchQuizStep(1);
     });
   }
 

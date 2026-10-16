@@ -2379,6 +2379,256 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
   stroke: currentColor;
 }
 
+/* ========================================================
+   منظومة الاختبارات: رفع الملفات وتوليد الامتحانات الرسمية للأستاذ
+   ======================================================== */
+
+/* File Upload Drag & Drop Zone */
+.quiz-upload-zone {
+  border: 2px dashed rgba(14, 107, 102, .35);
+  background: rgba(14, 107, 102, .03);
+  border-radius: 14px;
+  padding: 1.25rem 1rem;
+  text-align: center;
+  transition: all .2s ease;
+  margin-bottom: 1.1rem;
+  cursor: pointer;
+}
+.quiz-upload-zone:hover,
+.quiz-upload-zone.dragover {
+  border-color: #B97A12;
+  background: rgba(185, 122, 18, .07);
+  transform: translateY(-1px);
+}
+.quiz-upload-zone .upload-icon {
+  width: 44px;
+  height: 44px;
+  margin: 0 auto .4rem;
+  background: linear-gradient(135deg, rgba(14, 107, 102, .12), rgba(185, 122, 18, .12));
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #0E6B66;
+}
+.quiz-upload-zone .upload-text strong {
+  display: block;
+  font-size: .95rem;
+  font-weight: 700;
+  color: #06302C;
+  margin-bottom: .25rem;
+}
+.quiz-upload-zone .upload-text span {
+  display: block;
+  font-size: .78rem;
+  color: #666;
+  margin-bottom: .75rem;
+}
+.quiz-file-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  background: linear-gradient(135deg, #06302C, #0E6B66);
+  color: #fff;
+  padding: .35rem .95rem;
+  border-radius: 999px;
+  font-size: .82rem;
+  font-weight: 600;
+  margin-top: .6rem;
+  border: 1px solid #E9C16C;
+  box-shadow: 0 4px 12px rgba(6, 48, 44, .18);
+}
+.quiz-file-badge .file-size {
+  color: #F2CC85;
+  font-size: .75rem;
+  font-variant-numeric: tabular-nums;
+}
+.quiz-file-badge button {
+  background: rgba(255, 255, 255, .25);
+  border: none;
+  color: #fff;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  font-size: .75rem;
+  transition: background .2s ease;
+}
+.quiz-file-badge button:hover {
+  background: #B97A12;
+}
+
+/* Professor / Student Quiz Mode Switcher */
+.quiz-role-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .65rem;
+  margin-bottom: 1.15rem;
+}
+.quiz-role-btn {
+  background: #FAFCFB;
+  border: 1.5px solid rgba(14, 107, 102, .22);
+  border-radius: 10px;
+  padding: .75rem 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all .2s ease;
+  font-weight: 700;
+  font-size: .88rem;
+  color: #06302C;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+}
+.quiz-role-btn:hover {
+  border-color: #B97A12;
+}
+.quiz-role-btn.active {
+  background: linear-gradient(135deg, #06302C 0%, #0E6B66 100%);
+  border-color: #E9C16C;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(14, 107, 102, .22);
+}
+
+/* Exam Paper Container (ورقة الامتحان الرسمية) */
+.exam-paper-container {
+  background: #ffffff;
+  color: #111111;
+  border: 2px solid #06302C;
+  border-radius: 12px;
+  padding: 2.2rem 2.4rem;
+  margin-top: 1.4rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, .08);
+  font-family: inherit;
+  line-height: 1.7;
+}
+.exam-header {
+  border-bottom: 2px solid #06302C;
+  padding-bottom: 1.1rem;
+  margin-bottom: 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.exam-header-side {
+  font-size: .88rem;
+  font-weight: 700;
+  color: #111;
+  line-height: 1.6;
+}
+.exam-header-center {
+  text-align: center;
+  flex: 1;
+}
+.exam-header-center h4 {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #06302C;
+  margin: 0 0 .3rem;
+}
+.exam-header-center p {
+  margin: 0;
+  font-size: .9rem;
+  font-weight: 700;
+}
+.exam-student-box {
+  background: #fcfcfc;
+  border: 1.5px solid #333;
+  border-radius: 6px;
+  padding: .75rem 1rem;
+  margin-bottom: 1.3rem;
+  display: grid;
+  grid-template-columns: 2fr 1.2fr 1fr 1fr;
+  gap: .8rem;
+  font-size: .84rem;
+  font-weight: 700;
+}
+.exam-instructions-box {
+  background: #F8F9FA;
+  border-inline-start: 4px solid #0E6B66;
+  padding: .65rem 1rem;
+  font-size: .82rem;
+  color: #333;
+  margin-bottom: 1.4rem;
+}
+.exam-question-item {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px dashed #ccc;
+}
+.exam-question-item:last-child {
+  border-bottom: none;
+}
+.exam-question-title {
+  font-size: .96rem;
+  font-weight: 800;
+  color: #06302C;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: .6rem;
+}
+.exam-options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: .6rem;
+  margin-inline-start: 1rem;
+}
+.exam-opt-box {
+  font-size: .9rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.exam-opt-box .opt-circle {
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid #444;
+  border-radius: 50%;
+  display: inline-block;
+}
+.exam-answer-key-box {
+  background: #F4FAF8;
+  border: 1.5px solid #0E6B66;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+/* Print Stylesheet for Official University Exam Sheet */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .exam-paper-container,
+  .exam-paper-container * {
+    visibility: visible;
+  }
+  .exam-paper-container {
+    position: absolute;
+    inset-inline-start: 0;
+    top: 0;
+    width: 100% !important;
+    max-width: 100% !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .no-print,
+  .tool-actions,
+  .modal-close,
+  .quiz-steps-nav,
+  .quiz-upload-zone,
+  .quiz-role-tabs {
+    display: none !important;
+  }
+}
+
+
 
 
 
