@@ -1,57 +1,57 @@
 {
   "mohesr-ministry-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T12:50:42.776623+00:00",
-    "last_success": "2026-10-18T12:50:42.776623+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "mohesr-universities-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T12:50:42.776623+00:00",
-    "last_success": "2026-10-18T12:50:42.776623+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-baghdad-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-mosul-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-basra-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-nahrain-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-alqadsya-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-tikrit-news": {
-    "consecutive_failures": 17,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00"
+    "consecutive_failures": 18,
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-anbar-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-iraqi-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-diyala-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-karbala-news": {
     "consecutive_failures": 0
@@ -61,166 +61,166 @@
   },
   "univ-wasit-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-kirkuk-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-maysan-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-muthanna-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-samarra-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-alqasm-alkhdraa-news": {
-    "consecutive_failures": 17,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00"
+    "consecutive_failures": 18,
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-swmr-news": {
-    "consecutive_failures": 1,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T00:57:33.530765+00:00"
+    "consecutive_failures": 0,
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-fallujah-news": {
     "consecutive_failures": 0
   },
   "univ-nineveh-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-alkrkh-llalwm-news": {
-    "consecutive_failures": 17,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00"
+    "consecutive_failures": 18,
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-ibn-sina-med-pharm-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-basra-llnft-walghaz-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "jabr-bn-hayyan-medical-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-hamdaniya-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-talafar-news": {
     "consecutive_failures": 0
   },
   "univ-tknwlwjya-almalwmat-walatsalat-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-tech-alshmalya-news": {
     "consecutive_failures": 0
   },
   "univ-tech-aljnwbya-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-tech-alwsta-news": {
     "consecutive_failures": 0
   },
   "univ-furat-alawst-tech-news": {
-    "consecutive_failures": 1,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T00:57:33.530765+00:00"
+    "consecutive_failures": 0,
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "college-mansour-univ-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "college-rafidain-univ-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "college-almamwn-univ-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "college-sht-alarb-univ-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "college-hadba-univ-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "college-alyrmwk-univ-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-sciences-iraqi-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "college-baghdad-llalwm-medical-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-ahl-bait-news": {
-    "consecutive_failures": 17,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00"
+    "consecutive_failures": 18,
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-alaslamya-news": {
-    "consecutive_failures": 17,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00"
+    "consecutive_failures": 18,
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-kafeel-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "college-alshykh-altwsy-univ-news": {
-    "consecutive_failures": 6,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
+    "consecutive_failures": 7,
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
     "last_success": "2026-10-16T15:47:15.491220+00:00"
   },
   "college-rasheed-univ-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "college-iraq-univ-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "college-alhsyn-a-univ-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "college-turath-univ-news": {
     "consecutive_failures": 0
@@ -260,72 +260,72 @@
   },
   "college-almstfa-univ-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "college-almzaya-univ-news": {
-    "consecutive_failures": 17,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00"
+    "consecutive_failures": 18,
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00"
   },
   "college-altf-univ-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "college-aswl-aldin-univ-news": {
-    "consecutive_failures": 3,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-17T11:41:34.765453+00:00"
+    "consecutive_failures": 0,
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "college-farabi-univ-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "college-kunuz-univ-news": {
-    "consecutive_failures": 17,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00"
+    "consecutive_failures": 18,
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00"
   },
   "college-nukhba-univ-news": {
-    "consecutive_failures": 17,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00"
+    "consecutive_failures": 18,
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00"
   },
   "college-safwa-univ-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-alamyd-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-alktab-news": {
-    "consecutive_failures": 17,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00"
+    "consecutive_failures": 18,
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-awrwk-private-news": {
-    "consecutive_failures": 17,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00"
+    "consecutive_failures": 18,
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-bayan-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-warth-alanbyaa-news": {
-    "consecutive_failures": 17,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00"
+    "consecutive_failures": 18,
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00"
   },
   "college-alnwr-univ-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "college-kut-univ-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "college-hilla-univ-news": {
     "consecutive_failures": 0
@@ -355,13 +355,13 @@
     "consecutive_failures": 0
   },
   "univ-alayn-news": {
-    "consecutive_failures": 17,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00"
+    "consecutive_failures": 18,
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-alamyn-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "college-ashwr-news": {
     "consecutive_failures": 0
@@ -371,33 +371,33 @@
   },
   "college-east-alawst-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "college-amarah-univ-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "jnat-iraq-news": {
     "consecutive_failures": 0
   },
   "univ-zahraa-alyha-salam-llbnat-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-klkamsh-news": {
     "consecutive_failures": 0
   },
   "univ-alamrykya-news": {
-    "consecutive_failures": 17,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00"
+    "consecutive_failures": 18,
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-almaql-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-mashriq-news": {
     "consecutive_failures": 0
@@ -406,51 +406,51 @@
     "consecutive_failures": 0
   },
   "college-alhda-news": {
-    "consecutive_failures": 17,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00"
+    "consecutive_failures": 18,
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00"
   },
   "college-ibn-khldwn-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "college-alaml-sciences-medical-altkhssya-news": {
-    "consecutive_failures": 17,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00"
+    "consecutive_failures": 18,
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-alshab-news": {
-    "consecutive_failures": 17,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00"
+    "consecutive_failures": 18,
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-alsraj-private-news": {
     "consecutive_failures": 0
   },
   "college-east-sciences-tech-altkhssya-news": {
-    "consecutive_failures": 17,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00"
+    "consecutive_failures": 18,
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-shl-nineveh-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-qrtba-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "college-alqbs-private-news": {
     "consecutive_failures": 0
   },
   "univ-alnajy-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "college-ashtar-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-10-18T07:43:16.227515+00:00",
-    "last_success": "2026-10-18T07:43:16.227515+00:00"
+    "last_attempt": "2026-10-18T14:43:05.137661+00:00",
+    "last_success": "2026-10-18T14:43:05.137661+00:00"
   },
   "univ-mhd-alhdarat-news": {
     "consecutive_failures": 0
