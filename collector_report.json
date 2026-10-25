@@ -1,10 +1,10 @@
 {
-  "time": "2026-10-25T14:44:39.450582+00:00",
-  "new_items": 2,
+  "time": "2026-10-25T15:45:28.708900+00:00",
+  "new_items": 1,
   "sources": [
     {
       "id": "mohesr-ministry-news",
-      "new_items": 2,
+      "new_items": 1,
       "status": "ok",
       "needs_attention": false,
       "consecutive_failures": 0
