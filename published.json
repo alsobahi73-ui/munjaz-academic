@@ -40864,7 +40864,10 @@
     "category": "general",
     "type": "official",
     "id": "612fec179d5b86dd24958cdc236810a6ebead4ac732445a6a20ba0bf6841fc5c",
-    "website_published_at": "2026-10-26T13:42:56.594Z"
+    "website_published_at": "2026-10-26T13:42:56.594Z",
+    "telegram_published_at": "2026-10-26T13:56:15.889Z",
+    "telegram_message_id": 675,
+    "published_at": "2026-10-26T13:56:15.890Z"
   },
   {
     "title": "جامعة الكفيل تشهد انطلاق فعاليات اليوم الثاني للمؤتمر العلمي الدولي التمهيدي الثاني لإحياء ذكرى ألفية حوزة النجف الأشرف",
@@ -40875,6 +40878,9 @@
     "category": "general",
     "type": "official",
     "id": "c97a9fcc868ff4216ba7537a1dafe24b07a22bb09d2a4f569b1ba7fbabd9a40b",
-    "website_published_at": "2026-10-26T13:42:56.772Z"
+    "website_published_at": "2026-10-26T13:42:56.772Z",
+    "telegram_published_at": "2026-10-26T13:56:16.076Z",
+    "telegram_message_id": 676,
+    "published_at": "2026-10-26T13:56:16.076Z"
   }
 ]
