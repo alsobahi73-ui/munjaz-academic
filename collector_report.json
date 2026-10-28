@@ -1,84 +1,61 @@
 {
-  "time": "2026-10-28T09:03:14.047693+00:00",
-  "new_items": 9,
+  "time": "2026-10-28T10:00:11.902048+00:00",
+  "new_items": 0,
   "sources": [
     {
       "id": "mohesr-ministry-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "mohesr-universities-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "univ-baghdad-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "univ-mosul-news",
-      "new_items": 1,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "univ-basra-news",
-      "new_items": 1,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "univ-nahrain-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "univ-alqadsya-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "univ-tikrit-news",
-      "new_items": 0,
-      "status": "failed",
-      "error": "URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1010)>",
-      "needs_attention": true,
-      "consecutive_failures": 54
+      "status": "not_due",
+      "needs_attention": true
     },
     {
       "id": "univ-anbar-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "univ-iraqi-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "univ-diyala-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "univ-karbala-news",
@@ -90,53 +67,38 @@
     },
     {
       "id": "univ-wasit-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "univ-kirkuk-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "univ-maysan-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "univ-muthanna-news",
-      "new_items": 3,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "univ-samarra-news",
-      "new_items": 1,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "univ-alqasm-alkhdraa-news",
-      "new_items": 0,
-      "status": "failed",
-      "error": "ValueError: HTML article missing title/link",
-      "needs_attention": true,
-      "consecutive_failures": 54
+      "status": "not_due",
+      "needs_attention": true
     },
     {
       "id": "univ-swmr-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "univ-fallujah-news",
@@ -144,46 +106,33 @@
     },
     {
       "id": "univ-nineveh-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "univ-alkrkh-llalwm-news",
-      "new_items": 0,
-      "status": "failed",
-      "error": "ValueError: HTML article missing publication date",
-      "needs_attention": true,
-      "consecutive_failures": 54
+      "status": "not_due",
+      "needs_attention": true
     },
     {
       "id": "univ-ibn-sina-med-pharm-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "univ-basra-llnft-walghaz-news",
-      "new_items": 2,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "jabr-bn-hayyan-medical-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "univ-hamdaniya-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "univ-talafar-news",
@@ -191,10 +140,8 @@
     },
     {
       "id": "univ-tknwlwjya-almalwmat-walatsalat-news",
-      "new_items": 1,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "univ-tech-alshmalya-news",
@@ -202,10 +149,8 @@
     },
     {
       "id": "univ-tech-aljnwbya-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "univ-tech-alwsta-news",
@@ -213,118 +158,83 @@
     },
     {
       "id": "univ-furat-alawst-tech-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "college-mansour-univ-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "college-rafidain-univ-news",
-      "new_items": 0,
-      "status": "failed",
-      "error": "ValueError: robots.txt unavailable; refusing to crawl",
-      "needs_attention": false,
-      "consecutive_failures": 1
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "college-almamwn-univ-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "college-sht-alarb-univ-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "college-hadba-univ-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "college-alyrmwk-univ-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "univ-sciences-iraqi-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "college-baghdad-llalwm-medical-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "univ-ahl-bait-news",
-      "new_items": 0,
-      "status": "failed",
-      "error": "ValueError: HTML article missing title/link",
-      "needs_attention": true,
-      "consecutive_failures": 54
+      "status": "not_due",
+      "needs_attention": true
     },
     {
       "id": "univ-alaslamya-news",
-      "new_items": 0,
-      "status": "failed",
-      "error": "ValueError: Redirect requires verified canonical URL",
-      "needs_attention": true,
-      "consecutive_failures": 54
+      "status": "not_due",
+      "needs_attention": true
     },
     {
       "id": "univ-kafeel-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "college-alshykh-altwsy-univ-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "college-rasheed-univ-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "college-iraq-univ-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "college-alhsyn-a-univ-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "college-turath-univ-news",
@@ -376,114 +286,78 @@
     },
     {
       "id": "college-almstfa-univ-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "college-almzaya-univ-news",
-      "new_items": 0,
-      "status": "failed",
-      "error": "ValueError: HTML article missing publication date",
-      "needs_attention": true,
-      "consecutive_failures": 54
+      "status": "not_due",
+      "needs_attention": true
     },
     {
       "id": "college-altf-univ-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "college-aswl-aldin-univ-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "college-farabi-univ-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "college-kunuz-univ-news",
-      "new_items": 0,
-      "status": "failed",
-      "error": "ValueError: HTML article missing title/link",
-      "needs_attention": true,
-      "consecutive_failures": 54
+      "status": "not_due",
+      "needs_attention": true
     },
     {
       "id": "college-nukhba-univ-news",
-      "new_items": 0,
-      "status": "failed",
-      "error": "HTTPError: HTTP Error 403: Forbidden",
-      "needs_attention": true,
-      "consecutive_failures": 54
+      "status": "not_due",
+      "needs_attention": true
     },
     {
       "id": "college-safwa-univ-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "univ-alamyd-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "univ-alktab-news",
-      "new_items": 0,
-      "status": "failed",
-      "error": "ValueError: robots.txt unavailable; refusing to crawl",
-      "needs_attention": true,
-      "consecutive_failures": 54
+      "status": "not_due",
+      "needs_attention": true
     },
     {
       "id": "univ-awrwk-private-news",
-      "new_items": 0,
-      "status": "failed",
-      "error": "ValueError: HTML article missing publication date",
-      "needs_attention": true,
-      "consecutive_failures": 54
+      "status": "not_due",
+      "needs_attention": true
     },
     {
       "id": "univ-bayan-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "univ-warth-alanbyaa-news",
-      "new_items": 0,
-      "status": "failed",
-      "error": "ValueError: HTML article missing title/link",
-      "needs_attention": true,
-      "consecutive_failures": 54
+      "status": "not_due",
+      "needs_attention": true
     },
     {
       "id": "college-alnwr-univ-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "college-kut-univ-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "college-hilla-univ-news",
@@ -523,18 +397,13 @@
     },
     {
       "id": "univ-alayn-news",
-      "new_items": 0,
-      "status": "failed",
-      "error": "ValueError: HTML article missing title/link",
-      "needs_attention": true,
-      "consecutive_failures": 54
+      "status": "not_due",
+      "needs_attention": true
     },
     {
       "id": "univ-alamyn-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "college-ashwr-news",
@@ -546,17 +415,13 @@
     },
     {
       "id": "college-east-alawst-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "college-amarah-univ-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "jnat-iraq-news",
@@ -564,11 +429,8 @@
     },
     {
       "id": "univ-zahraa-alyha-salam-llbnat-news",
-      "new_items": 0,
-      "status": "failed",
-      "error": "HTTPError: HTTP Error 522: <none>",
-      "needs_attention": false,
-      "consecutive_failures": 1
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "univ-klkamsh-news",
@@ -576,18 +438,13 @@
     },
     {
       "id": "univ-alamrykya-news",
-      "new_items": 0,
-      "status": "failed",
-      "error": "ValueError: Redirect requires verified canonical URL",
-      "needs_attention": true,
-      "consecutive_failures": 54
+      "status": "not_due",
+      "needs_attention": true
     },
     {
       "id": "univ-almaql-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "univ-mashriq-news",
@@ -599,34 +456,23 @@
     },
     {
       "id": "college-alhda-news",
-      "new_items": 0,
-      "status": "failed",
-      "error": "ValueError: HTML article missing title/link",
-      "needs_attention": true,
-      "consecutive_failures": 54
+      "status": "not_due",
+      "needs_attention": true
     },
     {
       "id": "college-ibn-khldwn-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "college-alaml-sciences-medical-altkhssya-news",
-      "new_items": 0,
-      "status": "failed",
-      "error": "ValueError: HTML article missing title/link",
-      "needs_attention": true,
-      "consecutive_failures": 54
+      "status": "not_due",
+      "needs_attention": true
     },
     {
       "id": "univ-alshab-news",
-      "new_items": 0,
-      "status": "failed",
-      "error": "HTTPError: HTTP Error 403: Forbidden",
-      "needs_attention": true,
-      "consecutive_failures": 54
+      "status": "not_due",
+      "needs_attention": true
     },
     {
       "id": "univ-alsraj-private-news",
@@ -634,25 +480,18 @@
     },
     {
       "id": "college-east-sciences-tech-altkhssya-news",
-      "new_items": 0,
-      "status": "failed",
-      "error": "ValueError: HTML article missing title/link",
-      "needs_attention": true,
-      "consecutive_failures": 54
+      "status": "not_due",
+      "needs_attention": true
     },
     {
       "id": "univ-shl-nineveh-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "univ-qrtba-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "college-alqbs-private-news",
@@ -660,17 +499,13 @@
     },
     {
       "id": "univ-alnajy-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "college-ashtar-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "univ-mhd-alhdarat-news",
