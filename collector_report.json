@@ -1,20 +1,16 @@
 {
-  "time": "2026-10-29T01:13:08.326258+00:00",
+  "time": "2026-10-29T02:07:35.421847+00:00",
   "new_items": 0,
   "sources": [
     {
       "id": "mohesr-ministry-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "mohesr-universities-news",
-      "new_items": 0,
-      "status": "ok",
-      "needs_attention": false,
-      "consecutive_failures": 0
+      "status": "not_due",
+      "needs_attention": false
     },
     {
       "id": "univ-baghdad-news",
