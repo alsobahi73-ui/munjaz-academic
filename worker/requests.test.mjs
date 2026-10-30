@@ -7,7 +7,7 @@ import { createWorker } from './index.mjs';
 const ctx = createContext({ window: {} });
 new Script(await readFile(new URL('../academic-services-data.js', import.meta.url), 'utf8')).runInContext(ctx);
 const env = { TELEGRAM_BOT_TOKEN: 'FAKE_TEST_TOKEN', TELEGRAM_CHAT_ID: '1234', SITE_ORIGIN: 'https://site.example' };
-const request = (id = randomUUID(), ip = '192.0.2.1') => new Request('https://worker.example/api/academic-requests', { method: 'POST', headers: { Origin: env.SITE_ORIGIN, 'Content-Type': 'application/json', 'CF-Connecting-IP': ip }, body: JSON.stringify({ requestId: id, service: 'reports', details: 'طلب اختبار معزول للخدمة الأكاديمية', consent: true }) });
+const request = (id = randomUUID(), ip = '192.0.2.1', phone = '+9647701234567') => new Request('https://worker.example/api/academic-requests', { method: 'POST', headers: { Origin: env.SITE_ORIGIN, 'Content-Type': 'application/json', 'CF-Connecting-IP': ip }, body: JSON.stringify({ requestId: id, service: 'reports', phone, details: 'طلب اختبار معزول للخدمة الأكاديمية', consent: true }) });
 test('worker routes, CORS, delivery and deduplication survive separate fetch calls', async () => {
  let calls = 0;
  const worker = createWorker(ctx.window.AcademicServicesCatalog, async () => { calls++; return Response.json({ ok: true, result: { message_id: 1 } }); });
@@ -56,6 +56,15 @@ test('health reports configuration readiness without disclosing secrets or claim
   assert.equal(response.headers.get('Cache-Control'), 'no-store');
  }
  assert.equal(calls, 0);
+});
+test('phone number is required and is included in the Telegram message', async () => {
+ let sentText = '';
+ const worker = createWorker(ctx.window.AcademicServicesCatalog, async (url, options) => { sentText = JSON.parse(options.body).text; return Response.json({ ok: true, result: { message_id: 1 } }); });
+ assert.equal((await worker.fetch(request(randomUUID(), '192.0.2.9', ''), env)).status, 400);
+ assert.equal((await worker.fetch(request(randomUUID(), '192.0.2.9', '123'), env)).status, 400);
+ assert.equal(sentText, '');
+ assert.equal((await worker.fetch(request(randomUUID(), '192.0.2.9', '+9647701234567'), env)).status, 201);
+ assert.match(sentText, /رقم التواصل: \+9647701234567/);
 });
 test('deployment targets the worker used by the frontend', async () => {
  const configuration = await readFile(new URL('../wrangler.toml', import.meta.url), 'utf8');
