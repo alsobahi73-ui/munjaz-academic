@@ -1,4 +1,4 @@
-/* قسم «أخبار التعليم العالي» في الصفحة الرئيسية — يتغذى من news.json */
+/* قسم «أخبار التعليم العالي» في الصفحة الرئيسية — يتغذى من news-latest.json (الموجز المختصر) */
 (function () {
   'use strict';
   var CATEGORIES = [
@@ -127,7 +127,7 @@
     return pick;
   }
 
-  fetch('news.json', { cache: 'no-cache' }).then(function (r) {
+  fetch('news-latest.json', { cache: 'default' }).then(function (r) {
     if (!r.ok) throw new Error('feed_unavailable');
     return r.json();
   }).then(function (data) {
