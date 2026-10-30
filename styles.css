@@ -892,7 +892,7 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
 .section-head h2::before, .section-head h2::after { width: 8px; height: 8px; }
 
 /* ===== Trio: three equal columns ===== */
-.trio-wrap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; align-items: stretch; max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
+.trio-wrap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; align-items: start; max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
 .trio-wrap .trio-col { display: flex; flex-direction: column; padding: 2.5rem 0; }
 .trio-wrap .trio-col .container { flex: 1; display: flex; flex-direction: column; max-width: 100%; padding: 0; }
 .trio-wrap .section-head { margin-bottom: 1.5rem; }
