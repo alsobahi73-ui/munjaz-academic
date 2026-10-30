@@ -128,8 +128,11 @@
     }
     var controller = null;
     try { controller = new AbortController(); setTimeout(function () { controller.abort(); }, 15000); } catch (e) {}
-    fetch('news.json', { cache: 'no-cache', signal: controller ? controller.signal : undefined })
+    // الرئيسية تستهلك الموجز المختصر (أحدث 60 خبرًا) بدل الملف الكامل؛
+    // وإن لم يوجد بعد (نشر قديم)، يعود إلى news.json الكامل كاحتياط.
+    fetch('news-latest.json', { cache: 'default', signal: controller ? controller.signal : undefined })
       .then(function (r) { if (!r.ok) throw new Error('feed_unavailable'); return r.json(); })
+      .catch(function () { return fetch('news.json', { cache: 'default', signal: controller ? controller.signal : undefined }).then(function (r) { if (!r.ok) throw new Error('feed_unavailable'); return r.json(); }); })
       .then(function (items) {
         if (!Array.isArray(items) || !items.length) throw new Error('empty_feed');
         render(items);
@@ -258,12 +261,12 @@
           <h2 id="jobsTitle">بوابة الباحثين عن التعيين</h2>
           <p>سجّل معلوماتك الأساسية لنرشحك للفرص الأكاديمية المناسبة لتخصصك.</p>
         </header>
-        <div class="portal-card clickable-card" onclick="window.location.href='jobs.html'" role="link" tabindex="0">
+        <a class="portal-card clickable-card" href="jobs.html">
           <div class="portal-icon tools-theme"><svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#E9C16C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
           <h3>هل تبحث عن فرصة أكاديمية؟</h3>
           <p>ادخل البوابة وسجّل بياناتك: الشهادة، التخصص، العمر، ومحافظة السكن — وسنطابقك مع الفرص المناسبة.</p>
           <span class="btn btn-primary btn-lg">ادخل البوابة ←</span>
-        </div>
+        </a>
       </div>
     </section>
 
@@ -274,19 +277,19 @@
           <h2 id="oppTitle">فرص وظيفية</h2>
           <p>أحدث إعلانات التوظيف الأكاديمي.</p>
         </header>
-        <div class="portal-card clickable-card" onclick="window.location.href='opportunities.html'" role="link" tabindex="0">
+        <a class="portal-card clickable-card" href="opportunities.html">
           <div class="portal-icon tools-theme"><svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#E9C16C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></div>
           <h3>وظائف شاغرة الآن</h3>
           <p>تصفح أحدث إعلانات التوظيف في الجامعات العراقية الأهلية والحكومية.</p>
           <span class="btn btn-primary btn-lg">عرض الفرص ←</span>
-        </div>
+        </a>
       </div>
     </section>
     </div>
 
     <!-- ============ Free Pen (Qalam Hur) Banner ============ -->
     <section class="qalam-section" id="qalam-hur" aria-labelledby="qalamTitle">
-      <div class="qalam-banner-card clickable-card" onclick="window.location.href='articles.html'" role="link" tabindex="0">
+      <div class="qalam-banner-card clickable-card" onclick="window.location.href='articles.html'" onkeydown="if((event.key==='Enter'||event.key===' ')&&event.target===event.currentTarget){event.preventDefault();window.location.href='articles.html';}" role="link" tabindex="0">
         <!-- Symbolic Animated SVG Backdrop: Open Manuscript + Flowing Golden Ink Trail + Geometric Diamonds -->
         <svg class="qalam-symbolic-art" viewBox="0 0 900 180" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
           <defs>
@@ -883,13 +886,13 @@
               <!-- التبويبات الرئيسية الثلاثة -->
               <div class="omr-main-tabs" role="tablist">
                 <button type="button" class="omr-main-tab active" id="omrTabGenBtn">
-                  <span>🖨️ 1. توليد وطباعة استمارة الببل شيت ومفتاح الحل (A4)</span>
+                  <span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="9" width="12" height="7" rx="1"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> 1. توليد وطباعة استمارة الببل شيت ومفتاح الحل (A4)</span>
                 </button>
                 <button type="button" class="omr-main-tab" id="omrTabCamBtn">
-                  <span>📱 2. التصحيح الفوري بكاميرا الموبايل</span>
+                  <span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg> 2. التصحيح الفوري بكاميرا الموبايل</span>
                 </button>
                 <button type="button" class="omr-main-tab" id="omrTabScanBtn">
-                  <span>🖨️ 3. تصحيح حزمة الماسح الضوئي (PDF / صور متعددة)</span>
+                  <span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="9" width="12" height="7" rx="1"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> 3. تصحيح حزمة الماسح الضوئي (PDF / صور متعددة)</span>
                 </button>
               </div>
 
@@ -929,7 +932,7 @@
                 <div class="omr-models-panel" style="margin-top: 1.2rem; padding: 12px 14px; background: #F8FAFC; border: 1.5px solid #E2E8F0; border-radius: 8px;">
                   <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .8rem;">
                     <div>
-                      <strong style="color: #06302C; display: block; font-size: .88rem; margin-bottom: 2px;">📁 نماذج الأسئلة المتعددة (Exam Forms):</strong>
+                      <strong style="color: #06302C; display: block; font-size: .88rem; margin-bottom: 2px;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> نماذج الأسئلة المتعددة (Exam Forms):</strong>
                       <small style="color: #64748B;">اختر النموذج لضبط مفتاح إجابته وطباعة استمارته المخصصة لمنع الغش بين الطلبة.</small>
                     </div>
                     <div style="display: flex; gap: .5rem; align-items: center; flex-wrap: wrap;">
@@ -945,7 +948,7 @@
                       </button>
                       <button type="button" class="btn btn-outline btn-sm btn-svg-inline" id="omrSaveExamCloudBtn" style="border-color: #0d9488; color: #0d9488; font-weight: bold;">
                         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="14" height="14"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                        <span>💾 حفظ النماذج بالحساب</span>
+                        <span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> حفظ النماذج بالحساب</span>
                       </button>
                     </div>
                   </div>
@@ -956,17 +959,17 @@
                 <div class="omr-key-box" style="margin-top: 1.2rem;">
                   <div class="omr-key-header">
                     <div>
-                      <strong style="color: #06302C;">🔑 ضبط مفتاح الإجابة النموذجي المعتمد (Master Key):</strong>
+                      <strong style="color: #06302C;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7.5" cy="15.5" r="4.5"/><path d="m11 12 9-9"/><path d="m15 8 3 3"/></svg> ضبط مفتاح الإجابة النموذجي المعتمد (Master Key):</strong>
                       <small style="display: block; color: #4A5568;">انقر على الحرف الصحيح (A, B, C, D) لكل سؤال، وسيُعتمد فوراً في التصحيح التلقائي.</small>
                     </div>
                     <div style="display: flex; gap: .5rem; flex-wrap: wrap;">
                       <button type="button" class="btn btn-outline btn-sm btn-svg-inline" id="omrImportKeyBtn" title="رفع ملف نصي/CSV أو لصق سلسلة الإجابات">
                         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="14" height="14"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                        <span>📥 رفع / لصق الحلول</span>
+                        <span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> رفع / لصق الحلول</span>
                       </button>
                       <button type="button" class="btn btn-outline btn-sm btn-svg-inline" id="omrScanMasterSheetBtn" title="رفع صورة ورقة إجابة مظللة لاعتمادها كحل نموذجي">
                         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="14" height="14"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                        <span>📷 مسح ورقة مظللة</span>
+                        <span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg> مسح ورقة مظللة</span>
                       </button>
                       <button type="button" class="btn btn-outline btn-sm" id="omrKeyAutoSampleBtn">تعبئة تجريبية</button>
                       <button type="button" class="btn btn-outline btn-sm" id="omrKeyResetBtn">تفريغ</button>
@@ -979,7 +982,7 @@
                   <!-- درج استيراد ولصق المفتاح السريع -->
                   <div id="omrImportKeyDrawer" style="display:none; margin-top: 10px; margin-bottom: 12px; padding: 12px; background: #F0FDF4; border: 1.5px solid #0d9488; border-radius: 8px;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                      <strong style="color: #064E3B; font-size: .88rem;">📥 استيراد مفتاح الحلول الصحيحة لـ (نموذج <span id="omrImportModelLabel">A</span>):</strong>
+                      <strong style="color: #064E3B; font-size: .88rem;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> استيراد مفتاح الحلول الصحيحة لـ (نموذج <span id="omrImportModelLabel">A</span>):</strong>
                       <button type="button" id="omrCloseImportDrawerBtn" style="border:none; background:transparent; font-size:1.1rem; cursor:pointer; color:#64748B;">✕</button>
                     </div>
                     <p style="font-size: .78rem; color: #334155; margin-bottom: 8px;">
@@ -987,7 +990,7 @@
                     </p>
                     <textarea id="omrImportKeyText" rows="2" style="width: 100%; font-family: monospace; font-size: .88rem; padding: 6px 8px; border: 1px solid #CBD5E1; border-radius: 4px; direction: ltr;" placeholder="A, B, C, D, A, C, D, B..."></textarea>
                     <div style="display: flex; gap: .5rem; margin-top: 8px; justify-content: flex-end; flex-wrap: wrap;">
-                      <button type="button" class="btn btn-outline btn-sm" id="omrUploadKeyFileBtn">📁 رفع ملف CSV / TXT</button>
+                      <button type="button" class="btn btn-outline btn-sm" id="omrUploadKeyFileBtn"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> رفع ملف CSV / TXT</button>
                       <button type="button" class="btn btn-teal btn-sm" id="omrApplyImportKeyBtn">تطبيق وحفظ المفتاح ✓</button>
                     </div>
                   </div>
@@ -1000,7 +1003,7 @@
                   <div style="display: flex; gap: .6rem; flex-wrap: wrap;">
                     <button type="button" class="btn btn-teal btn-svg-inline" id="omrPrintBlankSheetBtn">
                       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="16" height="16"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-                      <span>🖨️ طباعة استمارة الببل شيت للطلبة (A4)</span>
+                      <span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="9" width="12" height="7" rx="1"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> طباعة استمارة الببل شيت للطلبة (A4)</span>
                     </button>
                     <button type="button" class="btn btn-outline btn-svg-inline" id="omrPrintMasterKeyBtn">
                       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="16" height="16"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
@@ -1008,15 +1011,15 @@
                     </button>
                     <button type="button" class="btn btn-outline btn-svg-inline" id="omrExportDocBtn">
                       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="16" height="16"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-                      <span>⬇️ تصدير كملف Word (.doc)</span>
+                      <span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> تصدير كملف Word (.doc)</span>
                     </button>
                   </div>
                   <div style="display: flex; gap: .6rem; flex-wrap: wrap;">
                     <button type="button" class="btn btn-teal btn-svg-inline" id="omrGoToCamBtn">
-                      <span>📱 تصحيح عبر الموبايل ➔</span>
+                      <span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg> تصحيح عبر الموبايل ➔</span>
                     </button>
                     <button type="button" class="btn btn-outline btn-svg-inline" id="omrGoToScanBtn">
-                      <span>🖨️ تصحيح حزمة السكنر ➔</span>
+                      <span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="9" width="12" height="7" rx="1"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> تصحيح حزمة السكنر ➔</span>
                     </button>
                   </div>
                 </div>
@@ -1028,6 +1031,7 @@
               <!-- =================== المسار 2: كاميرا الموبايل =================== -->
               <div id="omrViewCamera" class="omr-view-panel" hidden>
                 <p class="tool-note">وجه كاميرا الهاتف الخلفية نحو ورقة إجابة الطالب وتأكد من محاذاة الورقة داخل الإطار ليتم رصد وتصحيح الإجابات فورياً.</p>
+                <p class="tool-note" style="font-weight: 700; color: #06302C;">إرشاد تصوير صارم — القارئ لا يصحّح ميل الصورة: صوّر الورقة من الأعلى مباشرة وبزاوية قائمة، والورقة كاملة داخل الإطار دون قصّ أي حافة، وبإضاءة متساوية دون ظل أو انعكاس. إذا ظهرت فقرات كثيرة «غير مقروءة» أو «متروكة»، فالسبب غالبًا ميل الصورة أو قصّها — أعد التصوير باستقامة أكبر وراجع الفقرات يدويًا قبل اعتماد الدرجة.</p>
 
                 <div class="omr-camera-container">
                   <!-- نافذة الكاميرا التفاعلية -->
@@ -1054,7 +1058,7 @@
                     </button>
                     <button type="button" class="btn btn-teal btn-svg-inline" id="omrSnapBtn" disabled>
                       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>
-                      <span>⚡ التقاط وتصحيح الورقة فوراً</span>
+                      <span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> التقاط وتصحيح الورقة فوراً</span>
                     </button>
                     <label class="btn btn-outline btn-svg-inline" style="cursor: pointer; margin: 0;">
                       <input type="file" id="omrCamUploadInput" accept="image/*" capture="environment" style="display: none;">
@@ -1070,7 +1074,9 @@
                         <span class="student-score-badge" id="omrSingleScore">0 / 20</span>
                         <span class="student-pct-badge" id="omrSinglePct">0%</span>
                         <span class="status-pill" id="omrSingleStatus">ناجح ✓</span>
+                        <span id="omrSingleModel" style="font-weight: 700; color: #06302C;">النموذج المصحَّح به: (A)</span>
                       </div>
+                      <p id="omrSingleWarning" hidden style="margin: .6rem 0 0; font-weight: 700; color: #92400E; background: #FEF3C7; border: 1px solid #FDE68A; padding: 8px 12px; border-radius: 6px;"></p>
                       <div class="student-name-field">
                         <span>اسم الطالب / الورقة:</span>
                         <input type="text" id="omrSingleStudentName" placeholder="اكتب اسم الطالب هنا...">
@@ -1083,7 +1089,7 @@
 
                     <div class="result-card-actions">
                       <button type="button" class="btn btn-teal btn-sm" id="omrSaveSingleToBookBtn">
-                        <span>💾 حفظ ورصد في كشف الدرجات</span>
+                        <span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> حفظ ورصد في كشف الدرجات</span>
                       </button>
                       <button type="button" class="btn btn-outline btn-sm" id="omrNextSheetBtn">
                         <span>الورقة التالية ➔</span>
@@ -1096,6 +1102,7 @@
               <!-- =================== المسار 3: ماسح السكنر دفعة واحدة =================== -->
               <div id="omrViewScanner" class="omr-view-panel" hidden>
                 <p class="tool-note">ارفع حزمة أوراق الامتحان الممسوحة بجهاز السكنر (ملف PDF واحد يحتوي على 50 أو 100 ورقة، أو مجموعة صور ممسوحة) لتصحيحها دفعة واحدة في ثوانٍ.</p>
+                <p class="tool-note" style="font-weight: 700; color: #06302C;">إرشاد مسح صارم — القارئ لا يصحّح ميل الصورة: امسح كل ورقة مستقيمة وكاملة دون قصّ أي حافة وبإضاءة متساوية. الفقرات غير الواضحة تُسجَّل فارغة للمراجعة اليدوية ولا تُخمَّن أبدًا، فإذا كثرت الفقرات غير المقروءة أعد مسح الورقة باستقامة أكبر.</p>
 
                 <div class="omr-batch-upload-box" id="omrBatchDropZone">
                   <input type="file" id="omrBatchFileInput" accept=".pdf,image/*" multiple style="display: none;">
@@ -1122,7 +1129,7 @@
                 <div style="margin-top: 1rem; display: flex; gap: .8rem; align-items: center; flex-wrap: wrap;">
                   <button type="button" class="btn btn-teal btn-svg-inline" id="omrStartBatchBtn" disabled>
                     <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="16" height="16"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                    <span>⚡ بدء التصحيح الضوئي الشامل للدفعة</span>
+                    <span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> بدء التصحيح الضوئي الشامل للدفعة</span>
                   </button>
                   <div id="omrBatchProgressWrap" style="flex: 1; min-width: 200px;" hidden>
                     <div style="display: flex; justify-content: space-between; font-size: .8rem; font-weight: 700; margin-bottom: 3px;">
@@ -1137,6 +1144,7 @@
 
                 <!-- كشف الدرجات والإحصائيات الشاملة -->
                 <div id="omrGradebookSection" style="margin-top: 1.8rem;" hidden>
+                  <p class="tool-note" style="font-weight: 700; color: #06302C;">تنبيه: كشف الدرجات يُحفظ تلقائيًا على هذا الجهاز والمتصفح، لكن صدّر نسخة CSV قبل مغادرة الصفحة أو مسح بيانات المتصفح، لأن الحفظ المحلي قد يُفقد عند مسح البيانات.</p>
                   <!-- كروت الإحصاءات الذكية -->
                   <div class="omr-stats-summary-grid">
                     <div class="omr-stat-box">
@@ -1166,11 +1174,11 @@
                     <div style="display: flex; gap: .6rem; flex-wrap: wrap;">
                       <button type="button" class="btn btn-teal btn-sm btn-svg-inline" id="omrExportCsvBtn">
                         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="15" height="15"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-                        <span>⬇️ تصدير كشف الدرجات (Excel / CSV)</span>
+                        <span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> تصدير كشف الدرجات (Excel / CSV)</span>
                       </button>
                       <button type="button" class="btn btn-outline btn-sm btn-svg-inline" id="omrPrintGradebookBtn">
                         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="15" height="15"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-                        <span>🖨️ طباعة كشف الدرجات الرسمي للقسم</span>
+                        <span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="9" width="12" height="7" rx="1"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> طباعة كشف الدرجات الرسمي للقسم</span>
                       </button>
                     </div>
                     <button type="button" class="btn btn-outline btn-sm" id="omrClearGradebookBtn">مسح الكشف الحالي</button>
@@ -1771,10 +1779,7 @@
     </div>
   </dialog>
 
-  <!-- Document parsers for Quiz Generator (Word .docx & PDF) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-
+  <!-- Document parsers (mammoth/pdf.js) are loaded dynamically by app.js on first use only, never on homepage load. -->
   <script src="academic-services-config.js"></script>
   <script src="app.js"></script>
 
