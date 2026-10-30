@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtemp, readFile, writeFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { publishOfficial, atomicWrite, telegramText } from '../publish-official.mjs';
+import { publishOfficial, atomicWrite, telegramText, valid } from '../publish-official.mjs';
 const item = { type: 'official', title: 'عنوان تجريبي للاختبار فقط', url: 'https://example.org/test', source: 'مصدر اختبار', date: '2026-10-10', summary: 'السطر الأول\nالسطر الثاني', category: 'research' };
 async function fixture(t, queue = [item]) {
   const root = await mkdtemp(join(tmpdir(), 'official-publisher-'));
@@ -76,6 +76,11 @@ test('corrupt website data still allows Telegram; corrupt queue fails safely', a
   assert.ok((await read(opts.root, 'published'))[0].telegram_published_at);
   await writeFile(join(opts.root, 'news_queue.json'), '{broken');
   await assert.rejects(publishOfficial(opts), /Invalid publication data/);
+});
+test('valid() requires https and rejects test-marked titles', () => {
+  assert.equal(valid(item), true);
+  assert.equal(valid({ ...item, url: 'http://example.org/test' }), false);
+  assert.equal(valid({ ...item, title: 'تجريبي: خبر للاختبار' }), false);
 });
 test('missing credentials, invalid entries and transport errors remain pending', async t => {
   const opts = await fixture(t, [item, { ...item, url: 'javascript:alert(1)' }]);
