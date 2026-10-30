@@ -262,6 +262,10 @@
             </div>
           </div>
         </div>
+        <div id="defensesAutoHome">
+          <h3>أحدث المناقشات من الأخبار الرسمية</h3>
+          <ul id="defensesAutoList"><li class="muted">جاري تحميل أحدث المناقشات…</li></ul>
+        </div>
       </div>
     </section>
 
@@ -292,6 +296,7 @@
           <div class="portal-icon tools-theme"><svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#E9C16C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></div>
           <h3>وظائف شاغرة الآن</h3>
           <p>تصفح أحدث إعلانات التوظيف في الجامعات العراقية الأهلية والحكومية.</p>
+          <p class="muted" id="oppLatestHome">جاري تحميل آخر إعلان…</p>
           <span class="btn btn-primary btn-lg">عرض الفرص ←</span>
         </a>
       </div>
@@ -1926,6 +1931,57 @@
       })
       .catch(function(){ bodyEl.innerHTML = '<p class="muted">تعذر التحميل.</p>'; });
   });
+  </script>
+  <script>
+  (function () {
+    var defList = document.getElementById('defensesAutoList');
+    var oppLatest = document.getElementById('oppLatestHome');
+    var DEFENSE_KW = ['مناقشة','رسالة ماجستير','رساله ماجستير','أطروحة دكتوراه','اطروحة دكتوراه','اطروحه'];
+    var JOB_INC = ['وظائف شاغرة','إعلان وظائف','اعلان وظائف','وظائف أكاديمية','تعيين على الملاك','للانضمام للكادر','للأنضمام للكادر','للإنضمام للكادر','انضمام للكادر'];
+    var JOB_EXC = ['دراسة','دراسات','ندوة','دورة','ورشة','مؤتمر','محاضرة','اختبار صلاحية'];
+    function esc(s) {
+      return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+    fetch('news.json', { cache: 'no-cache' })
+      .then(function (r) { if (!r.ok) throw new Error('http'); return r.json(); })
+      .then(function (items) {
+        var rev = (Array.isArray(items) ? items : []).slice().reverse();
+        if (defList) {
+          var defs = rev.filter(function (it) {
+            var t = String((it && it.title) || '');
+            return t && DEFENSE_KW.some(function (k) { return t.indexOf(k) !== -1; });
+          }).slice(0, 6);
+          if (!defs.length) {
+            defList.innerHTML = '<li class="muted">لا توجد مناقشات حديثة في الأخبار الرسمية.</li>';
+          } else {
+            defList.innerHTML = defs.map(function (it) {
+              var meta = esc(it.source || '') + (it.date ? ' — ' + esc(it.date) : '');
+              return '<li><a href="' + esc(it.url || '#') + '" target="_blank" rel="noopener">' + esc(it.title) + '</a> <span class="muted">' + meta + '</span></li>';
+            }).join('');
+          }
+        }
+        if (oppLatest) {
+          var job = null;
+          for (var i = 0; i < rev.length; i++) {
+            var it = rev[i];
+            if (!it) continue;
+            var txt = String(it.title || '') + ' ' + String(it.summary || '');
+            var inc = JOB_INC.some(function (k) { return txt.indexOf(k) !== -1; });
+            var exc = JOB_EXC.some(function (k) { return txt.indexOf(k) !== -1; });
+            if (inc && !exc) { job = it; break; }
+          }
+          if (job) {
+            oppLatest.textContent = 'آخر إعلان توظيف: ' + (job.title || '') + ' — ' + (job.source || '');
+          } else {
+            oppLatest.textContent = 'لا توجد إعلانات توظيف حديثة في الأخبار الرسمية.';
+          }
+        }
+      })
+      .catch(function () {
+        if (defList) defList.innerHTML = '<li class="muted">تعذر تحميل أحدث المناقشات.</li>';
+        if (oppLatest) oppLatest.textContent = 'لا توجد إعلانات توظيف حديثة في الأخبار الرسمية.';
+      });
+  })();
   </script>
 
 <!-- rebuild trigger -->
