@@ -9,7 +9,7 @@ export function normalizeNews(item) {
     if (typeof item[key] === 'string' && item[key].length <= 200) result[key] = item[key];
   }
   const url = new URL(result.url);
-  if (!['https:', 'http:'].includes(url.protocol) || url.username || url.password) throw new Error('invalid_url');
+  if (url.protocol !== 'https:' || url.username || url.password) throw new Error('invalid_url');
   if (result.title.includes('تجريبي:')) throw new Error('test_news_not_allowed');
   return result;
 }
