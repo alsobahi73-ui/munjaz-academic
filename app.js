@@ -1115,6 +1115,7 @@
       examModels[currentModel] = Array(qCount).fill(null);
       renderMasterKeyGrid();
       renderPrintableSheet();
+    });
     // --- استيراد ولصق مفتاح الحلول الصحيحة ---
     const importDrawer = $('#omrImportKeyDrawer');
     const importModelLabel = $('#omrImportModelLabel');
@@ -1662,7 +1663,7 @@
           correct++;
         } else if (!chosen) {
           blank++;
-          errorList.push(`س${i + 1} (متروك)`);
+          errorList.push(`س${i + 1} (متروك / غير مقروء للمراجعة اليدوية)`);
         } else {
           wrong++;
           errorList.push(`س${i + 1} (${chosen} ✗ / الحل ${correctOpt})`);
@@ -1712,6 +1713,7 @@
         // Fallback if cross-origin tainted
       }
 
+      const activeMasterKey = examModels[currentModel] || examModels['A'];
       const detectedAnswers = [];
       const letters = ['A', 'B', 'C', 'D'];
 
@@ -1769,32 +1771,20 @@
           if (sorted[0] > 70 && sorted[0] - sorted[1] > 18) {
             detectedAnswers.push(bestOpt);
           } else {
-            // محاكاة ذكية متسقة مع مفتاح الإجابة عند رصد الاختبارات التجريبية
-            const seed = (i * 3 + defaultName.length) % 10;
-            if (seed === 0) {
-              detectedAnswers.push(letters[(letters.indexOf(masterKey[i]) + 1) % 4]);
-            } else if (seed === 9) {
-              detectedAnswers.push(null); // متروك
-            } else {
-              detectedAnswers.push(masterKey[i] || 'A');
-            }
+            // فقرة غير واضحة أو تظليل مزدوج أو غير مقروءة: تُسجّل فارغة للمراجعة اليدوية دون محاكاة أو تخمين
+            void activeMasterKey[i];
+            detectedAnswers.push(null);
           }
         }
       } else {
-        // استجابة محاكاة ذكية متسقة للبيئة التجريبية
+        // تعذّر قراءة الصورة: تُسجّل جميع الفقرات فارغة/غير مقروءة للمراجعة اليدوية دون محاكاة أو تخمين
         for (let i = 0; i < qCount; i++) {
-          const rand = Math.random();
-          if (rand > 0.88) {
-            detectedAnswers.push(letters[Math.floor(Math.random() * 4)]);
-          } else if (rand < 0.05) {
-            detectedAnswers.push(null);
-          } else {
-            detectedAnswers.push(masterKey[i] || 'A');
-          }
+          void activeMasterKey[i];
+          detectedAnswers.push(null);
         }
       }
 
-      return gradeSheetAnswers(detectedAnswers, defaultName);
+      return gradeSheetAnswers(detectedAnswers, defaultName, currentModel);
     };
 
     // --- المسار الأول: كاميرا الموبايل التفاعلية ---
@@ -2143,6 +2133,9 @@
       const college = $('#omrGenCollege')?.value.trim() || 'وزارة التعليم العالي والبحث العلمي';
       const subject = $('#omrGenSubject')?.value.trim() || 'مادة الاختبار الأكاديمي';
       const stage = $('#omrGenStage')?.value.trim() || 'الدراسات الأولية';
+      const printYear = new Date();
+      const academicStart = printYear.getMonth() >= 8 ? printYear.getFullYear() : printYear.getFullYear() - 1;
+      const academicYear = academicStart + ' - ' + (academicStart + 1);
 
       const fullReportHtml = `
         <div style="direction: rtl; text-align: right; padding: 10px;">
@@ -2154,7 +2147,7 @@
               </td>
               <td width="35%" align="center">
                 <h2 style="margin: 0; color: #06302C;">كشف درجات الاختبار النهائي (OMR)</h2>
-                <span>العام الجامعي: 2024 - 2025 | ${stage}</span>
+                <span>العام الجامعي: ${academicYear} | ${stage}</span>
               </td>
               <td width="30%" align="left">
                 <span>المادة: <strong>${subject}</strong></span><br>
@@ -3646,6 +3639,29 @@
   /* =====================================================
      التنقل (موبايل) + تفاصيل عامة
      ===================================================== */
+
+  function initReferences() {
+    const authorEl = $('#refAuthor'), yearEl = $('#refYear'), titleEl = $('#refTitle');
+    const sourceEl = $('#refSource'), volEl = $('#refVol'), urlEl = $('#refUrl');
+    const typeEl = $('#refType'), outEl = $('#refOutput');
+    if (!authorEl || !yearEl || !titleEl || !outEl) return;
+    const render = () => {
+      const author = authorEl.value.trim(), year = yearEl.value.trim(), title = titleEl.value.trim();
+      const source = sourceEl ? sourceEl.value.trim() : '', vol = volEl ? volEl.value.trim() : '';
+      const url = urlEl ? urlEl.value.trim() : '', type = typeEl ? typeEl.value : 'journal';
+      if (!author || !year || !title) { outEl.value = ''; outEl.placeholder = 'أدخل المؤلف والسنة والعنوان لتوليد المرجع.'; return; }
+      let ref = author + ' (' + year + '). ' + title + '.';
+      if (source) ref += ' ' + source + (type === 'journal' && vol ? ', ' + vol : '') + '.';
+      if (url) ref += ' ' + url;
+      outEl.value = ref;
+    };
+    [authorEl, yearEl, titleEl, sourceEl, volEl, urlEl, typeEl].forEach((el) => { if (el) el.addEventListener('input', render); });
+    const copyBtn = $('#refCopyBtn');
+    if (copyBtn) copyBtn.addEventListener('click', () => { if (outEl.value && navigator.clipboard) navigator.clipboard.writeText(outEl.value); });
+    const clearBtn = $('#refClearBtn');
+    if (clearBtn) clearBtn.addEventListener('click', () => { [authorEl, yearEl, titleEl, sourceEl, volEl, urlEl].forEach((el) => { if (el) el.value = ''; }); render(); });
+  }
+
   function initNav() {
     const toggle = $('#navToggle');
     const nav = $('#mainNav');
@@ -3678,6 +3694,7 @@
     initOmrSystem();
     initUnits();
     initQuiz();
+    initReferences();
     modals.init();
     auth.init();
   });
