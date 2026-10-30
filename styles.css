@@ -892,13 +892,13 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
 .section-head h2::before, .section-head h2::after { width: 8px; height: 8px; }
 
 /* ===== Trio: three equal columns ===== */
-.trio-wrap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; align-items: start; max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
+.trio-wrap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; align-items: stretch; max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
 .trio-wrap .trio-col { display: flex; flex-direction: column; padding: 2.5rem 0; }
 .trio-wrap .trio-col .container { flex: 1; display: flex; flex-direction: column; max-width: 100%; padding: 0; }
 .trio-wrap .section-head { margin-bottom: 1.5rem; }
 .trio-wrap .section-head h2 { font-size: 1.2rem; }
 /* Equal height cards */
-.trio-wrap .portal-card, .trio-wrap .featured-wrap { flex: 0 0 auto; display: flex; flex-direction: column; }
+.trio-wrap .portal-card, .trio-wrap .featured-wrap { flex: 1; display: flex; flex-direction: column; }
 .trio-wrap .portal-card { justify-content: center; }
 /* Remove old duo styles */
 .duo-wrap { display: none; }
@@ -1098,18 +1098,18 @@ a.portal-card { text-decoration: none; color: inherit; }
 .trio-wrap .featured-card {
   position: relative;
   overflow: hidden;
-  flex: 0 0 auto;
+  flex: 1;
   width: 100%;
   max-width: 100%;
   min-height: 0;
-  height: auto;
+  height: 100%;
   margin: 0 !important;
   padding: 2.15rem 1.6rem 1.85rem !important;
   border-radius: 22px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   text-align: center;
   perspective: 900px;
