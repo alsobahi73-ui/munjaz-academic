@@ -33,7 +33,7 @@ jobs:
           node scripts/publish-official.mjs || status=$?
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          for file in news.json news_queue.json published.json; do
+          for file in news.json news-latest.json news_queue.json published.json; do
             if [ -f "$file" ]; then git add -- "$file"; fi
           done
           if ! git diff --cached --quiet; then
