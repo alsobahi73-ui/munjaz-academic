@@ -898,7 +898,7 @@ footer.site-footer { padding: 2.5rem 0 1.5rem; }
 .trio-wrap .section-head { margin-bottom: 1.5rem; }
 .trio-wrap .section-head h2 { font-size: 1.2rem; }
 /* Equal height cards */
-.trio-wrap .portal-card, .trio-wrap .featured-wrap { flex: 1; display: flex; flex-direction: column; }
+.trio-wrap .portal-card, .trio-wrap .featured-wrap { flex: 0 0 auto; display: flex; flex-direction: column; }
 .trio-wrap .portal-card { justify-content: center; }
 /* Remove old duo styles */
 .duo-wrap { display: none; }
@@ -1180,7 +1180,7 @@ a.portal-card { text-decoration: none; color: inherit; }
   font-size: .95rem;
   font-weight: 700;
   padding: .68rem 1.65rem;
-  margin-top: auto;
+  margin-top: 1.25rem;
   border-radius: 999px;
   background: linear-gradient(135deg, #0B4F4B 0%, #0E6B66 100%);
   color: #fff !important;
