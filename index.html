@@ -689,6 +689,60 @@
           </article>
           </div></dialog>
 
+          <!-- References builder -->
+          <dialog class="modal modal-lg" id="dlg-references" aria-labelledby="ttl-references"><div class="modal-box">
+          <button type="button" class="modal-close" data-close-modal aria-label="إغلاق">✕</button>
+          <article class="tool" id="tool-references">
+            <header class="tool-head">
+              <div>
+                <h3 id="ttl-references">منشئ المراجع الفوري</h3>
+                <span class="badge-tag">APA 7 — أدخل بياناتك أنت، ولا يولّد أي مرجع وهمي</span>
+              </div>
+            </header>
+            <label class="field">
+              <span>نوع المصدر</span>
+              <select id="refType">
+                <option value="journal">مقال في مجلة</option>
+                <option value="book">كتاب</option>
+                <option value="website">موقع إلكتروني</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>المؤلف (مثال: حماد، ق.)</span>
+              <input type="text" id="refAuthor" placeholder="اللقب، الحرف الأول من الاسم">
+            </label>
+            <label class="field">
+              <span>السنة</span>
+              <input type="number" id="refYear" min="1900" max="2100" step="1" placeholder="مثال: 2026">
+            </label>
+            <label class="field">
+              <span>عنوان العمل</span>
+              <input type="text" id="refTitle" placeholder="عنوان المقال أو الكتاب">
+            </label>
+            <label class="field">
+              <span>اسم المجلة أو الناشر أو الموقع</span>
+              <input type="text" id="refSource" placeholder="حسب نوع المصدر">
+            </label>
+            <label class="field">
+              <span>المجلد / العدد / الصفحات (للمجلة، اختياري)</span>
+              <input type="text" id="refVol" placeholder="مثال: 5(2)، 628-637">
+            </label>
+            <label class="field">
+              <span>الرابط أو DOI (اختياري)</span>
+              <input type="text" id="refUrl" placeholder="مثال: https://doi.org/10.xxxx">
+            </label>
+            <label class="field">
+              <span>المرجع بصيغة APA 7</span>
+              <textarea id="refOutput" rows="4" readonly placeholder="أدخل المؤلف والسنة والعنوان لتوليد المرجع."></textarea>
+            </label>
+            <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+              <button type="button" class="btn btn-teal" id="refCopyBtn">نسخ المرجع</button>
+              <button type="button" class="btn btn-outline" id="refClearBtn">مسح الحقول</button>
+            </div>
+            <p class="tool-note" id="refNote">راجع المرجع المولّد مقابل المصدر الأصلي قبل إدراجه في بحثك.</p>
+          </article>
+          </div></dialog>
+
           <!-- Sample size -->
           <dialog class="modal modal-lg" id="dlg-sample" aria-labelledby="ttl-sample"><div class="modal-box">
           <button type="button" class="modal-close" data-close-modal aria-label="إغلاق">✕</button>
@@ -862,7 +916,9 @@
                       <option value="10">10 أسئلة (كويز سريع)</option>
                       <option value="15">15 سؤالاً</option>
                       <option value="20" selected>20 سؤالاً (امتحان فصلي)</option>
+                      <option value="25">25 سؤالاً</option>
                       <option value="30">30 سؤالاً</option>
+                      <option value="35">35 سؤالاً</option>
                       <option value="40">40 سؤالاً</option>
                       <option value="50">50 سؤالاً (امتحان شامل / نهائي)</option>
                     </select>
