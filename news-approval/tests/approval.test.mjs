@@ -128,6 +128,26 @@ test('admin pauses sync/status cleanly when worker is not configured, while publ
     await assert.rejects(runAdmin({ APPROVAL_ACTION: action, APPROVAL_WORKER_URL: 'https://worker.example.org', APPROVAL_ITEM_ID: 'a'.repeat(32) }), /سر الإدارة غير مضبوط/);
   }
 });
+test('admin pauses sync/status when the configured worker is unreachable, while manual decisions still fail loudly', async () => {
+  const { runAdmin } = await import('../admin.mjs');
+  const env = { APPROVAL_WORKER_URL: 'https://worker.example.org', APPROVAL_ADMIN_SECRET: 'ADMIN_TEST' };
+  for (const action of ['sync', 'status']) {
+    const thrown = await runAdmin({ ...env, APPROVAL_ACTION: action }, async () => { throw Error('fetch failed'); });
+    assert.equal(thrown.ok, true);
+    assert.equal(thrown.paused, true);
+    assert.equal(thrown.configured, false);
+    assert.equal(thrown.reviewed, 0);
+    assert.equal(thrown.published, 0);
+    assert.match(thrown.message, /غير قابل للوصول/);
+    const bad = await runAdmin({ ...env, APPROVAL_ACTION: action }, async () => Response.json({ ok: false }, { status: 502 }));
+    assert.equal(bad.paused, true);
+    assert.equal(bad.configured, false);
+  }
+  await assert.rejects(
+    runAdmin({ ...env, APPROVAL_ACTION: 'publish', APPROVAL_ITEM_ID: 'a'.repeat(32) }, async () => { throw Error('fetch failed'); }),
+    /تعذّر الاتصال/
+  );
+});
 test('collector empty summaries and metadata are supported without invented content', () => {
   const item=normalizeNews({...fixture(),summary:'',source_id:'source',collected_at:'2026-10-11'});
   assert.equal(item.summary,'');assert.equal(item.source_id,'source');assert.equal(item.collected_at,'2026-10-11');
