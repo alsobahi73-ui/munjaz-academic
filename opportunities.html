@@ -40,6 +40,10 @@
       <div class="job-listings" id="jobListingsPage">
         <p class="muted" style="text-align:center">جارٍ التحميل…</p>
       </div>
+      <section style="margin-top:2rem">
+        <h3>إعلانات توظيف من الأخبار الرسمية</h3>
+        <div class="job-listings" id="autoJobsList"></div>
+      </section>
     </div>
     <p style="text-align:center;margin-top:2rem">
       <a class="btn btn-primary" href="jobs.html">سجّل بياناتك كباحث عن عمل ←</a>
@@ -70,6 +74,51 @@
       });
     })
     .catch(function(){wrap.innerHTML='<p class="muted" style="text-align:center">تعذر تحميل الإعلانات.</p>';});
+})();
+</script>
+<script>
+(function () {
+  var wrap = document.getElementById('autoJobsList');
+  if (!wrap) return;
+  var JOB_INC = ['وظائف شاغرة','إعلان وظائف','اعلان وظائف','وظائف أكاديمية','تعيين على الملاك','للانضمام للكادر','للأنضمام للكادر','للإنضمام للكادر','انضمام للكادر'];
+  var JOB_EXC = ['دراسة','دراسات','ندوة','دورة','ورشة','مؤتمر','محاضرة','اختبار صلاحية'];
+  function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  fetch('news.json', { cache: 'no-cache' })
+    .then(function(r){ if (!r.ok) throw new Error('http'); return r.json(); })
+    .then(function(items){
+      var rev = (Array.isArray(items) ? items : []).slice().reverse();
+      var seen = {};
+      var matched = [];
+      for (var i = 0; i < rev.length && matched.length < 12; i++) {
+        var it = rev[i];
+        if (!it || !it.url || seen[it.url]) continue;
+        var txt = String(it.title || '') + ' ' + String(it.summary || '');
+        var inc = JOB_INC.some(function(k){ return txt.indexOf(k) !== -1; });
+        var exc = JOB_EXC.some(function(k){ return txt.indexOf(k) !== -1; });
+        if (inc && !exc) {
+          seen[it.url] = true;
+          matched.push(it);
+        }
+      }
+      if (!matched.length) {
+        wrap.innerHTML = '<p class="muted" style="text-align:center">لا توجد إعلانات توظيف حديثة في الأخبار الرسمية.</p>';
+        return;
+      }
+      wrap.innerHTML = '';
+      matched.forEach(function(j){
+        var card = document.createElement('article');
+        card.className = 'job-listing-card';
+        card.innerHTML =
+          '<div class="job-listing-head"><h4>' + esc(j.title) + '</h4><span class="job-listing-univ">' + esc(j.source) + '</span></div>' +
+          (j.summary ? '<p>' + esc(j.summary) + '</p>' : '') +
+          '<div class="job-listing-meta">' + (j.date ? '<span>' + esc(j.date) + '</span>' : '') + '</div>' +
+          (j.url ? '<a href="' + esc(j.url) + '" target="_blank" rel="noopener" class="job-listing-link">عرض الإعلان الأصلي</a>' : '');
+        wrap.appendChild(card);
+      });
+    })
+    .catch(function(){
+      wrap.innerHTML = '<p class="muted" style="text-align:center">تعذر تحميل إعلانات التوظيف من الأخبار.</p>';
+    });
 })();
 </script>
 </body>
