@@ -9,7 +9,8 @@ const publicItem = item => Object.fromEntries(fields.map(key => [key, item[key]]
 export function valid(item) {
   if (!item || !fields.every(key => typeof item[key] === 'string') ||
       !['title', 'url', 'source', 'date', 'category'].every(key => item[key].trim())) return false;
-  try { return ['https:', 'http:'].includes(new URL(item.url).protocol); } catch { return false; }
+  if (item.title.includes('تجريبي:')) return false;
+  try { return new URL(item.url).protocol === 'https:'; } catch { return false; }
 }
 async function readArray(path) {
   try {
