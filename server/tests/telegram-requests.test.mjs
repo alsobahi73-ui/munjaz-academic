@@ -8,7 +8,7 @@ const ctx = createContext({window:{}});
 new Script(await readFile(new URL('../../academic-services-data.js', import.meta.url),'utf8')).runInContext(ctx);
 const catalog=ctx.window.AcademicServicesCatalog;
 const origin='https://munjiz.example';
-const payload=()=>({requestId:randomUUID(),service:'reports',name:'',phone:'',details:'أحتاج تنسيق التقرير العلمي وفق متطلبات الجامعة.',consent:true});
+const payload=()=>({requestId:randomUUID(),service:'reports',name:'',phone:'+9647701234567',details:'أحتاج تنسيق التقرير العلمي وفق متطلبات الجامعة.',consent:true});
 const makeRequest=(body,opts={})=>new Request('https://api.example/api/academic-requests',{
  method:'POST',headers:{Origin:origin,'Content-Type':'application/json',...opts.headers},body:JSON.stringify(body)});
 const makeHandler=(fetchImpl,extra={})=>createRequestHandler({catalog,token:'FAKE_TEST_TOKEN',chatId:'1234',siteOrigin:origin,fetchImpl,...extra});
@@ -22,11 +22,11 @@ test('sends exact approved service/category and anonymous message; verifies prov
  assert.ok(sent.body.text.includes(input.details));assert.ok(sent.body.text.includes('مدفوعة'));
  assert.equal(sent.body.parse_mode,undefined);
 });
-test('validates all service IDs, optional Arabic phone, consent, UUID and size',async()=>{
+test('validates all service IDs, mandatory phone, consent, UUID and size',async()=>{
  let calls=0;const handler=makeHandler(async()=>{calls++;return ok();});
- for(const service of catalog.flatMap(g=>g.services)){const input={...payload(),service:service.id,phone:'٠٠٩٦٤٧٨١٩٩٣٤٢١٠'};assert.equal((await handler(makeRequest(input),service.id)).status,201);}
+ for(const service of catalog.flatMap(g=>g.services)){const input={...payload(),service:service.id,phone:'٠٠٩٦٤٧٧٠١٢٣٤٥٦٧'};assert.equal((await handler(makeRequest(input),service.id)).status,201);}
  assert.equal(calls,15);
- for(const invalid of [{consent:false},{consent:'true'},{service:'unknown'},{details:'قصير'},{details:'x'.repeat(2501)},{name:'x'.repeat(101)},{phone:'abcdefg'},{requestId:'invalid'},{phone:1234}]){
+ for(const invalid of [{consent:false},{consent:'true'},{service:'unknown'},{details:'قصير'},{details:'x'.repeat(2501)},{name:'x'.repeat(101)},{phone:''},{phone:'abcdefg'},{requestId:'invalid'},{phone:1234}]){
    assert.equal((await handler(makeRequest({...payload(),...invalid}),'invalid')).status,400);
  }
  assert.equal(calls,15);
