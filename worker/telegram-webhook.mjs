@@ -19,7 +19,7 @@ export function createTelegramWebhook({ token, adminChatId, webhookSecret, fetch
     'لا نكتب عنك… <b>ننجز معك</b>.',
     '',
     'أرسل استفسارك هنا مباشرة وسيرد عليك فريقنا.',
-    'لتصفح خدماتنا: https://alsobahi73-ui.github.io/munjaz-academic/',
+    'لتصفح خدماتنا: https://munjazacademic.pages.dev/',
   ].join('\n');
 
   return async function handleWebhook(request) {
