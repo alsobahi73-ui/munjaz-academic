@@ -28,12 +28,12 @@ test('rejects wrong secret', async () => {
   assert.equal(res.status, 403);
 });
 
-test('allows missing secret when unconfigured', async () => {
+test('rejects every request when the secret is unconfigured', async () => {
   calls.length = 0;
   const res = await hook({ webhookSecret: '' })(new Request('https://worker.example/telegram-webhook', {
     method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ update_id: 2 }),
   }));
-  assert.equal(res.status, 200);
+  assert.equal(res.status, 403);
   assert.equal(calls.length, 0);
 });
 

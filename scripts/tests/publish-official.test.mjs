@@ -35,14 +35,20 @@ test('publishes exact fields and Arabic message; skips unofficial and deduplicat
   assert.equal(calls, 1);
   assert.deepEqual(await read(opts.root, 'news_queue'), []);
 });
-test('Telegram rejection retains queue, updates site, retries only Telegram', async t => {
+test('Telegram rejection retains queue, updates site, backs off, then retries only Telegram', async t => {
   const opts = await fixture(t);
   const success = opts.fetchImpl;
   opts.fetchImpl = async () => Response.json({ ok: false }, { status: 429 });
   assert.equal((await publishOfficial(opts)).pending, 1);
   assert.equal((await read(opts.root, 'news')).length, 1);
   assert.equal((await read(opts.root, 'news_queue')).length, 1);
+  // Immediate retry is backed off (no Telegram call, item still pending).
   opts.fetchImpl = success;
+  const backed = await publishOfficial(opts);
+  assert.equal(backed.backedOff, 1);
+  assert.equal((await read(opts.root, 'news_queue')).length, 1);
+  // After the backoff window, the retry succeeds and sends Telegram only.
+  opts.now = () => new Date(Date.now() + 7 * 60 * 60 * 1000).toISOString();
   await publishOfficial(opts);
   assert.equal((await read(opts.root, 'news')).length, 1);
   assert.deepEqual(await read(opts.root, 'news_queue'), []);
@@ -74,7 +80,7 @@ test('corrupt website data still allows Telegram; corrupt queue fails safely', a
 test('missing credentials, invalid entries and transport errors remain pending', async t => {
   const opts = await fixture(t, [item, { ...item, url: 'javascript:alert(1)' }]);
   opts.token = '';
-  assert.deepEqual(await publishOfficial(opts), { completed: 0, pending: 1, invalid: 1 });
+  assert.deepEqual(await publishOfficial(opts), { completed: 0, pending: 1, invalid: 1, backedOff: 0, telegramFailedNow: 1, websitePending: 0 });
   opts.token = 'TEST_ONLY';
   opts.fetchImpl = async () => { throw Error('Do not expose provider URL'); };
   assert.equal((await publishOfficial(opts)).pending, 1);

@@ -45,12 +45,29 @@ export async function runAdmin(env = process.env, fetchImpl = fetch) {
     }
     headers = { Authorization: `Bearer ${adminSecret}` };
   }
+  // لإجراءي sync/status فقط: عامل غير قابل للوصول = إيقاف هادئ (exit 0)،
+  // لا فشل متكرر. القرارات اليدوية وwebhook تبقى فشلًا صريحًا.
+  const safePause = !decision && !webhookAction;
+  const unreachablePause = () => ({
+    ok: true,
+    paused: true,
+    configured: false,
+    reviewed: 0,
+    published: 0,
+    message: 'عامل الموافقة (munjaz-news-approval) غير قابل للوصول حاليًا؛ مراجعة الأخبار غير الرسمية متوقفة مؤقتًا ولم تتم مراجعة أو نشر أي خبر.'
+  });
   let response, data;
   try {
     response = await fetchImpl(url, { method: 'POST', headers: { ...headers, 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal: AbortSignal.timeout(60000) });
     data = await response.json();
-  } catch { throw Error('تعذّر الاتصال؛ افحص الحالة قبل إعادة الإرسال'); }
-  if (!response.ok || data.ok === false) throw Error('فشل الإجراء؛ افحص حالة المراجعة وإعدادات الوصول دون إعادة نشر يدوي مكرر');
+  } catch {
+    if (safePause) return unreachablePause();
+    throw Error('تعذّر الاتصال؛ افحص الحالة قبل إعادة الإرسال');
+  }
+  if (!response.ok || data.ok === false) {
+    if (safePause) return unreachablePause();
+    throw Error('فشل الإجراء؛ افحص حالة المراجعة وإعدادات الوصول دون إعادة نشر يدوي مكرر');
+  }
   if (action === 'webhook-status') return { configured: Boolean(data.result?.url), pending_updates: data.result?.pending_update_count, has_error: Boolean(data.result?.last_error_message) };
   if (action === 'set-webhook') return { configured: true };
   return data;

@@ -112,6 +112,32 @@
     return n;
   };
 
+  /* ---------- تحميل مكتبات المستندات عند الطلب فقط ---------- */
+  // mammoth وpdf.js لا تُحمَّلان مع الرئيسية أبدًا؛ تُحمَّلان ديناميكيًا
+  // عند أول استخدام فعلي (تصحيح PDF جماعي، أو رفع docx/pdf لمولّد الأسئلة).
+  const loadScriptOnce = (src) => new Promise((resolve, reject) => {
+    const existing = document.querySelector(`script[data-src="${src}"]`);
+    if (existing) { if (existing.dataset.loaded === '1') resolve(); else { existing.addEventListener('load', resolve); existing.addEventListener('error', reject); } return; }
+    const s = document.createElement('script');
+    s.dataset.src = src;
+    s.src = src;
+    s.addEventListener('load', () => { s.dataset.loaded = '1'; resolve(); });
+    s.addEventListener('error', reject);
+    document.head.appendChild(s);
+  });
+  const PDFJS_URL = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+  const PDFJS_WORKER_URL = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  const MAMMOTH_URL = 'https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js';
+  const ensurePdfJs = async () => {
+    if (!window.pdfjsLib) await loadScriptOnce(PDFJS_URL);
+    if (!window.pdfjsLib) throw new Error('مكتبة قراءة PDF لم تكتمل.');
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS_WORKER_URL;
+  };
+  const ensureMammoth = async () => {
+    if (!window.mammoth) await loadScriptOnce(MAMMOTH_URL);
+    if (!window.mammoth || typeof window.mammoth.extractRawText !== 'function') throw new Error('مكتبة فك ملفات Word لم تكتمل في المتصفح.');
+  };
+
   /* ---------- تيليجرام: الاسم من إعدادات الخدمات المشتركة ---------- */
   function telegramLink() {
     return `https://t.me/${window.AcademicServicesConfig.telegramBotUsername}`;
@@ -446,7 +472,10 @@
           ? `، ولتعويض معدل عدم الاستجابة المتوقع (${Math.round(resp * 100)}%) استوجب توزيع (${fmt(Math.ceil(n / resp))}) استبانة لضمان استرداد الحد الأدنى المطلوب`
           : '';
 
-        quoteEl.textContent = `«تم تحديد حجم العينة الممثلة للدراسة الحالية وفقاً لمعادلة كوكران (Cochran, 1977) عند مستوى ثقة قدره (${confPct}؛ Z = ${z}) وهامش خطأ مسموح به (e = ±${marginPct}) وبافتراض نسبة التباين القصوى (P = 0.50) لضمان أقصى درجات التمثيل والحياد الإحصائي. و${popPhrase} استقر الحد الأدنى العلمي لحجم العينة المعتمدة عند (n = ${n}) مستجيباً/مفردة${respPhrase}، بما يحقق الكفاية الإحصائية المعتمدة أكاديمياً لتعميم النتائج.»`;
+        const pPhrase = p === 0.5
+          ? 'وبافتراض نسبة التباين القصوى (P = 0.50) لضمان أقصى درجات التمثيل والحياد الإحصائي'
+          : `وبافتراض نسبة حدوث الظاهرة (P = ${p.toFixed(2)})`;
+        quoteEl.textContent = `«تم تحديد حجم العينة الممثلة للدراسة الحالية وفقاً لمعادلة كوكران (Cochran, 1977) عند مستوى ثقة قدره (${confPct}؛ Z = ${z}) وهامش خطأ مسموح به (e = ±${marginPct}) ${pPhrase}. و${popPhrase} استقر الحد الأدنى العلمي لحجم العينة المعتمدة عند (n = ${n}) مستجيباً/مفردة${respPhrase}، بما يحقق الكفاية الإحصائية المعتمدة أكاديمياً لتعميم النتائج.»`;
       }
     };
     ids.forEach((id) => $('#' + id).addEventListener('input', calc));
@@ -949,6 +978,15 @@
     } catch { /* ignore */ }
 
     let gradebook = [];
+    // الحفظ التلقائي للكشف: نفس نمط مفاتيح munjaz_omr_* الموجودة، مع
+    // نسخة عامة ونسخة للمستخدم المسجّل، ويُستعاد عند إعادة فتح الأداة.
+    const omrUser = auth?.user?.email || null;
+    const gradebookKey = () => (omrUser ? `munjaz_omr_gradebook_${omrUser}` : 'munjaz_omr_gradebook');
+    const saveGradebook = () => { try { store.set(gradebookKey(), gradebook); store.set('munjaz_omr_gradebook', gradebook); } catch { /* ignore */ } };
+    try {
+      const saved = (omrUser && store.get(`munjaz_omr_gradebook_${omrUser}`)) || store.get('munjaz_omr_gradebook');
+      if (Array.isArray(saved)) gradebook = saved.filter((st) => st && typeof st.name === 'string' && Array.isArray(st.details)).map((st, i) => ({ ...st, id: i + 1 }));
+    } catch { /* ignore */ }
     let currentCameraStream = null;
     let currentSingleResult = null;
     let batchFiles = [];
@@ -1644,17 +1682,51 @@
     });
 
     // --- محرك تحليل التصحيح الضوئي (OMR Engine) عبر Canvas ---
+    // إصلاح المفتاح الناقص: السؤال بلا مفتاح لا يُحتسب صحيحًا ولا خاطئًا ولا
+    // يُعرض له «حل» أبدًا؛ بل يُستثنى من المقام مع تنبيه واضح. والمفتاح
+    // الفارغ كليًا يمنع التصحيح (blocked) بدل نتيجة صفر مضللة.
     const gradeSheetAnswers = (detectedAnswers, studentName = 'طالب', detectedModel = null) => {
       let correct = 0;
       let wrong = 0;
       let blank = 0;
+      let excluded = 0;
       const details = [];
       const errorList = [];
 
       const modelUsed = detectedModel || currentModel;
       const activeMasterKey = examModels[modelUsed] || examModels['A'];
+      const keyed = [];
+      for (let i = 0; i < qCount; i++) keyed.push(['A', 'B', 'C', 'D'].includes(activeMasterKey[i]));
+      const totalKeyed = keyed.filter(Boolean).length;
+
+      if (totalKeyed === 0) {
+        return {
+          id: gradebook.length + 1,
+          name: studentName,
+          model: modelUsed,
+          score: 0,
+          total: qCount,
+          totalKeyed: 0,
+          pct: 0,
+          grade: 'غير مصحَّح — المفتاح فارغ',
+          passed: false,
+          wrong: 0,
+          blank: qCount,
+          excluded: qCount,
+          keyIncomplete: true,
+          blocked: true,
+          errorSummary: 'المفتاح فارغ — أكمل مفتاح الإجابة قبل التصحيح',
+          details: Array.from({ length: qCount }, (_, i) => ({ q: i + 1, chosen: null, correctOpt: null, isCorrect: false, excluded: true })),
+        };
+      }
 
       for (let i = 0; i < qCount; i++) {
+        if (!keyed[i]) {
+          excluded++;
+          errorList.push(`س${i + 1} (مستثناة — بلا مفتاح)`);
+          details.push({ q: i + 1, chosen: detectedAnswers[i] || null, correctOpt: null, isCorrect: false, excluded: true });
+          continue;
+        }
         const correctOpt = activeMasterKey[i];
         const chosen = detectedAnswers[i];
         const isCorrect = chosen && chosen === correctOpt;
@@ -1677,7 +1749,7 @@
         });
       }
 
-      const pct = Math.round((correct / qCount) * 100);
+      const pct = Math.round((correct / totalKeyed) * 100);
       let grade = 'راسب';
       if (pct >= 90) grade = 'ممتاز';
       else if (pct >= 80) grade = 'جيد جداً';
@@ -1690,19 +1762,36 @@
         name: studentName,
         model: modelUsed,
         score: correct,
-        total: qCount,
+        total: totalKeyed,
+        qCount,
+        totalKeyed,
         pct,
         grade,
         passed: pct >= 50,
         wrong,
         blank,
-        errorSummary: errorList.length ? errorList.slice(0, 3).join('، ') + (errorList.length > 3 ? ` و+${errorList.length - 3}` : '') : 'خالٍ من الأخطاء ✓',
+        excluded,
+        keyIncomplete: excluded > 0,
+        blocked: false,
+        errorSummary: (excluded > 0 ? `تنبيه: ${excluded} سؤالًا بلا مفتاح مستثناة من النسبة. ` : '') + (errorList.length ? errorList.slice(0, 3).join('، ') + (errorList.length > 3 ? ` و+${errorList.length - 3}` : '') : 'خالٍ من الأخطاء ✓'),
         details,
       };
     };
 
+    // تأكيد النموذج قبل التصحيح: الورقة المطبوعة تحمل FORM (X) لكن القارئ
+    // لا يقرأها من الصورة، فلا يجوز التصحيح بصمت بنموذج الواجهة. يُطلب من
+    // المستخدم إدخال النموذج المطبوع على الورقة، ويُستخدم هو لا نموذج
+    // الواجهة إذا اختلفا. إلغاء أو إدخال غير صالح = إيقاف التصحيح.
+    const askSheetModel = () => {
+      const entered = window.prompt(`أدخل النموذج المطبوع على الورقة (A أو B أو C أو D).\nالنموذج المختار حاليًا في الواجهة هو (${currentModel}).\nإذا كانا مختلفين، سيُصحَّح بالنموذج المطبوع على الورقة.`, currentModel);
+      if (entered === null) return null;
+      const m = entered.trim().toUpperCase();
+      if (!['A', 'B', 'C', 'D'].includes(m)) { alert('نموذج غير صالح — أدخل A أو B أو C أو D فقط، ولم يتم تصحيح أي ورقة.'); return null; }
+      return m;
+    };
+
     // تحليل صورة من Canvas واستخراج الإجابات المظللة
-    const processCanvasOMR = (canvas, defaultName = 'طالب') => {
+    const processCanvasOMR = (canvas, defaultName = 'طالب', sheetModel = null) => {
       const ctx = canvas.getContext('2d');
       const w = canvas.width;
       const h = canvas.height;
@@ -1713,7 +1802,8 @@
         // Fallback if cross-origin tainted
       }
 
-      const activeMasterKey = examModels[currentModel] || examModels['A'];
+      const gradingModel = sheetModel || currentModel;
+      const activeMasterKey = examModels[gradingModel] || examModels['A'];
       const detectedAnswers = [];
       const letters = ['A', 'B', 'C', 'D'];
 
@@ -1784,7 +1874,7 @@
         }
       }
 
-      return gradeSheetAnswers(detectedAnswers, defaultName, currentModel);
+      return gradeSheetAnswers(detectedAnswers, defaultName, gradingModel);
     };
 
     // --- المسار الأول: كاميرا الموبايل التفاعلية ---
@@ -1821,12 +1911,25 @@
       const card = $('#omrInstantResultCard');
       if (!card) return;
 
-      $('#omrSingleScore').textContent = `${res.score} / ${res.total}`;
-      $('#omrSinglePct').textContent = `${res.pct}%`;
+      $('#omrSingleScore').textContent = res.blocked ? '—' : `${res.score} / ${res.total}`;
+      $('#omrSinglePct').textContent = res.blocked ? '—' : `${res.pct}%`;
+      const modelEl = $('#omrSingleModel');
+      if (modelEl) modelEl.textContent = `النموذج المصحَّح به: (${res.model || 'A'})`;
+      const warnEl = $('#omrSingleWarning');
+      if (warnEl) {
+        warnEl.textContent = res.blocked
+          ? 'لم يتم التصحيح: مفتاح الإجابة للنموذج فارغ. أكمل المفتاح ثم أعد التصوير، ولن تُحفظ هذه الورقة في الكشف.'
+          : res.keyIncomplete
+          ? `تنبيه: ${res.excluded} سؤالًا بلا مفتاح استُثنيت من النسبة — النسبة محسوبة من ${res.totalKeyed} سؤالًا فقط. أكمل المفتاح لتصحيح كامل.`
+          : res.total && res.blank / res.total > 0.3
+          ? 'تحذير جودة التصوير: نسبة كبيرة من الفقرات غير مقروءة — غالبًا بسبب ميل الصورة أو قصّ حواف الورقة. أعد التصوير من الأعلى مباشرة والورقة كاملة داخل الإطار، وراجع الفقرات يدويًا.'
+          : '';
+        warnEl.hidden = !warnEl.textContent;
+      }
       const statusPill = $('#omrSingleStatus');
       if (statusPill) {
-        statusPill.textContent = res.passed ? 'ناجح ✓' : 'راسب ✗';
-        statusPill.className = `status-pill ${res.passed ? 'pass' : 'fail'}`;
+        statusPill.textContent = res.blocked ? 'غير مصحَّح' : res.passed ? 'ناجح ✓' : 'راسب ✗';
+        statusPill.className = `status-pill ${res.blocked ? '' : res.passed ? 'pass' : 'fail'}`;
       }
 
       const nameInput = $('#omrSingleStudentName');
@@ -1836,8 +1939,10 @@
       if (breakdownBox) {
         breakdownBox.innerHTML = res.details
           .map((d) => {
-            const cls = d.isCorrect ? 'correct' : d.chosen ? 'wrong' : 'blank';
-            const label = d.isCorrect
+            const cls = d.excluded ? 'blank' : d.isCorrect ? 'correct' : d.chosen ? 'wrong' : 'blank';
+            const label = d.excluded
+              ? `س${d.q}: (مستثناة — بلا مفتاح)`
+              : d.isCorrect
               ? `س${d.q}: (${d.chosen}) ✓`
               : d.chosen
               ? `س${d.q}: (${d.chosen} ✗ / الحل ${d.correctOpt})`
@@ -1863,7 +1968,9 @@
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
       const nextNum = gradebook.length + 1;
-      const res = processCanvasOMR(canvas, `طالب ورقة #${nextNum}`);
+      const sheetModel = askSheetModel();
+      if (!sheetModel) return;
+      const res = processCanvasOMR(canvas, `طالب ورقة #${nextNum}`, sheetModel);
       showInstantResult(res);
     });
 
@@ -1882,7 +1989,9 @@
         ctx.drawImage(img, 0, 0);
 
         const cleanName = file.name.replace(/\.[^.]+$/, '') || `طالب ورقة #${gradebook.length + 1}`;
-        const res = processCanvasOMR(canvas, cleanName);
+        const sheetModel = askSheetModel();
+        if (!sheetModel) return;
+        const res = processCanvasOMR(canvas, cleanName, sheetModel);
         showInstantResult(res);
       };
       img.src = URL.createObjectURL(file);
@@ -1891,6 +2000,7 @@
     // حفظ نتيجة الورقة الفردية في كشف الدرجات
     $('#omrSaveSingleToBookBtn')?.addEventListener('click', () => {
       if (!currentSingleResult) return;
+      if (currentSingleResult.blocked) { alert('هذه الورقة غير مصحَّحة لأن مفتاح الإجابة فارغ — أكمل المفتاح ثم أعد تصويرها قبل الحفظ.'); return; }
       const customName = $('#omrSingleStudentName')?.value.trim();
       if (customName) currentSingleResult.name = customName;
 
@@ -1964,8 +2074,14 @@
     });
 
     // بدء التصحيح الضوئي الشامل للدفعة
+    // تأكيد واحد للنموذج المطبوع على كل أوراق الدفعة قبل البدء، لأن الدفعة
+    // الواحدة عادةً من نموذج واحد؛ ولا تُدخل نتيجة محظورة (مفتاح فارغ) أبدًا.
     startBatchBtn?.addEventListener('click', async () => {
       if (!batchFiles.length) return;
+
+      const batchModel = askSheetModel();
+      if (!batchModel) return;
+      let batchBlocked = 0;
 
       startBatchBtn.disabled = true;
       const progressWrap = $('#omrBatchProgressWrap');
@@ -1987,10 +2103,7 @@
 
         // معالجة ملف PDF متعدد الصفحات عبر PDF.js
         if (firstFile.type === 'application/pdf' || firstFile.name.toLowerCase().endsWith('.pdf')) {
-          if (!window.pdfjsLib) {
-            throw new Error('مكتبة PDF.js غير متوفرة في الصفحة');
-          }
-          pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+          await ensurePdfJs();
 
           const arrayBuffer = await firstFile.arrayBuffer();
           const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
@@ -2007,8 +2120,8 @@
 
             await page.render({ canvasContext: offCtx, viewport }).promise;
 
-            const res = processCanvasOMR(offCanvas, `طالب صفحة #${p}`);
-            gradebook.push(res);
+            const res = processCanvasOMR(offCanvas, `طالب صفحة #${p}`, batchModel);
+            if (res.blocked) batchBlocked++; else gradebook.push(res);
           }
         } else {
           // معالجة حزمة صور ممسوحة بالسكنر (JPG / PNG)
@@ -2027,8 +2140,8 @@
                 offCtx.drawImage(img, 0, 0);
 
                 const cleanName = f.name.replace(/\.[^.]+$/, '') || `طالب ورقة #${gradebook.length + 1}`;
-                const res = processCanvasOMR(offCanvas, cleanName);
-                gradebook.push(res);
+                const res = processCanvasOMR(offCanvas, cleanName, batchModel);
+                if (res.blocked) batchBlocked++; else gradebook.push(res);
                 resolve();
               };
               img.onerror = resolve;
@@ -2040,6 +2153,7 @@
         if (progressText) progressText.textContent = 'اكتمل التصحيح الضوئي للدفعة بنجاح ✓';
         if (progressPct) progressPct.textContent = '100%';
         if (progressBar) progressBar.style.width = '100%';
+        if (batchBlocked > 0) alert(`تم تخطي ${batchBlocked} ورقة لأن مفتاح الإجابة للنموذج (${batchModel}) فارغ أو غير مكتمل كليًا — أكمل المفتاح ثم أعد تصحيحها، ولم تُدخل أي نتيجة مضللة في الكشف.`);
 
         renderGradebook();
         $('#omrGradebookSection').hidden = false;
@@ -2059,6 +2173,7 @@
       const total = gradebook.length;
       if (total === 0) {
         section.hidden = true;
+        saveGradebook();
         return;
       }
       section.hidden = false;
@@ -2093,6 +2208,7 @@
           <td><small style="color: ${st.wrong === 0 && st.blank === 0 ? '#2E7D32' : '#C53030'};">${st.errorSummary}</small></td>`;
         tbody.append(tr);
       });
+      saveGradebook();
     };
 
     // تصدير كشف الدرجات إلى CSV / Excel متوافق مع الحروف العربية
@@ -2179,6 +2295,7 @@
     // التهيئة الابتدائية
     renderMasterKeyGrid();
     renderPrintableSheet();
+    renderGradebook();
   }
 
   /* =====================================================
@@ -2585,12 +2702,9 @@
         const reader = new FileReader();
         reader.onload = async (e) => {
           try {
-            if (window.mammoth && typeof window.mammoth.extractRawText === 'function') {
-              const res = await window.mammoth.extractRawText({ arrayBuffer: e.target.result });
-              processExtractedText(res.value, name);
-            } else {
-              throw new Error('مكتبة فك ملفات Word لم تكتمل في المتصفح.');
-            }
+            await ensureMammoth();
+            const res = await window.mammoth.extractRawText({ arrayBuffer: e.target.result });
+            processExtractedText(res.value, name);
           } catch (err) {
             if (fileMsg) {
               fileMsg.textContent = 'تعذر استخراج النص من ملف Word: ' + (err.message || '');
@@ -2607,8 +2721,7 @@
         const reader = new FileReader();
         reader.onload = async (e) => {
           try {
-            if (!window.pdfjsLib) throw new Error('مكتبة قراءة PDF لم تكتمل.');
-            window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+            await ensurePdfJs();
             const loadingTask = window.pdfjsLib.getDocument({ data: e.target.result });
             const pdf = await loadingTask.promise;
             let fullText = '';

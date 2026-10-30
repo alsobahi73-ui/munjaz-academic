@@ -40,7 +40,7 @@
   render(NEWS);
   async function refresh() {
     try {
-      const response = await fetch('news.json', { cache: 'no-cache', signal: AbortSignal.timeout(8000) });
+      const response = await fetch('news-latest.json', { cache: 'default', signal: AbortSignal.timeout(8000) });
       if (!response.ok) throw Error('feed_unavailable');
       const items = await response.json();
       if (!Array.isArray(items)) throw Error('invalid_feed');

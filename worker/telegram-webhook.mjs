@@ -1,7 +1,8 @@
 // Telegram incoming-message webhook for @MunjazAcademicBot.
 // redeploy: pick up dashboard secrets
-// POST /telegram-webhook on the worker. Verifies the Telegram secret header
-// when TELEGRAM_WEBHOOK_SECRET is configured. Never throws: Telegram
+// POST /telegram-webhook on the worker. The Telegram secret header is always
+// required: an unset TELEGRAM_WEBHOOK_SECRET is rejected with 403, never
+// accepted. Never throws: Telegram
 // retries on non-2xx, so the handler always answers 200 for valid updates.
 export function createTelegramWebhook({ token, adminChatId, webhookSecret, fetchImpl = fetch }) {
   const api = (method, body) =>
@@ -23,7 +24,9 @@ export function createTelegramWebhook({ token, adminChatId, webhookSecret, fetch
 
   return async function handleWebhook(request) {
     if (request.method !== 'POST') return new Response(null, { status: 405 });
-    if (webhookSecret && request.headers.get('X-Telegram-Bot-Api-Secret-Token') !== webhookSecret) {
+    // سر غير مضبوط = رفض فوري 403، لا قبول مفتوح لأي POST.
+    if (!webhookSecret) return new Response(null, { status: 403 });
+    if (request.headers.get('X-Telegram-Bot-Api-Secret-Token') !== webhookSecret) {
       return new Response(null, { status: 403 });
     }
     let update;
