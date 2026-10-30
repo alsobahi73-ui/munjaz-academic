@@ -64,7 +64,7 @@ export function createRequestHandler({ catalog, token, chatId, siteOrigin, fetch
       || !services.has(service) || !validText(name, 0, 100) || !validText(phone, 0, 30)
       || !validText(details, 10, 2500) || consent !== true) return reply(400, { error: 'invalid_request' }, true);
     const phoneText = normalizeDigits(phone.trim());
-    if (phoneText && (!/^[+\d\s()-]+$/.test(phoneText) || phoneText.replace(/\D/g, '').length < 7)) return reply(400, { error: 'invalid_request' }, true);
+    if (!phoneText || !/^[+\d\s()-]+$/.test(phoneText) || phoneText.replace(/\D/g, '').length < 7) return reply(400, { error: 'invalid_request' }, true);
     const time = now();
     for (const [key, entry] of requests) if (time - entry.created >= ttl && !entry.pending) requests.delete(key);
     for (const [key, entry] of rates) if (time - entry.started >= windowMs) rates.delete(key);
@@ -87,7 +87,7 @@ export function createRequestHandler({ catalog, token, chatId, siteOrigin, fetch
       'طلب جديد — مُنجز أكاديمي', `رقم الطلب: ${requestId}`,
       `الفئة: ${item.category}`, `الخدمة: ${item.title}`,
       ...(name.trim() ? [`الاسم: ${name.trim()}`] : []),
-      ...(phone.trim() ? [`رقم التواصل: ${phone.trim()}`] : []),
+      `رقم التواصل: ${phoneText}`,
       `تفاصيل الطلب:\n${details.trim()}`,
       'وافق صاحب الطلب على أن الخدمة مدفوعة وعلى النزاهة الأكاديمية والدعم بالتعاون معه.',
     ].join('\n');

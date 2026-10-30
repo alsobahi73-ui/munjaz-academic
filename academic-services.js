@@ -117,8 +117,10 @@
     const phone = $('#requestPhone');
     const details = $('#requestDetails');
     const phoneText = normalizeDigits(phone.value.trim());
-    phone.setCustomValidity(!phoneText || (/^[+\d\s()-]+$/.test(phoneText) && phoneText.replace(/\D/g, '').length >= 7)
-      ? '' : 'يرجى إدخال رقم تواصل صحيح أو ترك الحقل فارغاً.');
+    phone.setCustomValidity(!phoneText
+      ? 'رقم التواصل إجباري: يرجى إدخال رقم هاتفك حتى نستطيع التواصل معك.'
+      : (/^[+\d\s()-]+$/.test(phoneText) && phoneText.replace(/\D/g, '').length >= 7)
+        ? '' : 'يرجى إدخال رقم هاتف صحيح.');
     details.setCustomValidity(details.value.trim().length >= 10 ? '' : 'يرجى توضيح طلبك بعشرة أحرف على الأقل.');
     if (!form.reportValidity() || !byId.has(select.value)) return;
     const endpoint = window.AcademicServicesConfig?.requestEndpoint;
@@ -127,7 +129,7 @@
       return;
     }
     const draft = {
-      service: select.value, name: name.value.trim(), phone: phone.value.trim(),
+      service: select.value, name: name.value.trim(), phone: phoneText,
       details: details.value.trim(), consent: $('#requestConsent').checked,
     };
     const fingerprint = JSON.stringify(draft);
