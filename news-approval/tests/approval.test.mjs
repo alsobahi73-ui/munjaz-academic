@@ -19,6 +19,10 @@ function harness() {
   const callback = (id, decision = 'publish') => ({ callback_query: { id: 'callback', data: `${decision}:${id}`, from: { id: 7 }, message: { message_id: 1, chat: { id: 7, type: 'private' } } } });
   return { queue, records, files, messages, request, callback, env, storage };
 }
+test('normalizeNews requires https URLs', () => {
+  assert.throws(() => normalizeNews({ ...fixture(), url: 'http://example.org/news/1' }), /invalid_url/);
+  assert.equal(normalizeNews(fixture()).url, 'https://example.org/news/1');
+});
 test('review -> owner approval publishes formatted Telegram message and atomic website/archive update once', async () => {
   const h = harness(); assert.equal((await h.request('/sync')).status, 200);
   const id = await newsId(fixture());

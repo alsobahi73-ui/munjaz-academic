@@ -542,10 +542,11 @@
       let sumWeighted = 0;
       let hasFx = false;
 
+      const maxMark = mode === 'gpa-points' ? 5 : 100;
       $$('.gpa-row', wrap).forEach((r) => {
         const w = parseFloat($('.g-units', r).value);
         const v = parseFloat($('.g-mark', r).value);
-        if (w > 0 && Number.isFinite(v) && v >= 0) {
+        if (w > 0 && Number.isFinite(v) && v >= 0 && v <= maxMark) {
           sumW += w;
           sumWeighted += w * v;
           if (mode === 'bologna' && v >= 45 && v < 50) hasFx = true;
@@ -577,9 +578,10 @@
       } else {
         resLbl.textContent = 'معدل نقاط GPA المحسوب';
         resEl.textContent = fmt(Math.round(avg * 1000) / 1000);
-        const grade = avg >= 3.7 ? 'مرتبة شرف / امتياز' : avg >= 3.0 ? 'جيد جداً' : avg >= 2.5 ? 'جيد' : avg >= 2.0 ? 'مقبول' : 'إنذار أكاديمي';
+        // عتبات مقياس 4.0 منسوبة إلى مقياس 5.0 (× 5/4) حتى لا يُصنَّف 3.5/5.0 خطأً «جيد جداً».
+        const grade = avg >= 4.625 ? 'مرتبة شرف / امتياز' : avg >= 3.75 ? 'جيد جداً' : avg >= 3.125 ? 'جيد' : avg >= 2.5 ? 'مقبول' : 'إنذار أكاديمي';
         grdEl.textContent = `التقدير التقريبي: ${grade}`;
-        detEl.textContent = `إجمالي الساعات المعتمدة: ${fmt(sumW)}`;
+        detEl.textContent = `إجمالي الساعات المعتمدة: ${fmt(sumW)} (عتبات التقدير على مقياس 5.0)`;
       }
     };
 
@@ -1862,14 +1864,12 @@
             detectedAnswers.push(bestOpt);
           } else {
             // فقرة غير واضحة أو تظليل مزدوج أو غير مقروءة: تُسجّل فارغة للمراجعة اليدوية دون محاكاة أو تخمين
-            void activeMasterKey[i];
             detectedAnswers.push(null);
           }
         }
       } else {
         // تعذّر قراءة الصورة: تُسجّل جميع الفقرات فارغة/غير مقروءة للمراجعة اليدوية دون محاكاة أو تخمين
         for (let i = 0; i < qCount; i++) {
-          void activeMasterKey[i];
           detectedAnswers.push(null);
         }
       }
@@ -2500,7 +2500,7 @@
             opts: ['صح', 'خطأ'],
             a: 1,
             exp: `العبارة خاطئة لأن المحتوى يثبت عكس ذلك: «${sent}».`,
-            type: 'tf',
+            type: 'tf', generated: true,
           });
         } else {
           generated.push({
@@ -2508,7 +2508,7 @@
             opts: ['صح', 'خطأ'],
             a: 0,
             exp: 'العبارة صحيحة ومتطابقة تماماً مع النص الأصلي للمحاضرة.',
-            type: 'tf',
+            type: 'tf', generated: true,
           });
         }
 
@@ -2528,7 +2528,11 @@
           const opts = [targetWord, ...distractors];
           // خلط الخيارات للحصول على تنوع في الإجابة الصحيحة
           const correctVal = targetWord;
-          const shuffledOpts = [...opts].sort(() => 0.5 - Math.random());
+          const shuffledOpts = [...opts];
+          for (let i = shuffledOpts.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffledOpts[i], shuffledOpts[j]] = [shuffledOpts[j], shuffledOpts[i]];
+          }
           const correctIdx = shuffledOpts.indexOf(correctVal);
 
           generated.push({
@@ -2536,7 +2540,7 @@
             opts: shuffledOpts,
             a: correctIdx,
             exp: `المصطلح العلمي الصحيح الوارد في المتن هو: «${targetWord}».`,
-            type: 'mcq',
+            type: 'mcq', generated: true,
           });
         }
       });
@@ -2791,6 +2795,8 @@
       $('#quizCurrentProgress').textContent = `السؤال ${currentIdx + 1} من ${activeQuestions.length}`;
       $('#quizProgressBar').style.width = `${((currentIdx + 1) / activeQuestions.length) * 100}%`;
       $('#qCurrentText').textContent = item.q;
+      const genNote = $('#quizGeneratedNote');
+      if (genNote) genNote.hidden = !item.generated;
 
       const optsBox = $('#qCurrentOptions');
       optsBox.replaceChildren();
@@ -3521,6 +3527,8 @@
       this.last.set(dlg, document.activeElement);
       if (typeof dlg.showModal === 'function') dlg.showModal(); else dlg.setAttribute('open', '');
       document.body.style.overflow = 'hidden';
+      const first = dlg.querySelector('button:not([hidden]), [href], input:not([hidden]), select, textarea, [tabindex]:not([tabindex="-1"])');
+      if (first && first.focus) first.focus();
     },
     close(dlg) {
       if (!dlg) return;
@@ -3768,9 +3776,31 @@
       if (url) ref += ' ' + url;
       outEl.value = ref;
     };
-    [authorEl, yearEl, titleEl, sourceEl, volEl, urlEl, typeEl].forEach((el) => { if (el) el.addEventListener('input', render); });
+    const validate = () => {
+      const year = yearEl.value.trim();
+      const url = urlEl ? urlEl.value.trim() : '';
+      const yearOk = !year || (/^\d{4}$/.test(year) && +year >= 1900 && +year <= new Date().getFullYear() + 1);
+      const urlOk = !url || /^(https?:\/\/|10\.\d{4,9}\/\S+)$/.test(url);
+      const note = $('#refNote');
+      if (!yearOk) { if (note) note.textContent = 'يرجى إدخال سنة صحيحة بين 1900 والسنة الحالية.'; return false; }
+      if (!urlOk) { if (note) note.textContent = 'يرجى إدخال رابط يبدأ بـ https:// أو معرّف DOI صحيح (10.xxxx/...).'; return false; }
+      if (note) note.textContent = 'راجع المرجع المولّد مقابل المصدر الأصلي قبل إدراجه في بحثك.';
+      return true;
+    };
+    const renderChecked = () => { if (validate()) render(); else outEl.value = ''; };
+    [authorEl, yearEl, titleEl, sourceEl, volEl, urlEl, typeEl].forEach((el) => { if (el) { el.addEventListener('input', renderChecked); el.addEventListener('change', renderChecked); } });
     const copyBtn = $('#refCopyBtn');
-    if (copyBtn) copyBtn.addEventListener('click', () => { if (outEl.value && navigator.clipboard) navigator.clipboard.writeText(outEl.value); });
+    if (copyBtn) copyBtn.addEventListener('click', async () => {
+      if (!outEl.value) return;
+      const note = $('#refNote');
+      try {
+        if (navigator.clipboard) { await navigator.clipboard.writeText(outEl.value); if (note) note.textContent = 'تم نسخ المرجع.'; return; }
+        throw new Error('clipboard unavailable');
+      } catch {
+        outEl.select();
+        if (note) note.textContent = 'تعذّر النسخ التلقائي — تم تحديد النص، انسخه يدويًا (Ctrl+C).';
+      }
+    });
     const clearBtn = $('#refClearBtn');
     if (clearBtn) clearBtn.addEventListener('click', () => { [authorEl, yearEl, titleEl, sourceEl, volEl, urlEl].forEach((el) => { if (el) el.value = ''; }); render(); });
   }

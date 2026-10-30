@@ -6,6 +6,17 @@
   <title>مُنجز أكاديمي | لا نكتب عنك... نُنجز معك</title>
   <meta name="description" content="منصة عراقية للدعم الأكاديمي وأدوات مجانية لطلبة الدراسات الأولية والعليا والباحثين والتدريسيين: حاسبة الترقية العلمية، حجم العينة، المعدل التراكمي، عداد الكلمات.">
   <meta name="theme-color" content="#0E6B66">
+  <link rel="canonical" href="https://alsobahi73-ui.github.io/munjaz-academic/">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="مُنجز أكاديمي">
+  <meta property="og:title" content="مُنجز أكاديمي | لا نكتب عنك... نُنجز معك">
+  <meta property="og:description" content="منصة عراقية للدعم الأكاديمي وأدوات مجانية لطلبة الدراسات الأولية والعليا والباحثين والتدريسيين: حاسبة الترقية العلمية، حجم العينة، المعدل التراكمي، عداد الكلمات.">
+  <meta property="og:url" content="https://alsobahi73-ui.github.io/munjaz-academic/">
+  <meta property="og:locale" content="ar_IQ">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="مُنجز أكاديمي | لا نكتب عنك... نُنجز معك">
+  <meta name="twitter:description" content="منصة عراقية للدعم الأكاديمي وأدوات مجانية لطلبة الدراسات الأولية والعليا والباحثين والتدريسيين.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -697,6 +708,9 @@
           <button type="button" class="modal-close" data-close-modal aria-label="إغلاق">✕</button>
           <article class="tool" id="tool-references">
             <header class="tool-head">
+              <div class="tool-head-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              </div>
               <div>
                 <h3 id="ttl-references">منشئ المراجع الفوري</h3>
                 <span class="badge-tag">APA 7 — أدخل بياناتك أنت، ولا يولّد أي مرجع وهمي</span>
@@ -946,13 +960,13 @@
                         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="14" height="14"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
                         <span>خلط عشوائي</span>
                       </button>
-                      <button type="button" class="btn btn-outline btn-sm btn-svg-inline" id="omrSaveExamCloudBtn" style="border-color: #0d9488; color: #0d9488; font-weight: bold;">
+                      <button type="button" class="btn btn-outline btn-sm btn-svg-inline" id="omrSaveExamCloudBtn" style="border-color: var(--teal); color: var(--teal); font-weight: bold;">
                         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="14" height="14"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
                         <span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> حفظ النماذج بالحساب</span>
                       </button>
                     </div>
                   </div>
-                  <div id="omrCloudSavedNotice" style="margin-top: .6rem; font-size: .8rem; color: #0d9488; display: none;"></div>
+                  <div id="omrCloudSavedNotice" style="margin-top: .6rem; font-size: .8rem; color: var(--teal); display: none;"></div>
                 </div>
 
                 <!-- شبكة ضبط مفتاح الإجابة النموذجي (Master Key Setup) -->
@@ -980,7 +994,7 @@
                   <input type="file" id="omrScanMasterSheetInput" accept="image/*" style="display:none;">
 
                   <!-- درج استيراد ولصق المفتاح السريع -->
-                  <div id="omrImportKeyDrawer" style="display:none; margin-top: 10px; margin-bottom: 12px; padding: 12px; background: #F0FDF4; border: 1.5px solid #0d9488; border-radius: 8px;">
+                  <div id="omrImportKeyDrawer" style="display:none; margin-top: 10px; margin-bottom: 12px; padding: 12px; background: #F0FDF4; border: 1.5px solid var(--teal); border-radius: 8px;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                       <strong style="color: #064E3B; font-size: .88rem;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> استيراد مفتاح الحلول الصحيحة لـ (نموذج <span id="omrImportModelLabel">A</span>):</strong>
                       <button type="button" id="omrCloseImportDrawerBtn" style="border:none; background:transparent; font-size:1.1rem; cursor:pointer; color:#64748B;">✕</button>
@@ -1418,6 +1432,7 @@
                 </div>
 
                 <div class="question-card" id="quizQuestionBox">
+                  <p class="tool-note" id="quizGeneratedNote" hidden>أسئلة مولّدة آليًا — راجعها قبل الاستخدام</p>
                   <h4 id="qCurrentText" class="q-title">نص السؤال يظهر هنا...</h4>
                   <div class="q-options" id="qCurrentOptions"></div>
                 </div>
@@ -1464,7 +1479,7 @@
                   <button type="button" class="btn btn-outline btn-sm" id="tabViewMasterKey">
                     <span>🔑 دليل ومفتاح التصحيح النموذجي</span>
                   </button>
-                  <button type="button" class="btn btn-outline btn-sm btn-svg-inline" id="goToOmrFromQuizBtn" style="margin-right: auto; border-color: #0d9488; color: #0d9488; font-weight: bold;">
+                  <button type="button" class="btn btn-outline btn-sm btn-svg-inline" id="goToOmrFromQuizBtn" style="margin-right: auto; border-color: var(--teal); color: var(--teal); font-weight: bold;">
                     <span>الانتقال لمنظومة الببل شيت والتصحيح الضوئي (OMR) ➔</span>
                   </button>
                 </div>
