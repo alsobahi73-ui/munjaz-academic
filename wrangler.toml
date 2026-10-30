@@ -10,5 +10,12 @@ command = "node worker/build.mjs"
 [vars]
 SITE_ORIGIN = "https://alsobahi73-ui.github.io"
 
+# Required for Workers Builds preview deployments: wrangler preview fails
+# without a previews block. This is only a CORS origin string, not a
+# production resource; using the live site origin lets the preview worker
+# accept requests from the live site during testing.
+[previews.vars]
+SITE_ORIGIN = "https://alsobahi73-ui.github.io"
+
 # TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID and TELEGRAM_WEBHOOK_SECRET stay as
 # Worker secrets in the Cloudflare dashboard — never in this file.
