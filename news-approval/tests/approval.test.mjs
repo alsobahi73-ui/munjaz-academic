@@ -113,6 +113,21 @@ test('admin manual fallback records existing channel ID and never leaks provider
   const token='FAKE_SENSITIVE_TEST';
   await assert.rejects(runAdmin({...env,APPROVAL_ACTION:'set-webhook',TELEGRAM_BOT_TOKEN:token,TELEGRAM_WEBHOOK_SECRET:'HOOK_TEST'},async()=>{throw Error(`https://api.telegram.org/bot${token}/setWebhook`);}), error=>!error.message.includes(token));
 });
+test('admin pauses sync/status cleanly when worker is not configured, while publish/ignore still fail loudly', async () => {
+  const { runAdmin } = await import('../admin.mjs');
+  for (const badEnv of [{ APPROVAL_ACTION: 'sync' }, { APPROVAL_ACTION: 'sync', APPROVAL_WORKER_URL: 'not-a-url', APPROVAL_ADMIN_SECRET: 's' }, { APPROVAL_ACTION: 'status', APPROVAL_WORKER_URL: 'https://worker.example.org' }]) {
+    const paused = await runAdmin(badEnv, async () => { throw Error('must not fetch'); });
+    assert.equal(paused.paused, true);
+    assert.equal(paused.configured, false);
+    assert.equal(paused.reviewed, 0);
+    assert.equal(paused.published, 0);
+  }
+  for (const action of ['publish', 'ignore']) {
+    await assert.rejects(runAdmin({ APPROVAL_ACTION: action, APPROVAL_ITEM_ID: 'a'.repeat(32) }), /عنوان العامل غير مضبوط/);
+    await assert.rejects(runAdmin({ APPROVAL_ACTION: action, APPROVAL_WORKER_URL: 'http://insecure.example.org', APPROVAL_ADMIN_SECRET: 's', APPROVAL_ITEM_ID: 'a'.repeat(32) }), /يلزم عنوان HTTPS آمن للعامل/);
+    await assert.rejects(runAdmin({ APPROVAL_ACTION: action, APPROVAL_WORKER_URL: 'https://worker.example.org', APPROVAL_ITEM_ID: 'a'.repeat(32) }), /سر الإدارة غير مضبوط/);
+  }
+});
 test('collector empty summaries and metadata are supported without invented content', () => {
   const item=normalizeNews({...fixture(),summary:'',source_id:'source',collected_at:'2026-10-11'});
   assert.equal(item.summary,'');assert.equal(item.source_id,'source');assert.equal(item.collected_at,'2026-10-11');
