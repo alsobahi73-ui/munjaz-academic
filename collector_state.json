@@ -1,13 +1,13 @@
 {
   "mohesr-ministry-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-11-01T14:50:04.370021+00:00",
-    "last_success": "2026-11-01T14:50:04.370021+00:00"
+    "last_attempt": "2026-11-01T16:50:02.019213+00:00",
+    "last_success": "2026-11-01T16:50:02.019213+00:00"
   },
   "mohesr-universities-news": {
     "consecutive_failures": 0,
-    "last_attempt": "2026-11-01T14:50:04.370021+00:00",
-    "last_success": "2026-11-01T14:50:04.370021+00:00"
+    "last_attempt": "2026-11-01T16:50:02.019213+00:00",
+    "last_success": "2026-11-01T16:50:02.019213+00:00"
   },
   "univ-baghdad-news": {
     "consecutive_failures": 0,
