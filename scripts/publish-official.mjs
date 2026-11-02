@@ -107,9 +107,10 @@ export async function publishOfficial({ root = process.cwd(), token = process.en
     }
     await write(paths.published, published);
   }
-  // تجديد موجز الرئيسية عند كل نشر رسمي، حتى لا يتقادم news-latest.json.
+  // تجديد موجز الرئيسية عند كل نشر رسمي: news.json مرتب من الأقدم إلى الأحدث
+  // (الإلحاق في آخر المصفوفة)، فآخر 60 عنصرًا هي الأحدث وتُحفظ بترتيب الملف لأن شريط الرئيسية يعكسه.
   if (websiteReadable) {
-    try { await write(resolve(root, 'news-latest.json'), news.slice(0, 60)); } catch { /* الموجز تحسين أداء فقط؛ فشله لا يفشل النشر. */ }
+    try { await write(resolve(root, 'news-latest.json'), news.slice(-60)); } catch { /* الموجز تحسين أداء فقط؛ فشله لا يفشل النشر. */ }
   }
   await write(paths.news_queue, remaining);
   return result;
