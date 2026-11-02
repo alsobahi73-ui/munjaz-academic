@@ -1,10 +1,10 @@
 {
-  "time": "2026-11-02T10:19:54.406635+00:00",
-  "new_items": 0,
+  "time": "2026-11-02T12:04:39.833394+00:00",
+  "new_items": 1,
   "sources": [
     {
       "id": "mohesr-ministry-news",
-      "new_items": 0,
+      "new_items": 1,
       "status": "ok",
       "needs_attention": false,
       "consecutive_failures": 0
@@ -43,8 +43,7 @@
     },
     {
       "id": "univ-tikrit-news",
-      "status": "not_due",
-      "needs_attention": true
+      "status": "disabled"
     },
     {
       "id": "univ-anbar-news",
