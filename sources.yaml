@@ -92,8 +92,10 @@ sources:
   type: official
   url: https://qu.edu.iq/?cat=10
   sector: public
+# Paused 2026-11-02 because the site's SSL certificate fails verification (72 consecutive collector failures);
+# re-enable by setting enabled back to true once the university fixes its certificate.
 - category: general
-  enabled: true
+  enabled: false
   feed_url: https://www.tu.edu.iq/index.php/ar/tu-news?format=feed&type=rss
   id: univ-tikrit-news
   name: جامعة تكريت
