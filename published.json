@@ -44757,8 +44757,8 @@
     "type": "official",
     "id": "38df622d4fb94968caeb6dc9b1b041bf3ae284a3fa9e1fb1ad3c5ab6dc8be3dc",
     "website_published_at": "2026-11-03T10:16:06.936Z",
-    "telegram_failures": 1,
-    "telegram_last_error_at": "2026-11-03T10:16:07.098Z",
-    "telegram_next_attempt_at": "2026-11-03T10:46:07.098Z"
+    "telegram_published_at": "2026-11-03T10:52:35.585Z",
+    "telegram_message_id": 953,
+    "published_at": "2026-11-03T10:52:35.585Z"
   }
 ]
