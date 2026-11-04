@@ -45345,9 +45345,9 @@
     "type": "official",
     "id": "cb619166dcd3035a9c122ed347be33e164d0d274db98da1e55518d1f93329346",
     "website_published_at": "2026-11-04T13:32:39.733Z",
-    "telegram_failures": 1,
-    "telegram_last_error_at": "2026-11-04T13:32:39.901Z",
-    "telegram_next_attempt_at": "2026-11-04T14:02:39.901Z"
+    "telegram_published_at": "2026-11-04T14:22:39.187Z",
+    "telegram_message_id": 995,
+    "published_at": "2026-11-04T14:22:39.187Z"
   },
   {
     "title": "وحدة حقوق الإنسان تنظم ندوة علمية حول الوصم الاجتماعي وآثاره النفسية والاجتماعية",
@@ -45359,9 +45359,9 @@
     "type": "official",
     "id": "3c4e521adccb2089326cf37dee087993ded218e3abae2a94c80ad27c70c590d5",
     "website_published_at": "2026-11-04T13:32:39.921Z",
-    "telegram_failures": 1,
-    "telegram_last_error_at": "2026-11-04T13:32:40.096Z",
-    "telegram_next_attempt_at": "2026-11-04T14:02:40.096Z"
+    "telegram_published_at": "2026-11-04T14:22:39.438Z",
+    "telegram_message_id": 996,
+    "published_at": "2026-11-04T14:22:39.438Z"
   },
   {
     "title": "مشاركة تدريسي من كلية التمريض جامعة البيان في المؤتمر الثالث لتغذية الأطفال في الدوحة",
@@ -45373,8 +45373,8 @@
     "type": "official",
     "id": "8995e8bc24dd683c82612593e3f5b8cc5c68556546750d6b204d38d31f1791f1",
     "website_published_at": "2026-11-04T13:32:40.114Z",
-    "telegram_failures": 1,
-    "telegram_last_error_at": "2026-11-04T13:32:40.283Z",
-    "telegram_next_attempt_at": "2026-11-04T14:02:40.283Z"
+    "telegram_published_at": "2026-11-04T14:22:39.687Z",
+    "telegram_message_id": 997,
+    "published_at": "2026-11-04T14:22:39.687Z"
   }
 ]
