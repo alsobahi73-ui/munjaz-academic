@@ -1,17 +1,17 @@
 {
-  "time": "2026-11-04T09:10:37.486504+00:00",
-  "new_items": 2,
+  "time": "2026-11-04T12:02:07.699697+00:00",
+  "new_items": 0,
   "sources": [
     {
       "id": "mohesr-ministry-news",
-      "new_items": 1,
+      "new_items": 0,
       "status": "ok",
       "needs_attention": false,
       "consecutive_failures": 0
     },
     {
       "id": "mohesr-universities-news",
-      "new_items": 1,
+      "new_items": 0,
       "status": "ok",
       "needs_attention": false,
       "consecutive_failures": 0
