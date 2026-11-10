@@ -47305,9 +47305,9 @@
     "type": "official",
     "id": "884199de6aa8395db3757d927f25147514deaf4f37e10c2ee397c0b4ea70c877",
     "website_published_at": "2026-11-09T20:57:15.412Z",
-    "telegram_failures": 1,
-    "telegram_last_error_at": "2026-11-09T20:57:15.583Z",
-    "telegram_next_attempt_at": "2026-11-09T21:27:15.583Z"
+    "telegram_published_at": "2026-11-10T01:46:35.055Z",
+    "telegram_message_id": 1135,
+    "published_at": "2026-11-10T01:46:35.055Z"
   },
   {
     "title": "المركز الأكاديمي للأمراض الوبائية في جامعة جابر بن حيان يعقد اجتماعه الدوري لمناقشة الخطط البحثية وتفعيل العيادة الاستشارية",
@@ -47319,9 +47319,9 @@
     "type": "official",
     "id": "49d51f1acaf1b5535b4647d60b6b8d1470276de66ad068def2ed7f82e1dd04e0",
     "website_published_at": "2026-11-09T20:57:15.611Z",
-    "telegram_failures": 1,
-    "telegram_last_error_at": "2026-11-09T20:57:15.773Z",
-    "telegram_next_attempt_at": "2026-11-09T21:27:15.773Z"
+    "telegram_published_at": "2026-11-10T01:46:35.311Z",
+    "telegram_message_id": 1136,
+    "published_at": "2026-11-10T01:46:35.311Z"
   },
   {
     "title": "مؤتمر إطلاق نتائج القبول الجامعي الموحد يوم الخميس 12 تشرين الثاني 2026",
@@ -47333,9 +47333,9 @@
     "type": "official",
     "id": "567192b4c92ced1286ec9a33a4f93b52a1a3685539c65a7fefab3c4678ac0459",
     "website_published_at": "2026-11-09T20:57:15.799Z",
-    "telegram_failures": 1,
-    "telegram_last_error_at": "2026-11-09T20:57:15.963Z",
-    "telegram_next_attempt_at": "2026-11-09T21:27:15.963Z"
+    "telegram_published_at": "2026-11-10T01:46:35.612Z",
+    "telegram_message_id": 1137,
+    "published_at": "2026-11-10T01:46:35.612Z"
   },
   {
     "title": "مجلس جامعة الكفيل يبحث الخطط العلمية والبحثية واستعدادات المؤتمر العلمي الدولي السابع",
@@ -47347,9 +47347,9 @@
     "type": "official",
     "id": "e770b10b48bbfcd92fe76893df2eeeaf54210c0d458247dca74848516281216f",
     "website_published_at": "2026-11-09T20:57:15.988Z",
-    "telegram_failures": 1,
-    "telegram_last_error_at": "2026-11-09T20:57:16.145Z",
-    "telegram_next_attempt_at": "2026-11-09T21:27:16.145Z"
+    "telegram_published_at": "2026-11-10T01:46:35.850Z",
+    "telegram_message_id": 1138,
+    "published_at": "2026-11-10T01:46:35.850Z"
   },
   {
     "title": "وحدة حقوق الإنسان تنظم ندوة علمية حول التحديات الصحية الشائعة لدى الأطفال وسبل الوقاية منها",
@@ -47361,9 +47361,9 @@
     "type": "official",
     "id": "80a318deec2781dd432a4f52c9812606128cbaa3aaafb84b6c0aecf11bcf8aca",
     "website_published_at": "2026-11-09T20:57:16.171Z",
-    "telegram_failures": 1,
-    "telegram_last_error_at": "2026-11-09T20:57:16.332Z",
-    "telegram_next_attempt_at": "2026-11-09T21:27:16.332Z"
+    "telegram_published_at": "2026-11-10T01:46:36.105Z",
+    "telegram_message_id": 1139,
+    "published_at": "2026-11-10T01:46:36.105Z"
   },
   {
     "title": "بمشاركة رئيس مجلس إدارتها.. بحث علمي يعزز حضور جامعة الكوت في النشر الأكاديمي الدولي.",
@@ -47375,8 +47375,8 @@
     "type": "official",
     "id": "cf715ffbe3e3ef6db3cff95e4f2908644ad2302b5be787a2741edfeb6a60e2bf",
     "website_published_at": "2026-11-09T20:57:16.357Z",
-    "telegram_failures": 1,
-    "telegram_last_error_at": "2026-11-09T20:57:16.515Z",
-    "telegram_next_attempt_at": "2026-11-09T21:27:16.515Z"
+    "telegram_published_at": "2026-11-10T01:46:42.434Z",
+    "telegram_message_id": 1140,
+    "published_at": "2026-11-10T01:46:42.434Z"
   }
 ]
