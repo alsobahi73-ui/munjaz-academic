@@ -48943,9 +48943,9 @@
     "type": "official",
     "id": "b571649f1319aedee2561c5bada3614ba41b2b04ac4ab8aa71759ce03825f08f",
     "website_published_at": "2026-11-12T12:57:11.126Z",
-    "telegram_failures": 1,
-    "telegram_last_error_at": "2026-11-12T12:57:11.304Z",
-    "telegram_next_attempt_at": "2026-11-12T13:27:11.304Z"
+    "telegram_published_at": "2026-11-12T20:44:24.977Z",
+    "telegram_message_id": 1252,
+    "published_at": "2026-11-12T20:44:24.977Z"
   },
   {
     "title": "رئيس الجامعة يشارك في اجتماع خبراء الإسكوا حول التوظيف الآمن للذكاء الاصطناعي",
@@ -48957,8 +48957,8 @@
     "type": "official",
     "id": "234b0dad963edd0ed5451e1fb793b8f75fd2ee1efaf6e908f306c646040dad97",
     "website_published_at": "2026-11-12T12:57:11.332Z",
-    "telegram_failures": 1,
-    "telegram_last_error_at": "2026-11-12T12:57:11.507Z",
-    "telegram_next_attempt_at": "2026-11-12T13:27:11.507Z"
+    "telegram_published_at": "2026-11-12T20:44:25.248Z",
+    "telegram_message_id": 1253,
+    "published_at": "2026-11-12T20:44:25.248Z"
   }
 ]
