@@ -50063,9 +50063,9 @@
     "type": "official",
     "id": "55881d005c8719780c69c3970db70e4d65246c01d509cabb44660bc88a11899b",
     "website_published_at": "2026-11-15T11:09:25.304Z",
-    "telegram_failures": 1,
-    "telegram_last_error_at": "2026-11-15T11:09:25.427Z",
-    "telegram_next_attempt_at": "2026-11-15T11:39:25.427Z"
+    "telegram_published_at": "2026-11-15T14:38:12.039Z",
+    "telegram_message_id": 1332,
+    "published_at": "2026-11-15T14:38:12.039Z"
   },
   {
     "title": "التعليم تعلن نتائج تعديل الترشيح وقبول طلبة السنة السابقة (المقاعد الشاغرة)..",
@@ -50077,9 +50077,9 @@
     "type": "official",
     "id": "a252b9921ef84b6ceabc6d14761d95e27fc88a95e917a70d1ab628f9bae711fc",
     "website_published_at": "2026-11-15T11:09:25.466Z",
-    "telegram_failures": 1,
-    "telegram_last_error_at": "2026-11-15T11:09:25.586Z",
-    "telegram_next_attempt_at": "2026-11-15T11:39:25.586Z"
+    "telegram_published_at": "2026-11-15T14:38:12.311Z",
+    "telegram_message_id": 1333,
+    "published_at": "2026-11-15T14:38:12.311Z"
   },
   {
     "title": "إعلان مهم إلى الطلبة المتقدمين للقبول الجامعي الموحد",
@@ -50091,9 +50091,9 @@
     "type": "official",
     "id": "4e351f815544bde1744dfc1978a25c4c844d81cd5ff2d4cc22bd6185ae7db5e7",
     "website_published_at": "2026-11-15T11:09:25.624Z",
-    "telegram_failures": 1,
-    "telegram_last_error_at": "2026-11-15T11:09:25.754Z",
-    "telegram_next_attempt_at": "2026-11-15T11:39:25.754Z"
+    "telegram_published_at": "2026-11-15T14:38:12.582Z",
+    "telegram_message_id": 1334,
+    "published_at": "2026-11-15T14:38:12.582Z"
   },
   {
     "title": "المساعد العلمي يفتتح بطولة الكرة الطائرة لطلبة جامعة الفرات الأوسط التقنية..",
@@ -50105,9 +50105,9 @@
     "type": "official",
     "id": "b05a81dbc54919dfca13343b3c2fddf5da32f0857f564def9b1aee9ed2f0f31e",
     "website_published_at": "2026-11-15T11:09:25.795Z",
-    "telegram_failures": 1,
-    "telegram_last_error_at": "2026-11-15T11:09:25.917Z",
-    "telegram_next_attempt_at": "2026-11-15T11:39:25.917Z"
+    "telegram_published_at": "2026-11-15T14:38:12.828Z",
+    "telegram_message_id": 1335,
+    "published_at": "2026-11-15T14:38:12.828Z"
   },
   {
     "title": "إعلان مهم جدا",
@@ -50119,9 +50119,9 @@
     "type": "official",
     "id": "ad080a38ea37ef3861297095ceb2444b6798d53ad9dcbdfb64427687f4a291ea",
     "website_published_at": "2026-11-15T11:09:25.956Z",
-    "telegram_failures": 1,
-    "telegram_last_error_at": "2026-11-15T11:09:26.076Z",
-    "telegram_next_attempt_at": "2026-11-15T11:39:26.076Z"
+    "telegram_published_at": "2026-11-15T14:38:13.087Z",
+    "telegram_message_id": 1336,
+    "published_at": "2026-11-15T14:38:13.087Z"
   },
   {
     "title": "جامعة الكفيل تشارك في فعاليات مؤتمر العميد العلمي العالمي الثامن بالعتبة العباسية المقدسة",
@@ -50133,8 +50133,8 @@
     "type": "official",
     "id": "370ef09c39943d50a9e611eaf30b4e38c6676f656c5307aa28f11e4bef3c2d7e",
     "website_published_at": "2026-11-15T11:09:26.113Z",
-    "telegram_failures": 1,
-    "telegram_last_error_at": "2026-11-15T11:09:26.271Z",
-    "telegram_next_attempt_at": "2026-11-15T11:39:26.271Z"
+    "telegram_published_at": "2026-11-15T14:38:19.383Z",
+    "telegram_message_id": 1337,
+    "published_at": "2026-11-15T14:38:19.383Z"
   }
 ]
