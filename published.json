@@ -51729,9 +51729,9 @@
     "type": "official",
     "id": "65c79c222dc9d66f270f374492f9c96aa8b116cf1856a1058f9e4caf19cbc4e5",
     "website_published_at": "2026-11-19T13:25:21.823Z",
-    "telegram_failures": 1,
-    "telegram_last_error_at": "2026-11-19T13:25:21.978Z",
-    "telegram_next_attempt_at": "2026-11-19T13:55:21.978Z"
+    "telegram_published_at": "2026-11-19T20:48:54.430Z",
+    "telegram_message_id": 1451,
+    "published_at": "2026-11-19T20:48:54.430Z"
   },
   {
     "title": "جامعة جابر بن حيان تعزز حضورها العلمي في مهرجان الأدلة الجنائية والبيولوجيا الجزيئية بجامعة القاسم الخضراء",
@@ -51743,9 +51743,9 @@
     "type": "official",
     "id": "aabfe1034bf7057c47977a56b09ef5ac056f194036f1742afd91195b9c1ba561",
     "website_published_at": "2026-11-19T13:25:22.006Z",
-    "telegram_failures": 1,
-    "telegram_last_error_at": "2026-11-19T13:25:22.179Z",
-    "telegram_next_attempt_at": "2026-11-19T13:55:22.179Z"
+    "telegram_published_at": "2026-11-19T20:48:54.687Z",
+    "telegram_message_id": 1452,
+    "published_at": "2026-11-19T20:48:54.687Z"
   },
   {
     "title": "تحت شعار «معاً ضد الاحتيال».. كلية معلوماتية الأعمال تنظم حملة توعوية للتعريف بمخاطر الاحتيال المالي وسبل الوقاية منه",
@@ -51757,9 +51757,9 @@
     "type": "official",
     "id": "09ad257d15b482190cb2f9e64fa0f6beee7462d4d30632c707a86d0847cdf422",
     "website_published_at": "2026-11-19T13:25:22.210Z",
-    "telegram_failures": 1,
-    "telegram_last_error_at": "2026-11-19T13:25:22.348Z",
-    "telegram_next_attempt_at": "2026-11-19T13:55:22.348Z"
+    "telegram_published_at": "2026-11-19T20:48:54.961Z",
+    "telegram_message_id": 1453,
+    "published_at": "2026-11-19T20:48:54.961Z"
   },
   {
     "title": "الجامعة تشارك في معرض بغداد للوظائف 2026 لتعزيز فرص الطلبة والخريجين في سوق العمل",
@@ -51771,9 +51771,9 @@
     "type": "official",
     "id": "51c51d84da779c346559e5bb15ba0c8808ca0da2f638c4d208b78b4fd3f25055",
     "website_published_at": "2026-11-19T13:25:22.375Z",
-    "telegram_failures": 1,
-    "telegram_last_error_at": "2026-11-19T13:25:22.509Z",
-    "telegram_next_attempt_at": "2026-11-19T13:55:22.509Z"
+    "telegram_published_at": "2026-11-19T20:48:55.235Z",
+    "telegram_message_id": 1454,
+    "published_at": "2026-11-19T20:48:55.235Z"
   },
   {
     "title": "الجامعة تقيم ندوة توعوية حول الصراعات الداخلية وأثرها في السلوك المهني والإداري",
@@ -51785,9 +51785,9 @@
     "type": "official",
     "id": "4bddaff7be835b78297fa19e781274a62d4cea14553743863127f525962cffcc",
     "website_published_at": "2026-11-19T13:25:22.534Z",
-    "telegram_failures": 1,
-    "telegram_last_error_at": "2026-11-19T13:25:22.674Z",
-    "telegram_next_attempt_at": "2026-11-19T13:55:22.674Z"
+    "telegram_published_at": "2026-11-19T20:48:55.505Z",
+    "telegram_message_id": 1455,
+    "published_at": "2026-11-19T20:48:55.505Z"
   },
   {
     "title": "كلية الطب تنظم تدريباً عملياً لطلبة المرحلة الرابعة على فحوصات وظائف الرئة",
@@ -51799,8 +51799,8 @@
     "type": "official",
     "id": "6b8ab175674a30e22dc96b4177697c38e33c3b722da9663d427b3c573883c53d",
     "website_published_at": "2026-11-19T13:25:22.700Z",
-    "telegram_failures": 1,
-    "telegram_last_error_at": "2026-11-19T13:25:22.839Z",
-    "telegram_next_attempt_at": "2026-11-19T13:55:22.839Z"
+    "telegram_published_at": "2026-11-19T20:48:59.773Z",
+    "telegram_message_id": 1456,
+    "published_at": "2026-11-19T20:48:59.774Z"
   }
 ]
