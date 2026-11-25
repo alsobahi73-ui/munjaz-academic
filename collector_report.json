@@ -1,10 +1,10 @@
 {
-  "time": "2026-11-25T04:18:47.217937+00:00",
-  "new_items": 0,
+  "time": "2026-11-25T15:39:34.509996+00:00",
+  "new_items": 36,
   "sources": [
     {
       "id": "mohesr-ministry-news",
-      "new_items": 0,
+      "new_items": 3,
       "status": "ok",
       "needs_attention": false,
       "consecutive_failures": 0
@@ -32,7 +32,7 @@
     },
     {
       "id": "univ-basra-news",
-      "new_items": 0,
+      "new_items": 6,
       "status": "ok",
       "needs_attention": false,
       "consecutive_failures": 0
@@ -68,11 +68,11 @@
       "status": "failed",
       "error": "HTTPError: HTTP Error 404: Not Found",
       "needs_attention": true,
-      "consecutive_failures": 33
+      "consecutive_failures": 34
     },
     {
       "id": "univ-diyala-news",
-      "new_items": 0,
+      "new_items": 10,
       "status": "ok",
       "needs_attention": false,
       "consecutive_failures": 0
@@ -87,14 +87,14 @@
     },
     {
       "id": "univ-wasit-news",
-      "new_items": 0,
+      "new_items": 1,
       "status": "ok",
       "needs_attention": false,
       "consecutive_failures": 0
     },
     {
       "id": "univ-kirkuk-news",
-      "new_items": 0,
+      "new_items": 3,
       "status": "ok",
       "needs_attention": false,
       "consecutive_failures": 0
@@ -105,7 +105,7 @@
       "status": "failed",
       "error": "ValueError: robots.txt unavailable; refusing to crawl",
       "needs_attention": true,
-      "consecutive_failures": 41
+      "consecutive_failures": 42
     },
     {
       "id": "univ-muthanna-news",
@@ -127,7 +127,7 @@
       "status": "failed",
       "error": "ValueError: HTML article missing title/link",
       "needs_attention": true,
-      "consecutive_failures": 135
+      "consecutive_failures": 136
     },
     {
       "id": "univ-swmr-news",
@@ -153,7 +153,7 @@
       "status": "failed",
       "error": "ValueError: HTML article missing publication date",
       "needs_attention": true,
-      "consecutive_failures": 135
+      "consecutive_failures": 136
     },
     {
       "id": "univ-ibn-sina-med-pharm-news",
@@ -164,14 +164,14 @@
     },
     {
       "id": "univ-basra-llnft-walghaz-news",
-      "new_items": 0,
+      "new_items": 2,
       "status": "ok",
       "needs_attention": false,
       "consecutive_failures": 0
     },
     {
       "id": "jabr-bn-hayyan-medical-news",
-      "new_items": 0,
+      "new_items": 2,
       "status": "ok",
       "needs_attention": false,
       "consecutive_failures": 0
@@ -189,7 +189,7 @@
     },
     {
       "id": "univ-tknwlwjya-almalwmat-walatsalat-news",
-      "new_items": 0,
+      "new_items": 6,
       "status": "ok",
       "needs_attention": false,
       "consecutive_failures": 0
@@ -211,7 +211,7 @@
     },
     {
       "id": "univ-furat-alawst-tech-news",
-      "new_items": 0,
+      "new_items": 2,
       "status": "ok",
       "needs_attention": false,
       "consecutive_failures": 0
@@ -236,7 +236,7 @@
       "status": "failed",
       "error": "ValueError: HTML article missing publication date",
       "needs_attention": true,
-      "consecutive_failures": 63
+      "consecutive_failures": 64
     },
     {
       "id": "college-sht-alarb-univ-news",
@@ -279,7 +279,7 @@
       "status": "failed",
       "error": "ValueError: HTML article missing title/link",
       "needs_attention": true,
-      "consecutive_failures": 135
+      "consecutive_failures": 136
     },
     {
       "id": "univ-alaslamya-news",
@@ -287,15 +287,14 @@
       "status": "failed",
       "error": "ValueError: Redirect requires verified canonical URL",
       "needs_attention": true,
-      "consecutive_failures": 135
+      "consecutive_failures": 136
     },
     {
       "id": "univ-kafeel-news",
       "new_items": 0,
-      "status": "failed",
-      "error": "ValueError: Redirect requires verified canonical URL",
+      "status": "ok",
       "needs_attention": false,
-      "consecutive_failures": 2
+      "consecutive_failures": 0
     },
     {
       "id": "college-alshykh-altwsy-univ-news",
@@ -303,7 +302,7 @@
       "status": "failed",
       "error": "ValueError: Discovered feeds failed: ValueError",
       "needs_attention": true,
-      "consecutive_failures": 31
+      "consecutive_failures": 32
     },
     {
       "id": "college-rasheed-univ-news",
@@ -311,7 +310,7 @@
       "status": "failed",
       "error": "HTTPError: HTTP Error 404: Not Found",
       "needs_attention": true,
-      "consecutive_failures": 72
+      "consecutive_failures": 73
     },
     {
       "id": "college-iraq-univ-news",
@@ -388,7 +387,7 @@
       "status": "failed",
       "error": "ValueError: HTML article missing publication date",
       "needs_attention": true,
-      "consecutive_failures": 135
+      "consecutive_failures": 136
     },
     {
       "id": "college-altf-univ-news",
@@ -417,7 +416,7 @@
       "status": "failed",
       "error": "ValueError: HTML article missing title/link",
       "needs_attention": true,
-      "consecutive_failures": 135
+      "consecutive_failures": 136
     },
     {
       "id": "college-nukhba-univ-news",
@@ -425,7 +424,7 @@
       "status": "failed",
       "error": "HTTPError: HTTP Error 403: Forbidden",
       "needs_attention": true,
-      "consecutive_failures": 135
+      "consecutive_failures": 136
     },
     {
       "id": "college-safwa-univ-news",
@@ -436,7 +435,7 @@
     },
     {
       "id": "univ-alamyd-news",
-      "new_items": 0,
+      "new_items": 1,
       "status": "ok",
       "needs_attention": false,
       "consecutive_failures": 0
@@ -447,7 +446,7 @@
       "status": "failed",
       "error": "ValueError: robots.txt unavailable; refusing to crawl",
       "needs_attention": true,
-      "consecutive_failures": 135
+      "consecutive_failures": 136
     },
     {
       "id": "univ-awrwk-private-news",
@@ -455,7 +454,7 @@
       "status": "failed",
       "error": "ValueError: HTML article missing publication date",
       "needs_attention": true,
-      "consecutive_failures": 135
+      "consecutive_failures": 136
     },
     {
       "id": "univ-bayan-news",
@@ -470,7 +469,7 @@
       "status": "failed",
       "error": "ValueError: HTML article missing title/link",
       "needs_attention": true,
-      "consecutive_failures": 135
+      "consecutive_failures": 136
     },
     {
       "id": "college-alnwr-univ-news",
@@ -528,7 +527,7 @@
       "status": "failed",
       "error": "ValueError: HTML article missing title/link",
       "needs_attention": true,
-      "consecutive_failures": 135
+      "consecutive_failures": 136
     },
     {
       "id": "univ-alamyn-news",
@@ -580,7 +579,7 @@
       "status": "failed",
       "error": "ValueError: Redirect requires verified canonical URL",
       "needs_attention": true,
-      "consecutive_failures": 135
+      "consecutive_failures": 136
     },
     {
       "id": "univ-almaql-news",
@@ -603,7 +602,7 @@
       "status": "failed",
       "error": "ValueError: HTML article missing title/link",
       "needs_attention": true,
-      "consecutive_failures": 135
+      "consecutive_failures": 136
     },
     {
       "id": "college-ibn-khldwn-news",
@@ -618,7 +617,7 @@
       "status": "failed",
       "error": "ValueError: HTML article missing title/link",
       "needs_attention": true,
-      "consecutive_failures": 135
+      "consecutive_failures": 136
     },
     {
       "id": "univ-alshab-news",
@@ -626,7 +625,7 @@
       "status": "failed",
       "error": "HTTPError: HTTP Error 403: Forbidden",
       "needs_attention": true,
-      "consecutive_failures": 135
+      "consecutive_failures": 136
     },
     {
       "id": "univ-alsraj-private-news",
@@ -638,7 +637,7 @@
       "status": "failed",
       "error": "ValueError: HTML article missing title/link",
       "needs_attention": true,
-      "consecutive_failures": 135
+      "consecutive_failures": 136
     },
     {
       "id": "univ-shl-nineveh-news",
@@ -653,7 +652,7 @@
       "status": "failed",
       "error": "ValueError: Redirect requires verified canonical URL",
       "needs_attention": true,
-      "consecutive_failures": 14
+      "consecutive_failures": 15
     },
     {
       "id": "college-alqbs-private-news",
